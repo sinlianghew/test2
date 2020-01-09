@@ -3,6 +3,11 @@
     .jumbotron {
         height: 466px;
         border-radius: 0px;
+
+        @include media-breakpoint-up(md) {
+            height: 452px;
+        }
+
     }
 
 
@@ -45,18 +50,29 @@
 
 
             .navbar-collapse {
+                
                 @include media-breakpoint-down(md) {
                     background: white;
                     margin: 0 -1rem;
                     padding: 0 15px;
+                    position: absolute;
+                    top: 48px;
+                    width: 100%;
+                    box-shadow: 0 0.125rem 0.25rem rgba(102, 102, 102, 0.16);
                 }
 
                 .navbar-nav {
-                    @include media-breakpoint-down(up) {
-                       margin: auto;
+                    @include media-breakpoint-up(md) {
+                        margin: auto;
                     }
 
                     .nav-item {
+
+                        &:last-child{
+                            .nav-link {
+                                border-bottom: 0px;
+                            }
+                        }
                         @include media-breakpoint-up(md) {
                             &:first-child {
                                 &::before {
@@ -85,6 +101,7 @@
                             margin: 0 -1rem;
                             padding: 0 15px;
 
+                       
                             @include media-breakpoint-up(md) {
                                 height: 80px;
                                 font-size: $h2-font-size;
@@ -94,6 +111,8 @@
                                 margin: 0;
                                 line-height: 5rem;
                                 color: white;
+                                border-bottom: 0px;
+                                box-shadow: none;
                             }
 
                             &:hover {
