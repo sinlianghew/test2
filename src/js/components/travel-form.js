@@ -40,16 +40,42 @@ const travelForm = new Vue({
                 completed: false 
             }
         ],
+        coverageAreas: [
+            {
+                name: 'Area 1',
+                countries: 'Australia, Brunei, Cambodia, China, Hong Kong, India, Indonesia, Japan, Korea, Laos, Macau, Maldives, Myanmar, New Zealand, Pakistan, Philippines, Singapore, Sri Lanka, Taiwan, Thailand and Vietnam.'
+            },
+            {
+                name: 'Area 2',
+                countries: 'Europe, Tibet, Nepal, Mongolia, Bhutan and Countries in Area 1.'
+            },
+            {
+                name: 'Area 3',
+                countries: 'Worldwide and countries in Area 1 and 2 but excluding Afghanistan, Cuba, Democratic Republic of Congo, Iran, Iraq, Sudan and Syria.'
+            },
+            {
+                name: 'Area 4',
+                countries: 'Malaysia (single trip between Peninsular and East Malaysia and vice versa).'
+            }
+        ],
         formData: {
             idType: 'Passport',
             nric: '',
             country: '',
             passport: '',
             pdpaAgreement: false,
-            dateOfBirth: ''
+            dateOfBirth: '',
+            areaOfCoverage: 'Area 1',
+            startDate: null,
+            endDate: null
         },
         currStep: null,
-        showGetStartedConsent: false
+        showGetStartedConsent: true
+    },
+    computed: {
+        countriesForCurrArea: function () {
+            return this.coverageAreas.find(a => a.name === this.formData.areaOfCoverage).countries;
+        }
     },
     methods: {
         changeStep(step) {
@@ -81,6 +107,6 @@ const travelForm = new Vue({
         }
     },
     mounted() {
-        this.currStep = this.steps[0]
+        this.currStep = this.steps[1]
     }
 })
