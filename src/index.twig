@@ -56,8 +56,8 @@
                         </div>
 
                         <div v-if="formData.idType === 'Passport'">
-                            <div class="d-flex">
-                                <div class="form-group mr-3">
+                            <div class="d-md-flex">
+                                <div class="form-group mr-md-3">
                                     <select class="form-control" id="country" name="country">
                                         <option disabled hidden selected>Select country</option>
                                         <option>Malaysia</option>
@@ -71,9 +71,13 @@
                                 </div>
                             </div>
                             <p class="bt1">Date of Birth:</p>
-                            <div class="d-flex">
-                                <div class="form-group variant-icon">
-                                    <input type="text" class="form-control" placeholder="DD/MM/YYYY">
+                            <div class="d-md-flex">
+                                <div class="form-group variant-date-picker">
+                                    <datepicker class="form-control"
+                                        placeholder="DD/MM/YYYY"
+                                        :format="customDateFormatter"
+                                        v-model="formData.dateOfBirth">
+                                    </datepicker>
                                     {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
                                 </div>
                             </div>

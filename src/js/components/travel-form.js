@@ -1,7 +1,12 @@
 import Vue from 'vue';
+import Datepicker from 'vuejs-datepicker';
+import moment from 'moment';
 
 const travelForm = new Vue({
     el: '#travel-form',
+    components: {
+        Datepicker
+    },
     data: {
         steps: [
             { 
@@ -33,17 +38,18 @@ const travelForm = new Vue({
                 step: 6,
                 title: 'Pay',
                 completed: false 
-            },
+            }
         ],
         formData: {
-            idType: 'NRIC',
+            idType: 'Passport',
             nric: '',
             country: '',
             passport: '',
-            pdpaAgreement: false
+            pdpaAgreement: false,
+            dateOfBirth: ''
         },
         currStep: null,
-        showGetStartedConsent: true
+        showGetStartedConsent: false
     },
     methods: {
         changeStep(step) {
@@ -66,6 +72,12 @@ const travelForm = new Vue({
             }
             const prevStep = this.steps.find(s => s.step === this.currStep.step - 1);
             this.currStep = prevStep;
+        },
+        customDateFormatter(date) {
+            return moment(date).format('DD/MM/YYYY')
+        },
+        customDateFormatterWithDay(date) {
+            return moment(date).format('DD/MM/YYYY (ddd)')
         }
     },
     mounted() {

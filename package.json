@@ -48,10 +48,13 @@
     "hamburgers": "^1.1.3",
     "jquery": "^3.4.1",
     "lodash": "^4.17.15",
+    "moment": "^2.24.0",
     "owl.carousel": "^2.3.4",
     "popper.js": "^1.15.0",
     "svg4everybody": "^2.1.9",
     "swiper": "^5.0.4",
-    "vue": "^2.6.11"
+    "vue": "^2.6.11",
+    "vuejs-datepicker": "^1.6.2",
+    "vuelidate": "^0.7.4"
   }
 }
