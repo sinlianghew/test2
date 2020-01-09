@@ -2,6 +2,10 @@
     line-height: $headings-line-height;
     color: $p2;
     stroke: $p2;
+    width: 100%;
+    @include media-breakpoint-up(md) {
+        width: 50%;
+    }
     
     input[type="radio"] {
         display: none;
@@ -32,10 +36,6 @@
         text-align: center;
         cursor: pointer;
         position: relative;
-
-        @include media-breakpoint-up(md) {
-            width: 400px;
-        }
 
         &:active {
             transform: translateY(10px);

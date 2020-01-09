@@ -207,7 +207,7 @@
                             <div class="bg-w py-5 px-4 mb-3">
                                 <h2 class="p2">Please Select Your Preferred Plan</h2>
                                 <div class="row">
-                                    <div class="col-4">
+                                    <div class="col-12 col-lg-4">
                                         <p class="h2">TravelRight Plus</p>
                                         <p class="bt1 d-none d-lg-block">Benefits</p>
                                         {% include "templates/components/list-variant-icon.twig" with {
@@ -218,11 +218,11 @@
                                                 { iconName: 'tick-mark', content: 'Luggage & Delay (Every 6 hours)' },
                                                 { iconName: 'tick-mark', content: 'Travel Delay (Every 6 hours)' },
                                             ],
-                                            classes: "d-none d-lg-block"
+                                            class: "d-none d-lg-block"
                                         } %}
                                         <p class="bt2">View the full benefits <strong><a href="#">HERE</a></strong></p>
                                     </div>
-                                    <div class="col-8">
+                                    <div class="col-12 col-lg-8">
                                         <div class="d-lg-flex">
                                             {% embed "templates/components/radio-infobox.twig" with {
                                                 name: "choosePlan",
@@ -293,7 +293,7 @@
                              <div class="bg-w py-5 px-4">
                                 <h2 class="p2">Choose Your Optional Add-On</h2>
                                 <div class="row">
-                                    <div class="col-4">
+                                    <div class="col-12 col-lg-4">
                                         <p class="h2">Sports Fan</p>
                                         <p class="bt1">Travelling and can’t wait to cheer for your favourite sports team? Make sure you are covered with the Sports Fans add-on for additional protection!</p>
                                         {% include "templates/components/list-variant-icon.twig" with {
@@ -306,7 +306,7 @@
                                         } %}
                                         <p class="bt2">View the full benefits <strong><a href="#">HERE</a></strong></p>
                                     </div>
-                                    <div class="col-8"></div>
+                                    <div class="col-12 col-lg-8"></div>
                                 </div>
                             </div>
                         </div>
