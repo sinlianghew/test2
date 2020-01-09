@@ -69,7 +69,7 @@ const travelForm = new Vue({
             startDate: null,
             endDate: null,
             tncAgreement: false,
-            paymentMethod: 'Online Banking'
+            paymentMethod: 'Credit/Debit Card'
         },
         currStep: null,
         showGetStartedConsent: true
@@ -123,6 +123,6 @@ const travelForm = new Vue({
         }
     },
     mounted() {
-        this.currStep = this.steps[5];
+        this.currStep = this.steps[0];
     }
 })
