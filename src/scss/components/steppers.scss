@@ -64,18 +64,18 @@
     }
 
     .step-title {
-        @extend .bt1;
         opacity: 0;
+        font-weight: bold;
         visibility: hidden;
         text-transform: uppercase;
-        font-size: 12px;
-        margin-top: 20px;
+        font-size: 14px;
         user-select: none;
         text-align: center;
         transition: 0.3s ease;
         position: absolute;
         white-space: nowrap;
         bottom: 0;
+        transform: translateY(50%);
     }
 
     /** Different state overrides **/
