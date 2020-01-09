@@ -5,7 +5,17 @@
 
 .bt2 {
     font-weight: 400;
-    font-size: 18px;
+    font-size: 16px;
+}
+
+@include media-breakpoint-up(md) {
+    .bt1 {
+        font-size: 18px;
+    }
+    
+    .bt2 {
+        font-size: 18px;
+    }
 }
 
 .bt3 {
