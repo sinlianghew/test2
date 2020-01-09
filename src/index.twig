@@ -692,10 +692,10 @@
                                     } %}
                                 </div>
 
-                                <div class="pt-4 wizard-navigation">
-                                    <a href="#" role="button" class="btn btn-default btn-outline-primary" @click.prevent="goToPrevStep()">Back</a>
-                                    <a href="#" role="button" class="btn btn-default btn-primary" @click.prevent="goToNextStep()">Pay Now</a>
-                                </div>
+                            </div>
+                            <div class="pt-4 wizard-navigation d-none d-md-flex">
+                                <a href="#" role="button" class="btn btn-default btn-outline-primary" @click.prevent="goToPrevStep()">Back</a>
+                                <a href="/payment-completed.html" role="button" class="btn btn-default btn-primary">Pay Now</a>
                             </div>
                         </div>
                         <div class="col-12 col-md-4">
@@ -703,7 +703,12 @@
                         </div>
                     </div>
                 </div>
+                <div class="container pt-4 wizard-navigation d-md-none">
+                    <a href="#" role="button" class="btn btn-default btn-outline-primary mb-3 mb-md-0" @click.prevent="goToPrevStep()">Back</a>
+                    <a href="/payment-completed.html" role="button" class="btn btn-default btn-primary">Pay Now</a>
+                </div>
             </div>
+            
         </div>
     </div>
 

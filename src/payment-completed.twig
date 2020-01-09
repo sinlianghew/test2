@@ -1,0 +1,24 @@
+{% extends "templates/partials/base.twig" %}
+
+{% block main %}
+    <div class="bg-p2d py-5 payment-completed-page">
+        <div class="container py-5">
+            <div class="bg-w text-center px-3 px-md-5 py-5">
+                {% include "templates/components/icon.twig" with { iconName: 'shield-protected', iconSize: '5xl p2 mb-4' } %}
+                <h1 class="p2 mb-3">Thank you, you're Covered!</h1>
+                <p class="bt2 mb-4">Your purchase is successful, an email has been sent to you with all the details.<br>Below is your confirmation of your insurance number:</p>
+
+                <h2 class="mb-5">98202139</h2>
+
+                <a href="/" class="btn btn-default btn-primary mb-3">Back To Home</a>
+
+                <div class="row">
+                    <div class="col-12 col-md-8 offset-md-2">
+                        <p>If you have any enquiries you may contact our Customer Service Hotline at: <a href="tel:1800886744">1-800-88(6744)</a> or <a href="mailto:google@google.com">Email Us</a> from <strong>Monday to Friday 8:30am - 5:30pm</strong> excluding public holidays.</p>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+{% endblock %}
