@@ -206,12 +206,29 @@
 
                             <div class="bg-w py-5 px-4">
                                 <h2 class="p2">Please Select Your Preferred Plan</h2>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <p class="h2">TravelRight Plus</p>
+                                        <p class="bt1">Benefits</p>
+                                        {% include "templates/components/list-variant-icon.twig" with {
+                                            items: [
+                                                { iconName: 'tick-mark', content: 'Personal Accident' },
+                                                { iconName: 'tick-mark', content: 'Medical & Other Expenses' },
+                                                { iconName: 'tick-mark', content: 'Luggage & Personal Effects' },
+                                                { iconName: 'tick-mark', content: 'Luggage & Delay (Every 6 hours)' },
+                                                { iconName: 'tick-mark', content: 'Travel Delay (Every 6 hours)' },
+                                            ]
+                                        } %}
+                                        <p class="bt2">View the full benefits <strong><a href="#">HERE</a></strong></p>
+                                    </div>
+                                    <div class="col-8"></div>
+                                </div>
                             </div>
                         </div>
 
                         <div class="col-4 summary-pane">
-                            <div class="section-header bg-p2 w py-3 px-4">
-                                <h2>Summary</h2>
+                            <div class="section-header bg-p2 py-3 px-4">
+                                <h2 class="w">Summary</h2>
                             </div>
                             <div class="bg-w py-3 px-4">
                                 <p class="bt1">Coverage</p>
