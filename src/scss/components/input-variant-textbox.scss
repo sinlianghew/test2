@@ -1,0 +1,17 @@
+.form-group {
+    input[type=text].form-control {
+        &::placeholder {
+            font-style: italic;
+        }
+    }
+
+    &.variant-icon {
+        position: relative;
+        .icon {
+            position: absolute;
+            top: 50%;
+            right: 5px;
+            transform: translateY(-50%);
+        }
+    }
+}

@@ -1,0 +1,35 @@
+.form-check {
+    .form-check-input[type=radio] {
+        visibility: hidden;
+        position: absolute;
+        opacity: 0;
+
+        & + .form-check-label {
+            padding-left: 12px;
+            padding-right: 12px;
+            user-select: none;
+    
+            &::before {
+                height: 24px;
+                width: 24px;
+                content: '';
+                background-color: #fff;
+                border: 2px solid $p2;
+                border-radius: 50%;
+                position: absolute;
+                left: 0;
+                transition: 0.2s ease border-color;
+            }
+        }
+    }
+
+    /** Different state overrides **/
+    .form-check-input[type=radio]:checked + .form-check-label {
+        font-weight: 700;
+
+        &::before {
+            border-color: $s1;
+            border-width: 7px;
+        }
+    }
+}

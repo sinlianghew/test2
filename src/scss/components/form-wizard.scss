@@ -1,0 +1,14 @@
+.form-wizard {
+    .wizard-navigation {
+        display: flex;
+        justify-content: flex-end;
+
+        .btn {
+            margin-right: 1rem;
+
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+    }
+}

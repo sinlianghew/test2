@@ -1,0 +1,141 @@
+.nav.variant-steppers {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    height: 100px;
+    
+    .nav-item.step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        flex-grow: 1;
+        flex: 1;
+        height: 100%;
+        position: relative;
+        transition: 0.5s ease flex;
+
+        &::after {
+            content: '';
+            position: absolute;
+            height: 1px;
+            width: 100%;
+            background-color: $p2;
+            bottom: 48%;
+        }
+
+        &:first-child::after {
+            width: 50%;
+            right: 0;
+        }
+
+        &:last-child::after {
+            width: 50%;
+            left: 0;
+        }
+    }
+
+    .step-indicator {
+        height: 35px;
+        width: 35px;
+        border-radius: 50%;
+        border: 1px solid $p2;
+        background-color: #fff;
+        color: $p2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        z-index: 1;
+        cursor: pointer;
+        user-select: none;
+        @extend .bt1;
+        transform-origin: center;
+        transition: 0.3s ease;
+
+        .tick-mark {
+            position: absolute;
+            opacity: 0;
+            visibility: hidden;
+            transform: rotate(-30deg);
+            transition: 0.3s ease;
+        }
+    }
+
+    .step-title {
+        @extend .bt1;
+        opacity: 0;
+        visibility: hidden;
+        text-transform: uppercase;
+        font-size: 12px;
+        margin-top: 20px;
+        user-select: none;
+        text-align: center;
+        transition: 0.3s ease;
+        position: absolute;
+        white-space: nowrap;
+        bottom: 0;
+    }
+
+    /** Different state overrides **/
+    .nav-item.step {
+        &.active {
+            flex: 1.8;
+
+            .step-indicator {
+                transform: scale(1.8);
+                background-color: $p2;
+                color: #fff;
+            }
+
+            .step-title {
+                opacity: 1;
+                visibility: visible;
+            }
+        }
+        &.completed {
+            .step-indicator {
+                background-color: $p2;
+                color: transparent;
+
+                .tick-mark {
+                    opacity: 1;
+                    visibility: visible;
+                    transform: rotate(0deg);
+                }
+            }
+        }
+    }
+
+    /** Responsive overrides **/
+    @include media-breakpoint-up(md) {
+        .step-title {
+            opacity: 1;
+            visibility: visible;
+            font-size: 14px;
+            margin-top: 10px;
+            position: relative;
+        }
+
+        .nav-item.step {
+            justify-content: flex-end;
+
+            &::after {
+                bottom: 48%;
+            }
+
+            &.active {
+                flex: 1.5;
+
+                .step-indicator {
+                    transform: scale(1.8);
+                }
+            }
+        }
+
+        .step-indicator {
+            border: 2px solid $p2;
+            transform-origin: bottom;
+        }
+    }
+}

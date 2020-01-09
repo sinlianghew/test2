@@ -1,0 +1,50 @@
+.form-check {
+    .form-check-input[type=checkbox] {
+        visibility: hidden;
+        position: absolute;
+        opacity: 0;
+
+        & + .form-check-label {
+            user-select: none;
+            padding-left: 12px;
+            padding-right: 12px;
+    
+            &::before {
+                height: 24px;
+                width: 24px;
+                content: '';
+                background-color: #fff;
+                border: 2px solid $p2;
+                border-radius: 4px;
+                position: absolute;
+                left: 0;
+                transition: 0.2s ease border-color;
+            }
+        }
+    }
+
+    svg.tick-mark {
+        position: absolute;
+        left: 0;
+        top: 0;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transform: scale(0.8) rotate(-10deg);
+        transition: 0.3s ease;
+    }
+
+    /** Different state overrides **/
+    .form-check-input[type=checkbox]:checked + .form-check-label {
+        &::before {
+            border-color: $s1;
+            background-color: $s1;
+        }
+
+        & + svg.tick-mark {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(0.6) rotate(0deg);
+        }
+    }
+}
