@@ -1,12 +1,21 @@
-<ul class="list variant-icon">
+<ul class="list variant-icon {{classes}}">
 	{% for item in items %}        
-        <li>
-            <div class="list-icon">
-                {% include "icon.twig" with { iconName: item.iconName, iconSize: 's' } %}
-            </div>
-            <div class="list-content">
-                {{ item.content }}
-            </div>
+        <li class="mb-2 {% if listWithLabelValue == true %}pl-lg-0 text-lg-center{% endif %}">
+            {% if listWithLabelValue == true %}
+                <div class="list-icon d-lg-none">
+                    {% include "icon.twig" with { iconName: item.iconName, iconSize: 's' } %}
+                </div>
+                <div class="list-content d-flex justify-content-between d-lg-block w-100">
+                    {{ item.content }}
+                </div>
+            {% else %}
+                <div class="list-icon">
+                    {% include "icon.twig" with { iconName: item.iconName, iconSize: 's' } %}
+                </div>
+                <div class="list-content">
+                    {{ item.content }}
+                </div>
+            {% endif %}
         </li>
     {% endfor %}
 </ul>

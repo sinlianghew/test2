@@ -1,6 +1,6 @@
 .form-group.variant-date-picker {
     position: relative;
-
+    stroke: $p2;
     .form-control {
         padding: 0;
 
@@ -28,7 +28,7 @@
         width: 100%;
         border: none;
         box-shadow: 0 0 10px 5px rgba(0,0,0,0.1);
-
+        
         header {
             .prev, .day__month_btn, .next {
                 background-color: $p2;

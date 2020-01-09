@@ -1,6 +1,7 @@
 .radio-infobox {
     line-height: $headings-line-height;
     color: $p2;
+    stroke: $p2;
     
     input[type="radio"] {
         display: none;
@@ -9,14 +10,7 @@
             +.box {
                 background-color: $p2;
                 color: white;
-                span {
-                    transform: translateY(70px);
-
-                    &:before {
-                        transform: translateY(0px);
-                        opacity: 1;
-                    }
-                }
+                stroke: white;
                 .custom-rounded-checked{
                     background-color: $s1;
                     border-color: $s1;
@@ -27,6 +21,7 @@
 
     .box {
         width: 100%;
+        max-width: 400px;
         height: auto;
         border-radius: $btn-border-radius;
         border: 2px solid $p2;

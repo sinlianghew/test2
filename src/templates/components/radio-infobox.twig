@@ -1,87 +1,17 @@
-<div class="radio-infobox d-flex">
-    <label>
-        <input type="radio" name="radio" />
+<div class="radio-infobox {{classes}}">
+    <label class="d-block">
+        <input type="radio" name="{{name}}" />
         <div class="box overflow-hidden">
             <div class="box--header bg-p2 text-white p-3">
-                <h3 class="m-0">Plan 1</h3>
-                <p class="m-0">from <span class="h3">RM39.00</span></p>
+                {% block top %}
+                    Headline
+                {% endblock %}
             </div>
             <div class="box--body p-3">
-                <div class="row py-2">
-                    <div class="text-left col-6 col-lg-12 d-lg-none">
-                        <strong class="mr-2 bold">Benefits</strong>
-                    </div>
-                    <div class="text-right text-lg-center col-6 col-lg-12">
-                        <strong class="ml-2">RM</strong>
-                    </div>
-                </div>
-                <div class="row py-2">
-                    <div class="text-left col-6 col-lg-12 d-lg-none">
-                        <span class="mr-2 bold">
-                            Personal Accident
-                        </span>
-                    </div>
-                    <div class="text-right text-lg-center col-6 col-lg-12">
-                        <span class="ml-2">10,000</span>
-                    </div>
-                </div>
-                <div class="row py-2">
-                    <div class="text-left col-6 col-lg-12 d-lg-none">
-                        <span class="mr-2 bold">
-                            <i>Travel Delay<br/>(Every 6 hours)</i>
-                        </span>
-                    </div>
-                    <div class="text-right text-lg-center col-6 col-lg-12">
-                        <span class="ml-2">10,000</span>
-                    </div>
-                </div>
-                <div class="text-center">
-                    <div class="custom-rounded-checked mt-3">
-                        <svg class="icon icon-m tick-mark my-2">
-                            <use xlink:href="assets/icons/icons.svg#sprite-tick-mark" href="assets/icons/icons.svg#sprite-tick-mark"></use>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </label>
-
-    <label>
-        <input type="radio" name="radio" />
-        <div class="box overflow-hidden">
-            <div class="box--header bg-p2 text-white p-3">
-                <h3 class="m-0">Plan 2</h3>
-                <p class="m-0">from <span class="h3">RM58.00</span></p>
-            </div>
-            <div class="box--body p-3">
-                <div class="row py-2">
-                    <div class="text-left col-6 col-lg-12 d-lg-none">
-                        <strong class="mr-2 bold">Benefits</strong>
-                    </div>
-                    <div class="text-right text-lg-center col-6 col-lg-12">
-                        <strong class="ml-2">RM</strong>
-                    </div>
-                </div>
-                <div class="row py-2">
-                    <div class="text-left col-6 col-lg-12 d-lg-none">
-                        <span class="mr-2 bold">
-                            Personal Accident
-                        </span>
-                    </div>
-                    <div class="text-right text-lg-center col-6 col-lg-12">
-                        <span class="ml-2">10,000</span>
-                    </div>
-                </div>
-                <div class="row py-2">
-                    <div class="text-left col-6 col-lg-12 d-lg-none">
-                        <span class="mr-2 bold">
-                            <i>Travel Delay<br/>(Every 6 hours)</i>
-                        </span>
-                    </div>
-                    <div class="text-right text-lg-center col-6 col-lg-12">
-                        <span class="ml-2">10,000</span>
-                    </div>
-                </div>
+                {% block bottom %}
+                    Body
+                {% endblock %}
+                
                 <div class="text-center">
                     <div class="custom-rounded-checked mt-3">
                         <svg class="icon icon-m tick-mark my-2">
