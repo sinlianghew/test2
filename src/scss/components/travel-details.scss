@@ -1,0 +1,124 @@
+.travel-details {
+
+    .jumbotron {
+        height: 466px;
+        border-radius: 0px;
+    }
+
+
+    .subnav-travel-details {
+        background: $p1;
+
+        @include media-breakpoint-up(md) {
+            background: $p2;
+        }
+
+        .navbar {
+            padding: 0 1rem;
+
+            @include media-breakpoint-up(md) {
+                height: 80px;
+            }
+
+
+
+            .nav-brand {
+                color: white;
+                line-height: 3rem;
+                font-size: $h4-font-size;
+                font-weight: $font-weight-bold;
+                border-bottom: 0px;
+                margin: 0;
+            }
+
+            .arrow-dropdown {
+                transform: rotate(180deg);
+                -webkit-transition: -webkit-transform .5s ease;
+                -ms-transition: -ms-transform .5s ease;
+                transition: transform .5s ease;
+
+                &.collapsed {
+                    transform: rotate(0deg);
+                }
+            }
+
+
+
+            .navbar-collapse {
+                @include media-breakpoint-down(md) {
+                    background: white;
+                    margin: 0 -1rem;
+                    padding: 0 15px;
+                }
+
+                .navbar-nav {
+                    @include media-breakpoint-down(up) {
+                       margin: auto;
+                    }
+
+                    .nav-item {
+                        @include media-breakpoint-up(md) {
+                            &:first-child {
+                                &::before {
+                                    width: 0;
+                                }
+                            }
+
+                            &::before {
+                                content: " ";
+                                position: absolute;
+                                top: 0;
+                                height: 80px;
+                                width: 1px;
+                                background: white;
+                            }
+                        }
+
+
+                        .nav-link {
+                            font-size: $h4-font-size;
+                            color: black;
+                            font-weight: $font-weight-normal;
+                            height: 48px;
+                            line-height: 3rem;
+                            border-bottom: 1px solid $p2;
+                            margin: 0 -1rem;
+                            padding: 0 15px;
+
+                            @include media-breakpoint-up(md) {
+                                height: 80px;
+                                font-size: $h2-font-size;
+                                font-weight: $font-weight-bold;
+                                text-align: center;
+                                padding: 0 50px;
+                                margin: 0;
+                                line-height: 5rem;
+                                color: white;
+                            }
+
+                            &:hover {
+                                @include media-breakpoint-up(md) {
+                                    background: $p1;
+                                }
+                            }
+
+                            &.active {
+                                display: none;
+
+                                @include media-breakpoint-up(md) {
+                                    display: block;
+                                    background: $p1;
+                                }
+                            }
+                        }
+
+                    }
+                }
+
+            }
+
+
+
+        }
+    }
+}
