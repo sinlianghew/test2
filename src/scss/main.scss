@@ -21,5 +21,9 @@
 @import "components/input-variant-datepicker.scss";
 @import "components/divider.scss";
 
+
+/** Page Specific styling **/
+@import "pages/travel-form.scss";
+
 /** Bootstrap **/
 @import "node_modules/bootstrap/scss/bootstrap.scss";
