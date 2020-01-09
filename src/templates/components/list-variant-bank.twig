@@ -1,0 +1,15 @@
+<div class="list variant-bank">
+    {% for bank in banks %}
+        <div class="list-item">
+            <input type="radio" name="bank" id="bankRadio{{ loop.index }}">
+            <label for="bankRadio{{ loop.index }}">
+                <div class="bank-logo">
+                    <img src="assets/img/{{ bank.img }}" alt="{{ bank.name }} logo">
+                </div>
+                <div class="bank-name">
+                    {{ bank.name }}
+                </div>
+            </label>
+        </div>
+    {% endfor %}
+</div>
