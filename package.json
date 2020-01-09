@@ -1,7 +1,7 @@
 {
-  "name": "superfruits-valley-fe-build",
+  "name": "msig-takeiteasy-microsite",
   "version": "1.0.0",
-  "description": "The front-end build for SV Umbraco CMS",
+  "description": "The front-end build for the MSIG TakeItEasy Microsite",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ihlim97/SuperfruitsValleyFE.git"
+    "url": "git+https://gitlab.com/apd-my/msig-takeiteasy-webpack.git"
   },
   "author": "Ie Howe",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ihlim97/SuperfruitsValleyFE/issues"
+    "url": "https://gitlab.com/apd-my/msig-takeiteasy-webpack/issues"
   },
-  "homepage": "https://github.com/ihlim97/SuperfruitsValleyFE#readme",
+  "homepage": "https://gitlab.com/apd-my/msig-takeiteasy-webpack#readme",
   "devDependencies": {
     "@babel/core": "^7.5.0",
     "@babel/preset-env": "^7.5.0",
