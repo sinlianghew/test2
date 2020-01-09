@@ -1,0 +1,11 @@
+<div class="form-check">
+    <input class="form-check-input" type="checkbox" name="{{ name }}" id="{{ name }}" {% if vModel %} v-model="{{ vModel }}"{% endif %}>
+    <label class="form-check-label" for="{{ name }}">
+        {% block content %}{% endblock %}
+    </label>
+    <svg class="icon icon-m tick-mark">
+        <use xlink:href="assets/icons/icons.svg#sprite-tick-mark" href="assets/icons/icons.svg#sprite-tick-mark"></use>
+    </svg>
+</div>
+
+

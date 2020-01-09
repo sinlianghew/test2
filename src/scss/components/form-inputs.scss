@@ -10,3 +10,9 @@
         }
     }
 }
+
+.form-row {
+    .form-group .form-control {
+        min-width: auto;
+    }
+}

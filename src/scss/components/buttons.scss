@@ -1,6 +1,8 @@
 .btn.btn-icon {
     display: flex;
     align-items: center;
+    padding: 0;
+    min-width: auto;
 
     .button-icon {
         border-radius: 50%;
@@ -50,7 +52,7 @@
     &.btn-secondary {
         background-color: transparent;
         border: none;
-        
+
         .button-icon {
             background-color: $p2;
         }
