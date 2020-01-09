@@ -8,7 +8,7 @@
             {% include "templates/components/steppers.twig" %}
         </div>
 
-        <div class="bg-light py-5 wizard-sections">
+        <div class="bg-p2d py-5 wizard-sections">
             <div class="wizard-section-1" :class="{ 'd-none': currStep && currStep.step !== 1 }">
                 <div class="container bg-w py-5 px-4">
                 
@@ -56,8 +56,8 @@
                         </div>
 
                         <div v-if="formData.idType === 'Passport'">
-                            <div class="d-flex">
-                                <div class="form-group mr-3">
+                            <div class="d-md-flex">
+                                <div class="form-group mr-md-3">
                                     <select class="form-control" id="country" name="country">
                                         <option disabled hidden selected>Select country</option>
                                         <option>Malaysia</option>
@@ -71,9 +71,13 @@
                                 </div>
                             </div>
                             <p class="bt1">Date of Birth:</p>
-                            <div class="d-flex">
-                                <div class="form-group variant-icon">
-                                    <input type="text" class="form-control" placeholder="DD/MM/YYYY">
+                            <div class="d-md-flex">
+                                <div class="form-group variant-date-picker">
+                                    <datepicker class="form-control"
+                                        placeholder="DD/MM/YYYY"
+                                        :format="customDateFormatter"
+                                        v-model="formData.dateOfBirth">
+                                    </datepicker>
                                     {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
                                 </div>
                             </div>
@@ -99,7 +103,174 @@
             </div>
 
             <div class="wizard-section-2" :class="{ 'd-none': currStep && currStep.step !== 2 }">
-                <div class="container bg-w py-5 px-4"></div>
+                <div class="container py-5">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="bg-w py-5 px-4 mb-3">
+                                <h2 class="p2">Choose a Plan</h2>
+
+                                {% include "templates/components/input-variant-radio.twig" with {
+                                    name: 'coverageType',
+                                    formControls: [
+                                        { value: 'Single Trip' },
+                                        { value: 'Annual Cover' },
+                                    ],
+                                    spacing: 'mb-4'
+                                } %}
+
+                                {% verbatim %}    
+                                    <div class="d-md-flex">
+                                        <div class="form-group">
+                                            <label class="bt1" for="areaOfCoverage">Area of Coverage</label>
+                                            <select name="areaOfCoverage" id="areaOfCoverage" class="form-control" v-model="formData.areaOfCoverage">
+                                                <option :value="area.name" v-for="area in coverageAreas" v-bind:key="coverageAreas.indexOf(area)">
+                                                    {{ area.name }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="bt2">
+                                        <p>Locations covered in this area of coverage:</p>
+                                        <p>{{ countriesForCurrArea }}</p>
+                                    </div>
+                                {% endverbatim %}
+
+
+                                <div class="area-of-coverage text-center mb-5">
+                                    <img src="assets/img/area-1.jpg" 
+                                        alt="Area 1" 
+                                        :class="{
+                                            'img-fluid': true,
+                                            'd-none': formData.areaOfCoverage !== 'Area 1'
+                                        }">
+                                    <img src="assets/img/area-2.jpg" 
+                                        alt="Area 2" 
+                                        :class="{
+                                            'img-fluid': true,
+                                            'd-none': formData.areaOfCoverage !== 'Area 2'
+                                        }">
+                                    <img src="assets/img/area-3.jpg" 
+                                        alt="Area 3" 
+                                        :class="{
+                                            'img-fluid': true,
+                                            'd-none': formData.areaOfCoverage !== 'Area 3'
+                                        }">
+                                    <img src="assets/img/area-4.jpg" 
+                                        alt="Area 4" 
+                                        :class="{
+                                            'img-fluid': true,
+                                            'd-none': formData.areaOfCoverage !== 'Area 4'
+                                        }">
+                                </div>
+
+                                <h2 class="p2 mb-4">Period of Coverage</h2>
+                                <div class="d-flex justify-content-between mb-4">
+                                    <div>
+                                        <p class="bt1">Start Date</p>
+                                        <div class="form-group variant-date-picker">
+                                            <datepicker class="form-control"
+                                                placeholder="Select date"
+                                                :format="customDateFormatter"
+                                                v-model="formData.startDate">
+                                            </datepicker>
+                                            {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <p class="bt1">End Date</p>
+                                        <div class="form-group variant-date-picker">
+                                            <datepicker class="form-control"
+                                                placeholder="Select date"
+                                                :format="customDateFormatter"
+                                                v-model="formData.endDate">
+                                            </datepicker>
+                                            {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="bt2">
+                                    <p>Please note that your coverage will terminate at the earliest happening of the following:</p>
+                                    <ol>
+                                        <li>24 hours upon your arrival in Malaysia</li>
+                                        <li>Upon reaching your home or workplace in Malaysia (whichever is the earlier)</li>
+                                        <li>Expiry date of your travel insurance policy</li>
+                                    </ol>
+                                    <p>The following benefits will not be applicable for travel insurance purchased less than 7 days from travel start date:</p>
+                                    <ol>
+                                        <li>Section 7: Travel Cancellation</li>
+                                        <li>Section 14: Loss of Travel Deposit</li>
+                                    </ol>
+                                </div>
+                            </div>
+
+                            <div class="bg-w py-5 px-4">
+                                <h2 class="p2">Please Select Your Preferred Plan</h2>
+                            </div>
+                        </div>
+
+                        <div class="col-4 summary-pane">
+                            <div class="section-header bg-p2 w py-3 px-4">
+                                <h2>Summary</h2>
+                            </div>
+                            <div class="bg-w py-3 px-4">
+                                <p class="bt1">Coverage</p>
+                                <table>
+                                    <tr>
+                                        <td>Type:</td>
+                                        <td>Single Trip</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Area:</td>
+                                        <td>Area 4</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Period:</td>
+                                        <td>20/08/2019 - 19/09/2019 (30 Days)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Plan:</td>
+                                        <td>Plan 2</td>
+                                    </tr>
+                                </table>
+                                <p class="text-right bt1">RM</p>
+                                <div class="bg-p2c d-flex justify-content-between px-3 py-4 rounded mb-3">
+                                    <p class="bt2 mb-0">Basic Premium</p>
+                                    <p class="bt2 mb-0">58.00</p>
+                                </div>
+
+                                <div class="bg-p2c px-3 py-4 mb-3 rounded">
+                                    <div class="d-flex justify-content-between">
+                                        <p class="bt2 mb-0">Gross Premium</p>
+                                        <p class="bt2 mb-0">58.00</p>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <p class="bt2 mb-0">Rebate (25%)</p>
+                                        <p class="bt2 mb-0">(14.50)</p>
+                                    </div>
+                                    <div class="divider"></div>
+                                    <div class="d-flex justify-content-between">
+                                        <p class="bt2 mb-0"><strong>Subtotal</strong></p>
+                                        <p class="bt2 mb-0"><strong>43.50</strong></p>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <p class="bt2 mb-0">Service Tax (6%)</p>
+                                        <p class="bt2 mb-0">0.00</p>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <p class="bt2 mb-0">Stamp Duty</p>
+                                        <p class="bt2 mb-0">10.00</p>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <p class="bt1 p2">Total Amount Payable</p>
+                                    <p class="h2 p2">0.00</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="container pt-4 wizard-navigation">
                     <a href="#" role="button" class="btn btn-default btn-outline-primary" @click="goToPrevStep()">Back</a>
                     <a href="#" role="button" class="btn btn-default btn-primary" @click="goToNextStep()">Continue</a>
