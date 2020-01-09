@@ -204,7 +204,7 @@
                                 </div>
                             </div>
 
-                            <div class="bg-w py-5 px-4">
+                            <div class="bg-w py-5 px-4 mb-3">
                                 <h2 class="p2">Please Select Your Preferred Plan</h2>
                                 <div class="row">
                                     <div class="col-4">
@@ -224,67 +224,30 @@
                                     <div class="col-8"></div>
                                 </div>
                             </div>
+
+                             <div class="bg-w py-5 px-4">
+                                <h2 class="p2">Choose Your Optional Add-On</h2>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <p class="h2">Sports Fan</p>
+                                        <p class="bt1">Travelling and can’t wait to cheer for your favourite sports team? Make sure you are covered with the Sports Fans add-on for additional protection!</p>
+                                        {% include "templates/components/list-variant-icon.twig" with {
+                                            items: [
+                                                { iconName: 'tick-mark', content: 'Additional Indemnity for Personal Accident' },
+                                                { iconName: 'tick-mark', content: 'Extended Accommodation Cover' },
+                                                { iconName: 'tick-mark', content: 'Ticket Cover' },
+                                                { iconName: 'tick-mark', content: 'Transportation Amendment Fee' },
+                                            ]
+                                        } %}
+                                        <p class="bt2">View the full benefits <strong><a href="#">HERE</a></strong></p>
+                                    </div>
+                                    <div class="col-8"></div>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="col-4 summary-pane">
-                            <div class="section-header bg-p2 py-3 px-4">
-                                <h2 class="w">Summary</h2>
-                            </div>
-                            <div class="bg-w py-3 px-4">
-                                <p class="bt1">Coverage</p>
-                                <table>
-                                    <tr>
-                                        <td>Type:</td>
-                                        <td>Single Trip</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Area:</td>
-                                        <td>Area 4</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Period:</td>
-                                        <td>20/08/2019 - 19/09/2019 (30 Days)</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Plan:</td>
-                                        <td>Plan 2</td>
-                                    </tr>
-                                </table>
-                                <p class="text-right bt1">RM</p>
-                                <div class="bg-p2c d-flex justify-content-between px-3 py-4 rounded mb-3">
-                                    <p class="bt2 mb-0">Basic Premium</p>
-                                    <p class="bt2 mb-0">58.00</p>
-                                </div>
-
-                                <div class="bg-p2c px-3 py-4 mb-3 rounded">
-                                    <div class="d-flex justify-content-between">
-                                        <p class="bt2 mb-0">Gross Premium</p>
-                                        <p class="bt2 mb-0">58.00</p>
-                                    </div>
-                                    <div class="d-flex justify-content-between">
-                                        <p class="bt2 mb-0">Rebate (25%)</p>
-                                        <p class="bt2 mb-0">(14.50)</p>
-                                    </div>
-                                    <div class="divider"></div>
-                                    <div class="d-flex justify-content-between">
-                                        <p class="bt2 mb-0"><strong>Subtotal</strong></p>
-                                        <p class="bt2 mb-0"><strong>43.50</strong></p>
-                                    </div>
-                                    <div class="d-flex justify-content-between">
-                                        <p class="bt2 mb-0">Service Tax (6%)</p>
-                                        <p class="bt2 mb-0">0.00</p>
-                                    </div>
-                                    <div class="d-flex justify-content-between">
-                                        <p class="bt2 mb-0">Stamp Duty</p>
-                                        <p class="bt2 mb-0">10.00</p>
-                                    </div>
-                                </div>
-
-                                <div class="d-flex justify-content-between">
-                                    <p class="bt1 p2">Total Amount Payable</p>
-                                    <p class="h2 p2">0.00</p>
-                                </div>
-                            </div>
+                        <div class="col-4">
+                            {% include "templates/components/summary-pane.twig" %}
                         </div>
                     </div>
                 </div>
@@ -295,7 +258,88 @@
             </div>
 
             <div class="wizard-section-3" :class="{ 'd-none': currStep && currStep.step !== 3 }">
-                <div class="container bg-w py-5 px-4"></div>
+                <div class="container py-5 px-4">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="bg-w py-5 px-4">
+                                <h2 class="p2">Personal Details</h2>
+
+                                <div class="row">
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label for="customerName" class="bt1">Name (as per NRIC):</label>
+                                            <input id="customerName" type="text" class="form-control" placeholder="e.g. Henry Teo">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label for="nricNo" class="bt1">NRIC No:</label>
+                                            <input id="nricNo" disabled type="text" class="form-control" placeholder="NRIC" v-model="formData.nric">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label for="customerEmail" class="bt1">Email:</label>
+                                            <input id="customerEmail" type="text" class="form-control" placeholder="e.g. hteoro@gmail.com">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label for="mobileNo" class="bt1">Mobile No:</label>
+                                            <input id="mobileNo" type="text" class="form-control" placeholder="e.g. 01x-xxxxxxx">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label for="address1" class="bt1">Address:</label>
+                                            <input id="address1" type="text" class="form-control" placeholder="First Line">
+                                        </div>
+                                        <div class="form-group">
+                                            <input id="address2" type="text" class="form-control" placeholder="Second Line">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group variant-icon">
+                                            <label for="postcode" class="bt1">Postcode</label>
+                                            <div class="input-wrapper">
+                                                <input id="postcode" type="text" class="form-control" placeholder="Find postcode">
+                                                {% include "templates/components/icon.twig" with { iconName: 'search', iconSize: 'm' } %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label for="city" class="bt1">City:</label>
+                                            <input id="city" type="text" class="form-control" disabled placeholder="City">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label for="state" class="bt1">State:</label>
+                                            <input id="state" type="text" class="form-control" disabled placeholder="State">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex justify-content-end mb-3">
+                                <a href="#" class="btn btn-secondary btn-icon">
+                                    <div class="button-icon">
+                                        {% include "templates/components/icon.twig" with { iconName: 'plus', iconSize: 's' } %}
+                                    </div>
+                                    <span class="button-text">Add family</span>
+                                </a>
+                            </div>
+
+                            <div class="bg-w py-5 px-4 mb-3">
+                            
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            {% include "templates/components/summary-pane.twig" %}
+                        </div>
+                    </div>
+                </div>
                 <div class="container pt-4 wizard-navigation">
                     <a href="#" role="button" class="btn btn-default btn-outline-primary" @click="goToPrevStep()">Back</a>
                     <a href="#" role="button" class="btn btn-default btn-primary" @click="goToNextStep()">Continue</a>

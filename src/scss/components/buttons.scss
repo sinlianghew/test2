@@ -1,0 +1,72 @@
+.btn.btn-icon {
+    display: flex;
+    align-items: center;
+
+    .button-icon {
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 10px;
+        transition: 0.2s ease;
+    }
+
+    .button-text {
+        transition: 0.2s ease;
+    }
+
+    &:active,
+    &:focus {
+        background-color: transparent !important;
+        box-shadow: none !important;
+    }
+    
+
+    &.btn-primary {
+        background-color: transparent;
+        border: none;
+
+        .button-icon {
+            background-color: $p1;
+        }
+
+        .button-text {
+            color: $p1;
+        }
+
+        &:hover {
+            .button-icon {
+                background-color: darken($color: $p1, $amount: 10%)
+            }
+
+            .button-text {
+                color: darken($color: $p1, $amount: 10%)
+            }
+        }
+    }
+
+    &.btn-secondary {
+        background-color: transparent;
+        border: none;
+        
+        .button-icon {
+            background-color: $p2;
+        }
+
+        .button-text {
+            color: $p2;
+        }
+
+        &:hover {
+            .button-icon {
+                background-color: darken($color: $p2, $amount: 10%)
+            }
+
+            .button-text {
+                color: darken($color: $p2, $amount: 10%)
+            }
+        }
+    }
+}

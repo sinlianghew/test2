@@ -107,6 +107,6 @@ const travelForm = new Vue({
         }
     },
     mounted() {
-        this.currStep = this.steps[1]
+        this.currStep = this.steps[2];
     }
 })
