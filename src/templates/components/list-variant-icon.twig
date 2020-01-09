@@ -1,0 +1,12 @@
+<ul class="list variant-icon">
+	{% for item in items %}        
+        <li>
+            <div class="list-icon">
+                {% include "icon.twig" with { iconName: item.iconName, iconSize: 's' } %}
+            </div>
+            <div class="list-content">
+                {{ item.content }}
+            </div>
+        </li>
+    {% endfor %}
+</ul>
