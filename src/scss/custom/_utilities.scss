@@ -5,7 +5,17 @@
 
 .bt2 {
     font-weight: 400;
-    font-size: 18px;
+    font-size: 16px;
+}
+
+@include media-breakpoint-up(md) {
+    .bt1 {
+        font-size: 18px;
+    }
+    
+    .bt2 {
+        font-size: 18px;
+    }
 }
 
 .bt3 {
@@ -35,6 +45,30 @@
 
 .bg-p2a {
     background-color: $p2a;
+}
+
+.p2b {
+    color: $p2b;
+}
+
+.bg-p2b {
+    background-color: $p2b;
+}
+
+.p2c {
+    color: $p2c;
+}
+
+.bg-p2c {
+    background-color: $p2c;
+}
+
+.p2d {
+    color: $p2d;
+}
+
+.bg-p2d {
+    background-color: $p2d;
 }
 
 .s1 {
@@ -72,6 +106,12 @@
 .btn {
     min-width: 158px;
 }
+
+
+.btn-l {
+    min-width: 220px;
+}
+
 
 ol.roman {
     list-style-type: lower-roman;

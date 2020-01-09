@@ -3,5 +3,10 @@
         border-radius: 0;
         border-color: $p2;
         min-width: 315px;
+
+        &[disabled] {
+            border: none;
+            background-color: $p2c;
+        }
     }
 }

@@ -3,12 +3,8 @@
 @import "node_modules/bootstrap/scss/mixins";
 @import "node_modules/bootstrap/scss/variables";
 @import "mixins";
-
-/** Customizations **/
 @import "custom/variables";
 @import "custom/fonts";
-@import "custom/utilities";
-@import "custom/overrides";
 
 /** Components **/
 @import "components/steppers.scss";
@@ -21,12 +17,16 @@
 @import "components/input-variant-datepicker.scss";
 @import "components/divider.scss";
 @import "components/radio-infobox.scss";
-
-
-
+@import "components/list-variant-icon.scss";
+@import "components/travel-details.scss";
+@import "components/buttons.scss";
 
 /** Page Specific styling **/
 @import "pages/travel-form.scss";
+
+/** Customizations **/
+@import "custom/utilities";
+@import "custom/overrides";
 
 /** Bootstrap **/
 @import "node_modules/bootstrap/scss/bootstrap.scss";

@@ -1,6 +1,9 @@
 $p1:                            #E11F27;
 $p2:                            #1B1464;
-$p2a:                           #B0ACC4;
+$p2a:                           #504B78;
+$p2b:                           #7A7497;
+$p2c:                           #B0ACC4;
+$p2d:                           #E3E2EB;
 
 $s1:                            #27AE60;
 $s2:                            #0089FF;
@@ -50,6 +53,7 @@ $font-weight-bold:              700;
 $headings-font-weight:          700;
 $headings-font-family:          "PT Sans";
 $headings-line-height:          1;
+$headings-color:                $black;
 
 $h1-font-size:                  $font-size-base * 2.75;
 $h2-font-size:                  $font-size-base * 1.5;

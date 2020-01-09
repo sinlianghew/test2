@@ -8,7 +8,7 @@
             {% include "templates/components/steppers.twig" %}
         </div>
 
-        <div class="bg-light py-5 wizard-sections">
+        <div class="bg-p2d py-5 wizard-sections">
             <div class="wizard-section-1" :class="{ 'd-none': currStep && currStep.step !== 1 }">
                 <div class="container bg-w py-5 px-4">
                     {% include "templates/components/radio-infobox.twig" %}
@@ -104,11 +104,153 @@
             </div>
 
             <div class="wizard-section-2" :class="{ 'd-none': currStep && currStep.step !== 2 }">
-                <div class="container bg-w py-5 px-4">
-                
-                
-                
-                
+                <div class="container py-5">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="bg-w py-5 px-4 mb-3">
+                                <h2 class="p2">Choose a Plan</h2>
+
+                                {% include "templates/components/input-variant-radio.twig" with {
+                                    name: 'coverageType',
+                                    formControls: [
+                                        { value: 'Single Trip' },
+                                        { value: 'Annual Cover' },
+                                    ],
+                                    spacing: 'mb-4'
+                                } %}
+
+                                {% verbatim %}    
+                                    <div class="d-md-flex">
+                                        <div class="form-group">
+                                            <label class="bt1" for="areaOfCoverage">Area of Coverage</label>
+                                            <select name="areaOfCoverage" id="areaOfCoverage" class="form-control" v-model="formData.areaOfCoverage">
+                                                <option :value="area.name" v-for="area in coverageAreas" v-bind:key="coverageAreas.indexOf(area)">
+                                                    {{ area.name }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="bt2">
+                                        <p>Locations covered in this area of coverage:</p>
+                                        <p>{{ countriesForCurrArea }}</p>
+                                    </div>
+                                {% endverbatim %}
+
+
+                                <div class="area-of-coverage text-center mb-5">
+                                    <img src="assets/img/area-1.jpg" 
+                                        alt="Area 1" 
+                                        :class="{
+                                            'img-fluid': true,
+                                            'd-none': formData.areaOfCoverage !== 'Area 1'
+                                        }">
+                                    <img src="assets/img/area-2.jpg" 
+                                        alt="Area 2" 
+                                        :class="{
+                                            'img-fluid': true,
+                                            'd-none': formData.areaOfCoverage !== 'Area 2'
+                                        }">
+                                    <img src="assets/img/area-3.jpg" 
+                                        alt="Area 3" 
+                                        :class="{
+                                            'img-fluid': true,
+                                            'd-none': formData.areaOfCoverage !== 'Area 3'
+                                        }">
+                                    <img src="assets/img/area-4.jpg" 
+                                        alt="Area 4" 
+                                        :class="{
+                                            'img-fluid': true,
+                                            'd-none': formData.areaOfCoverage !== 'Area 4'
+                                        }">
+                                </div>
+
+                                <h2 class="p2 mb-4">Period of Coverage</h2>
+                                <div class="d-flex justify-content-between mb-4">
+                                    <div>
+                                        <p class="bt1">Start Date</p>
+                                        <div class="form-group variant-date-picker">
+                                            <datepicker class="form-control"
+                                                placeholder="Select date"
+                                                :format="customDateFormatter"
+                                                v-model="formData.startDate">
+                                            </datepicker>
+                                            {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <p class="bt1">End Date</p>
+                                        <div class="form-group variant-date-picker">
+                                            <datepicker class="form-control"
+                                                placeholder="Select date"
+                                                :format="customDateFormatter"
+                                                v-model="formData.endDate">
+                                            </datepicker>
+                                            {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="bt2">
+                                    <p>Please note that your coverage will terminate at the earliest happening of the following:</p>
+                                    <ol>
+                                        <li>24 hours upon your arrival in Malaysia</li>
+                                        <li>Upon reaching your home or workplace in Malaysia (whichever is the earlier)</li>
+                                        <li>Expiry date of your travel insurance policy</li>
+                                    </ol>
+                                    <p>The following benefits will not be applicable for travel insurance purchased less than 7 days from travel start date:</p>
+                                    <ol>
+                                        <li>Section 7: Travel Cancellation</li>
+                                        <li>Section 14: Loss of Travel Deposit</li>
+                                    </ol>
+                                </div>
+                            </div>
+
+                            <div class="bg-w py-5 px-4 mb-3">
+                                <h2 class="p2">Please Select Your Preferred Plan</h2>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <p class="h2">TravelRight Plus</p>
+                                        <p class="bt1">Benefits</p>
+                                        {% include "templates/components/list-variant-icon.twig" with {
+                                            items: [
+                                                { iconName: 'tick-mark', content: 'Personal Accident' },
+                                                { iconName: 'tick-mark', content: 'Medical & Other Expenses' },
+                                                { iconName: 'tick-mark', content: 'Luggage & Personal Effects' },
+                                                { iconName: 'tick-mark', content: 'Luggage & Delay (Every 6 hours)' },
+                                                { iconName: 'tick-mark', content: 'Travel Delay (Every 6 hours)' },
+                                            ]
+                                        } %}
+                                        <p class="bt2">View the full benefits <strong><a href="#">HERE</a></strong></p>
+                                    </div>
+                                    <div class="col-8"></div>
+                                </div>
+                            </div>
+
+                             <div class="bg-w py-5 px-4">
+                                <h2 class="p2">Choose Your Optional Add-On</h2>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <p class="h2">Sports Fan</p>
+                                        <p class="bt1">Travelling and can’t wait to cheer for your favourite sports team? Make sure you are covered with the Sports Fans add-on for additional protection!</p>
+                                        {% include "templates/components/list-variant-icon.twig" with {
+                                            items: [
+                                                { iconName: 'tick-mark', content: 'Additional Indemnity for Personal Accident' },
+                                                { iconName: 'tick-mark', content: 'Extended Accommodation Cover' },
+                                                { iconName: 'tick-mark', content: 'Ticket Cover' },
+                                                { iconName: 'tick-mark', content: 'Transportation Amendment Fee' },
+                                            ]
+                                        } %}
+                                        <p class="bt2">View the full benefits <strong><a href="#">HERE</a></strong></p>
+                                    </div>
+                                    <div class="col-8"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-4">
+                            {% include "templates/components/summary-pane.twig" %}
+                        </div>
+                    </div>
                 </div>
                 <div class="container pt-4 wizard-navigation">
                     <a href="#" role="button" class="btn btn-default btn-outline-primary" @click="goToPrevStep()">Back</a>
@@ -117,7 +259,88 @@
             </div>
 
             <div class="wizard-section-3" :class="{ 'd-none': currStep && currStep.step !== 3 }">
-                <div class="container bg-w py-5 px-4"></div>
+                <div class="container py-5 px-4">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="bg-w py-5 px-4">
+                                <h2 class="p2">Personal Details</h2>
+
+                                <div class="row">
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label for="customerName" class="bt1">Name (as per NRIC):</label>
+                                            <input id="customerName" type="text" class="form-control" placeholder="e.g. Henry Teo">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label for="nricNo" class="bt1">NRIC No:</label>
+                                            <input id="nricNo" disabled type="text" class="form-control" placeholder="NRIC" v-model="formData.nric">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label for="customerEmail" class="bt1">Email:</label>
+                                            <input id="customerEmail" type="text" class="form-control" placeholder="e.g. hteoro@gmail.com">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label for="mobileNo" class="bt1">Mobile No:</label>
+                                            <input id="mobileNo" type="text" class="form-control" placeholder="e.g. 01x-xxxxxxx">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label for="address1" class="bt1">Address:</label>
+                                            <input id="address1" type="text" class="form-control" placeholder="First Line">
+                                        </div>
+                                        <div class="form-group">
+                                            <input id="address2" type="text" class="form-control" placeholder="Second Line">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group variant-icon">
+                                            <label for="postcode" class="bt1">Postcode</label>
+                                            <div class="input-wrapper">
+                                                <input id="postcode" type="text" class="form-control" placeholder="Find postcode">
+                                                {% include "templates/components/icon.twig" with { iconName: 'search', iconSize: 'm' } %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label for="city" class="bt1">City:</label>
+                                            <input id="city" type="text" class="form-control" disabled placeholder="City">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label for="state" class="bt1">State:</label>
+                                            <input id="state" type="text" class="form-control" disabled placeholder="State">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex justify-content-end mb-3">
+                                <a href="#" class="btn btn-secondary btn-icon">
+                                    <div class="button-icon">
+                                        {% include "templates/components/icon.twig" with { iconName: 'plus', iconSize: 's' } %}
+                                    </div>
+                                    <span class="button-text">Add family</span>
+                                </a>
+                            </div>
+
+                            <div class="bg-w py-5 px-4 mb-3">
+                            
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            {% include "templates/components/summary-pane.twig" %}
+                        </div>
+                    </div>
+                </div>
                 <div class="container pt-4 wizard-navigation">
                     <a href="#" role="button" class="btn btn-default btn-outline-primary" @click="goToPrevStep()">Back</a>
                     <a href="#" role="button" class="btn btn-default btn-primary" @click="goToNextStep()">Continue</a>

@@ -1,0 +1,18 @@
+.list.variant-icon {
+    list-style: none;
+    padding-left: 0;
+
+    .list-icon svg.icon {
+        fill: $black !important;
+        position: absolute;
+        left: 0;
+        top: 5px;
+    }
+
+    li {
+        padding-left: 1.5rem;
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+}
