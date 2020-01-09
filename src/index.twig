@@ -378,6 +378,243 @@
                                     </a>
                                 </div>
                             </div>
+
+                            <div class="pt-4 wizard-navigation">
+                                <a href="#" role="button" class="btn btn-default btn-outline-primary" @click="goToPrevStep()">Back</a>
+                                <a href="#" role="button" class="btn btn-default btn-primary" @click="goToNextStep()">Continue</a>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            {% include "templates/components/summary-pane.twig" %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="wizard-section-4" :class="{ 'd-none': currStep && currStep.step !== 4 }">
+                <div class="container py-5 px-4">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="bg-w py-5 px-4">
+                                <div class="row">
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label class="bt1">Name (as per NRIC):</label>
+                                            <input type="text" class="form-control" placeholder="e.g. Henry Teo">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label class="bt1">NRIC No:</label>
+                                            <input type="text" class="form-control" placeholder="e.g. 888888-88-8888">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label class="bt1">Mobile No:</label>
+                                            <input type="text" class="form-control" placeholder="e.g. 01X-XXXXXXX">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label class="bt1">Relationship</label>
+                                            <input type="text" class="form-control" placeholder="e.g. Father">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pt-4 wizard-navigation">
+                                <a href="#" role="button" class="btn btn-default btn-outline-primary" @click="goToPrevStep()">Back</a>
+                                <a href="#" role="button" class="btn btn-default btn-primary" @click="goToNextStep()">Continue</a>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            {% include "templates/components/summary-pane.twig" %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="wizard-section-5" :class="{ 'd-none': currStep && currStep.step !== 5 }">
+                <div class="container py-5 px-4">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="bg-w pt-5 pb-3 px-4 mb-3">
+                                <h2 class="p2 mb-4">Personal Details</h2>
+
+                                {% set personalDetails = [
+                                    { title: 'Name (as per NRIC):', content: 'Henry Teo' },
+                                    { title: 'NRIC No:', content: '901010-14-5021' },
+                                    { title: 'Email:', content: 'henryto@gmail.com' },
+                                    { title: 'Mobile No:', content: '012-216 2534' },
+                                    { title: 'Address:', content: '7, Lorong Bahagia 2, TTDI, 60000 Kuala Lumpur, Wilayah Persekutuan, Malaysia' }
+                                ] %}
+
+                                <div class="row">
+                                    {% for item in personalDetails %}
+                                        <div class="col-12 col-md-6">
+                                            <p class="bt1 mb-0">{{ item.title }}</p>
+                                            <p class="bt2">{{ item.content }}</p>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+
+                                <div class="d-flex justify-content-end">
+                                    <a href="#" @click.prevent="changeStep(3)" class="btn btn-secondary btn-icon">
+                                        <div class="button-icon">
+                                            {% include "templates/components/icon.twig" with { iconName: 'plus', iconSize: 's' } %}
+                                        </div>
+                                        <span class="button-text">Edit</span>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="bg-w pt-5 pb-3 px-4 mb-3">
+                                <h2 class="p2">Nominee Details</h2>
+
+                                {% set nomineeDetails = [
+                                    { title: 'Name (as per NRIC):', content: 'Teo Wei Ming' },
+                                    { title: 'NRIC No:', content: '801116-14-5497' },
+                                    { title: 'Mobile No:', content: '017-216 2534' },
+                                    { title: 'Relationship:', content: 'Father' },
+                                ] %}
+
+                                <div class="row">
+                                    {% for item in nomineeDetails %}
+                                        <div class="col-12 col-md-6">
+                                            <p class="bt1 mb-0">{{ item.title }}</p>
+                                            <p class="bt2">{{ item.content }}</p>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+
+                                <div class="d-flex justify-content-end">
+                                    <a href="#" @click.prevent="changeStep(4)" class="btn btn-secondary btn-icon">
+                                        <div class="button-icon">
+                                            {% include "templates/components/icon.twig" with { iconName: 'plus', iconSize: 's' } %}
+                                        </div>
+                                        <span class="button-text">Edit</span>
+                                    </a>
+                                </div>
+                            </div>
+
+                            {% embed "templates/components/input-variant-checkbox.twig" with {
+                                name: 'tncAgreement',
+                                vModel: 'formData.tncAgreement'
+                            } %}
+                                {% block content %}
+                                    By ticking this box, I hereby acknowledge that I have read the <a href="#">Product Disclosure Sheet</a> and agree to the <a href="#">Terms and Conditions</a>.
+                                {% endblock %}
+                            {% endembed %}
+
+                            <div class="pt-4 wizard-navigation">
+                                <a href="#" role="button" class="btn btn-default btn-outline-primary" @click.prevent="goToPrevStep()">Back</a>
+                                <a href="#" role="button" class="btn btn-default btn-primary" @click.prevent="goToNextStep()">Continue</a>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            {% include "templates/components/summary-pane.twig" %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="wizard-section-6" :class="{ 'd-none': currStep && currStep.step !== 6 }">
+                <div class="container py-5 px-4">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="bg-w py-5 px-4 mb-3">
+                                <h2 class="p2 mb-4">Payment</h2>
+                                {% include "templates/components/input-variant-radio.twig" with {
+                                    name: 'paymentMethod',
+                                    formControls: [
+                                        { value: 'Credit/Debit Card' },
+                                        { value: 'Online Banking' },
+                                        { value: 'E-Wallet' },
+                                    ],
+                                    spacing: 'mb-5',
+                                    vModel: 'formData.paymentMethod'
+                                } %}
+
+                                <template v-if="formData.paymentMethod === 'Credit/Debit Card'">
+                                    <img src="assets/img/visa-master-logo.jpg" alt="Visa and Mastercard logo" class="img-fluid mb-4">
+                                    <div class="row">
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label class="bt1">Card Number:</label>
+                                                <input class="form-control" type="text" placeholder="xxxx-xxxx-xxxx-xxxx" name="cardNumber">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="bt1">Name on Card:</label>
+                                                <input class="form-control" type="text" placeholder="Name on Card" name="nameOnCard">
+                                            </div>
+
+                                            <div class="form-row">
+                                                <div class="form-group col-7">
+                                                    <label class="bt1">Expiration Date:</label>
+                                                    <input class="form-control" type="text" placeholder="MM/YY" name="expirationDate">
+                                                </div>
+                                                <div class="form-group col-5">
+                                                    <label class="bt1">CVV:</label>
+                                                    <input class="form-control" type="text" placeholder="xxx" name="CVV">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </template>
+
+                                <template v-if="formData.paymentMethod === 'Online Banking'">
+                                    <p class="bt1">Payee Email Address:</p>
+                                    <p class="bt2">Please enter your email address below if you would like to have a digital receipt of your purchase.</p>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-md-6">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="e.g. hteoro@gmail.com">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {% set banks = [
+                                        { img: 'maybank.jpg', name: 'Maybank2U' },
+                                        { img: 'maybank.jpg', name: 'Maybank2E' },
+                                        { img: 'ocbc.jpg', name: 'OCBC Bank' },
+                                        { img: 'rhb.jpg', name: 'RHB' },
+                                        { img: 'standard-chartered.jpg', name: 'Standard Chartered' },
+                                        { img: 'uob.jpg', name: 'UOB Bank' },
+                                        { img: 'ambank.jpg', name: 'AmBank' },
+                                        { img: 'bank-islam.jpg', name: 'Bank Islam' },
+                                        { img: 'bank-rakyat.jpg', name: 'Bank Rakyat' },
+                                        { img: 'bank-muamalat.jpg', name: 'Bank Muamalat' },
+                                        { img: 'bsn.jpg', name: 'BSN' },
+                                        { img: 'cimb.jpg', name: 'CIMB Clicks' },
+                                        { img: 'hlb.jpg', name: 'Hong Leong Bank' },
+                                        { img: 'hsbc.jpg', name: 'HSBC Bank' },
+                                        { img: 'kuwait.jpg', name: 'KFH' },
+                                        { img: 'public.jpg', name: 'Public Bank' },
+                                        { img: 'alliance.jpg', name: 'Alliance Bank' },
+                                        { img: 'affin.jpg', name: 'Affin Bank' },
+                                    ] %}
+
+                                    <div class="list variant-bank-list">
+                                        {% for bank in banks %}
+                                            <div class="list-item">
+                                                <input type="radio" name="bank" id="paymentMethod{{ loop.index }}">
+                                                <label for="paymentMethod{{ loop.index }}">{{ bank.name }}</label>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </template>
+
+                                <template v-if="formData.paymentMethod === 'E-Wallet'">
+                                
+                                </template>
+
+                                <div class="pt-4 wizard-navigation">
+                                    <a href="#" role="button" class="btn btn-default btn-outline-primary" @click.prevent="goToPrevStep()">Back</a>
+                                    <a href="#" role="button" class="btn btn-default btn-primary" @click.prevent="goToNextStep()">Pay Now</a>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-4">
                             {% include "templates/components/summary-pane.twig" %}
@@ -385,32 +622,8 @@
                     </div>
                 </div>
                 <div class="container pt-4 wizard-navigation">
-                    <a href="#" role="button" class="btn btn-default btn-outline-primary" @click="goToPrevStep()">Back</a>
-                    <a href="#" role="button" class="btn btn-default btn-primary" @click="goToNextStep()">Continue</a>
-                </div>
-            </div>
-
-            <div class="wizard-section-4" :class="{ 'd-none': currStep && currStep.step !== 4 }">
-                <div class="container bg-w py-5 px-4"></div>
-                <div class="container pt-4 wizard-navigation">
-                    <a href="#" role="button" class="btn btn-default btn-outline-primary" @click="goToPrevStep()">Back</a>
-                    <a href="#" role="button" class="btn btn-default btn-primary" @click="goToNextStep()">Continue</a>
-                </div>
-            </div>
-
-            <div class="wizard-section-5" :class="{ 'd-none': currStep && currStep.step !== 5 }">
-                <div class="container bg-w py-5 px-4"></div>
-                <div class="container pt-4 wizard-navigation">
-                    <a href="#" role="button" class="btn btn-default btn-outline-primary" @click="goToPrevStep()">Back</a>
-                    <a href="#" role="button" class="btn btn-default btn-primary" @click="goToNextStep()">Continue</a>
-                </div>
-            </div>
-
-            <div class="wizard-section-6" :class="{ 'd-none': currStep && currStep.step !== 6 }">
-                <div class="container bg-w py-5 px-4"></div>
-                <div class="container pt-4 wizard-navigation">
-                    <a href="#" role="button" class="btn btn-default btn-outline-primary" @click="goToPrevStep()">Back</a>
-                    <a href="#" role="button" class="btn btn-default btn-primary" @click="goToNextStep()">Continue</a>
+                    <a href="#" role="button" class="btn btn-default btn-outline-primary" @click="goToPrevStep($event)">Back</a>
+                    <a href="#" role="button" class="btn btn-default btn-primary" @click="goToNextStep($event)">Continue</a>
                 </div>
             </div>
         </div>

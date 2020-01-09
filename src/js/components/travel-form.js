@@ -67,7 +67,9 @@ const travelForm = new Vue({
             dateOfBirth: '',
             areaOfCoverage: 'Area 1',
             startDate: null,
-            endDate: null
+            endDate: null,
+            tncAgreement: false,
+            paymentMethod: 'Online Banking'
         },
         currStep: null,
         showGetStartedConsent: true
@@ -79,7 +81,13 @@ const travelForm = new Vue({
     },
     methods: {
         changeStep(step) {
-            this.currStep = step;
+            if (typeof step === 'number') {
+                this.currStep = this.steps.find(s => s.step === step);
+                this.scrollTop();
+            }
+            if (typeof step === 'object') {
+                this.currStep = step;
+            }
         },
         setShowGetStartedConsent(value) {
             this.showGetStartedConsent = value;
@@ -91,6 +99,7 @@ const travelForm = new Vue({
             const nextStep = this.steps.find(s => s.step === this.currStep.step + 1);
             this.currStep.completed = true;
             this.currStep = nextStep;
+            this.scrollTop();
         },
         goToPrevStep() {
             if (this.currStep.step === 1) {
@@ -98,15 +107,22 @@ const travelForm = new Vue({
             }
             const prevStep = this.steps.find(s => s.step === this.currStep.step - 1);
             this.currStep = prevStep;
+            this.scrollTop();
         },
         customDateFormatter(date) {
             return moment(date).format('DD/MM/YYYY')
         },
         customDateFormatterWithDay(date) {
             return moment(date).format('DD/MM/YYYY (ddd)')
+        },
+        scrollTop() {
+            const offset = $("#travel-form").offset().top;
+            $("body, html").animate({
+                scrollTop: offset
+            }, 800)
         }
     },
     mounted() {
-        this.currStep = this.steps[2];
+        this.currStep = this.steps[5];
     }
 })
