@@ -18,6 +18,10 @@
         &:focus {
             outline: none;
         }
+
+        &::placeholder {
+            font-style: italic;
+        }
     }
 
     .vdp-datepicker__calendar {
