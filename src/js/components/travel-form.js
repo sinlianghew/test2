@@ -62,7 +62,7 @@ if ($('#travel-form').length) {
                 }
             ],
             formData: {
-                idType: 'Passport',
+                idType: 'NRIC',
                 nric: '901010-14-5021',
                 country: 'Malaysia',
                 passport: '',
@@ -74,6 +74,7 @@ if ($('#travel-form').length) {
                 customerName: 'Henry Teo',
                 email: 'henryto@gmail.com',
                 mobileNo: '012-216 2534',
+                gender: '',
                 addressLine1: '7, Lorong Bahagia 2',
                 addressLine2: 'Taman Tun Dr Ismail',
                 postcode: '60000',
@@ -183,8 +184,7 @@ if ($('#travel-form').length) {
             }
         },
         mounted() {
-            this.currStep = this.steps[4];
-            this.addFamilyMember()
+            this.currStep = this.steps[0];
         }
     })
 }
