@@ -12,6 +12,7 @@
 .travel-insurance-new {
     
     /** Components **/
+    @import "components/pdp-table.scss";
     @import "components/steppers.scss";
     @import "components/icons.scss";
     @import "components/form-wizard.scss";
@@ -35,8 +36,6 @@
     @import "custom/overrides";
 
     /** Bootstrap **/
-    
-    
     @import "node_modules/bootstrap/scss/images";
     @import "node_modules/bootstrap/scss/code";
     @import "node_modules/bootstrap/scss/grid";

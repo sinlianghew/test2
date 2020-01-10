@@ -1,0 +1,51 @@
+  <!-- Accordion card -->
+  <div class="w-100">
+
+      <!-- Card header -->
+      <div class="title-box collapsed h-line" role="tab" id="headingOne1" data-toggle="collapse"
+          data-parent="#accordionEx" href="#{{accordionNumber}}" aria-expanded="true" aria-controls="content">
+
+          <div class="col-md-6 col-12  title-desc">
+              <div class="row">
+                  <div class="col-11 pr-0">
+                      <p class="mb-0">Section 1 - Personal Accident
+                      </p>
+                  </div>
+                  <div class="col-1 p-0">
+                      {% include "icon.twig" with { iconName: 'arrow-black'  } %}
+                  </div>
+              </div>
+          </div>
+
+          <div class="col-6 d-md-block d-none ">
+              <div class="row">
+                  <div class="col-6 bg-lightGrey title-box justify-content-center">
+                      <h3>{{planOne}}</h3>
+                  </div>
+                  <div class="col-6 bg-p1 w title-box justify-content-center">
+                      <h3>{{planTwo}}</h3>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <!-- Card body -->
+      <div id="{{accordionNumber}}" class="collapse w-100 accordion-content" role="tabpanel" aria-labelledby="headingOne1"
+          data-parent="#accordionEx">
+              <div class="row m-0">
+                  <div class="col-6 ">
+                      {{title}}
+                  </div>
+                  <div class="col-6 p-0">
+                      <div class="row m-0">
+                          <div class="col-6 bg-lightGrey title-box justify-content-center">
+                              <h3>{{planOne}}</h3>
+                          </div>
+                          <div class="col-6 bg-p1 w title-box justify-content-center">
+                              <h3>{{planTwo}}</h3>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+      </div>
