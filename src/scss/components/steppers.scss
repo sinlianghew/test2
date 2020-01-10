@@ -80,7 +80,7 @@
 
     /** Different state overrides **/
     .nav-item.step {
-        &.active {
+        &.current {
             flex: 1.8;
 
             .step-indicator {
@@ -125,7 +125,7 @@
                 bottom: 48%;
             }
 
-            &.active {
+            &.current {
                 flex: 1.5;
 
                 .step-indicator {

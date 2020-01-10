@@ -9,88 +9,89 @@
         </div>
 
         <div class="bg-p2d py-5 wizard-sections">
+        
             <div class="wizard-section-1" :class="{ 'd-none': currStep && currStep.step !== 1 }">
-                <div class="container bg-w py-5 px-4">
-                
-                    <h2 class="p2">Get Started</h2>
+                <div class="container">
+                    <div class="bg-w py-5 px-4">
+                        <h2 class="p2">Get Started</h2>
                     
-                    <div :class="{
-                        'bt2': true,
-                        'd-none': !showGetStartedConsent
-                    }">
-                        <p>
-                            Please make sure you meet the following conditions.
-                        </p>
-                        <ol class="pl-3">
-                            <li>The journey you intend to insure begins ans ends in Malaysia, except for Single Trip One-Way Cover.</li>
-                            <li>You are between 18 and 70 years of age.</li>
-                        </ol>
-                        <p><strong>Note:</strong></p>
-                        <p>Please contact _____ for your insurance application if:</p>
-                        <ol class="roman pl-3">
-                            <li>You are above 70 years of age; <strong>OR</strong></li>
-                            <li>You are purchasing travel insurance only for your child (below 18 years of age)</li>
-                        </ol>
-                    </div>
-
-                    <div :class="{
-                        'bt2': true,
-                        'd-none': showGetStartedConsent
-                    }">
-                        <p>Please enter the details of the insured person</p>
-                        <div class="d-flex mb-3">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="id_type" value="NRIC" id="id_type1" v-model="formData.idType">
-                                <label class="form-check-label" for="id_type1">NRIC</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="id_type" value="Passport" id="id_type2" v-model="formData.idType">
-                                <label class="form-check-label" for="id_type2">Passport</label>
-                            </div>
+                        <div :class="{
+                            'bt2': true,
+                            'd-none': !showGetStartedConsent
+                        }">
+                            <p>
+                                Please make sure you meet the following conditions.
+                            </p>
+                            <ol class="pl-3">
+                                <li>The journey you intend to insure begins ans ends in Malaysia, except for Single Trip One-Way Cover.</li>
+                                <li>You are between 18 and 70 years of age.</li>
+                            </ol>
+                            <p><strong>Note:</strong></p>
+                            <p>Please contact _____ for your insurance application if:</p>
+                            <ol class="roman pl-3">
+                                <li>You are above 70 years of age; <strong>OR</strong></li>
+                                <li>You are purchasing travel insurance only for your child (below 18 years of age)</li>
+                            </ol>
                         </div>
 
-                        <div class="d-flex" v-if="formData.idType === 'NRIC'">
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="nric" placeholder="xxxxxx-xx-xxxx" v-model="formData.nric">
-                            </div>
-                        </div>
-
-                        <div v-if="formData.idType === 'Passport'">
-                            <div class="d-md-flex">
-                                <div class="form-group mr-md-3">
-                                    <select class="form-control" id="country" name="country">
-                                        <option disabled hidden selected>Select country</option>
-                                        <option>Malaysia</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                        <option>4</option>
-                                    </select>
+                        <div :class="{
+                            'bt2': true,
+                            'd-none': showGetStartedConsent
+                        }">
+                            <p>Please enter the details of the insured person</p>
+                            <div class="d-flex mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="id_type" value="NRIC" id="id_type1" v-model="formData.idType">
+                                    <label class="form-check-label" for="id_type1">NRIC</label>
                                 </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="id_type" value="Passport" id="id_type2" v-model="formData.idType">
+                                    <label class="form-check-label" for="id_type2">Passport</label>
+                                </div>
+                            </div>
+
+                            <div class="d-flex" v-if="formData.idType === 'NRIC'">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" name="passport" placeholder="Passport No." v-model="formData.passport">
+                                    <input type="text" class="form-control" name="nric" placeholder="xxxxxx-xx-xxxx" v-model="formData.nric">
                                 </div>
                             </div>
-                            <p class="bt1">Date of Birth:</p>
-                            <div class="d-md-flex">
-                                <div class="form-group variant-date-picker">
-                                    <datepicker class="form-control"
-                                        placeholder="DD/MM/YYYY"
-                                        :format="customDateFormatter"
-                                        v-model="formData.dateOfBirth">
-                                    </datepicker>
-                                    {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="agreement" id="agreement" v-model="formData.pdpaAgreement">
-                            <label class="form-check-label" for="agreement">
-                                I have read and understood MSIG's <a href="#">Privacy Notice</a> and agree to MSIG processing my personal data for the purposes and in the manners set out in the Privacy Notice.
-                            </label>
-                            <svg class="icon icon-m tick-mark">
-                                <use xlink:href="assets/icons/icons.svg#sprite-tick-mark" href="assets/icons/icons.svg#sprite-tick-mark"></use>
-                            </svg>
+                            <div v-if="formData.idType === 'Passport'">
+                                <div class="d-md-flex">
+                                    <div class="form-group mr-md-3">
+                                        {% verbatim %}
+                                            <select class="form-control" id="country" name="country" v-model="formData.country">
+                                                <option disabled hidden selected value="">Select country</option>
+                                                <option>Malaysia</option>
+                                            </select>
+                                        {% endverbatim %}
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" name="passport" placeholder="Passport No." v-model="formData.passport">
+                                    </div>
+                                </div>
+                                <p class="bt1">Date of Birth:</p>
+                                <div class="d-md-flex">
+                                    <div class="form-group variant-date-picker">
+                                        <datepicker class="form-control"
+                                            placeholder="DD/MM/YYYY"
+                                            :format="customDateFormatter"
+                                            v-model="formData.dateOfBirth">
+                                        </datepicker>
+                                        {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="agreement" id="agreement" v-model="formData.pdpaAgreement">
+                                <label class="form-check-label" for="agreement">
+                                    I have read and understood MSIG's <a href="#">Privacy Notice</a> and agree to MSIG processing my personal data for the purposes and in the manners set out in the Privacy Notice.
+                                </label>
+                                <svg class="icon icon-m tick-mark">
+                                    <use xlink:href="assets/icons/icons.svg#sprite-tick-mark" href="assets/icons/icons.svg#sprite-tick-mark"></use>
+                                </svg>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -333,6 +334,20 @@
                         <div class="col-12 col-md-8">
                             <div class="bg-w py-5 px-4 mb-3">
                                 <h2 class="p2 mb-4">Personal Details</h2>
+                                
+                                <div class="row" v-if="formData.idType === 'Passport'">
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <p class="bt1">Country:</p>
+                                            {% verbatim %}
+                                                <select v-model="formData.country" class="form-control">
+                                                    <option disabled hidden selected value="">Select a country</option>
+                                                    <option v-for="country in allCountries" v-bind:key="allCountries.indexOf(country)" :value="country">{{ country }}</option>
+                                                </select>
+                                            {% endverbatim %}
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <div class="row">
                                     <div class="col-12 col-md-6">
@@ -392,46 +407,74 @@
                                 </div>
                             </div>
 
-                            <div class="bg-w py-5 px-4 mb-3">
-                                <h2 class="p2">Family Member #1</h2>
+                            <div class="bg-w py-5 px-4 mb-3" v-for="(member, name, index) in formData.familyMembers">
+                                {% verbatim %}
+                                    <h2 class="p2">Family Member #{{name + 1}}</h2>
+                                {% endverbatim %}
+
+                                <div class="row">
+                                    <div class="col-12 col-md-6">
+                                        <p class="bt1">Country</p>
+                                        <div class="form-group">
+                                            {% verbatim %}
+                                                <select v-model="member.country" class="form-control">
+                                                    <option disabled hidden selected value="">Select a country</option>
+                                                    <option v-for="country in allCountries" v-bind:key="allCountries.indexOf(country)" :value="country">{{ country }}</option>
+                                                </select>
+                                            {% endverbatim %}
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <p class="bt1">Traveller</p>
-                                {% include "templates/components/input-variant-radio.twig" with {
-                                    name: 'relationToCustomer',
-                                    formControls: [
-                                        { value: 'Spouse' },
-                                        { value: 'Child (30 days - 17 years old)' }
-                                    ],
-                                    spacing: 'mb-4'
-                                } %}
+                                <div class="d-flex mb-4">
+                                    <div class="form-check mb-1">
+                                        <input class="form-check-input" 
+                                            type="radio" 
+                                            value="Spouse" 
+                                            :id="'relationToCustomer1' + index"
+                                            v-model="member.relationToCustomer">
+                                        <label class="form-check-label" :for="'relationToCustomer1' + index">Spouse</label>
+                                    </div>
+                                    <div class="form-check mb-1">
+                                        <input class="form-check-input" 
+                                            type="radio" 
+                                            value="Child (30 days - 17 years old)" 
+                                            :id="'relationToCustomer2' + index"
+                                            v-model="member.relationToCustomer">
+                                        <label class="form-check-label" :for="'relationToCustomer2' + index">Child (30 days - 17 years old)</label>
+                                    </div>
+                                </div>
                                 
                                 <p class="bt1">Nationality</p>
-                                {% include "templates/components/input-variant-radio.twig" with {
-                                    name: 'nationality',
-                                    formControls: [
-                                        { value: 'Malaysian' },
-                                        { value: 'Non-Malaysian' }
-                                    ],
-                                    spacing: 'mb-4'
-                                } %}
+                                <div class="d-flex mb-4">
+                                    <div class="form-check mb-1">
+                                        <input :id="'nationality1' + index" type="radio" class="form-check-input" value="Malaysian" v-model="member.nationality">
+                                        <label :for="'nationality1' + index" class="form-check-label">Malaysian</label>
+                                    </div>
+                                    <div class="form-check mb-1">
+                                        <input :id="'nationality2' + index" type="radio" class="form-check-input" value="Non-Malaysian" v-model="member.nationality">
+                                        <label :for="'nationality2' + index" class="form-check-label">Non-Malaysian</label>
+                                    </div>
+                                </div>
 
                                 <div class="row">
                                     <div class="col-12 col-md-6">
                                         <div class="form-group">
                                             <label class="bt1">Name (as per NRIC):</label>
-                                            <input type="text" class="form-control" placeholder="e.g. Lisa Teo">
+                                            <input type="text" class="form-control" placeholder="e.g. Lisa Teo" v-model="member.name">
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <div class="form-group">
                                             <label class="bt1">NRIC No:</label>
-                                            <input type="text" class="form-control" placeholder="e.g. 888888-88-8888">
+                                            <input type="text" class="form-control" placeholder="e.g. 888888-88-8888" v-model="member.nric">
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="d-flex justify-content-end">
-                                    <a href="#" class="btn btn-primary btn-icon">
+                                    <a href="#" class="btn btn-primary btn-icon" @click.prevent="removeFamilyMember(member)">
                                         <div class="button-icon">
                                             {% include "templates/components/icon.twig" with { iconName: 'close', iconSize: 's' } %}
                                         </div>
@@ -439,9 +482,9 @@
                                     </a>
                                 </div>
                             </div>
-                            
+
                             <div class="d-flex justify-content-end mb-3">
-                                <a href="#" class="btn btn-secondary btn-icon">
+                                <a href="#" @click.prevent="addFamilyMember()" class="btn btn-secondary btn-icon">
                                     <div class="button-icon">
                                         {% include "templates/components/icon.twig" with { iconName: 'plus', iconSize: 's' } %}
                                     </div>
@@ -604,7 +647,7 @@
             </div>
 
             <div class="wizard-section-6" :class="{ 'd-none': currStep && currStep.step !== 6 }">
-                <div class="container py-5">
+                <div class="container">
                     <div class="row">
                         <div class="col-12 col-md-8">
                             <div class="bg-w py-5 px-4 mb-3">

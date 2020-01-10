@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import Datepicker from 'vuejs-datepicker';
 import moment from 'moment';
+import Countries from '../../assets/json/countries.json';
+import _ from 'lodash';
 
 if ($('#travel-form').length) {
     const travelForm = new Vue({
@@ -67,17 +69,28 @@ if ($('#travel-form').length) {
                 pdpaAgreement: false,
                 dateOfBirth: '',
                 areaOfCoverage: 'Area 1',
-                startDate: null,
+                startDate: null  ,
                 endDate: null,
                 tncAgreement: false,
-                paymentMethod: 'Credit/Debit Card'
+                paymentMethod: 'Credit/Debit Card',
+                familyMembers: []
             },
             currStep: null,
-            showGetStartedConsent: true
+            showGetStartedConsent: true,
+            countries: Countries
         },
         computed: {
             countriesForCurrArea: function () {
                 return this.coverageAreas.find(a => a.name === this.formData.areaOfCoverage).countries;
+            },
+            allCountries: function () {
+                let self = this;
+                let keys = Object.keys(this.countries);
+                let countryNames = keys.map(function(k) {
+                    return self.countries[k].trim()
+                })
+                countryNames = _.orderBy(countryNames, null, ['asc'])
+                return countryNames
             }
         },
         methods: {
@@ -121,10 +134,25 @@ if ($('#travel-form').length) {
                 $("body, html").animate({
                     scrollTop: offset
                 }, 800)
+            },
+            addFamilyMember() {
+                let fields = {
+                    relationToCustomer: 'Spouse',
+                    nationality: 'Malaysian',
+                    country: '',
+                    name: '',
+                    nric: '',
+                    dateOfBirth: ''
+                }
+                this.formData.familyMembers.push(fields)
+            },
+            removeFamilyMember(familyMember) {
+                this.formData.familyMembers = this.formData.familyMembers.filter(m => m !== familyMember)   
             }
         },
         mounted() {
-            this.currStep = this.steps[0];
+            this.currStep = this.steps[2];
+            this.addFamilyMember()
         }
     })
 }
