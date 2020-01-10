@@ -2,7 +2,7 @@
     <div class="nav variant-steppers">
         <div :class="{
             'nav-item step': true,
-            'active': currStep == step,
+            'current': currStep == step,
             'completed': step.completed
         }" v-for="step in steps" v-bind:key="steps.indexOf(step)">
             <div class="step-indicator" @click="changeStep(step)">
