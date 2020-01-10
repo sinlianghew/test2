@@ -103,7 +103,7 @@
             </div>
 
             <div class="wizard-section-2" :class="{ 'd-none': currStep && currStep.step !== 2 }">
-                <div class="container py-5">
+                <div class="container">
                     <div class="row">
                         <div class="col-12 col-md-8">
                             <div class="bg-w py-5 px-4 mb-3">
@@ -328,7 +328,7 @@
             </div>
 
             <div class="wizard-section-3" :class="{ 'd-none': currStep && currStep.step !== 3 }">
-                <div class="container py-5">
+                <div class="container">
                     <div class="row">
                         <div class="col-12 col-md-8">
                             <div class="bg-w py-5 px-4 mb-3">
@@ -466,10 +466,11 @@
             </div>
 
             <div class="wizard-section-4" :class="{ 'd-none': currStep && currStep.step !== 4 }">
-                <div class="container py-5">
+                <div class="container">
                     <div class="row">
                         <div class="col-12 col-md-8">
                             <div class="bg-w py-5 px-4 mb-3">
+                                <h2 class="p2 mb-4">Nominee Details</h2>
                                 <div class="row">
                                     <div class="col-12 col-md-6">
                                         <div class="form-group">
@@ -514,7 +515,7 @@
             </div>
 
             <div class="wizard-section-5" :class="{ 'd-none': currStep && currStep.step !== 5 }">
-                <div class="container py-5">
+                <div class="container">
                     <div class="row">
                         <div class="col-12 col-md-8">
                             <div class="bg-w pt-5 pb-3 px-4 mb-3">
@@ -537,7 +538,7 @@
                                     {% endfor %}
                                 </div>
 
-                                <div class="d-flex justify-content-end">
+                                <div class="d-flex justify-content-end" v-if="false">
                                     <a href="#" @click.prevent="changeStep(3)" class="btn btn-secondary btn-icon">
                                         <div class="button-icon">
                                             {% include "templates/components/icon.twig" with { iconName: 'plus', iconSize: 's' } %}
@@ -566,7 +567,7 @@
                                     {% endfor %}
                                 </div>
 
-                                <div class="d-flex justify-content-end">
+                                <div class="d-flex justify-content-end" v-if="false">
                                     <a href="#" @click.prevent="changeStep(4)" class="btn btn-secondary btn-icon">
                                         <div class="button-icon">
                                             {% include "templates/components/icon.twig" with { iconName: 'plus', iconSize: 's' } %}

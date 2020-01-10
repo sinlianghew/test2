@@ -124,7 +124,7 @@ if ($('#travel-form').length) {
             }
         },
         mounted() {
-            this.currStep = this.steps[0];
+            this.currStep = this.steps[4];
         }
     })
 }
