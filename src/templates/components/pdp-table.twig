@@ -1,0 +1,66 @@
+<div class="pdp-table">
+
+    <div class="container">
+
+        <div class="d-none d-md-block">
+
+            <div class="row ">
+                <div class="col-6"></div>
+                <div class="col-6 bg-w title-box justify-content-center">
+                    <h3>OVERSEAS: OUTBOUND(RM)</h3>
+                </div>
+            </div>
+
+            <div class="row ">
+                <div class="col-6 title-box">
+                    <h3>BENEFITS</h3>
+                </div>
+                <div class="col-6 bg-w">
+                    <div class="row">
+                        <div class="col-6 bg-lightGrey title-box justify-content-center">
+                            <h3>PLAN 1</h3>
+                        </div>
+                        <div class="col-6 bg-p1 w title-box justify-content-center">
+                            <h3>PLAN 2</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- accordon list  -->
+
+        <!--Accordion wrapper-->
+        <div class="accordion md-accordion row" id="accordionEx" role="tablist" aria-multiselectable="true">
+
+            {% include "accordion-content.twig" with {
+                accordionNumber : 'content1',
+                title: ' <p>  test</p>' ,
+                planOne: '',
+                planTwo: ''
+            } %} 
+
+            {% include "accordion-content.twig" with {
+                accordionNumber : 'content2',
+                title: 'About Happy Lagersss',
+                planOne: 'Accident & Illness',
+                planTwo: 'Accident & Illness'
+            } %}
+
+
+
+
+        </div>
+        <!-- Accordion card -->
+
+
+
+
+
+    </div>
+    <!-- Accordion wrapper -->
+
+    <!-- accordion list end -->
+</div>
+</div>
