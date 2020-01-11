@@ -22,11 +22,13 @@
             width: 100%;
             background-color: $p2;
             bottom: 48%;
+            left: 0;
         }
 
         &:first-child::after {
             width: 50%;
             right: 0;
+            left: auto;
         }
 
         &:last-child::after {
@@ -57,7 +59,9 @@
             position: absolute;
             opacity: 0;
             visibility: hidden;
-            transform: rotate(-30deg);
+            top: 50%;
+            left: 50%;
+            transform: rotate(-30deg) translate(-50%, -50%);
             transition: 0.3s ease;
             fill: #fff;
         }
@@ -102,7 +106,7 @@
                 .tick-mark {
                     opacity: 1;
                     visibility: visible;
-                    transform: rotate(0deg);
+                    transform: rotate(0deg) translate(-50%, -50%);
                 }
             }
         }
