@@ -4,19 +4,6 @@
         background-color: #E7E7EF;
     }
 
-    .borderLeft {
-        @include media-breakpoint-up(md) {
-            border-left: 6px solid #fff;
-        }
-    }
-
-    .borderRight {
-        @include media-breakpoint-up(md) {
-            border-right: 6px solid #fff;
-        }
-    }
-
-
     .title-box {
         width: 100%;
         min-height: 52px;
@@ -44,6 +31,7 @@
         }
     }
 
+
     .accordion {
 
         .accordion-content-wrapper {
@@ -56,7 +44,6 @@
                     .icon {
                         display: none;
                     }
-
                 }
             }
 
@@ -100,7 +87,7 @@
 
                     &::after {
                         content: " ";
-                        height: 2px;
+                        height: 1px;
                         background-color: #cccccc;
                         position: absolute;
                         top: 0px;
@@ -159,7 +146,7 @@
                     }
 
                     .title-box {
-                        border-bottom: 2px solid #cccccc;
+                        border-bottom: 1px solid #cccccc;
                     }
 
                     p {
@@ -202,18 +189,31 @@
 }
 
 
+.borderLeft {
+    @include media-breakpoint-up(md) {
+        border-left: 6px solid #fff;
+    }
+}
+
+.borderRight {
+    @include media-breakpoint-up(md) {
+        border-right: 6px solid #fff;
+    }
+}
 
 .static-pdp-table {
     position: relative;
-
-
     background-color: white;
+
+    .bg-lightGrey {
+        @include media-breakpoint-down(md) {
+            background-color: #F8F8F8;
+        }
+    }
 
     @include media-breakpoint-up(md) {
         background-color: #E6E5EC;
     }
-
-
 
     .main-title {
         height: 90px;
@@ -221,6 +221,8 @@
 
     .plan-box {
         min-height: 50px;
+
+
 
         p {
             margin-bottom: 0;
@@ -244,10 +246,15 @@
 
         }
 
+        &:last-child {
+            border-bottom: 0px !important;
+        }
+
+
     }
 
 
     .h-line {
-        border-bottom: 2px solid #cccccc;
+        border-bottom: 1px solid #cccccc;
     }
 }
