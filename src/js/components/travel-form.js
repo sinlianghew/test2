@@ -12,36 +12,12 @@ if ($('#travel-form').length) {
         },
         data: {
             steps: [
-                { 
-                    step: 1,
-                    title: 'Get Started',
-                    completed: false,
-                },
-                { 
-                    step: 2,
-                    title: 'Choose a Plan',
-                    completed: false 
-                },
-                { 
-                    step: 3,
-                    title: 'Fill In Details',
-                    completed: false 
-                },
-                { 
-                    step: 4,
-                    title: 'Nominee Details',
-                    completed: false 
-                },
-                { 
-                    step: 5,
-                    title: 'Review',
-                    completed: false 
-                },
-                { 
-                    step: 6,
-                    title: 'Pay',
-                    completed: false 
-                }
+                { step: 1, title: 'Get Started', completed: false },
+                { step: 2, title: 'Choose a Plan', completed: false },
+                { step: 3, title: 'Fill In Details', completed: false },
+                { step: 4, title: 'Nominee Details', completed: false },
+                { step: 5, title: 'Review', completed: false },
+                { step: 6, title: 'Pay', completed: false }
             ],
             coverageAreas: [
                 {
@@ -158,7 +134,7 @@ if ($('#travel-form').length) {
                 $("body, html").animate({
                     scrollTop: offset
                 }, 800, function() {
-                    return defer.resolve()
+                    defer.resolve()
                 })
                 return defer;
             },
