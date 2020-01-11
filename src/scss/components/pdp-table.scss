@@ -206,29 +206,42 @@
 .static-pdp-table {
     position: relative;
 
+
+    background-color: white;
+
+    @include media-breakpoint-up(md) {
+        background-color: #E6E5EC;
+    }
+
+
+
     .main-title {
         height: 90px;
     }
 
     .plan-box {
         min-height: 50px;
-        p{
-            margin-bottom:0;
-        }    
-}
+
+        p {
+            margin-bottom: 0;
+        }
+    }
 
     .table-content {
 
+        .title {
+            height: 60px;
+        }
 
         .content-box {
-                min-height: 60px;
-                height: auto;
-                margin-bottom: 0px;
+            min-height: 60px;
+            height: auto;
+            margin-bottom: 0px;
 
-                @include media-breakpoint-up(md) {
-                    min-height: 90px;
-                }
-            
+            @include media-breakpoint-up(md) {
+                min-height: 90px;
+            }
+
         }
 
     }
