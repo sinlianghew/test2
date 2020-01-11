@@ -12,36 +12,12 @@ if ($('#travel-form').length) {
         },
         data: {
             steps: [
-                { 
-                    step: 1,
-                    title: 'Get Started',
-                    completed: false,
-                },
-                { 
-                    step: 2,
-                    title: 'Choose a Plan',
-                    completed: false 
-                },
-                { 
-                    step: 3,
-                    title: 'Fill In Details',
-                    completed: false 
-                },
-                { 
-                    step: 4,
-                    title: 'Nominee Details',
-                    completed: false 
-                },
-                { 
-                    step: 5,
-                    title: 'Review',
-                    completed: false 
-                },
-                { 
-                    step: 6,
-                    title: 'Pay',
-                    completed: false 
-                }
+                { step: 1, title: 'Get Started', completed: false },
+                { step: 2, title: 'Choose a Plan', completed: false },
+                { step: 3, title: 'Fill In Details', completed: false },
+                { step: 4, title: 'Nominee Details', completed: false },
+                { step: 5, title: 'Review', completed: false },
+                { step: 6, title: 'Pay', completed: false }
             ],
             coverageAreas: [
                 {
@@ -62,7 +38,7 @@ if ($('#travel-form').length) {
                 }
             ],
             formData: {
-                idType: 'Passport',
+                idType: 'NRIC',
                 nric: '901010-14-5021',
                 country: 'Malaysia',
                 passport: '',
@@ -74,6 +50,7 @@ if ($('#travel-form').length) {
                 customerName: 'Henry Teo',
                 email: 'henryto@gmail.com',
                 mobileNo: '012-216 2534',
+                gender: '',
                 addressLine1: '7, Lorong Bahagia 2',
                 addressLine2: 'Taman Tun Dr Ismail',
                 postcode: '60000',
@@ -157,7 +134,7 @@ if ($('#travel-form').length) {
                 $("body, html").animate({
                     scrollTop: offset
                 }, 800, function() {
-                    return defer.resolve()
+                    defer.resolve()
                 })
                 return defer;
             },
@@ -183,8 +160,7 @@ if ($('#travel-form').length) {
             }
         },
         mounted() {
-            this.currStep = this.steps[4];
-            this.addFamilyMember()
+            this.currStep = this.steps[0];
         }
     })
 }
