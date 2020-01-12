@@ -17,4 +17,9 @@
         text-align: left;
     }
 
+    .row-match-height {
+        align-items: flex-start;
+        min-height: 48px;
+    }
+
 }

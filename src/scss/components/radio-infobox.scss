@@ -1,10 +1,13 @@
 .radio-infobox {
-    line-height: $headings-line-height;
     color: $p2;
     stroke: $p2;
     width: 100%;
-    @include media-breakpoint-up(md) {
+    @include media-breakpoint-up(lg) {
         width: 50%;
+    }
+
+    .box--header {
+        line-height: $headings-line-height;
     }
     
     input[type="radio"] {

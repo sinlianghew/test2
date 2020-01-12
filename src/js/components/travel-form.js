@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Datepicker from 'vuejs-datepicker';
 import moment from 'moment';
 
+
 const travelForm = new Vue({
     el: '#travel-form',
     components: {
@@ -123,6 +124,6 @@ const travelForm = new Vue({
         }
     },
     mounted() {
-        this.currStep = this.steps[0];
+        this.currStep = this.steps[1];
     }
 })

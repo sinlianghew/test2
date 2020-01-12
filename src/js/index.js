@@ -4,6 +4,7 @@ import "../scss/main.scss"
 // Import the bootstrap client library
 import "bootstrap"
 
+
 // Vue Related Stuff
 import Vue from 'vue';
 import Vuelidate from 'vuelidate';
