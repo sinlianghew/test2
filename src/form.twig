@@ -207,10 +207,12 @@
 
                             <div class="bg-w py-5 px-4 mb-3">
                                 <h2 class="p2 mb-4">Please Select Your Preferred Plan</h2>
-                                <div class="row">
+                                <div class="selection-infobox-group row">
                                     <div class="col-12 col-lg-4">
-                                        <p class="h2 h2 mt-5 pt-5">TravelRight Plus</p>
-                                        <p class="bt1 d-none d-lg-block mt-5 pt-1 mb-1">Benefits</p>
+                                        <div class="header-match-height d-flex align-items-center mt-5">
+                                            <p class="h2">TravelRight Plus</p>
+                                        </div>
+                                        <p class="bt1 d-none d-lg-block mb-1">Benefits</p>
                                         {% include "templates/components/list-variant-icon.twig" with {
                                             items: [
                                                 { iconName: 'tick-mark', content: 'Personal Accident' },
@@ -225,8 +227,10 @@
                                     </div>
                                     <div class="col-12 col-lg-8">
                                         <div class="d-lg-flex">
-                                            {% embed "templates/components/radio-infobox.twig" with {
+                                            {% embed "templates/components/selection-infobox.twig" with {
+                                                type: "radio",
                                                 name: "choosePlan",
+                                                value: "plan1",
                                                 classes: "mb-3 mb-lg-0 mr-lg-3"
                                             } %}
                                                 {% block top %}
@@ -234,59 +238,64 @@
                                                     <p class="m-0">from <span class="h3">RM39.00</span></p>
                                                 {% endblock %}
 
+                                                {% block icon %}
+                                                    {% include "templates/components/icon.twig" with { iconName: 'calendar', iconSize: '4xl' } %}
+                                                {% endblock %}
+
                                                 {% block bottom %}
-                                                    <div class="mb-3">
-                                                        {% include "templates/components/icon.twig" with { iconName: 'calendar', iconSize: '4xl' } %}
-                                                    </div>
                                                     <div class="row py-2">
                                                         <div class="text-left col-6 col-lg-12 d-lg-none">
-                                                            <strong class="mr-2 bold">Benefits</strong>
+                                                            <strong class="mr-2 mr-lg-0 bold">Benefits</strong>
                                                         </div>
                                                         <div class="text-right text-lg-center col-6 col-lg-12">
-                                                            <strong class="ml-2">RM</strong>
+                                                            <strong class="ml-2 ml-lg-0">RM</strong>
                                                         </div>
                                                     </div>
                                                     {% include "templates/components/list-variant-icon.twig" with {
                                                         items: [
-                                                            { iconName: 'tick-mark', content: '<span class="mr-2 bold d-lg-none">Personal Accident</span><span class="ml-2">10,000</span>' },
-                                                            { iconName: 'tick-mark', content: '<span class="mr-2 bold d-lg-none">Travel Delay<br/><i>(Every 6 hours)</i></span><span class="ml-2">100,000</span>' },
-                                                            { iconName: 'tick-mark', content: '<span class="mr-2 bold d-lg-none">Personal Accident</span><span class="ml-2">10,000</span>' },
-                                                            { iconName: 'tick-mark', content: '<span class="mr-2 bold d-lg-none">Travel Delay<br/><i>(Every 6 hours)</i></span><span class="ml-2">100,000</span>' },
-                                                            { iconName: 'tick-mark', content: '<span class="mr-2 bold d-lg-none">Personal Accident</span><span class="ml-2">10,000</span>' },
+                                                            { iconName: 'tick-mark', content: '<span class="mr-2 mr-lg-0 bold d-lg-none">Personal Accident</span><span class="ml-2 ml-lg-0">250,000</span>' },
+                                                            { iconName: 'tick-mark', content: '<span class="mr-2 mr-lg-0 bold d-lg-none">Medical & Other Expenses</span><span class="ml-2 ml-lg-0">1,000,000</span>' },
+                                                            { iconName: 'tick-mark', content: '<span class="mr-2 mr-lg-0 bold d-lg-none">Luggage & Personal Effects</span><span class="ml-2 ml-lg-0">5,000</span>' },
+                                                            { iconName: 'tick-mark', content: '<span class="mr-2 mr-lg-0 bold d-lg-none">Luggage & Delay<br/><i>(Every 6 hours)</i></span><span class="ml-2 ml-lg-0">200</span>' },
+                                                            { iconName: 'tick-mark', content: '<span class="mr-2 mr-lg-0 bold d-lg-none">Travel Delay<br/><i>(Every 6 hours)</i></span><span class="ml-2 ml-lg-0">200</span>' },
                                                         ],
                                                         listWithLabelValue: true
                                                     } %}
                                                 {% endblock %}
                                             {% endembed %}
 
-                                            {% embed "templates/components/radio-infobox.twig" with {
+                                            {% embed "templates/components/selection-infobox.twig" with {
+                                                type: "radio",
                                                 name: "choosePlan",
-                                                classes: "mb-3 mb-lg-0 mr-lg-3"
+                                                value: "plan2",
+                                                classes: "mb-3 mb-lg-0 mr-lg-3",
+                                                highlight: "Recommended" 
                                             } %}
                                                 {% block top %}
                                                     <h3 class="m-0">Plan 2</h3>
                                                     <p class="m-0">from <span class="h3">RM58.00</span></p>
                                                 {% endblock %}
 
+                                                {% block icon %}
+                                                    {% include "templates/components/icon.twig" with { iconName: 'calendar', iconSize: '4xl' } %}
+                                                {% endblock %}
+
                                                 {% block bottom %}
-                                                    <div class="mb-3">
-                                                        {% include "templates/components/icon.twig" with { iconName: 'calendar', iconSize: '4xl' } %}
-                                                    </div>
                                                     <div class="row py-2">
                                                         <div class="text-left col-6 col-lg-12 d-lg-none">
-                                                            <strong class="mr-2 bold">Benefits</strong>
+                                                            <strong class="mr-2 mr-lg-0 bold">Benefits</strong>
                                                         </div>
                                                         <div class="text-right text-lg-center col-6 col-lg-12">
-                                                            <strong class="ml-2">RM</strong>
+                                                            <strong class="ml-2 ml-lg-0">RM</strong>
                                                         </div>
                                                     </div>
                                                     {% include "templates/components/list-variant-icon.twig" with {
                                                         items: [
-                                                            { iconName: 'tick-mark', content: '<span class="mr-2 bold d-lg-none">Personal Accident</span><span class="ml-2">10,000</span>' },
-                                                            { iconName: 'tick-mark', content: '<span class="mr-2 bold d-lg-none">Travel Delay<br/><i>(Every 6 hours)</i></span><span class="ml-2">100,000</span>' },
-                                                            { iconName: 'tick-mark', content: '<span class="mr-2 bold d-lg-none">Personal Accident</span><span class="ml-2">10,000</span>' },
-                                                            { iconName: 'tick-mark', content: '<span class="mr-2 bold d-lg-none">Travel Delay<br/><i>(Every 6 hours)</i></span><span class="ml-2">100,000</span>' },
-                                                            { iconName: 'tick-mark', content: '<span class="mr-2 bold d-lg-none">Personal Accident</span><span class="ml-2">10,000</span>' },
+                                                            { iconName: 'tick-mark', content: '<span class="mr-2 mr-lg-0 bold d-lg-none">Personal Accident</span><span class="ml-2 ml-lg-0">350,000</span>' },
+                                                            { iconName: 'tick-mark', content: '<span class="mr-2 mr-lg-0 bold d-lg-none">Medical & Other Expenses</span><span class="ml-2 ml-lg-0">1,000,000</span>' },
+                                                            { iconName: 'tick-mark', content: '<span class="mr-2 mr-lg-0 bold d-lg-none">Luggage & Personal Effects</span><span class="ml-2 ml-lg-0">7,500</span>' },
+                                                            { iconName: 'tick-mark', content: '<span class="mr-2 mr-lg-0 bold d-lg-none">Luggage & Delay<br/><i>(Every 6 hours)</i></span><span class="ml-2 ml-lg-0">200</span>' },
+                                                            { iconName: 'tick-mark', content: '<span class="mr-2 mr-lg-0 bold d-lg-none">Travel Delay<br/><i>(Every 6 hours)</i></span><span class="ml-2 ml-lg-0">200</span>' },
                                                         ],
                                                         listWithLabelValue: true
                                                     } %}
@@ -299,10 +308,13 @@
 
                              <div class="bg-w py-5 px-4 mb-3">
                                 <h2 class="p2">Choose Your Optional Add-On</h2>
-                                <div class="row">
+                                <div class="selection-infobox-group row">
                                     <div class="col-12 col-lg-4">
-                                        <p class="h2">Sports Fan</p>
-                                        <p class="bt1">Travelling and can’t wait to cheer for your favourite sports team? Make sure you are covered with the Sports Fans add-on for additional protection!</p>
+                                        <div class="header-match-height">
+                                            <p class="h2 mt-5">Sports Fan</p>
+                                            <p class="bt1 mb-0 pb-2">Travelling and can't wait to cheer for your favourite sports team? Make sure you are covered with the Sports Fans add-on for additional protection!</p> 
+                                        </div>
+                                        <p class="bt1 d-none d-lg-block mb-1">Benefits</p>
                                         {% include "templates/components/list-variant-icon.twig" with {
                                             items: [
                                                 { iconName: 'tick-mark', content: 'Additional Indemnity for Personal Accident' },
@@ -313,7 +325,81 @@
                                         } %}
                                         <p class="bt2">View the full benefits <strong><a href="#">HERE</a></strong></p>
                                     </div>
-                                    <div class="col-12 col-lg-8"></div>
+                                    <div class="col-12 col-lg-8">
+                                        <div class="d-lg-flex">
+                                            {% embed "templates/components/selection-infobox.twig" with {
+                                                type: "radio",
+                                                name: "choosePlan",
+                                                value: "sport_plan1",
+                                                classes: "mb-3 mb-lg-0 mr-lg-3"
+                                            } %}
+                                                {% block top %}
+                                                    <h3 class="m-0">Plan 1</h3>
+                                                    <p class="m-0">+ <span class="h3">RM9.00</span></p>
+                                                {% endblock %}
+
+                                                {% block icon %}
+                                                    {% include "templates/components/icon.twig" with { iconName: 'calendar', iconSize: '4xl' } %}
+                                                {% endblock %}
+
+                                                {% block bottom %}
+                                                    <div class="row py-2">
+                                                        <div class="text-left col-6 col-lg-12 d-lg-none">
+                                                            <strong class="mr-2 mr-lg-0 bold">Benefits</strong>
+                                                        </div>
+                                                        <div class="text-right text-lg-center col-6 col-lg-12">
+                                                            <strong class="ml-2 ml-lg-0">RM</strong>
+                                                        </div>
+                                                    </div>
+                                                    {% include "templates/components/list-variant-icon.twig" with {
+                                                        items: [
+                                                            { iconName: 'tick-mark', content: '<span class="mr-2 mr-lg-0 bold d-lg-none">Additional Indemnity for Personal Accident</span><span class="ml-2 ml-lg-0">250,000</span>' },
+                                                            { iconName: 'tick-mark', content: '<span class="mr-2 mr-lg-0 bold d-lg-none">Extended Accommodation Cover</span><span class="ml-2 ml-lg-0">200 (per day)</span>' },
+                                                            { iconName: 'tick-mark', content: '<span class="mr-2 mr-lg-0 bold d-lg-none">Ticket Cover</span><span class="ml-2 ml-lg-0">5,000</span>' },
+                                                            { iconName: 'tick-mark', content: '<span class="mr-2 mr-lg-0 bold d-lg-none">Transportation Amendment Fee</span><span class="ml-2 ml-lg-0">1,000</span>' },
+                                                        ],
+                                                        listWithLabelValue: true
+                                                    } %}
+                                                {% endblock %}
+                                            {% endembed %}
+
+                                            {% embed "templates/components/selection-infobox.twig" with {
+                                                type: "radio",
+                                                name: "choosePlan",
+                                                value: "sport_plan2",
+                                                classes: "mb-3 mb-lg-0 mr-lg-3",
+                                            } %}
+                                                {% block top %}
+                                                    <h3 class="m-0">Plan 2</h3>
+                                                    <p class="m-0">+ <span class="h3">RM15.00</span></p>
+                                                {% endblock %}
+
+                                                {% block icon %}
+                                                    {% include "templates/components/icon.twig" with { iconName: 'calendar', iconSize: '4xl' } %}
+                                                {% endblock %}
+
+                                                {% block bottom %}
+                                                    <div class="row py-2">
+                                                        <div class="text-left col-6 col-lg-12 d-lg-none">
+                                                            <strong class="mr-2 mr-lg-0 bold">Benefits</strong>
+                                                        </div>
+                                                        <div class="text-right text-lg-center col-6 col-lg-12">
+                                                            <strong class="ml-2 ml-lg-0">RM</strong>
+                                                        </div>
+                                                    </div>
+                                                    {% include "templates/components/list-variant-icon.twig" with {
+                                                        items: [
+                                                            { iconName: 'tick-mark', content: '<span class="mr-2 mr-lg-0 bold d-lg-none">Additional Indemnity for Personal Accident</span><span class="ml-2 ml-lg-0">350,000</span>' },
+                                                            { iconName: 'tick-mark', content: '<span class="mr-2 mr-lg-0 bold d-lg-none">Extended Accommodation Cover</span><span class="ml-2 ml-lg-0">200 (per day)</span>' },
+                                                            { iconName: 'tick-mark', content: '<span class="mr-2 mr-lg-0 bold d-lg-none">Ticket Cover</span><span class="ml-2 ml-lg-0">5,000</span>' },
+                                                            { iconName: 'tick-mark', content: '<span class="mr-2 mr-lg-0 bold d-lg-none">Transportation Amendment Fee</span><span class="ml-2 ml-lg-0">1,000</span>' },
+                                                        ],
+                                                        listWithLabelValue: true
+                                                    } %}
+                                                {% endblock %}
+                                            {% endembed %}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -731,6 +817,55 @@
                                     spacing: 'mb-5',
                                     vModel: 'formData.paymentMethod'
                                 } %}
+                                <div class="vertical-scroller mb-5">
+                                    <div class="d-flex">
+                                        {% embed "templates/components/selection-infobox.twig" with {
+                                            type: "radio",
+                                            name: "choosePayment",
+                                            value: "Credit/Debit Card",
+                                            classes: "mb-3 mb-lg-0 mr-3"
+                                        
+                                        } %}
+                                            {% block top %}
+                                                <h3 class="m-0">Credit/Debit Card</h3>
+                                            {% endblock %}
+
+                                            {% block icon %}
+                                                {% include "templates/components/icon.twig" with { iconName: 'calendar', iconSize: '4xl' } %}
+                                            {% endblock %}
+                                        {% endembed %}
+                                        {% embed "templates/components/selection-infobox.twig" with {
+                                            type: "radio",
+                                            name: "choosePayment",
+                                            value: "Online Banking",
+                                            classes: "mb-3 mb-lg-0 mr-3"
+                                        
+                                        } %}
+                                            {% block top %}
+                                                <h3 class="m-0">Online Banking</h3>
+                                            {% endblock %}
+
+                                            {% block icon %}
+                                                {% include "templates/components/icon.twig" with { iconName: 'calendar', iconSize: '4xl' } %}
+                                            {% endblock %}
+                                        {% endembed %}
+                                        {% embed "templates/components/selection-infobox.twig" with {
+                                            type: "radio",
+                                            name: "choosePayment",
+                                            value: "E-Wallet",
+                                            classes: "mb-3 mb-lg-0 mr-3"
+                                        
+                                        } %}
+                                            {% block top %}
+                                                <h3 class="m-0">E-Wallet</h3>
+                                            {% endblock %}
+
+                                            {% block icon %}
+                                                {% include "templates/components/icon.twig" with { iconName: 'calendar', iconSize: '4xl' } %}
+                                            {% endblock %}
+                                        {% endembed %}
+                                    </div>  
+                                </div>
 
                                 <div v-if="formData.paymentMethod === 'Credit/Debit Card'">
                                     <img src="assets/img/visa-master-logo.jpg" alt="Visa and Mastercard logo" class="img-fluid mb-4">

@@ -3,6 +3,8 @@ import Datepicker from 'vuejs-datepicker';
 import moment from 'moment';
 import Countries from '../../assets/json/countries.json';
 import _ from 'lodash';
+import $ from 'jquery';
+import matchHeight from 'jquery-match-height';
 
 if ($('#travel-form').length) {
     const travelForm = new Vue({
@@ -87,7 +89,28 @@ if ($('#travel-form').length) {
                 return `${this.formData.addressLine1}, ${this.formData.addressLine2}, ${this.formData.postcode} ${this.formData.city}, ${this.formData.state}, ${this.formData.country}`;
             }
         },
-        methods: {
+        updated() {
+            let group = document.querySelectorAll('.selection-infobox-group');
+            group.forEach((item) => {
+                let heights = []
+                item.querySelectorAll('.header-match-height').forEach((elem, i) => {
+                    elem.style.removeProperty('height');
+                    let height = elem.clientHeight;
+                    heights.push(height);
+                    console.log(i, height);
+                });
+
+                let max = Math.max(...heights);
+
+                item.querySelectorAll('.header-match-height').forEach((elem, i) => {
+                    elem.style.height = max + 'px';
+                });
+            })
+        },
+        methods: {  
+            rowMatchHeight() {
+                
+            },
             changeStep(step) {
                 if (typeof step === 'number') {
                     this.currStep = this.steps.find(s => s.step === step);

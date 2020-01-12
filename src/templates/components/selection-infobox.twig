@@ -1,0 +1,32 @@
+<div class="selection-infobox {{classes}}">
+    <label class="d-block">
+        <strong class="flag-recommended text-primary text-center d-block mb-2 {% if highlight == null %}invisible{% endif %}">
+            {% include "icon.twig" with { iconName: 'star' } %}
+            <span>{{highlight}}</span>
+        </strong>
+        <input type="{{type}}" name="{{name}}" value="{{value}}" {% if vModel %} v-model="{{ vModel }}"{% endif %}/> 
+        <div class="box overflow-hidden">
+            <div class="header-match-height">
+                <div class="box--header bg-p2 text-white p-3">
+                    {% block top %}
+                    {% endblock %}
+                </div>
+                <div class="mt-4 mb-3">
+                    {% block icon %}
+                    {% endblock %}
+                </div>
+            </div>
+            <div class="box--body px-3 pt-0 pb-3">
+                {% block bottom %}
+                {% endblock %}
+                <div class="text-center py-2">
+                    <div class="custom-rounded-checked">
+                        <svg class="icon icon-m tick-mark my-2">
+                            <use xlink:href="assets/icons/icons.svg#sprite-tick-mark" href="assets/icons/icons.svg#sprite-tick-mark"></use>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </label>
+</div>

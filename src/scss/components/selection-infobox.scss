@@ -1,16 +1,13 @@
-.radio-infobox {
+.selection-infobox {
     color: $p2;
-    stroke: $p2;
     width: 100%;
     @include media-breakpoint-up(lg) {
         width: 50%;
     }
 
-    .box--header {
-        line-height: $headings-line-height;
-    }
     
-    input[type="radio"] {
+    input[type="radio"],
+    input[type="checkbox"] {
         display: none;
 
         &:checked {
@@ -18,9 +15,12 @@
                 background-color: $p2;
                 color: white;
                 stroke: white;
-                .custom-rounded-checked{
+                .custom-rounded-checked {
                     background-color: $s1;
                     border-color: $s1;
+                }
+                .custom-rounded-checked .icon {
+                    opacity: 1;
                 }
             }
         }
@@ -38,6 +38,7 @@
         text-align: center;
         cursor: pointer;
         position: relative;
+        stroke: $p2;
 
         &:active {
             transform: translateY(10px);
@@ -66,6 +67,9 @@
         text-align: center;
         border-radius: 50px;
         border: 2px solid $p2;
+        .icon {
+            opacity: 0;
+        }
     }
 
 

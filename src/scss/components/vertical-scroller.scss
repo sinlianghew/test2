@@ -1,0 +1,7 @@
+.vertical-scroller {
+    overflow: hidden;
+    overflow-x: auto;
+    & > div {
+        width: 680px;
+    }
+}
