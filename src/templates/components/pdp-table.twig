@@ -1,0 +1,112 @@
+<div class="pdp-table">
+
+    <div class="container">
+
+        <div class="d-none d-md-block">
+
+            <div class="row ">
+                <div class="col-6"></div>
+                <div class="col-6 bg-w title-box justify-content-center">
+                    <h3>OVERSEAS: OUTBOUND(RM)</h3>
+                </div>
+            </div>
+
+            <div class="row ">
+                <div class="col-6 title-box">
+                    <h3>BENEFITS</h3>
+                </div>
+                <div class="col-6 bg-w">
+                    <div class="row">
+                        <div class="col-6 bg-lightGrey title-box justify-content-center borderRight">
+                            <h3>PLAN 1</h3>
+                        </div>
+                        <div class="col-6 bg-p1 w title-box justify-content-center borderLeft">
+                            <h3>PLAN 2</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="accordion md-accordion row" id="accordionEx" role="tablist" aria-multiselectable="true">
+
+            <!-- accordion list start -->
+
+    
+            <!-- Table row 1 -->
+            {% embed "accordion-table-row.twig" with {
+                accordionNumber: "accordion1",
+                title: "Section 1 - Personal Accident",
+                planTitle1 :"",
+                planTitle2 :"",
+            } %}
+
+            {% set PlanList = [
+                { title: 'Death - Adult', planOneDesc: '250,000 ', planTwoDesc: '350,000 ' },
+                { title: 'Death - Child', planOneDesc: '62,500', planTwoDesc: '87,500' },
+                { title: 'Permanent Total Disablement - Adult/Child	', planOneDesc: '250,000 ', planTwoDesc: '350,000' },
+                { title: 'Child Education Fund^', planOneDesc: '7,500', planTwoDesc: '15,000' },
+            ] %}
+
+            {% endembed %}
+
+
+
+            <!-- Table row 2 -->
+            {% embed "accordion-table-row.twig" with {
+                accordionNumber: "accordion2",
+                title: "Section 2 -  Medical & Other Expenses",
+                planTitle1 :"Accident & Illness",
+                planTitle2 :"Accident & Illness",
+            } %}
+
+            {% set PlanList = [
+                { title: 'Overall Limit for Medical Expenses', planOneDesc: ' ', planTwoDesc: '' },
+                { title: '- Below 70 years', planOneDesc: '300,000', planTwoDesc: '400,000' },
+                { title: 'Fill in ', planOneDesc: '300 ', planTwoDesc: '300' },
+                { title: 'Fill in ', planOneDesc: '250 ', planTwoDesc: '350 ' },
+                { title: 'Fill in ', planOneDesc: '250 ', planTwoDesc: '350 ' },
+                { title: 'Fill in ', planOneDesc: '250 ', planTwoDesc: '350 ' },
+                { title: 'Fill in ', planOneDesc: '250 ', planTwoDesc: '350 ' },
+                { title: 'Fill in ', planOneDesc: '250 ', planTwoDesc: '350 ' },
+                { title: 'Fill in ', planOneDesc: '250 ', planTwoDesc: '350 ' },
+                { title: 'Fill in ', planOneDesc: '250 ', planTwoDesc: '350 ' },
+            ] %}
+
+            {% endembed %}
+
+
+
+
+
+            
+
+             <!-- Table row example -->
+             {% embed "accordion-table-row.twig" with {
+                accordionNumber: "accordionTest",
+                title: "this example to hide arrow in desktop if no accordion - blablablablab alfasfals asflasfl asfas",
+                planTitle1 :"1000",
+                planTitle2 :"3000",
+                hideArrow :"disable-md-click", 
+                oneList :"d-block d-md-none",
+                hideIfEmpty:"d-none"
+            } %}
+
+            {% set PlanList = [
+                { title: '', planOneDesc: '3000', planTwoDesc: '3000' },
+               
+            ] %}
+             <!-- Table row  example end -->
+
+
+            {% endembed %}
+
+            <!-- accordion list end -->
+
+
+        </div>
+
+
+    </div>
+</div>

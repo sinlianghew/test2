@@ -1,4 +1,9 @@
 .travel-details {
+    .bg-travel{
+        background:url(../../src/assets/img/travel-bg.png) no-repeat;
+        background-size: cover;
+        background-position: center;
+    }
 
     .jumbotron {
         height: 466px;
@@ -7,7 +12,13 @@
         @include media-breakpoint-up(md) {
             height: 452px;
         }
+    }
 
+    .jumbotron-2{
+        height: 200px;
+        @include media-breakpoint-up(md) {
+            height: 350px;
+        }
     }
 
 
@@ -37,6 +48,7 @@
             }
 
             .arrow-dropdown {
+                stroke :#fff;
                 transform: rotate(180deg);
                 -webkit-transition: -webkit-transform .5s ease;
                 -ms-transition: -ms-transform .5s ease;
@@ -46,7 +58,6 @@
                     transform: rotate(0deg);
                 }
             }
-
 
 
             .navbar-collapse {

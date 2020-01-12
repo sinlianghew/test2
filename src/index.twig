@@ -9,101 +9,102 @@
         </div>
 
         <div class="bg-p2d py-5 wizard-sections">
+        
             <div class="wizard-section-1" :class="{ 'd-none': currStep && currStep.step !== 1 }">
-                <div class="container bg-w py-5 px-4">
-                
-                    <h2 class="p2">Get Started</h2>
+                <div class="container">
+                    <div class="bg-w py-5 px-4">
+                        <h2 class="p2">Get Started</h2>
                     
-                    <div :class="{
-                        'bt2': true,
-                        'd-none': !showGetStartedConsent
-                    }">
-                        <p>
-                            Please make sure you meet the following conditions.
-                        </p>
-                        <ol class="pl-3">
-                            <li>The journey you intend to insure begins ans ends in Malaysia, except for Single Trip One-Way Cover.</li>
-                            <li>You are between 18 and 70 years of age.</li>
-                        </ol>
-                        <p><strong>Note:</strong></p>
-                        <p>Please contact _____ for your insurance application if:</p>
-                        <ol class="roman pl-3">
-                            <li>You are above 70 years of age; <strong>OR</strong></li>
-                            <li>You are purchasing travel insurance only for your child (below 18 years of age)</li>
-                        </ol>
-                    </div>
-
-                    <div :class="{
-                        'bt2': true,
-                        'd-none': showGetStartedConsent
-                    }">
-                        <p>Please enter the details of the insured person</p>
-                        <div class="d-flex mb-3">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="id_type" value="NRIC" id="id_type1" v-model="formData.idType">
-                                <label class="form-check-label" for="id_type1">NRIC</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="id_type" value="Passport" id="id_type2" v-model="formData.idType">
-                                <label class="form-check-label" for="id_type2">Passport</label>
-                            </div>
+                        <div :class="{
+                            'bt2': true,
+                            'd-none': !showGetStartedConsent
+                        }">
+                            <p>
+                                Please make sure you meet the following conditions.
+                            </p>
+                            <ol class="pl-3">
+                                <li>The journey you intend to insure begins ans ends in Malaysia, except for Single Trip One-Way Cover.</li>
+                                <li>You are between 18 and 70 years of age.</li>
+                            </ol>
+                            <p><strong>Note:</strong></p>
+                            <p>Please contact _____ for your insurance application if:</p>
+                            <ol class="roman pl-3">
+                                <li>You are above 70 years of age; <strong>OR</strong></li>
+                                <li>You are purchasing travel insurance only for your child (below 18 years of age)</li>
+                            </ol>
                         </div>
 
-                        <div class="d-flex" v-if="formData.idType === 'NRIC'">
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="nric" placeholder="xxxxxx-xx-xxxx" v-model="formData.nric">
-                            </div>
-                        </div>
-
-                        <div v-if="formData.idType === 'Passport'">
-                            <div class="d-md-flex">
-                                <div class="form-group mr-md-3">
-                                    <select class="form-control" id="country" name="country">
-                                        <option disabled hidden selected>Select country</option>
-                                        <option>Malaysia</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                        <option>4</option>
-                                    </select>
+                        <div :class="{
+                            'bt2': true,
+                            'd-none': showGetStartedConsent
+                        }">
+                            <p>Please enter the details of the insured person</p>
+                            <div class="d-flex mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="id_type" value="NRIC" id="id_type1" v-model="formData.idType">
+                                    <label class="form-check-label" for="id_type1">NRIC</label>
                                 </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="id_type" value="Passport" id="id_type2" v-model="formData.idType">
+                                    <label class="form-check-label" for="id_type2">Passport</label>
+                                </div>
+                            </div>
+
+                            <div class="d-flex" v-if="formData.idType === 'NRIC'">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" name="passport" placeholder="Passport No." v-model="formData.passport">
+                                    <input type="text" class="form-control" name="nric" placeholder="xxxxxx-xx-xxxx" v-model="formData.nric">
                                 </div>
                             </div>
-                            <p class="bt1">Date of Birth:</p>
-                            <div class="d-md-flex">
-                                <div class="form-group variant-date-picker">
-                                    <datepicker class="form-control"
-                                        placeholder="DD/MM/YYYY"
-                                        :format="customDateFormatter"
-                                        v-model="formData.dateOfBirth">
-                                    </datepicker>
-                                    {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="agreement" id="agreement" v-model="formData.pdpaAgreement">
-                            <label class="form-check-label" for="agreement">
-                                I have read and understood MSIG's <a href="#">Privacy Notice</a> and agree to MSIG processing my personal data for the purposes and in the manners set out in the Privacy Notice.
-                            </label>
-                            <svg class="icon icon-m tick-mark">
-                                <use xlink:href="assets/icons/icons.svg#sprite-tick-mark" href="assets/icons/icons.svg#sprite-tick-mark"></use>
-                            </svg>
+                            <div v-if="formData.idType === 'Passport'">
+                                <div class="d-md-flex">
+                                    <div class="form-group mr-md-3">
+                                        {% verbatim %}
+                                            <select class="form-control" id="country" name="country" v-model="formData.country">
+                                                <option disabled hidden selected value="">Select country</option>
+                                                <option>Malaysia</option>
+                                            </select>
+                                        {% endverbatim %}
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" name="passport" placeholder="Passport No." v-model="formData.passport">
+                                    </div>
+                                </div>
+                                <p class="bt1">Date of Birth:</p>
+                                <div class="d-md-flex">
+                                    <div class="form-group variant-date-picker">
+                                        <datepicker class="form-control"
+                                            placeholder="DD/MM/YYYY"
+                                            :format="customDateFormatter"
+                                            v-model="formData.dateOfBirth">
+                                        </datepicker>
+                                        {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="agreement" id="agreement" v-model="formData.pdpaAgreement">
+                                <label class="form-check-label" for="agreement">
+                                    I have read and understood MSIG's <a href="#">Privacy Notice</a> and agree to MSIG processing my personal data for the purposes and in the manners set out in the Privacy Notice.
+                                </label>
+                                <svg class="icon icon-m tick-mark">
+                                    <use xlink:href="assets/icons/icons.svg#sprite-tick-mark" href="assets/icons/icons.svg#sprite-tick-mark"></use>
+                                </svg>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="container pt-4 wizard-navigation">
                     <a href="#" role="button" class="btn btn-default btn-outline-primary mb-3 mb-md-0" v-if="showGetStartedConsent">No</a>
-                    <a href="#" role="button" class="btn btn-default btn-primary" @click="setShowGetStartedConsent(false)" v-if="showGetStartedConsent">Yes</a>
+                    <a href="#" role="button" class="btn btn-default btn-primary" @click.prevent="setShowGetStartedConsent(false)" v-if="showGetStartedConsent">Yes</a>
                     <a href="#" role="button" class="btn btn-default btn-outline-primary mb-3 mb-md-0" @click="setShowGetStartedConsent(true)" v-if="!showGetStartedConsent">Back</a>
                     <a href="#" role="button" class="btn btn-default btn-primary" @click="goToNextStep()" v-if="!showGetStartedConsent">Continue</a>
                 </div>
             </div>
 
             <div class="wizard-section-2" :class="{ 'd-none': currStep && currStep.step !== 2 }">
-                <div class="container py-5">
+                <div class="container">
                     <div class="row">
                         <div class="col-12 col-md-8">
                             <div class="bg-w py-5 px-4 mb-3">
@@ -334,11 +335,25 @@
             </div>
 
             <div class="wizard-section-3" :class="{ 'd-none': currStep && currStep.step !== 3 }">
-                <div class="container py-5">
+                <div class="container">
                     <div class="row">
                         <div class="col-12 col-md-8">
                             <div class="bg-w py-5 px-4 mb-3">
                                 <h2 class="p2 mb-4">Personal Details</h2>
+                                
+                                <div class="row" v-if="formData.idType === 'Passport'">
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <p class="bt1">Country:</p>
+                                            {% verbatim %}
+                                                <select v-model="formData.country" class="form-control">
+                                                    <option disabled hidden selected value="">Select a country</option>
+                                                    <option v-for="country in allCountries" v-bind:key="allCountries.indexOf(country)" :value="country">{{ country }}</option>
+                                                </select>
+                                            {% endverbatim %}
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <div class="row">
                                     <div class="col-12 col-md-6">
@@ -363,6 +378,27 @@
                                         <div class="form-group">
                                             <label for="mobileNo" class="bt1">Mobile No:</label>
                                             <input id="mobileNo" type="text" class="form-control" placeholder="e.g. 01x-xxxxxxx">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6" v-if="formData.idType === 'Passport'">
+                                        <div class="form-group">
+                                            <label class="bt1">Gender:</label>
+                                            <select class="form-control" v-model="formData.gender">
+                                                <option value="" selected disabled hidden>Please select</option>
+                                                <option value="Male">Male</option>
+                                                <option value="Female">Female</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6" v-if="formData.idType === 'Passport'">
+                                        <p class="bt1 mb-2">Date of Birth:</p>
+                                        <div class="form-group variant-date-picker">
+                                            <datepicker class="form-control"
+                                                placeholder="DD/MM/YYYY"
+                                                :format="customDateFormatter"
+                                                v-model="formData.dateOfBirth">
+                                            </datepicker>
+                                            {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
@@ -398,46 +434,77 @@
                                 </div>
                             </div>
 
-                            <div class="bg-w py-5 px-4 mb-3">
-                                <h2 class="p2">Family Member #1</h2>
+                            <div class="bg-w py-5 px-4 mb-3" v-for="(member, index) in formData.familyMembers">
+                                {% verbatim %}
+                                    <h2 class="p2">Family Member #{{index + 1}}</h2>
+                                {% endverbatim %}
 
                                 <p class="bt1">Traveller</p>
-                                {% include "templates/components/input-variant-radio.twig" with {
-                                    name: 'relationToCustomer',
-                                    formControls: [
-                                        { value: 'Spouse' },
-                                        { value: 'Child (30 days - 17 years old)' }
-                                    ],
-                                    spacing: 'mb-4'
-                                } %}
+                                <div class="d-flex mb-4">
+                                    <div class="form-check mb-1">
+                                        <input :id="'relationToCustomer-1-' + index" class="form-check-input" type="radio" value="Spouse" v-model="member.relationToCustomer">
+                                        <label :for="'relationToCustomer-1-' + index" class="form-check-label">Spouse</label>
+                                    </div>
+                                    <div class="form-check mb-1">
+                                        <input :id="'relationToCustomer-2-' + index" class="form-check-input" type="radio" value="Child (30 days - 17 years old)" v-model="member.relationToCustomer">
+                                        <label :for="'relationToCustomer-2-' + index" class="form-check-label">Child (30 days - 17 years old)</label>
+                                    </div>
+                                </div>
                                 
                                 <p class="bt1">Nationality</p>
-                                {% include "templates/components/input-variant-radio.twig" with {
-                                    name: 'nationality',
-                                    formControls: [
-                                        { value: 'Malaysian' },
-                                        { value: 'Non-Malaysian' }
-                                    ],
-                                    spacing: 'mb-4'
-                                } %}
+                                <div class="d-flex mb-4">
+                                    <div class="form-check mb-1">
+                                        <input :id="'nationality-1-' + index" type="radio" class="form-check-input" value="Malaysian" v-model="member.nationality">
+                                        <label :for="'nationality-1-' + index" class="form-check-label">Malaysian</label>
+                                    </div>
+                                    <div class="form-check mb-1">
+                                        <input :id="'nationality-2-' + index" type="radio" class="form-check-input" value="Non-Malaysian" v-model="member.nationality">
+                                        <label :for="'nationality-2-' + index" class="form-check-label">Non-Malaysian</label>
+                                    </div>
+                                </div>
+
+                                <div class="row" v-if="member.nationality === 'Non-Malaysian'">
+                                    <div class="col-12 col-md-6">
+                                        <p class="bt1">Country</p>
+                                        <div class="form-group">
+                                            {% verbatim %}
+                                                <select v-model="member.country" class="form-control">
+                                                    <option disabled hidden selected value="">Select a country</option>
+                                                    <option v-for="country in allCountries" v-bind:key="allCountries.indexOf(country)" :value="country">{{ country }}</option>
+                                                </select>
+                                            {% endverbatim %}
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <div class="row">
                                     <div class="col-12 col-md-6">
                                         <div class="form-group">
                                             <label class="bt1">Name (as per NRIC):</label>
-                                            <input type="text" class="form-control" placeholder="e.g. Lisa Teo">
+                                            <input type="text" class="form-control" placeholder="e.g. Lisa Teo" v-model="member.name">
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <div class="form-group">
                                             <label class="bt1">NRIC No:</label>
-                                            <input type="text" class="form-control" placeholder="e.g. 888888-88-8888">
+                                            <input type="text" class="form-control" placeholder="e.g. 888888-88-8888" v-model="member.nric">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6" v-if="member.nationality === 'Non-Malaysian'">
+                                        <p class="bt1">Date of Birth:</p>
+                                        <div class="form-group variant-date-picker">
+                                            <datepicker class="form-control"
+                                                placeholder="DD/MM/YYYY"
+                                                :format="customDateFormatter"
+                                                v-model="member.dateOfBirth">
+                                            </datepicker>
+                                            {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="d-flex justify-content-end">
-                                    <a href="#" class="btn btn-primary btn-icon">
+                                    <a href="#" class="btn btn-primary btn-icon" @click.prevent="removeFamilyMember(member)">
                                         <div class="button-icon">
                                             {% include "templates/components/icon.twig" with { iconName: 'close', iconSize: 's' } %}
                                         </div>
@@ -445,9 +512,9 @@
                                     </a>
                                 </div>
                             </div>
-                            
+
                             <div class="d-flex justify-content-end mb-3">
-                                <a href="#" class="btn btn-secondary btn-icon">
+                                <a href="#" @click.prevent="addFamilyMember()" class="btn btn-secondary btn-icon">
                                     <div class="button-icon">
                                         {% include "templates/components/icon.twig" with { iconName: 'plus', iconSize: 's' } %}
                                     </div>
@@ -472,10 +539,11 @@
             </div>
 
             <div class="wizard-section-4" :class="{ 'd-none': currStep && currStep.step !== 4 }">
-                <div class="container py-5">
+                <div class="container">
                     <div class="row">
                         <div class="col-12 col-md-8">
                             <div class="bg-w py-5 px-4 mb-3">
+                                <h2 class="p2 mb-4">Nominee Details</h2>
                                 <div class="row">
                                     <div class="col-12 col-md-6">
                                         <div class="form-group">
@@ -520,65 +588,104 @@
             </div>
 
             <div class="wizard-section-5" :class="{ 'd-none': currStep && currStep.step !== 5 }">
-                <div class="container py-5">
+                <div class="container">
                     <div class="row">
                         <div class="col-12 col-md-8">
                             <div class="bg-w pt-5 pb-3 px-4 mb-3">
                                 <h2 class="p2 mb-4">Personal Details</h2>
 
                                 {% set personalDetails = [
-                                    { title: 'Name (as per NRIC):', content: 'Henry Teo' },
-                                    { title: 'NRIC No:', content: '901010-14-5021' },
-                                    { title: 'Email:', content: 'henryto@gmail.com' },
-                                    { title: 'Mobile No:', content: '012-216 2534' },
-                                    { title: 'Address:', content: '7, Lorong Bahagia 2, TTDI, 60000 Kuala Lumpur, Wilayah Persekutuan, Malaysia' }
+                                    { title: 'Name (as per NRIC):', vModel: 'formData.customerName'},
+                                    { title: 'NRIC No:', vModel: 'formData.nric'},
+                                    { title: 'Email:', vModel: 'formData.email'},
+                                    { title: 'Mobile No:', vModel: 'formData.mobileNo'}
                                 ] %}
 
                                 <div class="row">
                                     {% for item in personalDetails %}
                                         <div class="col-12 col-md-6">
                                             <p class="bt1 mb-0">{{ item.title }}</p>
-                                            <p class="bt2">{{ item.content }}</p>
+                                            <p class="bt2" v-html="{{ item.vModel }}" v-if="!personalEditMode"></p>
+
+                                            <div class="form-group" v-if="personalEditMode">
+                                                <input type="text" class="form-control" v-model="{{ item.vModel }}">
+                                            </div>
                                         </div>
                                     {% endfor %}
+                                    <div class="col-12 col-md-6">
+                                        <p class="bt1 mb-0">Address:</p>
+                                        {% verbatim %}    
+                                        <p class="bt2" v-if="!personalEditMode">{{ fullAddress }}</p>
+                                        <div class="form-group" v-if="personalEditMode">
+                                            <input type="text" class="form-control" v-model="formData.addressLine1">
+                                        </div>
+                                        <div class="form-group" v-if="personalEditMode">
+                                            <input type="text" class="form-control" v-model="formData.addressLine2">
+                                        </div>
+                                        {% endverbatim %}
+                                    </div>
                                 </div>
 
-                                <div class="d-flex justify-content-end">
-                                    <a href="#" @click.prevent="changeStep(3)" class="btn btn-secondary btn-icon">
+                                <div class="d-flex justify-content-end" v-if="!personalEditMode">
+                                    <a href="#" @click.prevent="setPersonalEditMode(true)" class="btn btn-secondary btn-icon">
                                         <div class="button-icon">
                                             {% include "templates/components/icon.twig" with { iconName: 'plus', iconSize: 's' } %}
                                         </div>
                                         <span class="button-text">Edit</span>
                                     </a>
                                 </div>
+
+                                <div class="d-flex justify-content-end mt-3" v-if="personalEditMode">
+                                    <a href="#" @click.prevent="setPersonalEditMode(false)" class="btn btn-primary btn-icon mr-3">
+                                        <div class="button-icon">
+                                            {% include "templates/components/icon.twig" with { iconName: 'close', iconSize: 's' } %}
+                                        </div>
+                                        <span class="button-text">Cancel</span>
+                                    </a>
+                                    <a href="#" @click.prevent="setPersonalEditMode(false)" class="btn btn-default btn-secondary">Save</a>
+                                </div>
+
                             </div>
 
                             <div class="bg-w pt-5 pb-3 px-4 mb-3">
                                 <h2 class="p2">Nominee Details</h2>
 
                                 {% set nomineeDetails = [
-                                    { title: 'Name (as per NRIC):', content: 'Teo Wei Ming' },
-                                    { title: 'NRIC No:', content: '801116-14-5497' },
-                                    { title: 'Mobile No:', content: '017-216 2534' },
-                                    { title: 'Relationship:', content: 'Father' },
+                                    { title: 'Name (as per NRIC):', vModel: 'formData.nomineeName' },
+                                    { title: 'NRIC No:', vModel: 'formData.nomineeNric' },
+                                    { title: 'Mobile No:', vModel: 'formData.nomineeMobileNo' },
+                                    { title: 'Relationship:', vModel: 'formData.nomineeRelationToCustomer' },
                                 ] %}
 
                                 <div class="row">
                                     {% for item in nomineeDetails %}
                                         <div class="col-12 col-md-6">
                                             <p class="bt1 mb-0">{{ item.title }}</p>
-                                            <p class="bt2">{{ item.content }}</p>
+                                            <p class="bt2" v-if="!nomineeEditMode" v-html="{{ item.vModel }}"></p>
+                                            <div class="form-group" v-if="nomineeEditMode">
+                                                <input type="text" class="form-control" v-model="{{ item.vModel }}">
+                                            </div>
                                         </div>
                                     {% endfor %}
                                 </div>
 
-                                <div class="d-flex justify-content-end">
-                                    <a href="#" @click.prevent="changeStep(4)" class="btn btn-secondary btn-icon">
+                                <div class="d-flex justify-content-end" v-if="!nomineeEditMode">
+                                    <a href="#" @click.prevent="setNomineeEditMode(true)" class="btn btn-secondary btn-icon">
                                         <div class="button-icon">
                                             {% include "templates/components/icon.twig" with { iconName: 'plus', iconSize: 's' } %}
                                         </div>
                                         <span class="button-text">Edit</span>
                                     </a>
+                                </div>
+
+                                <div class="d-flex justify-content-end mt-3" v-if="nomineeEditMode">
+                                    <a href="#" @click.prevent="setNomineeEditMode(false)" class="btn btn-primary btn-icon mr-3">
+                                        <div class="button-icon">
+                                            {% include "templates/components/icon.twig" with { iconName: 'close', iconSize: 's' } %}
+                                        </div>
+                                        <span class="button-text">Cancel</span>
+                                    </a>
+                                    <a href="#" @click.prevent="setNomineeEditMode(false)" class="btn btn-default btn-secondary">Save</a>
                                 </div>
                             </div>
 
@@ -609,7 +716,7 @@
             </div>
 
             <div class="wizard-section-6" :class="{ 'd-none': currStep && currStep.step !== 6 }">
-                <div class="container py-5">
+                <div class="container">
                     <div class="row">
                         <div class="col-12 col-md-8">
                             <div class="bg-w py-5 px-4 mb-3">
@@ -698,10 +805,10 @@
                                     } %}
                                 </div>
 
-                                <div class="pt-4 wizard-navigation">
-                                    <a href="#" role="button" class="btn btn-default btn-outline-primary" @click.prevent="goToPrevStep()">Back</a>
-                                    <a href="#" role="button" class="btn btn-default btn-primary" @click.prevent="goToNextStep()">Pay Now</a>
-                                </div>
+                            </div>
+                            <div class="pt-4 wizard-navigation d-none d-md-flex">
+                                <a href="#" role="button" class="btn btn-default btn-outline-primary" @click.prevent="goToPrevStep()">Back</a>
+                                <a href="/payment-completed.html" role="button" class="btn btn-default btn-primary">Pay Now</a>
                             </div>
                         </div>
                         <div class="col-12 col-md-4">
@@ -709,7 +816,12 @@
                         </div>
                     </div>
                 </div>
+                <div class="container pt-4 wizard-navigation d-md-none">
+                    <a href="#" role="button" class="btn btn-default btn-outline-primary mb-3 mb-md-0" @click.prevent="goToPrevStep()">Back</a>
+                    <a href="/payment-completed.html" role="button" class="btn btn-default btn-primary">Pay Now</a>
+                </div>
             </div>
+            
         </div>
     </div>
 
