@@ -2,827 +2,193 @@
 
 {% block main %}
 
-    <div class="form-wizard" id="travel-form">
-        <div class="container py-5">
-            <h1>Travel Insurance</h1>
-            {% include "templates/components/steppers.twig" %}
-        </div>
+<div class="travel-details bg-lightGrey">
 
-        <div class="bg-p2d py-5 wizard-sections">
-        
-            <div class="wizard-section-1" :class="{ 'd-none': currStep && currStep.step !== 1 }">
-                <div class="container">
-                    <div class="bg-w py-5 px-4">
-                        <h2 class="p2">Get Started</h2>
-                    
-                        <div :class="{
-                            'bt2': true,
-                            'd-none': !showGetStartedConsent
-                        }">
-                            <p>
-                                Please make sure you meet the following conditions.
-                            </p>
-                            <ol class="pl-3">
-                                <li>The journey you intend to insure begins ans ends in Malaysia, except for Single Trip One-Way Cover.</li>
-                                <li>You are between 18 and 70 years of age.</li>
-                            </ol>
-                            <p><strong>Note:</strong></p>
-                            <p>Please contact _____ for your insurance application if:</p>
-                            <ol class="roman pl-3">
-                                <li>You are above 70 years of age; <strong>OR</strong></li>
-                                <li>You are purchasing travel insurance only for your child (below 18 years of age)</li>
-                            </ol>
-                        </div>
+    <div class="jumbotron text-center mb-0 align-items-center d-flex  justify-content-center bg-travel">
 
-                        <div :class="{
-                            'bt2': true,
-                            'd-none': showGetStartedConsent
-                        }">
-                            <p>Please enter the details of the insured person</p>
-                            <div class="d-flex mb-3">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="id_type" value="NRIC" id="id_type1" v-model="formData.idType">
-                                    <label class="form-check-label" for="id_type1">NRIC</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="id_type" value="Passport" id="id_type2" v-model="formData.idType">
-                                    <label class="form-check-label" for="id_type2">Passport</label>
-                                </div>
-                            </div>
-
-                            <div class="d-flex" v-if="formData.idType === 'NRIC'">
-                                <div class="form-group">
-                                    <input type="text" class="form-control" name="nric" placeholder="xxxxxx-xx-xxxx" v-model="formData.nric">
-                                </div>
-                            </div>
-
-                            <div v-if="formData.idType === 'Passport'">
-                                <div class="d-md-flex">
-                                    <div class="form-group mr-md-3">
-                                        {% verbatim %}
-                                            <select class="form-control" id="country" name="country" v-model="formData.country">
-                                                <option disabled hidden selected value="">Select country</option>
-                                                <option>Malaysia</option>
-                                            </select>
-                                        {% endverbatim %}
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" name="passport" placeholder="Passport No." v-model="formData.passport">
-                                    </div>
-                                </div>
-                                <p class="bt1">Date of Birth:</p>
-                                <div class="d-md-flex">
-                                    <div class="form-group variant-date-picker">
-                                        <datepicker class="form-control"
-                                            placeholder="DD/MM/YYYY"
-                                            :format="customDateFormatter"
-                                            v-model="formData.dateOfBirth">
-                                        </datepicker>
-                                        {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="agreement" id="agreement" v-model="formData.pdpaAgreement">
-                                <label class="form-check-label" for="agreement">
-                                    I have read and understood MSIG's <a href="#">Privacy Notice</a> and agree to MSIG processing my personal data for the purposes and in the manners set out in the Privacy Notice.
-                                </label>
-                                <svg class="icon icon-m tick-mark">
-                                    <use xlink:href="assets/icons/icons.svg#sprite-tick-mark" href="assets/icons/icons.svg#sprite-tick-mark"></use>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="container pt-4 wizard-navigation">
-                    <a href="#" role="button" class="btn btn-default btn-outline-primary mb-3 mb-md-0" v-if="showGetStartedConsent">No</a>
-                    <a href="#" role="button" class="btn btn-default btn-primary" @click.prevent="setShowGetStartedConsent(false)" v-if="showGetStartedConsent">Yes</a>
-                    <a href="#" role="button" class="btn btn-default btn-outline-primary mb-3 mb-md-0" @click="setShowGetStartedConsent(true)" v-if="!showGetStartedConsent">Back</a>
-                    <a href="#" role="button" class="btn btn-default btn-primary" @click="goToNextStep()" v-if="!showGetStartedConsent">Continue</a>
-                </div>
-            </div>
-
-            <div class="wizard-section-2" :class="{ 'd-none': currStep && currStep.step !== 2 }">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-12 col-md-8">
-                            <div class="bg-w py-5 px-4 mb-3">
-                                <h2 class="p2">Choose a Plan</h2>
-
-                                {% include "templates/components/input-variant-radio.twig" with {
-                                    name: 'coverageType',
-                                    formControls: [
-                                        { value: 'Single Trip' },
-                                        { value: 'Annual Cover' },
-                                    ],
-                                    spacing: 'mb-4'
-                                } %}
-
-                                {% verbatim %}    
-                                    <div class="d-md-flex">
-                                        <div class="form-group">
-                                            <label class="bt1" for="areaOfCoverage">Area of Coverage</label>
-                                            <select name="areaOfCoverage" id="areaOfCoverage" class="form-control" v-model="formData.areaOfCoverage">
-                                                <option :value="area.name" v-for="area in coverageAreas" v-bind:key="coverageAreas.indexOf(area)">
-                                                    {{ area.name }}
-                                                </option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="bt2">
-                                        <p>Locations covered in this area of coverage:</p>
-                                        <p>{{ countriesForCurrArea }}</p>
-                                    </div>
-                                {% endverbatim %}
-
-
-                                <div class="area-of-coverage text-center mb-5">
-                                    <img src="assets/img/area-1.jpg" 
-                                        alt="Area 1" 
-                                        :class="{
-                                            'img-fluid': true,
-                                            'd-none': formData.areaOfCoverage !== 'Area 1'
-                                        }">
-                                    <img src="assets/img/area-2.jpg" 
-                                        alt="Area 2" 
-                                        :class="{
-                                            'img-fluid': true,
-                                            'd-none': formData.areaOfCoverage !== 'Area 2'
-                                        }">
-                                    <img src="assets/img/area-3.jpg" 
-                                        alt="Area 3" 
-                                        :class="{
-                                            'img-fluid': true,
-                                            'd-none': formData.areaOfCoverage !== 'Area 3'
-                                        }">
-                                    <img src="assets/img/area-4.jpg" 
-                                        alt="Area 4" 
-                                        :class="{
-                                            'img-fluid': true,
-                                            'd-none': formData.areaOfCoverage !== 'Area 4'
-                                        }">
-                                </div>
-
-                                <h2 class="p2 mb-4">Period of Coverage</h2>
-                                <div class="d-md-flex justify-content-between mb-4">
-                                    <div>
-                                        <p class="bt1">Start Date</p>
-                                        <div class="form-group variant-date-picker">
-                                            <datepicker class="form-control"
-                                                placeholder="Select date"
-                                                :format="customDateFormatter"
-                                                v-model="formData.startDate">
-                                            </datepicker>
-                                            {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <p class="bt1">End Date</p>
-                                        <div class="form-group variant-date-picker">
-                                            <datepicker class="form-control"
-                                                placeholder="Select date"
-                                                :format="customDateFormatter"
-                                                v-model="formData.endDate">
-                                            </datepicker>
-                                            {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="bt2">
-                                    <p>Please note that your coverage will terminate at the earliest happening of the following:</p>
-                                    <ol class="pl-3">
-                                        <li>24 hours upon your arrival in Malaysia</li>
-                                        <li>Upon reaching your home or workplace in Malaysia (whichever is the earlier)</li>
-                                        <li>Expiry date of your travel insurance policy</li>
-                                    </ol>
-                                    <p>The following benefits will not be applicable for travel insurance purchased less than 7 days from travel start date:</p>
-                                    <ol class="pl-3">
-                                        <li>Section 7: Travel Cancellation</li>
-                                        <li>Section 14: Loss of Travel Deposit</li>
-                                    </ol>
-                                </div>
-                            </div>
-
-                            <div class="bg-w py-5 px-4 mb-3">
-                                <h2 class="p2 mb-4">Please Select Your Preferred Plan</h2>
-                                <div class="row">
-                                    <div class="col-12 col-lg-4">
-                                        <p class="h2 h2 mt-5 pt-5">TravelRight Plus</p>
-                                        <p class="bt1 d-none d-lg-block mt-5 pt-1 mb-1">Benefits</p>
-                                        {% include "templates/components/list-variant-icon.twig" with {
-                                            items: [
-                                                { iconName: 'tick-mark', content: 'Personal Accident' },
-                                                { iconName: 'tick-mark', content: 'Medical & Other Expenses' },
-                                                { iconName: 'tick-mark', content: 'Luggage & Personal Effects' },
-                                                { iconName: 'tick-mark', content: 'Luggage & Delay (Every 6 hours)' },
-                                                { iconName: 'tick-mark', content: 'Travel Delay (Every 6 hours)' },
-                                            ],
-                                            class: "d-none d-lg-block"
-                                        } %}
-                                        <p class="bt2">View the full benefits <strong><a href="#">HERE</a></strong></p>
-                                    </div>
-                                    <div class="col-12 col-lg-8">
-                                        <div class="d-lg-flex">
-                                            {% embed "templates/components/radio-infobox.twig" with {
-                                                name: "choosePlan",
-                                                classes: "mb-3 mb-lg-0 mr-lg-3"
-                                            } %}
-                                                {% block top %}
-                                                    <h3 class="m-0">Plan 1</h3>
-                                                    <p class="m-0">from <span class="h3">RM39.00</span></p>
-                                                {% endblock %}
-
-                                                {% block bottom %}
-                                                    <div class="mb-3">
-                                                        {% include "templates/components/icon.twig" with { iconName: 'calendar', iconSize: '4xl' } %}
-                                                    </div>
-                                                    <div class="row py-2">
-                                                        <div class="text-left col-6 col-lg-12 d-lg-none">
-                                                            <strong class="mr-2 bold">Benefits</strong>
-                                                        </div>
-                                                        <div class="text-right text-lg-center col-6 col-lg-12">
-                                                            <strong class="ml-2">RM</strong>
-                                                        </div>
-                                                    </div>
-                                                    {% include "templates/components/list-variant-icon.twig" with {
-                                                        items: [
-                                                            { iconName: 'tick-mark', content: '<span class="mr-2 bold d-lg-none">Personal Accident</span><span class="ml-2">10,000</span>' },
-                                                            { iconName: 'tick-mark', content: '<span class="mr-2 bold d-lg-none">Travel Delay<br/><i>(Every 6 hours)</i></span><span class="ml-2">100,000</span>' },
-                                                            { iconName: 'tick-mark', content: '<span class="mr-2 bold d-lg-none">Personal Accident</span><span class="ml-2">10,000</span>' },
-                                                            { iconName: 'tick-mark', content: '<span class="mr-2 bold d-lg-none">Travel Delay<br/><i>(Every 6 hours)</i></span><span class="ml-2">100,000</span>' },
-                                                            { iconName: 'tick-mark', content: '<span class="mr-2 bold d-lg-none">Personal Accident</span><span class="ml-2">10,000</span>' },
-                                                        ],
-                                                        listWithLabelValue: true
-                                                    } %}
-                                                {% endblock %}
-                                            {% endembed %}
-
-                                            {% embed "templates/components/radio-infobox.twig" with {
-                                                name: "choosePlan",
-                                                classes: "mb-3 mb-lg-0 mr-lg-3"
-                                            } %}
-                                                {% block top %}
-                                                    <h3 class="m-0">Plan 2</h3>
-                                                    <p class="m-0">from <span class="h3">RM58.00</span></p>
-                                                {% endblock %}
-
-                                                {% block bottom %}
-                                                    <div class="mb-3">
-                                                        {% include "templates/components/icon.twig" with { iconName: 'calendar', iconSize: '4xl' } %}
-                                                    </div>
-                                                    <div class="row py-2">
-                                                        <div class="text-left col-6 col-lg-12 d-lg-none">
-                                                            <strong class="mr-2 bold">Benefits</strong>
-                                                        </div>
-                                                        <div class="text-right text-lg-center col-6 col-lg-12">
-                                                            <strong class="ml-2">RM</strong>
-                                                        </div>
-                                                    </div>
-                                                    {% include "templates/components/list-variant-icon.twig" with {
-                                                        items: [
-                                                            { iconName: 'tick-mark', content: '<span class="mr-2 bold d-lg-none">Personal Accident</span><span class="ml-2">10,000</span>' },
-                                                            { iconName: 'tick-mark', content: '<span class="mr-2 bold d-lg-none">Travel Delay<br/><i>(Every 6 hours)</i></span><span class="ml-2">100,000</span>' },
-                                                            { iconName: 'tick-mark', content: '<span class="mr-2 bold d-lg-none">Personal Accident</span><span class="ml-2">10,000</span>' },
-                                                            { iconName: 'tick-mark', content: '<span class="mr-2 bold d-lg-none">Travel Delay<br/><i>(Every 6 hours)</i></span><span class="ml-2">100,000</span>' },
-                                                            { iconName: 'tick-mark', content: '<span class="mr-2 bold d-lg-none">Personal Accident</span><span class="ml-2">10,000</span>' },
-                                                        ],
-                                                        listWithLabelValue: true
-                                                    } %}
-                                                {% endblock %}
-                                            {% endembed %}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                             <div class="bg-w py-5 px-4 mb-3">
-                                <h2 class="p2">Choose Your Optional Add-On</h2>
-                                <div class="row">
-                                    <div class="col-12 col-lg-4">
-                                        <p class="h2">Sports Fan</p>
-                                        <p class="bt1">Travelling and can’t wait to cheer for your favourite sports team? Make sure you are covered with the Sports Fans add-on for additional protection!</p>
-                                        {% include "templates/components/list-variant-icon.twig" with {
-                                            items: [
-                                                { iconName: 'tick-mark', content: 'Additional Indemnity for Personal Accident' },
-                                                { iconName: 'tick-mark', content: 'Extended Accommodation Cover' },
-                                                { iconName: 'tick-mark', content: 'Ticket Cover' },
-                                                { iconName: 'tick-mark', content: 'Transportation Amendment Fee' },
-                                            ]
-                                        } %}
-                                        <p class="bt2">View the full benefits <strong><a href="#">HERE</a></strong></p>
-                                    </div>
-                                    <div class="col-12 col-lg-8"></div>
-                                </div>
-                            </div>
-
-                            <div class="pt-4 wizard-navigation d-none d-md-flex">
-                                <a href="#" role="button" class="btn btn-default btn-outline-primary" @click.prevent="goToPrevStep()">Back</a>
-                                <a href="#" role="button" class="btn btn-default btn-primary" @click.prevent="goToNextStep()">Continue</a>
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-md-4">
-                            {% include "templates/components/summary-pane.twig" %}
-                        </div>
-                    </div>
-                </div>
-                <div class="container pt-4 wizard-navigation d-md-none">
-                    <a href="#" role="button" class="btn btn-default btn-outline-primary mb-3 mb-md-0" @click="goToPrevStep()">Back</a>
-                    <a href="#" role="button" class="btn btn-default btn-primary" @click="goToNextStep()">Continue</a>
-                </div>
-            </div>
-
-            <div class="wizard-section-3" :class="{ 'd-none': currStep && currStep.step !== 3 }">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-12 col-md-8">
-                            <div class="bg-w py-5 px-4 mb-3">
-                                <h2 class="p2 mb-4">Personal Details</h2>
-                                
-                                <div class="row" v-if="formData.idType === 'Passport'">
-                                    <div class="col-12 col-md-6">
-                                        <div class="form-group">
-                                            <p class="bt1">Country:</p>
-                                            {% verbatim %}
-                                                <select v-model="formData.country" class="form-control">
-                                                    <option disabled hidden selected value="">Select a country</option>
-                                                    <option v-for="country in allCountries" v-bind:key="allCountries.indexOf(country)" :value="country">{{ country }}</option>
-                                                </select>
-                                            {% endverbatim %}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-12 col-md-6">
-                                        <div class="form-group">
-                                            <label for="customerName" class="bt1">Name (as per NRIC):</label>
-                                            <input id="customerName" type="text" class="form-control" placeholder="e.g. Henry Teo">
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-6">
-                                        <div class="form-group">
-                                            <label for="nricNo" class="bt1">NRIC No:</label>
-                                            <input id="nricNo" disabled type="text" class="form-control" placeholder="NRIC" v-model="formData.nric">
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-6">
-                                        <div class="form-group">
-                                            <label for="customerEmail" class="bt1">Email:</label>
-                                            <input id="customerEmail" type="text" class="form-control" placeholder="e.g. hteoro@gmail.com">
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-6">
-                                        <div class="form-group">
-                                            <label for="mobileNo" class="bt1">Mobile No:</label>
-                                            <input id="mobileNo" type="text" class="form-control" placeholder="e.g. 01x-xxxxxxx">
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-6" v-if="formData.idType === 'Passport'">
-                                        <div class="form-group">
-                                            <label class="bt1">Gender:</label>
-                                            <select class="form-control" v-model="formData.gender">
-                                                <option value="" selected disabled hidden>Please select</option>
-                                                <option value="Male">Male</option>
-                                                <option value="Female">Female</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-6" v-if="formData.idType === 'Passport'">
-                                        <p class="bt1 mb-2">Date of Birth:</p>
-                                        <div class="form-group variant-date-picker">
-                                            <datepicker class="form-control"
-                                                placeholder="DD/MM/YYYY"
-                                                :format="customDateFormatter"
-                                                v-model="formData.dateOfBirth">
-                                            </datepicker>
-                                            {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-6">
-                                        <div class="form-group">
-                                            <label for="address1" class="bt1">Address:</label>
-                                            <input id="address1" type="text" class="form-control" placeholder="First Line">
-                                        </div>
-                                        <div class="form-group">
-                                            <input id="address2" type="text" class="form-control" placeholder="Second Line">
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-6">
-                                        <div class="form-group variant-icon">
-                                            <label for="postcode" class="bt1">Postcode</label>
-                                            <div class="input-wrapper">
-                                                <input id="postcode" type="text" class="form-control" placeholder="Find postcode">
-                                                {% include "templates/components/icon.twig" with { iconName: 'search', iconSize: 'm' } %}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-6">
-                                        <div class="form-group">
-                                            <label for="city" class="bt1">City:</label>
-                                            <input id="city" type="text" class="form-control" disabled placeholder="City">
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-6">
-                                        <div class="form-group">
-                                            <label for="state" class="bt1">State:</label>
-                                            <input id="state" type="text" class="form-control" disabled placeholder="State">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="bg-w py-5 px-4 mb-3" v-for="(member, index) in formData.familyMembers">
-                                {% verbatim %}
-                                    <h2 class="p2">Family Member #{{index + 1}}</h2>
-                                {% endverbatim %}
-
-                                <p class="bt1">Traveller</p>
-                                <div class="d-flex mb-4">
-                                    <div class="form-check mb-1">
-                                        <input :id="'relationToCustomer-1-' + index" class="form-check-input" type="radio" value="Spouse" v-model="member.relationToCustomer">
-                                        <label :for="'relationToCustomer-1-' + index" class="form-check-label">Spouse</label>
-                                    </div>
-                                    <div class="form-check mb-1">
-                                        <input :id="'relationToCustomer-2-' + index" class="form-check-input" type="radio" value="Child (30 days - 17 years old)" v-model="member.relationToCustomer">
-                                        <label :for="'relationToCustomer-2-' + index" class="form-check-label">Child (30 days - 17 years old)</label>
-                                    </div>
-                                </div>
-                                
-                                <p class="bt1">Nationality</p>
-                                <div class="d-flex mb-4">
-                                    <div class="form-check mb-1">
-                                        <input :id="'nationality-1-' + index" type="radio" class="form-check-input" value="Malaysian" v-model="member.nationality">
-                                        <label :for="'nationality-1-' + index" class="form-check-label">Malaysian</label>
-                                    </div>
-                                    <div class="form-check mb-1">
-                                        <input :id="'nationality-2-' + index" type="radio" class="form-check-input" value="Non-Malaysian" v-model="member.nationality">
-                                        <label :for="'nationality-2-' + index" class="form-check-label">Non-Malaysian</label>
-                                    </div>
-                                </div>
-
-                                <div class="row" v-if="member.nationality === 'Non-Malaysian'">
-                                    <div class="col-12 col-md-6">
-                                        <p class="bt1">Country</p>
-                                        <div class="form-group">
-                                            {% verbatim %}
-                                                <select v-model="member.country" class="form-control">
-                                                    <option disabled hidden selected value="">Select a country</option>
-                                                    <option v-for="country in allCountries" v-bind:key="allCountries.indexOf(country)" :value="country">{{ country }}</option>
-                                                </select>
-                                            {% endverbatim %}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-12 col-md-6">
-                                        <div class="form-group">
-                                            <label class="bt1">Name (as per NRIC):</label>
-                                            <input type="text" class="form-control" placeholder="e.g. Lisa Teo" v-model="member.name">
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-6">
-                                        <div class="form-group">
-                                            <label class="bt1">NRIC No:</label>
-                                            <input type="text" class="form-control" placeholder="e.g. 888888-88-8888" v-model="member.nric">
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-6" v-if="member.nationality === 'Non-Malaysian'">
-                                        <p class="bt1">Date of Birth:</p>
-                                        <div class="form-group variant-date-picker">
-                                            <datepicker class="form-control"
-                                                placeholder="DD/MM/YYYY"
-                                                :format="customDateFormatter"
-                                                v-model="member.dateOfBirth">
-                                            </datepicker>
-                                            {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="d-flex justify-content-end">
-                                    <a href="#" class="btn btn-primary btn-icon" @click.prevent="removeFamilyMember(member)">
-                                        <div class="button-icon">
-                                            {% include "templates/components/icon.twig" with { iconName: 'close', iconSize: 's' } %}
-                                        </div>
-                                        <span class="button-text">Remove</span>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="d-flex justify-content-end mb-3">
-                                <a href="#" @click.prevent="addFamilyMember()" class="btn btn-secondary btn-icon">
-                                    <div class="button-icon">
-                                        {% include "templates/components/icon.twig" with { iconName: 'plus', iconSize: 's' } %}
-                                    </div>
-                                    <span class="button-text">Add family</span>
-                                </a>
-                            </div>
-
-                            <div class="pt-4 wizard-navigation d-none d-md-flex">
-                                <a href="#" role="button" class="btn btn-default btn-outline-primary" @click.prevent="goToPrevStep()">Back</a>
-                                <a href="#" role="button" class="btn btn-default btn-primary" @click.prevent="goToNextStep()">Continue</a>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-4">
-                            {% include "templates/components/summary-pane.twig" %}
-                        </div>
-                    </div>
-                </div>
-                <div class="container pt-4 wizard-navigation d-md-none">
-                    <a href="#" role="button" class="btn btn-default btn-outline-primary mb-3 mb-md-0" @click="goToPrevStep()">Back</a>
-                    <a href="#" role="button" class="btn btn-default btn-primary" @click="goToNextStep()">Continue</a>
-                </div>
-            </div>
-
-            <div class="wizard-section-4" :class="{ 'd-none': currStep && currStep.step !== 4 }">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-12 col-md-8">
-                            <div class="bg-w py-5 px-4 mb-3">
-                                <h2 class="p2 mb-4">Nominee Details</h2>
-                                <div class="row">
-                                    <div class="col-12 col-md-6">
-                                        <div class="form-group">
-                                            <label class="bt1">Name (as per NRIC):</label>
-                                            <input type="text" class="form-control" placeholder="e.g. Henry Teo">
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-6">
-                                        <div class="form-group">
-                                            <label class="bt1">NRIC No:</label>
-                                            <input type="text" class="form-control" placeholder="e.g. 888888-88-8888">
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-6">
-                                        <div class="form-group">
-                                            <label class="bt1">Mobile No:</label>
-                                            <input type="text" class="form-control" placeholder="e.g. 01X-XXXXXXX">
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-6">
-                                        <div class="form-group">
-                                            <label class="bt1">Relationship</label>
-                                            <input type="text" class="form-control" placeholder="e.g. Father">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="pt-4 wizard-navigation d-none d-md-flex">
-                                <a href="#" role="button" class="btn btn-default btn-outline-primary" @click.prevent="goToPrevStep()">Back</a>
-                                <a href="#" role="button" class="btn btn-default btn-primary" @click.prevent="goToNextStep()">Continue</a>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-4">
-                            {% include "templates/components/summary-pane.twig" %}
-                        </div>
-                    </div>
-                </div>
-                <div class="container pt-4 wizard-navigation d-md-none">
-                    <a href="#" role="button" class="btn btn-default btn-outline-primary mb-3 mb-md-0" @click="goToPrevStep()">Back</a>
-                    <a href="#" role="button" class="btn btn-default btn-primary" @click="goToNextStep()">Continue</a>
-                </div>
-            </div>
-
-            <div class="wizard-section-5" :class="{ 'd-none': currStep && currStep.step !== 5 }">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-12 col-md-8">
-                            <div class="bg-w pt-5 pb-3 px-4 mb-3">
-                                <h2 class="p2 mb-4">Personal Details</h2>
-
-                                {% set personalDetails = [
-                                    { title: 'Name (as per NRIC):', vModel: 'formData.customerName'},
-                                    { title: 'NRIC No:', vModel: 'formData.nric'},
-                                    { title: 'Email:', vModel: 'formData.email'},
-                                    { title: 'Mobile No:', vModel: 'formData.mobileNo'}
-                                ] %}
-
-                                <div class="row">
-                                    {% for item in personalDetails %}
-                                        <div class="col-12 col-md-6">
-                                            <p class="bt1 mb-0">{{ item.title }}</p>
-                                            <p class="bt2" v-html="{{ item.vModel }}" v-if="!personalEditMode"></p>
-
-                                            <div class="form-group" v-if="personalEditMode">
-                                                <input type="text" class="form-control" v-model="{{ item.vModel }}">
-                                            </div>
-                                        </div>
-                                    {% endfor %}
-                                    <div class="col-12 col-md-6">
-                                        <p class="bt1 mb-0">Address:</p>
-                                        {% verbatim %}    
-                                        <p class="bt2" v-if="!personalEditMode">{{ fullAddress }}</p>
-                                        <div class="form-group" v-if="personalEditMode">
-                                            <input type="text" class="form-control" v-model="formData.addressLine1">
-                                        </div>
-                                        <div class="form-group" v-if="personalEditMode">
-                                            <input type="text" class="form-control" v-model="formData.addressLine2">
-                                        </div>
-                                        {% endverbatim %}
-                                    </div>
-                                </div>
-
-                                <div class="d-flex justify-content-end" v-if="!personalEditMode">
-                                    <a href="#" @click.prevent="setPersonalEditMode(true)" class="btn btn-secondary btn-icon">
-                                        <div class="button-icon">
-                                            {% include "templates/components/icon.twig" with { iconName: 'plus', iconSize: 's' } %}
-                                        </div>
-                                        <span class="button-text">Edit</span>
-                                    </a>
-                                </div>
-
-                                <div class="d-flex justify-content-end mt-3" v-if="personalEditMode">
-                                    <a href="#" @click.prevent="setPersonalEditMode(false)" class="btn btn-primary btn-icon mr-3">
-                                        <div class="button-icon">
-                                            {% include "templates/components/icon.twig" with { iconName: 'close', iconSize: 's' } %}
-                                        </div>
-                                        <span class="button-text">Cancel</span>
-                                    </a>
-                                    <a href="#" @click.prevent="setPersonalEditMode(false)" class="btn btn-default btn-secondary">Save</a>
-                                </div>
-
-                            </div>
-
-                            <div class="bg-w pt-5 pb-3 px-4 mb-3">
-                                <h2 class="p2">Nominee Details</h2>
-
-                                {% set nomineeDetails = [
-                                    { title: 'Name (as per NRIC):', vModel: 'formData.nomineeName' },
-                                    { title: 'NRIC No:', vModel: 'formData.nomineeNric' },
-                                    { title: 'Mobile No:', vModel: 'formData.nomineeMobileNo' },
-                                    { title: 'Relationship:', vModel: 'formData.nomineeRelationToCustomer' },
-                                ] %}
-
-                                <div class="row">
-                                    {% for item in nomineeDetails %}
-                                        <div class="col-12 col-md-6">
-                                            <p class="bt1 mb-0">{{ item.title }}</p>
-                                            <p class="bt2" v-if="!nomineeEditMode" v-html="{{ item.vModel }}"></p>
-                                            <div class="form-group" v-if="nomineeEditMode">
-                                                <input type="text" class="form-control" v-model="{{ item.vModel }}">
-                                            </div>
-                                        </div>
-                                    {% endfor %}
-                                </div>
-
-                                <div class="d-flex justify-content-end" v-if="!nomineeEditMode">
-                                    <a href="#" @click.prevent="setNomineeEditMode(true)" class="btn btn-secondary btn-icon">
-                                        <div class="button-icon">
-                                            {% include "templates/components/icon.twig" with { iconName: 'plus', iconSize: 's' } %}
-                                        </div>
-                                        <span class="button-text">Edit</span>
-                                    </a>
-                                </div>
-
-                                <div class="d-flex justify-content-end mt-3" v-if="nomineeEditMode">
-                                    <a href="#" @click.prevent="setNomineeEditMode(false)" class="btn btn-primary btn-icon mr-3">
-                                        <div class="button-icon">
-                                            {% include "templates/components/icon.twig" with { iconName: 'close', iconSize: 's' } %}
-                                        </div>
-                                        <span class="button-text">Cancel</span>
-                                    </a>
-                                    <a href="#" @click.prevent="setNomineeEditMode(false)" class="btn btn-default btn-secondary">Save</a>
-                                </div>
-                            </div>
-
-                            {% embed "templates/components/input-variant-checkbox.twig" with {
-                                name: 'tncAgreement',
-                                vModel: 'formData.tncAgreement',
-                                spacing: 'mb-3'
-                            } %}
-                                {% block content %}
-                                    By ticking this box, I hereby acknowledge that I have read the <a href="#">Product Disclosure Sheet</a> and agree to the <a href="#">Terms and Conditions</a>.
-                                {% endblock %}
-                            {% endembed %}
-
-                            <div class="pt-4 wizard-navigation d-none d-md-flex">
-                                <a href="#" role="button" class="btn btn-default btn-outline-primary" @click.prevent="goToPrevStep()">Back</a>
-                                <a href="#" role="button" class="btn btn-default btn-primary" @click.prevent="goToNextStep()">Continue</a>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-4">
-                            {% include "templates/components/summary-pane.twig" %}
-                        </div>
-                    </div>
-                </div>
-                <div class="container pt-4 wizard-navigation d-md-none">
-                    <a href="#" role="button" class="btn btn-default btn-outline-primary mb-3 mb-md-0" @click="goToPrevStep()">Back</a>
-                    <a href="#" role="button" class="btn btn-default btn-primary" @click="goToNextStep()">Continue</a>
-                </div>
-            </div>
-
-            <div class="wizard-section-6" :class="{ 'd-none': currStep && currStep.step !== 6 }">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-12 col-md-8">
-                            <div class="bg-w py-5 px-4 mb-3">
-                                <h2 class="p2 mb-4">Payment</h2>
-                                {% include "templates/components/input-variant-radio.twig" with {
-                                    name: 'paymentMethod',
-                                    formControls: [
-                                        { value: 'Credit/Debit Card' },
-                                        { value: 'Online Banking' },
-                                        { value: 'E-Wallet' },
-                                    ],
-                                    spacing: 'mb-5',
-                                    vModel: 'formData.paymentMethod'
-                                } %}
-
-                                <div v-if="formData.paymentMethod === 'Credit/Debit Card'">
-                                    <img src="assets/img/visa-master-logo.jpg" alt="Visa and Mastercard logo" class="img-fluid mb-4">
-                                    <div class="row">
-                                        <div class="col-12 col-md-6">
-                                            <div class="form-group">
-                                                <label class="bt1">Card Number:</label>
-                                                <input class="form-control" type="text" placeholder="xxxx-xxxx-xxxx-xxxx" name="cardNumber">
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="bt1">Name on Card:</label>
-                                                <input class="form-control" type="text" placeholder="Name on Card" name="nameOnCard">
-                                            </div>
-
-                                            <div class="form-row">
-                                                <div class="form-group col-7">
-                                                    <label class="bt1">Expiration Date:</label>
-                                                    <input class="form-control" type="text" placeholder="MM/YY" name="expirationDate">
-                                                </div>
-                                                <div class="form-group col-5">
-                                                    <label class="bt1">CVV:</label>
-                                                    <input class="form-control" type="text" placeholder="xxx" name="CVV">
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div v-if="formData.paymentMethod === 'Online Banking'">
-                                    <p class="bt1">Payee Email Address:</p>
-                                    <p class="bt2">Please enter your email address below if you would like to have a digital receipt of your purchase.</p>
-                                    <div class="row">
-                                        <div class="col-12 col-md-6">
-                                            <div class="form-group">
-                                                <input type="text" class="form-control" placeholder="e.g. hteoro@gmail.com">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {% set banks = [
-                                        { img: 'maybank.jpg', name: 'Maybank2U' },
-                                        { img: 'maybank.jpg', name: 'Maybank2E' },
-                                        { img: 'ocbc.jpg', name: 'OCBC Bank' },
-                                        { img: 'rhb.jpg', name: 'RHB' },
-                                        { img: 'standard-chartered.jpg', name: 'Standard Chartered' },
-                                        { img: 'uob.jpg', name: 'UOB Bank' },
-                                        { img: 'ambank.jpg', name: 'AmBank' },
-                                        { img: 'bank-islam.jpg', name: 'Bank Islam' },
-                                        { img: 'bank-rakyat.jpg', name: 'Bank Rakyat' },
-                                        { img: 'bank-muamalat.jpg', name: 'Bank Muamalat' },
-                                        { img: 'bsn.jpg', name: 'BSN' },
-                                        { img: 'cimb.jpg', name: 'CIMB Clicks' },
-                                        { img: 'hlb.jpg', name: 'Hong Leong Bank' },
-                                        { img: 'hsbc.jpg', name: 'HSBC Bank' },
-                                        { img: 'kuwait.jpg', name: 'KFH' },
-                                        { img: 'public.jpg', name: 'Public Bank' },
-                                        { img: 'alliance.jpg', name: 'Alliance Bank' },
-                                        { img: 'affin.jpg', name: 'Affin Bank' },
-                                    ] %}
-
-                                    <p class="bt1">Select Your Bank:</p>
-                                    {% include "templates/components/list-variant-bank.twig" with { banks: banks } %}
-                                </div>
-
-                                <div v-if="formData.paymentMethod === 'E-Wallet'">
-                                    <p class="bt1">Select Your Preferred E-Wallet:</p>
-                                    {% include "templates/components/list-variant-bank.twig" with {
-                                        banks: [
-                                            { img: 'boost.jpg', name: 'Boost' }
-                                        ]
-                                    } %}
-                                </div>
-
-                            </div>
-                            <div class="pt-4 wizard-navigation d-none d-md-flex">
-                                <a href="#" role="button" class="btn btn-default btn-outline-primary" @click.prevent="goToPrevStep()">Back</a>
-                                <a href="/payment-completed.html" role="button" class="btn btn-default btn-primary">Pay Now</a>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-4">
-                            {% include "templates/components/summary-pane.twig" %}
-                        </div>
-                    </div>
-                </div>
-                <div class="container pt-4 wizard-navigation d-md-none">
-                    <a href="#" role="button" class="btn btn-default btn-outline-primary mb-3 mb-md-0" @click.prevent="goToPrevStep()">Back</a>
-                    <a href="/payment-completed.html" role="button" class="btn btn-default btn-primary">Pay Now</a>
-                </div>
-            </div>
-            
+        <div>
+            <img src="assets/img/travelright-icon-white.png">
+            <h1 class="w mb-3">Travel Insurance</h1>
+            <a href="./form.html" role="button" class="mt-5 btn btn-l btn-default btn-primary">Apply Now</a>
         </div>
     </div>
+
+    {% include "templates/components/subnav-pdp.twig" %}
+
+
+    <div class="container mt-md-5 mt-4 pt-2 pt-md-0">
+        <p class="bt4"><b>MSIG TravelRight Plus Insurance</b> is a comprehensive travel insurance that provides
+            compensation for mishaps
+            and covered events during your journey within the policy period. For example, flight delays, loss of
+            luggage, illness, accidents... the list goes on.
+        </p>
+        <p class="bt4">
+            When you are travel, for business or leisure, you can be assured that you are always protected throughout
+            your journey with this policy. You can opt for a short-term policy for a single trip or an annual policy to
+            cover an unlimited number of trips in a policy year. All Malaysians, Permanent Residents, Non Residents,
+            Work Permit/Employment PassHolders or otherwise legally employed persons in Malaysia and their Dependents
+            are eligible to apply.
+        </p>
+
+        <div class="divider mt-4 mt-md-5 bg-p2c "></div>
+    </div>
+    <div class="container mt-md-5 mt-4 mb-4 pt-2 pt-md-0">
+        <h1> Our Product Benefits </h1>
+    </div>
+
+    {% include "templates/components/pdp-table.twig" %}
+
+
+    <div class="container mt-4 pt-md-2 pb-4">
+        <p class="bt4 mb-1">* Excess of RM50 per claim.</p>
+        <p class="bt4 mb-1">º This insurance will only pay for one claim made either under Section 9, 10, 11, 12 or 13.
+        </p>
+        <p class="bt4 mb-1">^ This benefit is not applicable to non-residents.</p>
+        <p class="bt4 mb-1">**Subject to overall limit for medical expenses</p>
+
+        <div class="mt-3 mt-md-5">
+            <h2>Important Notes</h2>
+            <p class="bt4 mb-0">You are obligated to pay any applicable taxes (which include but not limited to service
+                tax
+                and stamp duty) imposed by
+                the Malaysian tax authorities in relation to your Policy. </p>
+        </div>
+    </div>
+
+
+
+
+    <div class="bg-darkGrey  pt-4 pb-4">
+        <div class="container">
+            <div class="d-flex ">
+                <p class="p1 font-weight-bold  mb-0">
+                    {% include "templates/components/icon.twig" with { iconName: 'star', } %}
+                </p>
+                <p class="p1 font-weight-bold bt1 ml-2 mb-0 ">
+                    New Product Add-On
+                </p>
+            </div>
+
+
+            <h1 class=" mb-4">Sports Fans</h1>
+            <div class="jumbotron bg-travel  jumbotron-2">
+                <!-- <img src="assets/img/travel-bg.png"> -->
+            </div>
+
+            <p class="bt4 mb-2">Travel and cheer for your favourite team without worries when you have additional
+                indemnity for Personal Accident, and cover over loss of use of event tickets, transportation tickets,
+                and hotel facilities!</p>
+
+            <p class="bt4 mb-2">Available for a limited time only, from <b>22 January 2020 until 6 September 2020</b>.
+            </p>
+
+            <p class="bt4">This extension forms part of your TravelRight Plus Policy and is subject to terms and
+                conditions of the
+                policy.</p>
+
+        </div>
+    </div>
+
+    <div class="bg-darkGrey pb-5">
+        <div class="container static-pdp-table pt-md-2 ">
+            <div class="row  main-title d-none d-md-flex align-items-center h-line">
+                <div class="col-4">
+                    <p class=" font-weight-bold mb-0 bt4">BENEFITS</p>
+                </div>
+                <div class="col-4 bg-w h-100 d-flex align-items-center justify-content-center bg-lightGrey borderRight">
+                    <p class=" font-weight-bold mb-0 text-center bt2 ">PLAN 1</p>
+                </div>
+                <div class="col-4 bg-p1 h-100 d-flex align-items-center justify-content-center borderLeft">
+                    <p class=" font-weight-bold mb-0  text-center bt2 w">PLAN 2</p>
+                </div>
+            </div>
+
+            {% set staticTableRow = [
+                { title: 'Additional Indemnity for Section 1 ', content1: 'Adult - RM 250,000 ', content2: 'Child- RM 62,500', content3:'Adult - RM 350,000' , content4:'Child- RM 87,500' },
+
+                { title: 'Extended Accommodation Cover 
+                for Section 17 ', content1: 'RM 200 Per day', content2: '(Max RM2,000)', content3:'RM 200 Per day' , content4:'(Max RM2,000)' },
+
+                { title: 'Ticket Cover', content1: 'RM 5,000', content2: '', content3:'RM 5,000' , content4:'' },
+                { title: 'Transportation Amendment Fee', content1: 'RM 1,000', content2: '', content3:'RM 1,000' , content4:'' },
+            ] %}
+
+            {% for item in staticTableRow %}
+
+            <div class="row table-content align-items-center h-line">
+                <div class="col-12 col-md-4 title d-flex align-items-center">
+                    <p class=" font-weight-bold bt2 mb-0">{{item.title}}
+                    </p>
+                </div>
+                <div class="col-12  d-block d-md-none ">
+                    <div class="row ">
+                        <div
+                            class="plan-box col-6 bg-w align-items-center d-flex justify-content-center font-weight-bold h-line bg-lightGrey">
+                            <p>PLAN 1</p>
+                        </div>
+                        <div
+                            class="plan-box col-6 bg-p1 align-items-center d-flex justify-content-center font-weight-bold h-line">
+                            <p class="w">PLAN 2</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="col-6 col-md-4 bg-w content-box d-flex align-items-center justify-content-center text-center  bg-lightGrey borderRight">
+
+                    <div class="col-12 title p-0 d-flex align-items-center justify-content-center  ">
+                        <p class=" bt2 mb-0">{{item.content1}}<br>{{item.content2}}
+                        </p>
+                    </div>
+
+                </div>
+                <div
+                    class="col-6 col-md-4 bg-p1 content-box d-flex align-items-center justify-content-center text-center borderLeft ">
+
+                    <div class="col-12 title p-0 d-flex align-items-center  justify-content-center">
+                        <p class=" bt2 mb-0 w">{{item.content3}}<br>{{item.content4}}</p>
+                    </div>
+                </div>
+            </div>
+
+            {% endfor %}
+
+
+        </div>
+    </div>
+
+
+
+    <div class="bg-w pt-5 pb-4">
+        <div class="container">
+            <h1 class=" mb-3 font-weight-bold">Read The Coverage Details below</h1>
+            <p class="bt4">MSIG TravelRight Plus Insurance provides you with coverage whenever you are travel.</p>
+            <p class="bt4 font-weight-bold">Download the coverage details below to learn more.</p>
+
+            <div class="row mt-5">
+                <a class="col-md-4 col-12">
+                    <p class="font-weight-normal p1 mb-0 bt4">
+                        {% include "templates/components/icon.twig" with { iconName: 'pdf' , iconSize:'xxl' } %}
+                        Product Disclosure Sheet</p>
+                </a>
+                <a class="col-md-4 col-12">
+                    <p class="font-weight-normal p1 mb-0 bt4 mt-4 mt-md-0">
+                        {% include "templates/components/icon.twig" with { iconName: 'pdf' , iconSize:'xxl' } %} Policy
+                        Wording</p>
+                </a>
+                <div class="col-4 d-none d-md-block"></div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-center mb-4">
+            <a href="./form.html" role="button" class="mt-5 btn btn-l btn-default btn-primary">Apply Now</a>
+        </div>
+
+    </div>
+
+
+
+
+</div>
 
 {% endblock %}
