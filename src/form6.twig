@@ -22,22 +22,6 @@
                                         {% embed "templates/components/selection-infobox.twig" with {
                                             type: "radio",
                                             name: "choosePayment",
-                                            value: "Credit/Debit Card",
-                                            classes: "mb-3 mb-lg-0 mr-3",
-                                            vModel: 'formData.paymentMethod'
-                                        
-                                        } %}
-                                            {% block top %}
-                                                <h3 class="m-0">Credit/Debit Card</h3>
-                                            {% endblock %}
-
-                                            {% block icon %}
-                                                {% include "templates/components/icon.twig" with { iconName: 'credit-card', iconSize: '4xl' } %}
-                                            {% endblock %}
-                                        {% endembed %}
-                                        {% embed "templates/components/selection-infobox.twig" with {
-                                            type: "radio",
-                                            name: "choosePayment",
                                             value: "Online Banking",
                                             classes: "mb-3 mb-lg-0 mr-3",
                                             vModel: 'formData.paymentMethod'
@@ -49,6 +33,22 @@
 
                                             {% block icon %}
                                                 {% include "templates/components/icon.twig" with { iconName: 'fpx', iconSize: '4xl' } %}
+                                            {% endblock %}
+                                        {% endembed %}
+                                        {% embed "templates/components/selection-infobox.twig" with {
+                                            type: "radio",
+                                            name: "choosePayment",
+                                            value: "Credit/Debit Card",
+                                            classes: "mb-3 mb-lg-0 mr-3",
+                                            vModel: 'formData.paymentMethod'
+                                        
+                                        } %}
+                                            {% block top %}
+                                                <h3 class="m-0">Credit/Debit Card</h3>
+                                            {% endblock %}
+
+                                            {% block icon %}
+                                                {% include "templates/components/icon.twig" with { iconName: 'credit-card', iconSize: '4xl' } %}
                                             {% endblock %}
                                         {% endembed %}
                                         {% embed "templates/components/selection-infobox.twig" with {
@@ -103,8 +103,21 @@
                                 </div>
 
                                 <div v-if="formData.paymentMethod === 'Online Banking'">
-                                    <p class="bt1">Payee Email Address:</p>
-                                    <p class="bt2">Please enter your email address below if you would like to have a digital receipt of your purchase.</p>
+                                    <p class="bt1">Bank:</p>
+
+                                    {% verbatim %}
+                                    <select class="form-control">
+                                        <option disabled hidden selected value="">Select a country</option>
+                                        <option v-for="(bank, index) in banks"
+                                            v-bind:key="index" :value="bank.name">
+                                            {{ bank.name }}</option>
+                                    </select>
+                                    {% endverbatim %}
+
+                                    <p><small>Note: You need to have an active internet banking account with any of the FPX performing banks to use FPX.</small></p>
+
+                                    <p class="bt1">Email Address: <small>(For transaction status)</small></p>
+                                    
                                     <div class="row">
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
@@ -113,30 +126,6 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    {% set banks = [
-                                        { img: 'maybank.jpg', name: 'Maybank2U' },
-                                        { img: 'maybank.jpg', name: 'Maybank2E' },
-                                        { img: 'ocbc.jpg', name: 'OCBC Bank' },
-                                        { img: 'rhb.jpg', name: 'RHB' },
-                                        { img: 'standard-chartered.jpg', name: 'Standard Chartered' },
-                                        { img: 'uob.jpg', name: 'UOB Bank' },
-                                        { img: 'ambank.jpg', name: 'AmBank' },
-                                        { img: 'bank-islam.jpg', name: 'Bank Islam' },
-                                        { img: 'bank-rakyat.jpg', name: 'Bank Rakyat' },
-                                        { img: 'bank-muamalat.jpg', name: 'Bank Muamalat' },
-                                        { img: 'bsn.jpg', name: 'BSN' },
-                                        { img: 'cimb.jpg', name: 'CIMB Clicks' },
-                                        { img: 'hlb.jpg', name: 'Hong Leong Bank' },
-                                        { img: 'hsbc.jpg', name: 'HSBC Bank' },
-                                        { img: 'kuwait.jpg', name: 'KFH' },
-                                        { img: 'public.jpg', name: 'Public Bank' },
-                                        { img: 'alliance.jpg', name: 'Alliance Bank' },
-                                        { img: 'affin.jpg', name: 'Affin Bank' },
-                                    ] %}
-
-                                    <p class="bt1">Select Your Bank:</p>
-                                    {% include "templates/components/list-variant-bank.twig" with { banks: banks } %}
                                 </div>
 
                                 <div v-if="formData.paymentMethod === 'E-Wallet'">
@@ -160,6 +149,8 @@
                     </div>
                 </div>
                 <div class="container pt-4 wizard-navigation d-md-none">
+                    <p v-if="formData.paymentMethod === 'Online Banking'" class="bt2 mb-5">By clicking <strong>"Pay Now"</strong> button, you agree to FPX's <a href="#" target="_blank">Terms & Conditions</a>.</p>
+
                     <a href="#" role="button" class="btn btn-default btn-outline-primary mb-3 mb-md-0" @click.prevent="goToPrevStep()">Back</a>
                     <a href="/payment-completed.html" role="button" class="btn btn-default btn-primary">Pay Now</a>
                 </div>
