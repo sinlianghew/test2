@@ -14,8 +14,9 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-12 col-md-8">
+
                             <div class="bg-w py-5 px-4 mb-3">
-                                <h2 class="p2">Choose a Plan</h2>
+                                <h2 class="p2 mb-4 pb-md-2">Choose a Plan</h2>
 
                                 {% include "templates/components/input-variant-radio.twig" with {
                                     name: 'coverageType',
@@ -23,13 +24,13 @@
                                         { value: 'Single Trip' },
                                         { value: 'Annual Cover' },
                                     ],
-                                    spacing: 'mb-4'
+                                    spacing: 'mb-4 d-flex'
                                 } %}
 
                                 {% verbatim %}    
                                     <div class="d-md-flex">
                                         <div class="form-group">
-                                            <label class="bt1" for="areaOfCoverage">Area of Coverage</label>
+                                            <label class="bt1" for="areaOfCoverage">Area of Coverage :</label>
                                             <select name="areaOfCoverage" id="areaOfCoverage" class="form-control" v-model="formData.areaOfCoverage">
                                                 <option :value="area.name" v-for="area in coverageAreas" v-bind:key="coverageAreas.indexOf(area)">
                                                     {{ area.name }}
