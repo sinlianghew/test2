@@ -79,24 +79,28 @@
                                 <div v-if="formData.paymentMethod === 'Credit/Debit Card'">
                                     <img src="assets/img/visa-master-logo.jpg" alt="Visa and Mastercard logo" class="img-fluid mb-4">
                                     <div class="row">
-                                        <div class="col-12 col-md-6">
+                                        <div class="col-12 col-md-7">
                                             <div class="form-group">
                                                 <label class="bt1">Card Number:</label>
                                                 <input class="form-control" type="text" placeholder="xxxx-xxxx-xxxx-xxxx" name="cardNumber">
+                                                <small class="error-message text-primary font-italic">* Complete the Name as per card field.</small>
                                             </div>
                                             <div class="form-group">
                                                 <label class="bt1">Name on Card:</label>
                                                 <input class="form-control" type="text" placeholder="Name on Card" name="nameOnCard">
+                                                <small class="error-message text-primary font-italic">* Please enter a valid Visa / MasterCard No.</small>
                                             </div>
 
                                             <div class="form-row">
                                                 <div class="form-group col-7">
                                                     <label class="bt1">Expiration Date:</label>
                                                     <input class="form-control" type="text" placeholder="MM/YY" name="expirationDate">
+                                                    <small class="error-message text-primary font-italic">* Complete the Expiry (MM/YY) field.</small>
                                                 </div>
                                                 <div class="form-group col-5">
                                                     <label class="bt1">CVV:</label>
                                                     <input class="form-control" type="text" placeholder="xxx" name="CVV">
+                                                    <small class="error-message text-primary font-italic">* Complete the CVC field.</small>
                                                 </div>
                                             </div>
 
@@ -111,6 +115,7 @@
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <input type="text" class="form-control" placeholder="e.g. hteoro@gmail.com">
+                                                <small class="error-message text-primary font-italic">* Complete the Email field.</small>
                                             </div>
                                         </div>
                                     </div>
