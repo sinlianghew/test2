@@ -1,0 +1,65 @@
+{% extends "templates/partials/base.twig" %}
+
+{% block main %}
+
+    <div class="form-wizard" id="travel-form">
+        <div class="container py-5">
+            <h1>Travel Insurance</h1>
+            {% include "templates/components/steppers.twig" %}
+        </div>
+
+        <div class="bg-p2d py-5 wizard-sections">
+
+            <div class="wizard-section-4">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12 col-md-8">
+                            <div class="bg-w py-5 px-4 mb-3">
+                                <h2 class="p2 mb-4">Nominee Details</h2>
+                                <div class="row">
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label class="bt1">Name (as per NRIC):</label>
+                                            <input type="text" class="form-control" placeholder="e.g. Henry Teo">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label class="bt1">NRIC No:</label>
+                                            <input type="text" class="form-control" placeholder="e.g. 888888-88-8888">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label class="bt1">Mobile No:</label>
+                                            <input type="text" class="form-control" placeholder="e.g. 01X-XXXXXXX">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label class="bt1">Relationship</label>
+                                            <input type="text" class="form-control" placeholder="e.g. Father">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pt-4 wizard-navigation d-none d-md-flex">
+                                <a href="#" role="button" class="btn btn-default btn-outline-primary" @click.prevent="goToPrevStep()">Back</a>
+                                <a href="#" role="button" class="btn btn-default btn-primary" @click.prevent="goToNextStep()">Continue</a>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            {% include "templates/components/summary-pane.twig" %}
+                        </div>
+                    </div>
+                </div>
+                <div class="container pt-4 wizard-navigation d-md-none">
+                    <a href="#" role="button" class="btn btn-default btn-outline-primary mb-3 mb-md-0" @click="goToPrevStep()">Back</a>
+                    <a href="#" role="button" class="btn btn-default btn-primary" @click="goToNextStep()">Continue</a>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+{% endblock %}
