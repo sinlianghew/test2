@@ -30,7 +30,7 @@
 
      {% for item in PlanList %}
      <!-- Card body  1-->
-     <div id="{{accordionNumber}}" class="collapse w-100 accordion-content " role="tabpanel"
+     <div id="{{accordionNumber}}" class="collapse w-100 accordion-content {{item.hideRow}} " role="tabpanel"
          aria-labelledby="headingOne1" data-parent="#accordionEx">
          <div class="row m-0 h-100">
              <div class="col-md-6 col-12 title-box  title-desc {{hideIfEmpty}}">
