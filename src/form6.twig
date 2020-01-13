@@ -16,23 +16,15 @@
                         <div class="col-12 col-md-8">
                             <div class="bg-w py-5 px-4 mb-3">
                                 <h2 class="p2 mb-4">Payment</h2>
-                                {% include "templates/components/input-variant-radio.twig" with {
-                                    name: 'paymentMethod',
-                                    formControls: [
-                                        { value: 'Credit/Debit Card' },
-                                        { value: 'Online Banking' },
-                                        { value: 'E-Wallet' },
-                                    ],
-                                    spacing: 'mb-5',
-                                    vModel: 'formData.paymentMethod'
-                                } %}
+                               
                                 <div class="vertical-scroller mb-5">
                                     <div class="d-flex">
                                         {% embed "templates/components/selection-infobox.twig" with {
                                             type: "radio",
                                             name: "choosePayment",
                                             value: "Credit/Debit Card",
-                                            classes: "mb-3 mb-lg-0 mr-3"
+                                            classes: "mb-3 mb-lg-0 mr-3",
+                                            vModel: 'formData.paymentMethod'
                                         
                                         } %}
                                             {% block top %}
@@ -47,7 +39,8 @@
                                             type: "radio",
                                             name: "choosePayment",
                                             value: "Online Banking",
-                                            classes: "mb-3 mb-lg-0 mr-3"
+                                            classes: "mb-3 mb-lg-0 mr-3",
+                                            vModel: 'formData.paymentMethod'
                                         
                                         } %}
                                             {% block top %}
@@ -62,7 +55,8 @@
                                             type: "radio",
                                             name: "choosePayment",
                                             value: "E-Wallet",
-                                            classes: "mb-3 mb-lg-0 mr-3"
+                                            classes: "mb-3 mb-lg-0 mr-3",
+                                            vModel: 'formData.paymentMethod'
                                         
                                         } %}
                                             {% block top %}
