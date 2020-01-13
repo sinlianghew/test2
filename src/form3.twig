@@ -132,13 +132,13 @@
                         <!-- dummy html -->
                         <div class="bg-w py-5 px-4 mb-3">
                             {% verbatim %}
-                            <h2 class="p2">Family Member #1</h2>
+                            <h2 class="p2">Family Member #1:</h2>
                             {% endverbatim %}
 
-                            <p class="bt1">Traveller</p>
+                            <p class="bt1">Traveller:</p>
                             <div class="d-flex mb-4">
                                 <div class="form-check mb-1">
-                                    <input class="form-check-input" type="radio" value="Spouse">
+                                    <input class="form-check-input" type="radio" value="Spouse" checked>
                                     <label class="form-check-label">Spouse</label>
                                 </div>
                                 <div class="form-check mb-1">
@@ -147,10 +147,10 @@
                                 </div>
                             </div>
 
-                            <p class="bt1">Nationality</p>
+                            <p class="bt1">Nationality:</p>
                             <div class="d-flex mb-4">
                                 <div class="form-check mb-1">
-                                    <input type="radio" class="form-check-input" value="Malaysian">
+                                    <input type="radio" class="form-check-input" value="Malaysian" checked>
                                     <label class="form-check-label">Malaysian</label>
                                 </div>
                                 <div class="form-check mb-1">
@@ -159,22 +159,7 @@
                                 </div>
                             </div>
 
-                            <div class="row">
-                                <div class="col-12 col-md-6">
-                                    <p class="bt1">Country</p>
-                                    <div class="form-group">
-                                        {% verbatim %}
-                                        <select class="form-control">
-                                            <option disabled hidden selected value="">Select a country</option>
-                                            <option v-for="country in allCountries"
-                                                v-bind:key="allCountries.indexOf(country)" :value="country">
-                                                {{ country }}</option>
-                                        </select>
-                                        {% endverbatim %}
-                                    </div>
-                                </div>
-                            </div>
-
+                
                             <div class="row">
                                 <div class="col-12 col-md-6">
                                     <div class="form-group">
@@ -224,7 +209,7 @@
                                 <p class="bt1">Traveller</p>
                                 <div class="d-flex mb-4">
                                     <div class="form-check mb-1">
-                                        <input class="form-check-input" type="radio" value="Spouse">
+                                        <input class="form-check-input" type="radio" value="Spouse" checked>
                                         <label class="form-check-label">Spouse</label>
                                     </div>
                                     <div class="form-check mb-1">
@@ -240,7 +225,7 @@
                                         <label class="form-check-label">Malaysian</label>
                                     </div>
                                     <div class="form-check mb-1">
-                                        <input type="radio" class="form-check-input" value="Non-Malaysian">
+                                        <input type="radio" class="form-check-input" value="Non-Malaysian" checked>
                                         <label class="form-check-label">Non-Malaysian</label>
                                     </div>
                                 </div>
@@ -264,7 +249,7 @@
                                 <div class="row">
                                     <div class="col-12 col-md-6">
                                         <div class="form-group">
-                                            <label class="bt1">Name (as per NRIC):</label>
+                                            <label class="bt1">Name (as per Passport):</label>
                                             <input type="text" class="form-control" placeholder="e.g. Lisa Teo">
                                             <small class="error-message text-primary font-italic">* Complete the Name as per
                                                 NRIC filed.</small>
@@ -272,10 +257,9 @@
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <div class="form-group">
-                                            <label class="bt1">NRIC No:</label>
+                                            <label class="bt1">Passport No:</label>
                                             <input type="text" class="form-control" placeholder="e.g. 888888-88-8888">
-                                            <small class="error-message text-primary font-italic">* Complete the NRIC
-                                                field.</small>
+                                            <small class="error-message text-primary font-italic">* Complete the Passport No field.</small> 
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
