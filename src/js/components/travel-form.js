@@ -110,26 +110,27 @@ if ($('#travel-form').length) {
             }
         },
         updated() {
-            let group = document.querySelectorAll('.selection-infobox-group');
-            group.forEach((item) => {
-                let heights = []
-                item.querySelectorAll('.header-match-height').forEach((elem, i) => {
-                    elem.style.removeProperty('height');
-                    let height = elem.clientHeight;
-                    heights.push(height);
-                    console.log(i, height);
-                });
-
-                let max = Math.max(...heights);
-
-                item.querySelectorAll('.header-match-height').forEach((elem, i) => {
-                    elem.style.height = max + 'px';
-                });
-            })
+            if(window.matchMedia('(min-width: 992px)').matches){
+                this.rowMatchHeight();
+            }
         },
         methods: {  
             rowMatchHeight() {
-                
+                let group = document.querySelectorAll('.selection-infobox-group');
+                group.forEach((item) => {
+                    let heights = []
+                    item.querySelectorAll('.header-match-height').forEach((elem, i) => {
+                        elem.style.removeProperty('height');
+                        let height = elem.clientHeight;
+                        heights.push(height);
+                    });
+
+                    let max = Math.max(...heights);
+
+                    item.querySelectorAll('.header-match-height').forEach((elem, i) => {
+                        elem.style.height = max + 'px';
+                    });
+                })
             },
             changeStep(step) {
                 if (typeof step === 'number') {

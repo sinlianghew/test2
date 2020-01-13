@@ -64,7 +64,7 @@
                                             {% endblock %}
 
                                             {% block icon %}
-                                                {% include "templates/components/icon.twig" with { iconName: 'e-wallet', iconSize: '4xl' } %}
+                                                {% include "templates/components/icon.twig" with { iconName: 'ewallets', iconSize: '4xl' } %}
                                             {% endblock %}
                                         {% endembed %}
                                     </div>  
@@ -103,11 +103,11 @@
                                 </div>
 
                                 <div v-if="formData.paymentMethod === 'Online Banking'">
-                                    <p class="bt1">Bank:</p>
+                                    <p class="bt1 mb-2">Bank:</p>
 
                                     {% verbatim %}
                                     <select class="form-control">
-                                        <option disabled hidden selected value="">Select a country</option>
+                                        <option disabled hidden selected value="">Select a Bank</option>
                                         <option v-for="(bank, index) in banks"
                                             v-bind:key="index" :value="bank.name">
                                             {{ bank.name }}</option>
@@ -116,7 +116,7 @@
 
                                     <p><small>Note: You need to have an active internet banking account with any of the FPX performing banks to use FPX.</small></p>
 
-                                    <p class="bt1">Email Address: <small>(For transaction status)</small></p>
+                                    <p class="bt1 mb-2">Email Address: <small class="font-italic">(For transaction status)</small></p>
                                     
                                     <div class="row">
                                         <div class="col-12 col-md-6">

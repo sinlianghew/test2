@@ -73,8 +73,8 @@
                                 </div>
 
                                 <h2 class="p2 mb-4">Period of Coverage</h2>
-                                <div class="d-md-flex justify-content-between mb-4">
-                                    <div>
+                                <div class="row mb-4">
+                                    <div class="col-12 col-lg-6">
                                         <p class="bt1">Start Date</p>
                                         <div class="form-group variant-date-picker mb-0">
                                             <datepicker class="form-control"
@@ -87,7 +87,7 @@
                                         <small class="error-message text-primary font-italic">* Complete the Start Date field.</small>
                                     </div>
 
-                                    <div>
+                                    <div class="col-12 col-lg-6">
                                         <p class="bt1">End Date</p>
                                         <div class="form-group variant-date-picker mb-0">
                                             <datepicker class="form-control"
@@ -116,10 +116,10 @@
                             </div>
 
                             <div class="bg-w py-5 px-4 mb-3">
-                                <h2 class="p2 mb-4">Please Select Your Preferred Plan</h2>
+                                <h2 class="p2">Please Select Your Preferred Plan</h2>
                                 <div class="selection-infobox-group row">
                                     <div class="col-12 col-lg-4">
-                                        <div class="header-match-height d-flex align-items-center mt-5">
+                                        <div class="header-match-height d-lg-flex align-items-center mt-5 d-none">
                                             <p class="h2">TravelRight Plus</p>
                                         </div>
                                         <p class="bt1 d-none d-lg-block mb-1">Benefits</p>
@@ -128,12 +128,12 @@
                                                 { iconName: 'tick-mark', content: 'Personal Accident' },
                                                 { iconName: 'tick-mark', content: 'Medical & Other Expenses' },
                                                 { iconName: 'tick-mark', content: 'Luggage & Personal Effects' },
-                                                { iconName: 'tick-mark', content: 'Luggage & Delay (Every 6 hours)' },
-                                                { iconName: 'tick-mark', content: 'Travel Delay (Every 6 hours)' },
+                                                { iconName: 'tick-mark', content: 'Luggage & Delay <br/><i>(Every 6 hours)</i>' },
+                                                { iconName: 'tick-mark', content: 'Travel Delay <br/><i>(Every 6 hours)</i>' },
                                             ],
                                             class: "d-none d-lg-block"
                                         } %}
-                                        <p class="bt2">View the full benefits <strong><a href="#">HERE</a></strong></p>
+                                        <p class="bt2 d-none d-lg-block">View the full benefits <strong><a href="#">HERE</a></strong></p>
                                     </div>
                                     <div class="col-12 col-lg-8">
                                         <div class="d-lg-flex">
@@ -144,7 +144,8 @@
                                                 classes: "mb-3 mb-lg-0 mr-lg-3"
                                             } %}
                                                 {% block top %}
-                                                    <h3 class="m-0">Plan 1</h3>
+                                                    <h3 class="m-0 d-lg-none">TravelRight Plus (Plan 1)</h3>
+                                                    <h3 class="m-0 d-none d-lg-block">Plan 1</h3>
                                                     <p class="m-0">from <span class="h3">RM39.00</span></p>
                                                 {% endblock %}
 
@@ -182,7 +183,8 @@
                                                 highlight: "Recommended" 
                                             } %}
                                                 {% block top %}
-                                                    <h3 class="m-0">Plan 2</h3>
+                                                    <h3 class="m-0 d-lg-none">TravelRight Plus (Plan 2)</h3>
+                                                    <h3 class="m-0 d-none d-lg-block">Plan 2</h3>
                                                     <p class="m-0">from <span class="h3">RM58.00</span></p>
                                                 {% endblock %}
 
@@ -212,6 +214,7 @@
                                                 {% endblock %}
                                             {% endembed %}
                                         </div>
+                                        <p class="bt2 d-lg-none">View the full benefits <strong><a href="#">HERE</a></strong></p>
                                     </div>
                                 </div>
                             </div>

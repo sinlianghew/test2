@@ -14,7 +14,7 @@
             +.box {
                 background-color: $p2;
                 color: white;
-                stroke: white;
+                fill: white;
                 .custom-rounded-checked {
                     background-color: $s1;
                     border-color: $s1;
@@ -38,7 +38,6 @@
         text-align: center;
         cursor: pointer;
         position: relative;
-        stroke: $p2;
 
         &:active {
             transform: translateY(10px);
