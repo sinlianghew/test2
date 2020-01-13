@@ -98,6 +98,12 @@
 
             .accordion-content {
 
+                &.m-hideRow{
+                    @include media-breakpoint-down(md) {
+                        display: none;
+                    }
+                }
+
                 .title-box {
                     background: transparent;
                 }
