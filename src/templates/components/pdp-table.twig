@@ -62,7 +62,7 @@
             } %}
 
             {% set PlanList = [
-                { hideRow:'d-none  d-md-block',title: 'Overall Limit for Medical Expenses', planOneDesc: ' ', planTwoDesc: '' },
+                { hideRow:'m-hideRow',title: 'Overall Limit for Medical Expenses', planOneDesc: ' ', planTwoDesc: '' },
                 { title: '- Below 70 years', planOneDesc: '300,000', planTwoDesc: '400,000' },
                 { title: 'Fill in ', planOneDesc: '300 ', planTwoDesc: '300' },
                 { title: 'Fill in ', planOneDesc: '250 ', planTwoDesc: '350 ' },
@@ -82,21 +82,25 @@
 
             
 
-             <!-- Table row example -->
-             {% embed "accordion-table-row.twig" with {
+             <!-- Table row example remove hideWrapper to see-->
+             
+              {% embed "accordion-table-row.twig" with {
                 accordionNumber: "accordionTest",
                 title: "this example to hide arrow in desktop if no accordion - blablablablab alfasfals asflasfl asfas",
                 planTitle1 :"1000",
                 planTitle2 :"3000",
                 hideArrow :"disable-md-click", 
-                oneList :"d-block d-md-none",
-                hideIfEmpty:"d-none"
+                oneList :"d-none d-md-block",
+                hideIfEmpty:"d-none",
+                hideWrapper:"d-none"
             } %}
 
             {% set PlanList = [
                 { title: '', planOneDesc: '3000', planTwoDesc: '3000' },
                
-            ] %}
+            ] %} }
+
+            
              <!-- Table row  example end -->
 
 
