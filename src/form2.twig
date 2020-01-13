@@ -76,7 +76,7 @@
                                 <div class="d-md-flex justify-content-between mb-4">
                                     <div>
                                         <p class="bt1">Start Date</p>
-                                        <div class="form-group variant-date-picker">
+                                        <div class="form-group variant-date-picker mb-0">
                                             <datepicker class="form-control"
                                                 placeholder="Select date"
                                                 :format="customDateFormatter"
@@ -84,11 +84,12 @@
                                             </datepicker>
                                             {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
                                         </div>
+                                        <small class="error-message text-primary font-italic">* Complete the Start Date field.</small>
                                     </div>
 
                                     <div>
                                         <p class="bt1">End Date</p>
-                                        <div class="form-group variant-date-picker">
+                                        <div class="form-group variant-date-picker mb-0">
                                             <datepicker class="form-control"
                                                 placeholder="Select date"
                                                 :format="customDateFormatter"
@@ -96,6 +97,7 @@
                                             </datepicker>
                                             {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
                                         </div>
+                                        <small class="error-message text-primary font-italic">* Complete the End Date field.</small>
                                     </div>
                                 </div>
                                 <div class="bt2">
