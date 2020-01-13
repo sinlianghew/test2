@@ -1,0 +1,144 @@
+{% extends "templates/partials/base.twig" %}
+
+{% block main %}
+
+    <div class="form-wizard" id="travel-form">
+        <div class="container py-5">
+            <h1>Travel Insurance</h1>
+            {% include "templates/components/steppers.twig" %}
+        </div>
+
+        <div class="bg-p2d py-5 wizard-sections">
+
+            <div class="wizard-section-5">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12 col-md-8">
+                            <div class="bg-w pt-5 pb-3 px-4 mb-3">
+                                <h2 class="p2 mb-4">Personal Details</h2>
+
+                                {% set personalDetails = [
+                                    { title: 'Name (as per NRIC):', vModel: 'formData.customerName'},
+                                    { title: 'NRIC No:', vModel: 'formData.nric'},
+                                    { title: 'Email:', vModel: 'formData.email'},
+                                    { title: 'Mobile No:', vModel: 'formData.mobileNo'}
+                                ] %}
+
+                                <div class="row">
+                                    {% for item in personalDetails %}
+                                        <div class="col-12 col-md-6">
+                                            <p class="bt1 mb-0">{{ item.title }}</p>
+                                            <p class="bt2" v-html="{{ item.vModel }}" v-if="!personalEditMode"></p>
+
+                                            <div class="form-group" v-if="personalEditMode">
+                                                <input type="text" class="form-control" v-model="{{ item.vModel }}">
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                    <div class="col-12 col-md-6">
+                                        <p class="bt1 mb-0">Address:</p>
+                                        {% verbatim %}    
+                                        <p class="bt2" v-if="!personalEditMode">{{ fullAddress }}</p>
+                                        <div class="form-group" v-if="personalEditMode">
+                                            <input type="text" class="form-control" v-model="formData.addressLine1">
+                                        </div>
+                                        <div class="form-group" v-if="personalEditMode">
+                                            <input type="text" class="form-control" v-model="formData.addressLine2">
+                                        </div>
+                                        {% endverbatim %}
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-end" v-if="!personalEditMode">
+                                    <a href="#" @click.prevent="setPersonalEditMode(true)" class="btn btn-secondary btn-icon">
+                                        <div class="button-icon">
+                                            {% include "templates/components/icon.twig" with { iconName: 'plus', iconSize: 's' } %}
+                                        </div>
+                                        <span class="button-text">Edit</span>
+                                    </a>
+                                </div>
+
+                                <div class="d-flex justify-content-end mt-3" v-if="personalEditMode">
+                                    <a href="#" @click.prevent="setPersonalEditMode(false)" class="btn btn-primary btn-icon mr-3">
+                                        <div class="button-icon">
+                                            {% include "templates/components/icon.twig" with { iconName: 'close', iconSize: 's' } %}
+                                        </div>
+                                        <span class="button-text">Cancel</span>
+                                    </a>
+                                    <a href="#" @click.prevent="setPersonalEditMode(false)" class="btn btn-default btn-secondary">Save</a>
+                                </div>
+
+                            </div>
+
+                            <div class="bg-w pt-5 pb-3 px-4 mb-3">
+                                <h2 class="p2">Nominee Details</h2>
+
+                                {% set nomineeDetails = [
+                                    { title: 'Name (as per NRIC):', vModel: 'formData.nomineeName' },
+                                    { title: 'NRIC No:', vModel: 'formData.nomineeNric' },
+                                    { title: 'Mobile No:', vModel: 'formData.nomineeMobileNo' },
+                                    { title: 'Relationship:', vModel: 'formData.nomineeRelationToCustomer' },
+                                ] %}
+
+                                <div class="row">
+                                    {% for item in nomineeDetails %}
+                                        <div class="col-12 col-md-6">
+                                            <p class="bt1 mb-0">{{ item.title }}</p>
+                                            <p class="bt2" v-if="!nomineeEditMode" v-html="{{ item.vModel }}"></p>
+                                            <div class="form-group" v-if="nomineeEditMode">
+                                                <input type="text" class="form-control" v-model="{{ item.vModel }}">
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+
+                                <div class="d-flex justify-content-end" v-if="!nomineeEditMode">
+                                    <a href="#" @click.prevent="setNomineeEditMode(true)" class="btn btn-secondary btn-icon">
+                                        <div class="button-icon">
+                                            {% include "templates/components/icon.twig" with { iconName: 'plus', iconSize: 's' } %}
+                                        </div>
+                                        <span class="button-text">Edit</span>
+                                    </a>
+                                </div>
+
+                                <div class="d-flex justify-content-end mt-3" v-if="nomineeEditMode">
+                                    <a href="#" @click.prevent="setNomineeEditMode(false)" class="btn btn-primary btn-icon mr-3">
+                                        <div class="button-icon">
+                                            {% include "templates/components/icon.twig" with { iconName: 'close', iconSize: 's' } %}
+                                        </div>
+                                        <span class="button-text">Cancel</span>
+                                    </a>
+                                    <a href="#" @click.prevent="setNomineeEditMode(false)" class="btn btn-default btn-secondary">Save</a>
+                                </div>
+                            </div>
+
+                            {% embed "templates/components/input-variant-checkbox.twig" with {
+                                name: 'tncAgreement',
+                                vModel: 'formData.tncAgreement',
+                                spacing: 'mb-3'
+                            } %}
+                                {% block content %}
+                                    By ticking this box, I hereby acknowledge that I have read the <a href="#">Product Disclosure Sheet</a> and agree to the <a href="#">Terms and Conditions</a>.
+                                {% endblock %}
+                            {% endembed %}
+
+                            <div class="pt-4 wizard-navigation d-none d-md-flex">
+                                <a href="#" role="button" class="btn btn-default btn-outline-primary" @click.prevent="goToPrevStep()">Back</a>
+                                <a href="#" role="button" class="btn btn-default btn-primary" @click.prevent="goToNextStep()">Continue</a>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            {% include "templates/components/summary-pane.twig" %}
+                        </div>
+                    </div>
+                </div>
+                <div class="container pt-4 wizard-navigation d-md-none">
+                    <a href="#" role="button" class="btn btn-default btn-outline-primary mb-3 mb-md-0" @click="goToPrevStep()">Back</a>
+                    <a href="#" role="button" class="btn btn-default btn-primary" @click="goToNextStep()">Continue</a>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+{% endblock %}
