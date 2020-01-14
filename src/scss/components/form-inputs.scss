@@ -2,7 +2,7 @@
     .form-control {
         border-radius: 0;
         border-color: $p2;
-        min-width: 200px;
+        //min-width: 200px;
 
         &[disabled] {
             border: none;
@@ -10,7 +10,7 @@
         }
 
         @include media-breakpoint-up(md) {
-            min-width: 315px;
+            //min-width: 315px;
         }
     }
 }

@@ -53,6 +53,7 @@
                             <div class="d-flex" v-if="formData.idType === 'NRIC'">
                                 <div class="form-group">
                                     <input type="text" class="form-control" name="nric" placeholder="xxxxxx-xx-xxxx" v-model="formData.nric">
+                                    <small class="error-message text-primary font-italic">* Complete the NRIC field.</small>
                                 </div>
                             </div>
 
@@ -68,9 +69,10 @@
                                     </div>
                                     <div class="form-group">
                                         <input type="text" class="form-control" name="passport" placeholder="Passport No." v-model="formData.passport">
+                                        <small class="error-message text-primary font-italic">* Complete the Passport No field.</small>
                                     </div>
                                 </div>
-                                <p class="bt1">Date of Birth:</p>
+                                <p class="bt1 mb-2">Date of Birth:</p>
                                 <div class="d-md-flex">
                                     <div class="form-group variant-date-picker">
                                         <datepicker class="form-control"
@@ -91,6 +93,7 @@
                                 <svg class="icon icon-m tick-mark">
                                     <use xlink:href="assets/icons/icons.svg#sprite-tick-mark" href="assets/icons/icons.svg#sprite-tick-mark"></use>
                                 </svg>
+                                <small class="error-message text-primary font-italic">* Oops, looks like you haven't ticked the box yet. Please do so to proceed</small>
                             </div>
                         </div>
                     </div>
@@ -107,22 +110,23 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-12 col-md-8">
+
                             <div class="bg-w py-5 px-4 mb-3">
-                                <h2 class="p2">Choose a Plan</h2>
+                                <h2 class="p2 mb-4 pb-md-2">Choose a Plan</h2>
 
                                 {% include "templates/components/input-variant-radio.twig" with {
                                     name: 'coverageType',
                                     formControls: [
-                                        { value: 'Single Trip' },
+                                        { value: 'Single Trip' , checked:'checked' },
                                         { value: 'Annual Cover' },
                                     ],
-                                    spacing: 'mb-4'
+                                    spacing: 'mb-4 d-flex'
                                 } %}
 
                                 {% verbatim %}    
                                     <div class="d-md-flex">
                                         <div class="form-group">
-                                            <label class="bt1" for="areaOfCoverage">Area of Coverage</label>
+                                            <label class="bt1" for="areaOfCoverage">Area of Coverage :</label>
                                             <select name="areaOfCoverage" id="areaOfCoverage" class="form-control" v-model="formData.areaOfCoverage">
                                                 <option :value="area.name" v-for="area in coverageAreas" v-bind:key="coverageAreas.indexOf(area)">
                                                     {{ area.name }}
@@ -165,10 +169,10 @@
                                 </div>
 
                                 <h2 class="p2 mb-4">Period of Coverage</h2>
-                                <div class="d-md-flex justify-content-between mb-4">
-                                    <div>
+                                <div class="row mb-4">
+                                    <div class="col-12 col-lg-6">
                                         <p class="bt1">Start Date</p>
-                                        <div class="form-group variant-date-picker">
+                                        <div class="form-group variant-date-picker mb-0">
                                             <datepicker class="form-control"
                                                 placeholder="Select date"
                                                 :format="customDateFormatter"
@@ -176,11 +180,12 @@
                                             </datepicker>
                                             {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
                                         </div>
+                                        <small class="error-message text-primary font-italic">* Complete the Start Date field.</small>
                                     </div>
 
-                                    <div>
+                                    <div class="col-12 col-lg-6">
                                         <p class="bt1">End Date</p>
-                                        <div class="form-group variant-date-picker">
+                                        <div class="form-group variant-date-picker mb-0">
                                             <datepicker class="form-control"
                                                 placeholder="Select date"
                                                 :format="customDateFormatter"
@@ -188,6 +193,7 @@
                                             </datepicker>
                                             {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
                                         </div>
+                                        <small class="error-message text-primary font-italic">* Complete the End Date field.</small>
                                     </div>
                                 </div>
                                 <div class="bt2">
@@ -206,10 +212,10 @@
                             </div>
 
                             <div class="bg-w py-5 px-4 mb-3">
-                                <h2 class="p2 mb-4">Please Select Your Preferred Plan</h2>
+                                <h2 class="p2">Please Select Your Preferred Plan</h2>
                                 <div class="selection-infobox-group row">
                                     <div class="col-12 col-lg-4">
-                                        <div class="header-match-height d-flex align-items-center mt-5">
+                                        <div class="header-match-height d-lg-flex align-items-center mt-5 d-none">
                                             <p class="h2">TravelRight Plus</p>
                                         </div>
                                         <p class="bt1 d-none d-lg-block mb-1">Benefits</p>
@@ -218,12 +224,12 @@
                                                 { iconName: 'tick-mark', content: 'Personal Accident' },
                                                 { iconName: 'tick-mark', content: 'Medical & Other Expenses' },
                                                 { iconName: 'tick-mark', content: 'Luggage & Personal Effects' },
-                                                { iconName: 'tick-mark', content: 'Luggage & Delay (Every 6 hours)' },
-                                                { iconName: 'tick-mark', content: 'Travel Delay (Every 6 hours)' },
+                                                { iconName: 'tick-mark', content: 'Luggage & Delay <br/><i>(Every 6 hours)</i>' },
+                                                { iconName: 'tick-mark', content: 'Travel Delay <br/><i>(Every 6 hours)</i>' },
                                             ],
                                             class: "d-none d-lg-block"
                                         } %}
-                                        <p class="bt2">View the full benefits <strong><a href="#">HERE</a></strong></p>
+                                        <p class="bt2 d-none d-lg-block">View the full benefits <strong><a href="#">HERE</a></strong></p>
                                     </div>
                                     <div class="col-12 col-lg-8">
                                         <div class="d-lg-flex">
@@ -234,12 +240,13 @@
                                                 classes: "mb-3 mb-lg-0 mr-lg-3"
                                             } %}
                                                 {% block top %}
-                                                    <h3 class="m-0">Plan 1</h3>
+                                                    <h3 class="m-0 d-lg-none">TravelRight Plus (Plan 1)</h3>
+                                                    <h3 class="m-0 d-none d-lg-block">Plan 1</h3>
                                                     <p class="m-0">from <span class="h3">RM39.00</span></p>
                                                 {% endblock %}
 
                                                 {% block icon %}
-                                                    {% include "templates/components/icon.twig" with { iconName: 'calendar', iconSize: '4xl' } %}
+                                                    {% include "templates/components/icon.twig" with { iconName: 'travel-plan1', iconSize: '4xl' } %}
                                                 {% endblock %}
 
                                                 {% block bottom %}
@@ -272,12 +279,13 @@
                                                 highlight: "Recommended" 
                                             } %}
                                                 {% block top %}
-                                                    <h3 class="m-0">Plan 2</h3>
+                                                    <h3 class="m-0 d-lg-none">TravelRight Plus (Plan 2)</h3>
+                                                    <h3 class="m-0 d-none d-lg-block">Plan 2</h3>
                                                     <p class="m-0">from <span class="h3">RM58.00</span></p>
                                                 {% endblock %}
 
                                                 {% block icon %}
-                                                    {% include "templates/components/icon.twig" with { iconName: 'calendar', iconSize: '4xl' } %}
+                                                    {% include "templates/components/icon.twig" with { iconName: 'travel-plan2', iconSize: '4xl' } %}
                                                 {% endblock %}
 
                                                 {% block bottom %}
@@ -302,6 +310,7 @@
                                                 {% endblock %}
                                             {% endembed %}
                                         </div>
+                                        <p class="bt2 d-lg-none">View the full benefits <strong><a href="#">HERE</a></strong></p>
                                     </div>
                                 </div>
                             </div>
@@ -339,7 +348,7 @@
                                                 {% endblock %}
 
                                                 {% block icon %}
-                                                    {% include "templates/components/icon.twig" with { iconName: 'calendar', iconSize: '4xl' } %}
+                                                    {% include "templates/components/icon.twig" with { iconName: 'sport-plan1', iconSize: '4xl' } %}
                                                 {% endblock %}
 
                                                 {% block bottom %}
@@ -375,7 +384,7 @@
                                                 {% endblock %}
 
                                                 {% block icon %}
-                                                    {% include "templates/components/icon.twig" with { iconName: 'calendar', iconSize: '4xl' } %}
+                                                    {% include "templates/components/icon.twig" with { iconName: 'sport-plan2', iconSize: '4xl' } %}
                                                 {% endblock %}
 
                                                 {% block bottom %}
@@ -426,16 +435,18 @@
                         <div class="col-12 col-md-8">
                             <div class="bg-w py-5 px-4 mb-3">
                                 <h2 class="p2 mb-4">Personal Details</h2>
-                                
+
                                 <div class="row" v-if="formData.idType === 'Passport'">
                                     <div class="col-12 col-md-6">
                                         <div class="form-group">
                                             <p class="bt1">Country:</p>
                                             {% verbatim %}
-                                                <select v-model="formData.country" class="form-control">
-                                                    <option disabled hidden selected value="">Select a country</option>
-                                                    <option v-for="country in allCountries" v-bind:key="allCountries.indexOf(country)" :value="country">{{ country }}</option>
-                                                </select>
+                                            <select v-model="formData.country" class="form-control">
+                                                <option disabled hidden selected value="">Select a country</option>
+                                                <option v-for="country in allCountries"
+                                                    v-bind:key="allCountries.indexOf(country)" :value="country">
+                                                    {{ country }}</option>
+                                            </select>
                                             {% endverbatim %}
                                         </div>
                                     </div>
@@ -445,25 +456,35 @@
                                     <div class="col-12 col-md-6">
                                         <div class="form-group">
                                             <label for="customerName" class="bt1">Name (as per NRIC):</label>
-                                            <input id="customerName" type="text" class="form-control" placeholder="e.g. Henry Teo">
+                                            <input id="customerName" type="text" class="form-control"
+                                                placeholder="e.g. Henry Teo">
+                                            <small class="error-message text-primary font-italic">* Complete the Name as per
+                                                NRIC filed. as per card</small>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <div class="form-group">
                                             <label for="nricNo" class="bt1">NRIC No:</label>
                                             <input id="nricNo" disabled type="text" class="form-control" placeholder="NRIC" v-model="formData.nric">
+                                            <small class="error-message text-primary font-italic">* Complete the NRIC field.</small>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <div class="form-group">
                                             <label for="customerEmail" class="bt1">Email:</label>
-                                            <input id="customerEmail" type="text" class="form-control" placeholder="e.g. hteoro@gmail.com">
+                                            <input id="customerEmail" type="text" class="form-control"
+                                                placeholder="e.g. hteoro@gmail.com">
+                                            <small class="error-message text-primary font-italic">* Complete the Email
+                                                field.</small>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <div class="form-group">
                                             <label for="mobileNo" class="bt1">Mobile No:</label>
-                                            <input id="mobileNo" type="text" class="form-control" placeholder="e.g. 01x-xxxxxxx">
+                                            <input id="mobileNo" type="text" class="form-control"
+                                                placeholder="e.g. 01x-xxxxxxx">
+                                            <small class="error-message text-primary font-italic">* Complete the Mobile
+                                                field.</small>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6" v-if="formData.idType === 'Passport'">
@@ -474,23 +495,27 @@
                                                 <option value="Male">Male</option>
                                                 <option value="Female">Female</option>
                                             </select>
+                                            <small class="error-message text-primary font-italic">* Complete the Gender
+                                                field.</small>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6" v-if="formData.idType === 'Passport'">
                                         <p class="bt1 mb-2">Date of Birth:</p>
-                                        <div class="form-group variant-date-picker">
-                                            <datepicker class="form-control"
-                                                placeholder="DD/MM/YYYY"
-                                                :format="customDateFormatter"
-                                                v-model="formData.dateOfBirth">
+                                        <div class="form-group variant-date-picker mb-0">
+                                            <datepicker class="form-control" placeholder="DD/MM/YYYY"
+                                                :format="customDateFormatter" v-model="formData.dateOfBirth">
                                             </datepicker>
                                             {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
                                         </div>
+                                        <small class="error-message text-primary font-italic">* Please enter valid
+                                            DOB.</small>
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <div class="form-group">
                                             <label for="address1" class="bt1">Address:</label>
                                             <input id="address1" type="text" class="form-control" placeholder="First Line">
+                                            <small class="error-message text-primary font-italic">* Complete the Address
+                                                field.</small>
                                         </div>
                                         <div class="form-group">
                                             <input id="address2" type="text" class="form-control" placeholder="Second Line">
@@ -500,9 +525,12 @@
                                         <div class="form-group variant-icon">
                                             <label for="postcode" class="bt1">Postcode</label>
                                             <div class="input-wrapper">
-                                                <input id="postcode" type="text" class="form-control" placeholder="Find postcode">
+                                                <input id="postcode" type="text" class="form-control"
+                                                    placeholder="Find postcode">
                                                 {% include "templates/components/icon.twig" with { iconName: 'search', iconSize: 'm' } %}
                                             </div>
+                                            <small class="error-message text-primary font-italic">* Complete the Postal Code
+                                                field.</small>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
@@ -520,32 +548,198 @@
                                 </div>
                             </div>
 
+                            <!-- dummy html -->
+                            <div class="bg-w py-5 px-4 mb-3">
+                                {% verbatim %}
+                                <h2 class="p2">Family Member #1:</h2>
+                                {% endverbatim %}
+
+                                <p class="bt1">Traveller:</p>
+                                <div class="d-flex mb-4">
+                                    <div class="form-check mb-1">
+                                        <input class="form-check-input" type="radio" value="Spouse" checked>
+                                        <label class="form-check-label">Spouse</label>
+                                    </div>
+                                    <div class="form-check mb-1">
+                                        <input class="form-check-input" type="radio" value="Child (30 days - 17 years old)">
+                                        <label class="form-check-label">Child (30 days - 17 years old)</label>
+                                    </div>
+                                </div>
+
+                                <p class="bt1">Nationality:</p>
+                                <div class="d-flex mb-4">
+                                    <div class="form-check mb-1">
+                                        <input type="radio" class="form-check-input" value="Malaysian" checked>
+                                        <label class="form-check-label">Malaysian</label>
+                                    </div>
+                                    <div class="form-check mb-1">
+                                        <input type="radio" class="form-check-input" value="Non-Malaysian">
+                                        <label class="form-check-label">Non-Malaysian</label>
+                                    </div>
+                                </div>
+
+                    
+                                <div class="row">
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label class="bt1">Name (as per NRIC):</label>
+                                            <input type="text" class="form-control" placeholder="e.g. Lisa Teo">
+                                            <small class="error-message text-primary font-italic">* Complete the Name as per
+                                                NRIC filed.</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label class="bt1">NRIC No:</label>
+                                            <input type="text" class="form-control" placeholder="e.g. 888888-88-8888">
+                                            <small class="error-message text-primary font-italic">* Complete the NRIC
+                                                field.</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <p class="bt1">Date of Birth:</p>
+                                        <div class="form-group variant-date-picker mb-0">
+                                            <datepicker class="form-control" placeholder="DD/MM/YYYY"
+                                                :format="customDateFormatter">
+                                            </datepicker>
+                                            {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
+                                        </div>
+                                        <small class="error-message text-primary font-italic">* Please enter valid
+                                            DOB.</small>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-end">
+                                    <a href="#" class="btn btn-primary btn-icon">
+                                        <div class="button-icon">
+                                            {% include "templates/components/icon.twig" with { iconName: 'close', iconSize: 's' } %}
+                                        </div>
+                                        <span class="button-text">Remove</span>
+                                    </a>
+                                </div>
+                            </div>
+
+
+                            <div class="bg-w py-5 px-4 mb-3">
+                                    {% verbatim %}
+                                    <h2 class="p2">Family Member #2</h2>
+                                    {% endverbatim %}
+        
+                                    <p class="bt1">Traveller</p>
+                                    <div class="d-flex mb-4">
+                                        <div class="form-check mb-1">
+                                            <input class="form-check-input" type="radio" value="Spouse" checked>
+                                            <label class="form-check-label">Spouse</label>
+                                        </div>
+                                        <div class="form-check mb-1">
+                                            <input class="form-check-input" type="radio" value="Child (30 days - 17 years old)">
+                                            <label class="form-check-label">Child (30 days - 17 years old)</label>
+                                        </div>
+                                    </div>
+        
+                                    <p class="bt1">Nationality</p>
+                                    <div class="d-flex mb-4">
+                                        <div class="form-check mb-1">
+                                            <input type="radio" class="form-check-input" value="Malaysian">
+                                            <label class="form-check-label">Malaysian</label>
+                                        </div>
+                                        <div class="form-check mb-1">
+                                            <input type="radio" class="form-check-input" value="Non-Malaysian" checked>
+                                            <label class="form-check-label">Non-Malaysian</label>
+                                        </div>
+                                    </div>
+        
+                                    <div class="row">
+                                        <div class="col-12 col-md-6">
+                                            <p class="bt1">Country</p>
+                                            <div class="form-group">
+                                                {% verbatim %}
+                                                <select class="form-control">
+                                                    <option disabled hidden selected value="">Select a country</option>
+                                                    <option v-for="country in allCountries"
+                                                        v-bind:key="allCountries.indexOf(country)" :value="country">
+                                                        {{ country }}</option>
+                                                </select>
+                                                {% endverbatim %}
+                                            </div>
+                                        </div>
+                                    </div>
+        
+                                    <div class="row">
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label class="bt1">Name (as per Passport):</label>
+                                                <input type="text" class="form-control" placeholder="e.g. Lisa Teo">
+                                                <small class="error-message text-primary font-italic">* Complete the Name as per
+                                                    NRIC filed.</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label class="bt1">Passport No:</label>
+                                                <input type="text" class="form-control" placeholder="e.g. 888888-88-8888">
+                                                <small class="error-message text-primary font-italic">* Complete the Passport No field.</small> 
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <p class="bt1">Date of Birth:</p>
+                                            <div class="form-group variant-date-picker mb-0">
+                                                <datepicker class="form-control" placeholder="DD/MM/YYYY"
+                                                    :format="customDateFormatter">
+                                                </datepicker>
+                                                {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
+                                            </div>
+                                            <small class="error-message text-primary font-italic">* Please enter valid
+                                                DOB.</small>
+                                        </div>
+                                    </div>
+        
+                                    <div class="d-flex justify-content-end">
+                                        <a href="#" class="btn btn-primary btn-icon">
+                                            <div class="button-icon">
+                                                {% include "templates/components/icon.twig" with { iconName: 'close', iconSize: 's' } %}
+                                            </div>
+                                            <span class="button-text">Remove</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            <!-- dummy html -->
+
+
+
                             <div class="bg-w py-5 px-4 mb-3" v-for="(member, index) in formData.familyMembers">
                                 {% verbatim %}
-                                    <h2 class="p2">Family Member #{{index + 1}}</h2>
+                                <h2 class="p2">Family Member #{{index + 1}}</h2>
                                 {% endverbatim %}
 
                                 <p class="bt1">Traveller</p>
                                 <div class="d-flex mb-4">
                                     <div class="form-check mb-1">
-                                        <input :id="'relationToCustomer-1-' + index" class="form-check-input" type="radio" value="Spouse" v-model="member.relationToCustomer">
-                                        <label :for="'relationToCustomer-1-' + index" class="form-check-label">Spouse</label>
+                                        <input :id="'relationToCustomer-1-' + index" class="form-check-input" type="radio"
+                                            value="Spouse" v-model="member.relationToCustomer">
+                                        <label :for="'relationToCustomer-1-' + index"
+                                            class="form-check-label">Spouse</label>
                                     </div>
                                     <div class="form-check mb-1">
-                                        <input :id="'relationToCustomer-2-' + index" class="form-check-input" type="radio" value="Child (30 days - 17 years old)" v-model="member.relationToCustomer">
-                                        <label :for="'relationToCustomer-2-' + index" class="form-check-label">Child (30 days - 17 years old)</label>
+                                        <input :id="'relationToCustomer-2-' + index" class="form-check-input" type="radio"
+                                            value="Child (30 days - 17 years old)" v-model="member.relationToCustomer">
+                                        <label :for="'relationToCustomer-2-' + index" class="form-check-label">Child (30
+                                            days - 17 years old)</label>
                                     </div>
                                 </div>
-                                
+
                                 <p class="bt1">Nationality</p>
                                 <div class="d-flex mb-4">
                                     <div class="form-check mb-1">
-                                        <input :id="'nationality-1-' + index" type="radio" class="form-check-input" value="Malaysian" v-model="member.nationality">
+                                        <input :id="'nationality-1-' + index" type="radio" class="form-check-input"
+                                            value="Malaysian" v-model="member.nationality">
                                         <label :for="'nationality-1-' + index" class="form-check-label">Malaysian</label>
                                     </div>
                                     <div class="form-check mb-1">
-                                        <input :id="'nationality-2-' + index" type="radio" class="form-check-input" value="Non-Malaysian" v-model="member.nationality">
-                                        <label :for="'nationality-2-' + index" class="form-check-label">Non-Malaysian</label>
+                                        <input :id="'nationality-2-' + index" type="radio" class="form-check-input"
+                                            value="Non-Malaysian" v-model="member.nationality">
+                                        <label :for="'nationality-2-' + index"
+                                            class="form-check-label">Non-Malaysian</label>
                                     </div>
                                 </div>
 
@@ -554,10 +748,12 @@
                                         <p class="bt1">Country</p>
                                         <div class="form-group">
                                             {% verbatim %}
-                                                <select v-model="member.country" class="form-control">
-                                                    <option disabled hidden selected value="">Select a country</option>
-                                                    <option v-for="country in allCountries" v-bind:key="allCountries.indexOf(country)" :value="country">{{ country }}</option>
-                                                </select>
+                                            <select v-model="member.country" class="form-control">
+                                                <option disabled hidden selected value="">Select a country</option>
+                                                <option v-for="country in allCountries"
+                                                    v-bind:key="allCountries.indexOf(country)" :value="country">
+                                                    {{ country }}</option>
+                                            </select>
                                             {% endverbatim %}
                                         </div>
                                     </div>
@@ -567,30 +763,37 @@
                                     <div class="col-12 col-md-6">
                                         <div class="form-group">
                                             <label class="bt1">Name (as per NRIC):</label>
-                                            <input type="text" class="form-control" placeholder="e.g. Lisa Teo" v-model="member.name">
+                                            <input type="text" class="form-control" placeholder="e.g. Lisa Teo"
+                                                v-model="member.name">
+                                            <small class="error-message text-primary font-italic">* Complete the Name as per
+                                                NRIC filed.</small>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <div class="form-group">
                                             <label class="bt1">NRIC No:</label>
-                                            <input type="text" class="form-control" placeholder="e.g. 888888-88-8888" v-model="member.nric">
+                                            <input type="text" class="form-control" placeholder="e.g. 888888-88-8888"
+                                                v-model="member.nric">
+                                            <small class="error-message text-primary font-italic">* Complete the NRIC
+                                                field.</small>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6" v-if="member.nationality === 'Non-Malaysian'">
                                         <p class="bt1">Date of Birth:</p>
-                                        <div class="form-group variant-date-picker">
-                                            <datepicker class="form-control"
-                                                placeholder="DD/MM/YYYY"
-                                                :format="customDateFormatter"
-                                                v-model="member.dateOfBirth">
+                                        <div class="form-group variant-date-picker mb-0">
+                                            <datepicker class="form-control" placeholder="DD/MM/YYYY"
+                                                :format="customDateFormatter" v-model="member.dateOfBirth">
                                             </datepicker>
                                             {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
                                         </div>
+                                        <small class="error-message text-primary font-italic">* Please enter valid
+                                            DOB.</small>
                                     </div>
                                 </div>
 
                                 <div class="d-flex justify-content-end">
-                                    <a href="#" class="btn btn-primary btn-icon" @click.prevent="removeFamilyMember(member)">
+                                    <a href="#" class="btn btn-primary btn-icon"
+                                        @click.prevent="removeFamilyMember(member)">
                                         <div class="button-icon">
                                             {% include "templates/components/icon.twig" with { iconName: 'close', iconSize: 's' } %}
                                         </div>
@@ -609,8 +812,10 @@
                             </div>
 
                             <div class="pt-4 wizard-navigation d-none d-md-flex">
-                                <a href="#" role="button" class="btn btn-default btn-outline-primary" @click.prevent="goToPrevStep()">Back</a>
-                                <a href="#" role="button" class="btn btn-default btn-primary" @click.prevent="goToNextStep()">Continue</a>
+                                <a href="#" role="button" class="btn btn-default btn-outline-primary"
+                                    @click.prevent="goToPrevStep()">Back</a>
+                                <a href="#" role="button" class="btn btn-default btn-primary"
+                                    @click.prevent="goToNextStep()">Continue</a>
                             </div>
                         </div>
                         <div class="col-12 col-md-4">
@@ -619,7 +824,8 @@
                     </div>
                 </div>
                 <div class="container pt-4 wizard-navigation d-md-none">
-                    <a href="#" role="button" class="btn btn-default btn-outline-primary mb-3 mb-md-0" @click="goToPrevStep()">Back</a>
+                    <a href="#" role="button" class="btn btn-default btn-outline-primary mb-3 mb-md-0"
+                        @click="goToPrevStep()">Back</a>
                     <a href="#" role="button" class="btn btn-default btn-primary" @click="goToNextStep()">Continue</a>
                 </div>
             </div>
@@ -629,30 +835,34 @@
                     <div class="row">
                         <div class="col-12 col-md-8">
                             <div class="bg-w py-5 px-4 mb-3">
-                                <h2 class="p2 mb-4">Nominee Details</h2>
+                                <h2 class="p2 mb-4">Nominee Details :</h2>
                                 <div class="row">
                                     <div class="col-12 col-md-6">
                                         <div class="form-group">
                                             <label class="bt1">Name (as per NRIC):</label>
                                             <input type="text" class="form-control" placeholder="e.g. Henry Teo">
+                                            <small class="error-message text-primary font-italic">* Complete the Name as per NRIC filed.</small>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <div class="form-group">
                                             <label class="bt1">NRIC No:</label>
                                             <input type="text" class="form-control" placeholder="e.g. 888888-88-8888">
+                                            <small class="error-message text-primary font-italic">* Complete the NRIC field.</small>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <div class="form-group">
                                             <label class="bt1">Mobile No:</label>
                                             <input type="text" class="form-control" placeholder="e.g. 01X-XXXXXXX">
+                                            <small class="error-message text-primary font-italic">* Complete the Mobile field.</small>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <div class="form-group">
                                             <label class="bt1">Relationship</label>
                                             <input type="text" class="form-control" placeholder="e.g. Father">
+                                            <small class="error-message text-primary font-italic">* Complete the Relationship field.</small>
                                         </div>
                                     </div>
                                 </div>
@@ -681,10 +891,10 @@
                                 <h2 class="p2 mb-4">Personal Details</h2>
 
                                 {% set personalDetails = [
-                                    { title: 'Name (as per NRIC):', vModel: 'formData.customerName'},
-                                    { title: 'NRIC No:', vModel: 'formData.nric'},
-                                    { title: 'Email:', vModel: 'formData.email'},
-                                    { title: 'Mobile No:', vModel: 'formData.mobileNo'}
+                                    { title: 'Name (as per NRIC):', vModel: 'formData.customerName', error: "* Complete the Name as per NRIC filed."},
+                                    { title: 'NRIC No:', vModel: 'formData.nric', error: "* Complete the NRIC field."},
+                                    { title: 'Email:', vModel: 'formData.email', error: "* Complete the Email field."},
+                                    { title: 'Mobile No:', vModel: 'formData.mobileNo', error: "* Complete the Mobile field."}
                                 ] %}
 
                                 <div class="row">
@@ -695,6 +905,7 @@
 
                                             <div class="form-group" v-if="personalEditMode">
                                                 <input type="text" class="form-control" v-model="{{ item.vModel }}">
+                                                <small class="error-message text-primary font-italic">{{ item.error }}</small>
                                             </div>
                                         </div>
                                     {% endfor %}
@@ -704,6 +915,7 @@
                                         <p class="bt2" v-if="!personalEditMode">{{ fullAddress }}</p>
                                         <div class="form-group" v-if="personalEditMode">
                                             <input type="text" class="form-control" v-model="formData.addressLine1">
+                                            <small class="error-message text-primary font-italic">* Complete the Address field.</small>
                                         </div>
                                         <div class="form-group" v-if="personalEditMode">
                                             <input type="text" class="form-control" v-model="formData.addressLine2">
@@ -737,10 +949,10 @@
                                 <h2 class="p2">Nominee Details</h2>
 
                                 {% set nomineeDetails = [
-                                    { title: 'Name (as per NRIC):', vModel: 'formData.nomineeName' },
-                                    { title: 'NRIC No:', vModel: 'formData.nomineeNric' },
-                                    { title: 'Mobile No:', vModel: 'formData.nomineeMobileNo' },
-                                    { title: 'Relationship:', vModel: 'formData.nomineeRelationToCustomer' },
+                                    { title: 'Name (as per NRIC):', vModel: 'formData.nomineeName', error: "* Complete the Name as per NRIC filed." },
+                                    { title: 'NRIC No:', vModel: 'formData.nomineeNric', error: "* Complete the NRIC field." },
+                                    { title: 'Mobile No:', vModel: 'formData.nomineeMobileNo', error: "* Complete the Mobile field." },
+                                    { title: 'Relationship:', vModel: 'formData.nomineeRelationToCustomer', error: "* Complete the Relationship field." },
                                 ] %}
 
                                 <div class="row">
@@ -750,6 +962,7 @@
                                             <p class="bt2" v-if="!nomineeEditMode" v-html="{{ item.vModel }}"></p>
                                             <div class="form-group" v-if="nomineeEditMode">
                                                 <input type="text" class="form-control" v-model="{{ item.vModel }}">
+                                                <small class="error-message text-primary font-italic">{{ item.error }}</small>
                                             </div>
                                         </div>
                                     {% endfor %}
@@ -807,38 +1020,15 @@
                         <div class="col-12 col-md-8">
                             <div class="bg-w py-5 px-4 mb-3">
                                 <h2 class="p2 mb-4">Payment</h2>
-                                {% include "templates/components/input-variant-radio.twig" with {
-                                    name: 'paymentMethod',
-                                    formControls: [
-                                        { value: 'Credit/Debit Card' },
-                                        { value: 'Online Banking' },
-                                        { value: 'E-Wallet' },
-                                    ],
-                                    spacing: 'mb-5',
-                                    vModel: 'formData.paymentMethod'
-                                } %}
+                               
                                 <div class="vertical-scroller mb-5">
                                     <div class="d-flex">
                                         {% embed "templates/components/selection-infobox.twig" with {
                                             type: "radio",
                                             name: "choosePayment",
-                                            value: "Credit/Debit Card",
-                                            classes: "mb-3 mb-lg-0 mr-3"
-                                        
-                                        } %}
-                                            {% block top %}
-                                                <h3 class="m-0">Credit/Debit Card</h3>
-                                            {% endblock %}
-
-                                            {% block icon %}
-                                                {% include "templates/components/icon.twig" with { iconName: 'calendar', iconSize: '4xl' } %}
-                                            {% endblock %}
-                                        {% endembed %}
-                                        {% embed "templates/components/selection-infobox.twig" with {
-                                            type: "radio",
-                                            name: "choosePayment",
                                             value: "Online Banking",
-                                            classes: "mb-3 mb-lg-0 mr-3"
+                                            classes: "mb-3 mb-lg-0 mr-3",
+                                            vModel: 'formData.paymentMethod'
                                         
                                         } %}
                                             {% block top %}
@@ -846,14 +1036,31 @@
                                             {% endblock %}
 
                                             {% block icon %}
-                                                {% include "templates/components/icon.twig" with { iconName: 'calendar', iconSize: '4xl' } %}
+                                                {% include "templates/components/icon.twig" with { iconName: 'fpx', iconSize: '4xl' } %}
+                                            {% endblock %}
+                                        {% endembed %}
+                                        {% embed "templates/components/selection-infobox.twig" with {
+                                            type: "radio",
+                                            name: "choosePayment",
+                                            value: "Credit/Debit Card",
+                                            classes: "mb-3 mb-lg-0 mr-3",
+                                            vModel: 'formData.paymentMethod'
+                                        
+                                        } %}
+                                            {% block top %}
+                                                <h3 class="m-0">Credit/Debit Card</h3>
+                                            {% endblock %}
+
+                                            {% block icon %}
+                                                {% include "templates/components/icon.twig" with { iconName: 'credit-card', iconSize: '4xl' } %}
                                             {% endblock %}
                                         {% endembed %}
                                         {% embed "templates/components/selection-infobox.twig" with {
                                             type: "radio",
                                             name: "choosePayment",
                                             value: "E-Wallet",
-                                            classes: "mb-3 mb-lg-0 mr-3"
+                                            classes: "mb-3 mb-lg-0 mr-3",
+                                            vModel: 'formData.paymentMethod'
                                         
                                         } %}
                                             {% block top %}
@@ -861,7 +1068,7 @@
                                             {% endblock %}
 
                                             {% block icon %}
-                                                {% include "templates/components/icon.twig" with { iconName: 'calendar', iconSize: '4xl' } %}
+                                                {% include "templates/components/icon.twig" with { iconName: 'ewallets', iconSize: '4xl' } %}
                                             {% endblock %}
                                         {% endembed %}
                                     </div>  
@@ -870,24 +1077,28 @@
                                 <div v-if="formData.paymentMethod === 'Credit/Debit Card'">
                                     <img src="assets/img/visa-master-logo.jpg" alt="Visa and Mastercard logo" class="img-fluid mb-4">
                                     <div class="row">
-                                        <div class="col-12 col-md-6">
+                                        <div class="col-12 col-md-7">
                                             <div class="form-group">
                                                 <label class="bt1">Card Number:</label>
                                                 <input class="form-control" type="text" placeholder="xxxx-xxxx-xxxx-xxxx" name="cardNumber">
+                                                <small class="error-message text-primary font-italic">* Complete the Name as per card field.</small>
                                             </div>
                                             <div class="form-group">
                                                 <label class="bt1">Name on Card:</label>
                                                 <input class="form-control" type="text" placeholder="Name on Card" name="nameOnCard">
+                                                <small class="error-message text-primary font-italic">* Please enter a valid Visa / MasterCard No.</small>
                                             </div>
 
                                             <div class="form-row">
                                                 <div class="form-group col-7">
                                                     <label class="bt1">Expiration Date:</label>
                                                     <input class="form-control" type="text" placeholder="MM/YY" name="expirationDate">
+                                                    <small class="error-message text-primary font-italic">* Complete the Expiry (MM/YY) field.</small>
                                                 </div>
                                                 <div class="form-group col-5">
                                                     <label class="bt1">CVV:</label>
                                                     <input class="form-control" type="text" placeholder="xxx" name="CVV">
+                                                    <small class="error-message text-primary font-italic">* Complete the CVC field.</small>
                                                 </div>
                                             </div>
 
@@ -896,39 +1107,29 @@
                                 </div>
 
                                 <div v-if="formData.paymentMethod === 'Online Banking'">
-                                    <p class="bt1">Payee Email Address:</p>
-                                    <p class="bt2">Please enter your email address below if you would like to have a digital receipt of your purchase.</p>
+                                    <p class="bt1 mb-2">Bank:</p>
+
+                                    {% verbatim %}
+                                    <select class="form-control">
+                                        <option disabled hidden selected value="">Select a Bank</option>
+                                        <option v-for="(bank, index) in banks"
+                                            v-bind:key="index" :value="bank.name">
+                                            {{ bank.name }}</option>
+                                    </select>
+                                    {% endverbatim %}
+
+                                    <p><small>Note: You need to have an active internet banking account with any of the FPX performing banks to use FPX.</small></p>
+
+                                    <p class="bt1 mb-2">Email Address: <small class="font-italic">(For transaction status)</small></p>
+                                    
                                     <div class="row">
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <input type="text" class="form-control" placeholder="e.g. hteoro@gmail.com">
+                                                <small class="error-message text-primary font-italic">* Complete the Email field.</small>
                                             </div>
                                         </div>
                                     </div>
-
-                                    {% set banks = [
-                                        { img: 'maybank.jpg', name: 'Maybank2U' },
-                                        { img: 'maybank.jpg', name: 'Maybank2E' },
-                                        { img: 'ocbc.jpg', name: 'OCBC Bank' },
-                                        { img: 'rhb.jpg', name: 'RHB' },
-                                        { img: 'standard-chartered.jpg', name: 'Standard Chartered' },
-                                        { img: 'uob.jpg', name: 'UOB Bank' },
-                                        { img: 'ambank.jpg', name: 'AmBank' },
-                                        { img: 'bank-islam.jpg', name: 'Bank Islam' },
-                                        { img: 'bank-rakyat.jpg', name: 'Bank Rakyat' },
-                                        { img: 'bank-muamalat.jpg', name: 'Bank Muamalat' },
-                                        { img: 'bsn.jpg', name: 'BSN' },
-                                        { img: 'cimb.jpg', name: 'CIMB Clicks' },
-                                        { img: 'hlb.jpg', name: 'Hong Leong Bank' },
-                                        { img: 'hsbc.jpg', name: 'HSBC Bank' },
-                                        { img: 'kuwait.jpg', name: 'KFH' },
-                                        { img: 'public.jpg', name: 'Public Bank' },
-                                        { img: 'alliance.jpg', name: 'Alliance Bank' },
-                                        { img: 'affin.jpg', name: 'Affin Bank' },
-                                    ] %}
-
-                                    <p class="bt1">Select Your Bank:</p>
-                                    {% include "templates/components/list-variant-bank.twig" with { banks: banks } %}
                                 </div>
 
                                 <div v-if="formData.paymentMethod === 'E-Wallet'">
@@ -952,6 +1153,8 @@
                     </div>
                 </div>
                 <div class="container pt-4 wizard-navigation d-md-none">
+                    <p v-if="formData.paymentMethod === 'Online Banking'" class="bt2 mb-5">By clicking <strong>"Pay Now"</strong> button, you agree to FPX's <a href="#" target="_blank">Terms & Conditions</a>.</p>
+
                     <a href="#" role="button" class="btn btn-default btn-outline-primary mb-3 mb-md-0" @click.prevent="goToPrevStep()">Back</a>
                     <a href="/payment-completed.html" role="button" class="btn btn-default btn-primary">Pay Now</a>
                 </div>
