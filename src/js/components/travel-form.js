@@ -17,9 +17,8 @@ if ($('#travel-form').length) {
                 { step: 1, title: 'Get Started', completed: false },
                 { step: 2, title: 'Choose a Plan', completed: false },
                 { step: 3, title: 'Fill In Details', completed: false },
-                { step: 4, title: 'Nominee Details', completed: false },
-                { step: 5, title: 'Review', completed: false },
-                { step: 6, title: 'Pay', completed: false }
+                { step: 4, title: 'Review', completed: false },
+                { step: 5, title: 'Pay', completed: false }
             ],
             coverageAreas: [
                 {
