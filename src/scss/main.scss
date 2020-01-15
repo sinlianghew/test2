@@ -9,7 +9,12 @@
 @import "node_modules/bootstrap/scss/reboot";
 @import "node_modules/bootstrap/scss/type";
 
+/** Client base css **/
+body{font-size:1.0em;line-height:1.4;font-family:'pt_sansregular',Tahoma,Geneva,sans-serif;height:100%;background:#fff;overflow-x: hidden;}
+
 .travel-insurance-new {
+
+    font-family: 'pt_sansregular',Tahoma,Geneva,sans-serif;
     
     /** Components **/
     @import "components/pdp-table.scss";

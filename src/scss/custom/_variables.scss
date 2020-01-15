@@ -45,13 +45,13 @@ $btn-border-radius-lg:          .625rem;
 $btn-border-radius-sm:          .625rem;
 
 /** TYPOGRAPHY **/
-$font-family-base:              "PT Sans";
+$font-family-base:              'pt_sansregular',Tahoma,Geneva,sans-serif;
 
 $font-weight-normal:            400;
 $font-weight-bold:              700;
 
 $headings-font-weight:          700;
-$headings-font-family:          "PT Sans";
+$headings-font-family:          'pt_sansregular',Tahoma,Geneva,sans-serif;
 $headings-line-height:          1;
 
 $h1-font-size:                  $font-size-base * 2.75;
