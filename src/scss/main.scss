@@ -9,7 +9,34 @@
 @import "node_modules/bootstrap/scss/reboot";
 @import "node_modules/bootstrap/scss/type";
 
+/** Client base css **/
+body{font-size:1.0em;line-height:1.4;font-family:'pt_sansregular',Tahoma,Geneva,sans-serif;height:100%;background:#fff;overflow-x: hidden;}
+
 .travel-insurance-new {
+    font-size: 1em;
+	line-height: 1.4;
+    font-family: 'pt_sansregular',Tahoma,Geneva,sans-serif;
+
+    input[type="radio"]+label,
+    input[type="checkbox"]+label{background: none;}
+    header {
+        margin: auto;
+    }
+    header span {
+        position: static;
+        right: auto;
+        top: auto;
+        font-size: 1rem;
+        line-height: 40px;
+    }
+    .flag-recommended{
+        min-height: 22px;
+    }
+    .error-message{
+        padding-top: 3px;
+        display: inline-block;
+    }
+/** End of Client base css **/
     
     /** Components **/
     @import "components/pdp-table.scss";
