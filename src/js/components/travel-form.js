@@ -67,7 +67,7 @@ if ($('#travel-form').length) {
                 { img: 'affin.jpg', name: 'Affin Bank' },
             ],
             formData: {
-                idType: 'NRIC',
+                idType: 'N',
                 nric: '901010-14-5021',
                 country: 'Malaysia',
                 passport: '',
@@ -93,11 +93,18 @@ if ($('#travel-form').length) {
                 tncAgreement: false,
                 paymentMethod: 'Online Banking',
             },
+            calendar: {
+                disabledDates: {
+                    to: new Date(Date.now() - 8640000)
+                },
+            },
             currStep: null,
             showGetStartedConsent: true,
             countries: Countries,
             nomineeEditMode: false,
-            personalEditMode: false
+            personalEditMode: false,
+            selectedPlan: "",
+            selectedOptPlan: ""
         },
         computed: {
             countriesForCurrArea: function () {
@@ -152,6 +159,9 @@ if ($('#travel-form').length) {
                 this.showGetStartedConsent = value;
             },
             goToNextStep() {
+                if (this.currStep.step === 1 && !this.formData.pdpaAgreement) {
+                    return;
+                }
                 this.scrollTop().then(function() {
                     if (this.currStep.step === this.steps.length) {
                         return;
@@ -216,6 +226,11 @@ if ($('#travel-form').length) {
                 return matches ? matches[1] : null;
             }
         },
+        watch: {
+            selectedPlan(val){
+                this.selectedOptPlan = ""
+            }
+        },
         mounted() {
             window.onbeforeunload = null;
             let currentSlide = this.getHashValue('slide');
@@ -231,7 +246,6 @@ if ($('#travel-form').length) {
             } else {
                 this.currStep = this.steps[0];
             }
-            
             
 
         }
