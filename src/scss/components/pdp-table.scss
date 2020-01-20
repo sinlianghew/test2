@@ -17,6 +17,7 @@
 
         h3 {
             margin: 0;
+            text-align: center;
         }
 
         p {
@@ -263,4 +264,17 @@
     .h-line {
         border-bottom: 1px solid #cccccc;
     }
+}
+
+.list-dash {
+    float: left;
+    width: 15px;
+    height: 100%;
+    display: block;
+}
+
+.list-dash-item {
+    float: left;
+    width: calc(100% - 15px);
+    display: block;
 }

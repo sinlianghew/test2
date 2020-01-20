@@ -7,21 +7,21 @@
             <div class="row ">
                 <div class="col-6"></div>
                 <div class="col-6 bg-w title-box justify-content-center">
-                    <h3>OVERSEAS: OUTBOUND(RM)</h3>
+                    <h3>Overseas: Outbound (RM)</h3>
                 </div>
             </div>
 
             <div class="row ">
                 <div class="col-6 title-box">
-                    <h3>BENEFITS</h3>
+                    <h3>Benefits</h3>
                 </div>
                 <div class="col-6 bg-w">
                     <div class="row">
                         <div class="col-6 bg-lightGrey title-box justify-content-center borderRight">
-                            <h3>PLAN 1</h3>
+                            <h3>Plan 1</h3>
                         </div>
                         <div class="col-6 bg-p1 w title-box justify-content-center borderLeft">
-                            <h3>PLAN 2</h3>
+                            <h3>Plan 2</h3>
                         </div>
                     </div>
                 </div>
@@ -62,49 +62,378 @@
             } %}
 
             {% set PlanList = [
-                { hideRow:'m-hideRow',title: 'Overall Limit for Medical Expenses', planOneDesc: ' ', planTwoDesc: '' },
+                { hideRow:'m-hideRow',title: 'Overall Limit for Medical Expenses', planOneDesc: ' ', planTwoDesc: '' }, 
                 { title: '- Below 70 years', planOneDesc: '300,000', planTwoDesc: '400,000' },
-                { title: 'Fill in ', planOneDesc: '300 ', planTwoDesc: '300' },
-                { title: 'Fill in ', planOneDesc: '250 ', planTwoDesc: '350 ' },
-                { title: 'Fill in ', planOneDesc: '250 ', planTwoDesc: '350 ' },
-                { title: 'Fill in ', planOneDesc: '250 ', planTwoDesc: '350 ' },
-                { title: 'Fill in ', planOneDesc: '250 ', planTwoDesc: '350 ' },
-                { title: 'Fill in ', planOneDesc: '250 ', planTwoDesc: '350 ' },
-                { title: 'Fill in ', planOneDesc: '250 ', planTwoDesc: '350 ' },
-                { title: 'Fill in ', planOneDesc: '250 ', planTwoDesc: '350 ' },
+                { title: '- 70 years and above ', planOneDesc: '150,000 ', planTwoDesc: '200,000' },
+                { title: 'Alternative Medicine** ', planOneDesc: '250 ', planTwoDesc: '350 ' },
+                { title: 'Follow-up Treatment in Malaysia**', planOneDesc: 'Up to 30,000 (max 45 days)', planTwoDesc: 'Up to 75,000 (max 45 days)' },
+                { title: 'Emergency Medical Evacuation & Bringing Back to Malaysia', planOneDesc: '1,000,000 ', planTwoDesc: '1,000,000 ' },
+                { title: 'Repatriation of Mortal Remains (including Burial & Cremation) ', planOneDesc: '1,000,000 ', planTwoDesc: '1,000,000 ' },
+                { title: 'Hospital Income', planOneDesc: '250 per day (max 15,000)', planTwoDesc: '300 per day (max 18,000)' },
+                { title: 'Compassionate Care*^ ', planOneDesc: '5,000', planTwoDesc: '10,000' },
+                { title: 'Child Care*^', planOneDesc: '5,000 ', planTwoDesc: '10,000 ' },
             ] %}
 
             {% endembed %}
 
-
-
-
-
-            
-
-             <!-- Table row example remove hideWrapper to see-->
-             
-              {% embed "accordion-table-row.twig" with {
-                accordionNumber: "accordionTest",
-                title: "this example to hide arrow in desktop if no accordion - blablablablab alfasfals asflasfl asfas",
-                planTitle1 :"1000",
-                planTitle2 :"3000",
-                hideArrow :"disable-md-click", 
-                oneList :"d-none d-md-block",
-                hideIfEmpty:"d-none",
-                hideWrapper:"d-none"
+            <!-- Table row 3-->
+            {% embed "accordion-table-row.twig" with {
+                accordionNumber: "accordion3",
+                title: "Section 3 - Luggage & Personal Effects*",
+                planTitle1 :"max 5,000",
+                planTitle2 :"max 7,500",
             } %}
 
             {% set PlanList = [
-                { title: '', planOneDesc: '3000', planTwoDesc: '3000' },
+                { title: 'Single article, pair or set of articles', planOneDesc: '500', planTwoDesc: '500' },
+                { title: 'Notebook', planOneDesc: '1,500 ', planTwoDesc: '1,500' },
+            ] %}
+
+            {% endembed %}
+
+            <!-- Table row 4-->
+            {% embed "accordion-table-row.twig" with {
+                accordionNumber: "accordion4",
+                title: "Section 4 - Luggage Delay - Every 6 hours",
+                planTitle1 :" ",
+                planTitle2 :" ",
+            } %}
+
+            {% set PlanList = [
+                { title: 'Overseas', planOneDesc: '200 (max 800)', planTwoDesc: '200 (max 1000)' },
+                { title: 'Malaysia', planOneDesc: 'max 200 ', planTwoDesc: 'max 200' },
+            ] %}
+
+            {% endembed %}
+
+            <!-- Table row 5-->
+            {% embed "accordion-table-row.twig" with {
+                accordionNumber: "accordion5",
+                title: "Section 5 - Personal Money and Unauthorised Use of Card",
+                planTitle1 :"1,000 ",
+                planTitle2 :"1,000",
+                hideArrow :"disable-md-click", 
+                oneList :"d-none d-md-block",
+                hideIfEmpty:"d-none",
+            } %}
+            {% set PlanList = [
+                { title: '', planOneDesc: '1,000', planTwoDesc: '1,000' },
                
             ] %} }
 
-            
-             <!-- Table row  example end -->
+
+            {% endembed %}
+
+            <!-- Table row 6-->
+            {% embed "accordion-table-row.twig" with {
+                accordionNumber: "accordion6",
+                title: "Section 6 - Travel Documents*",
+                planTitle1 :"5,000 ",
+                planTitle2 :"7,500",
+                hideArrow :"disable-md-click", 
+                oneList :"d-none d-md-block",
+                hideIfEmpty:"d-none",
+            } %}
+            {% set PlanList = [
+                { title: '', planOneDesc: '5,000', planTwoDesc: '7,500' },
+               
+            ] %} }
 
 
             {% endembed %}
+
+            <!-- Table row 7 -->
+            {% embed "accordion-table-row.twig" with {
+                accordionNumber: "accordion7",
+                title: "Section 7 - Travel Cancellation*",
+                planTitle1 :"18,000 ",
+                planTitle2 :"50,000",
+                hideArrow :"disable-md-click", 
+                oneList :"d-none d-md-block",
+                hideIfEmpty:"d-none",
+            } %}
+            {% set PlanList = [
+                { title: '', planOneDesc: '18,000', planTwoDesc: '50,000' },
+               
+            ] %} }
+
+
+            {% endembed %}
+
+            <!-- Table row 8 -->
+            {% embed "accordion-table-row.twig" with {
+                accordionNumber: "accordion8",
+                title: "Section 8 - Travel Curtailment*",
+                planTitle1 :"18,000 ",
+                planTitle2 :"50,000",
+                hideArrow :"disable-md-click", 
+                oneList :"d-none d-md-block",
+                hideIfEmpty:"d-none",
+            } %}
+            {% set PlanList = [
+                { title: '', planOneDesc: '18,000', planTwoDesc: '50,000' },
+               
+            ] %} }
+
+
+            {% endembed %}
+
+            <!-- Table row 9-->
+            {% embed "accordion-table-row.twig" with {
+                accordionNumber: "accordion9",
+                title: "Section 9 - Travel Delay - Every 6 hoursº",
+                planTitle1 :"200 (max 3,600)",
+                planTitle2 :"200 (max 4,000)",
+            } %}
+
+            {% set PlanList = [
+                { title: 'Missed Events due to Travel Delay (Enhanced)', planOneDesc: '500', planTwoDesc: '500' },
+                { title: 'Malaysia', planOneDesc: 'max 200 ', planTwoDesc: 'max 200' },
+            ] %}
+
+            {% endembed %}
+
+            <!-- Table row 10 -->
+            {% embed "accordion-table-row.twig" with {
+                accordionNumber: "accordion10",
+                title: "Section 10 - Missed Travel Connection - Min 6 Hoursº",
+                planTitle1 :"600",
+                planTitle2 :"1,000",
+                hideArrow :"disable-md-click", 
+                oneList :"d-none d-md-block",
+                hideIfEmpty:"d-none",
+            } %}
+            {% set PlanList = [
+                { title: '', planOneDesc: '600', planTwoDesc: '1,000' },
+               
+            ] %} }
+
+
+            {% endembed %}
+
+            <!-- Table row 11 -->
+            {% embed "accordion-table-row.twig" with {
+                accordionNumber: "accordion11",
+                title: "Section 11 - Travel Overbooked - Every 6 hoursº",
+                planTitle1 :"500 (max 1,000)",
+                planTitle2 :"500 (max 1,000)",
+                hideArrow :"disable-md-click", 
+                oneList :"d-none d-md-block",
+                hideIfEmpty:"d-none",
+            } %}
+            {% set PlanList = [
+                { title: '', planOneDesc: '500 (max 1,000)', planTwoDesc: '500 (max 1,000)' },
+               
+            ] %} }
+
+
+            {% endembed %}
+
+            <!-- Table row 12 -->
+            {% embed "accordion-table-row.twig" with {
+                accordionNumber: "accordion12",
+                title: "Section 12 - Missed Departure*º",
+                planTitle1 :"1000",
+                planTitle2 :"1000",
+                hideArrow :"disable-md-click", 
+                oneList :"d-none d-md-block",
+                hideIfEmpty:"d-none",
+            } %}
+            {% set PlanList = [
+                { title: '', planOneDesc: '1000', planTwoDesc: '1000' },
+               
+            ] %} }
+
+
+            {% endembed %}
+
+            <!-- Table row 13 -->
+            {% embed "accordion-table-row.twig" with {
+                accordionNumber: "accordion13",
+                title: "Section 13 - Travel Reroute - Min 6 hoursº",
+                planTitle1 :"250",
+                planTitle2 :"500",
+                hideArrow :"disable-md-click", 
+                oneList :"d-none d-md-block",
+                hideIfEmpty:"d-none",
+            } %}
+            {% set PlanList = [
+                { title: '', planOneDesc: '250', planTwoDesc: '500' },
+               
+            ] %} }
+
+
+            {% endembed %}
+
+            <!-- Table row 14 -->
+            {% embed "accordion-table-row.twig" with {
+                accordionNumber: "accordion14",
+                title: "Section 14 - Loss of Travel Deposit",
+                planTitle1 :"7,500 <br> (max 22,500 for Family Plan)",
+                planTitle2 :"7,500 <br> (max 22,500 for Family Plan)",
+                hideArrow :"disable-md-click", 
+                oneList :"d-none d-md-block",
+                hideIfEmpty:"d-none",
+            } %}
+            {% set PlanList = [
+                { title: '', planOneDesc: '7,500 <br> (max 22,500 for Family Plan)', planTwoDesc: '7,500 <br> (max 22,500 for Family Plan)' },
+               
+            ] %} }
+
+
+            {% endembed %}
+
+            <!-- Table row 15 -->
+            {% embed "accordion-table-row.twig" with {
+                accordionNumber: "accordion15",
+                title: "Section 15 - Additional Costs of Rental Car Return* And Rental Car Excess* (Enhanced)",
+                planTitle1 :"1,000",
+                planTitle2 :"1,000",
+                hideArrow :"disable-md-click", 
+                oneList :"d-none d-md-block",
+                hideIfEmpty:"d-none",
+            } %}
+            {% set PlanList = [
+                { title: '', planOneDesc: '1,000', planTwoDesc: '1,000' },
+               
+            ] %} }
+
+            {% endembed %}
+
+            <!-- Table row 16 -->
+            {% embed "accordion-table-row.twig" with {
+                accordionNumber: "accordion16",
+                title: "Section 16 - Personal Liability",
+                planTitle1 :"1,000,000",
+                planTitle2 :"1,000,000",
+                hideArrow :"disable-md-click", 
+                oneList :"d-none d-md-block",
+                hideIfEmpty:"d-none",
+            } %}
+            {% set PlanList = [
+                { title: '', planOneDesc: '1,000,000', planTwoDesc: '1,000,000' },
+               
+            ] %} }
+
+            {% endembed %}
+
+            <!-- Table row 17 -->
+            {% embed "accordion-table-row.twig" with {
+                accordionNumber: "accordion17",
+                title: "Section 17 - Loss of Use of Hotel Facilities",
+                planTitle1 :"200 per day (max 2,000)",
+                planTitle2 :"200 per day (max 2,000)",
+                hideArrow :"disable-md-click", 
+                oneList :"d-none d-md-block",
+                hideIfEmpty:"d-none",
+            } %}
+            {% set PlanList = [
+                { title: '', planOneDesc: '200 per day (max 2,000)', planTwoDesc: '200 per day (max 2,000)' },
+               
+            ] %} }
+
+
+            {% endembed %}
+            
+            <!-- Table row 18 -->
+            {% embed "accordion-table-row.twig" with {
+                accordionNumber: "accordion18",
+                title: "Section 18 - Home Protection^",
+                planTitle1 :"500",
+                planTitle2 :"500",
+                hideArrow :"disable-md-click", 
+                oneList :"d-none d-md-block",
+                hideIfEmpty:"d-none",
+            } %}
+            {% set PlanList = [
+                { title: '', planOneDesc: '500', planTwoDesc: '500' },
+               
+            ] %} }
+
+
+            {% endembed %}
+
+            <!-- Table row 19-->
+            {% embed "accordion-table-row.twig" with {
+                accordionNumber: "accordion19",
+                title: "Section 19 - Adventurous Activity Cover",
+                planTitle1 :"Covered",
+                planTitle2 :"Covered",
+            } %}
+
+            {% set PlanList = [
+                { title: 'Extended to cover you in respect of Personal Accident and Medical & Other Expenses which may be sustained resulting from engaging in or practicing or:', planOneDesc: ' ', planTwoDesc: ' ' },
+                { title: '<span class="list-dash">-</span> <span class="list-dash-item">Bungee jumping;</span>', planOneDesc: '  ', planTwoDesc: ' ' },
+                { title: '<span class="list-dash">-</span> <span class="list-dash-item">Sky diving;</span>', planOneDesc: '  ', planTwoDesc: ' ' },
+                { title: '<span class="list-dash">-</span> <span class="list-dash-item">Hang-gliding;</span>', planOneDesc: '  ', planTwoDesc: ' ' },
+                { title: '<span class="list-dash">-</span> <span class="list-dash-item">Helicopter rides for sightseeing</span>', planOneDesc: '  ', planTwoDesc: ' ' },
+                { title: '<span class="list-dash">-</span> <span class="list-dash-item">Hot air ballooning;</span>', planOneDesc: '  ', planTwoDesc: ' ' },
+                { title: '<span class="list-dash">-</span> <span class="list-dash-item">Jet skiing;</span>', planOneDesc: '  ', planTwoDesc: ' ' },
+                { title: '<span class="list-dash">-</span> <span class="list-dash-item">Mountaineering or trekking at mountains below the height of 3,000 metres above sea level;</span>', planOneDesc: '  ', planTwoDesc: ' ' },
+                { title: '<span class="list-dash">-</span> <span class="list-dash-item">Skiing or snowboarding;</span>', planOneDesc: '  ', planTwoDesc: ' ' },
+                { title: '<span class="list-dash">-</span> <span class="list-dash-item">Canoeing or white water rafting;</span>', planOneDesc: '  ', planTwoDesc: ' ' },
+                { title: '<span class="list-dash">-</span> <span class="list-dash-item mb-3">Underwater activities involving artificial breathing apparatus for diving up to a max depth of 30 metres.</span>', planOneDesc: '  ', planTwoDesc: ' ' },
+                
+            ] %}
+
+            {% endembed %}
+
+            
+            <!-- Table row 20 -->
+            {% embed "accordion-table-row.twig" with {
+                accordionNumber: "accordion20",
+                title: "Section 20 - Travel Worldwide Assistance Services",
+                planTitle1 :"Covered",
+                planTitle2 :"Covered",
+                hideArrow :"disable-md-click", 
+                oneList :"d-none d-md-block",
+                hideIfEmpty:"d-none",
+            } %}
+            {% set PlanList = [
+                { title: '', planOneDesc: 'Covered', planTwoDesc: 'Covered' },
+               
+            ] %} }
+
+
+            {% endembed %}
+
+            <!-- Table row 21 -->
+            {% embed "accordion-table-row.twig" with {
+                accordionNumber: "accordion21",
+                title: "Terrorism & Hijacking",
+                planTitle1 :"Covered",
+                planTitle2 :"Covered",
+                hideArrow :"disable-md-click", 
+                oneList :"d-none d-md-block",
+                hideIfEmpty:"d-none",
+            } %}
+            {% set PlanList = [
+                { title: '', planOneDesc: 'Covered', planTwoDesc: 'Covered' },
+               
+            ] %} }
+
+
+            {% endembed %}
+
+            <!-- Table row 22 -->
+            {% embed "accordion-table-row.twig" with {
+                accordionNumber: "accordion22",
+                title: "Chartered Flights (Scheduled)",
+                planTitle1 :"Covered",
+                planTitle2 :"Covered",
+                hideArrow :"disable-md-click", 
+                oneList :"d-none d-md-block",
+                hideIfEmpty:"d-none",
+            } %}
+            {% set PlanList = [
+                { title: '', planOneDesc: 'Covered', planTwoDesc: 'Covered' },
+               
+            ] %} }
+
+
+            {% endembed %}
+
+
 
             <!-- accordion list end -->
 

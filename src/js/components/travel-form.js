@@ -13,13 +13,20 @@ if ($('#travel-form').length) {
             Datepicker
         },
         data: {
+            parameter: {
+                get_started: 0,
+                choose_a_plan: 1,
+                fill_in_details: 2,
+                review: 3,
+                pay: 4,
+
+            },
             steps: [
-                { step: 1, title: 'Get Started', completed: false },
-                { step: 2, title: 'Choose a Plan', completed: false },
-                { step: 3, title: 'Fill In Details', completed: false },
-                { step: 4, title: 'Nominee Details', completed: false },
-                { step: 5, title: 'Review', completed: false },
-                { step: 6, title: 'Pay', completed: false }
+                { step: 1, title: 'Get Started', completed: false, key:"get_started" },
+                { step: 2, title: 'Choose a Plan', completed: false, key:"choose_a_plan" },
+                { step: 3, title: 'Fill In Details', completed: false, key:"fill_in_details" },
+                { step: 4, title: 'Review', completed: false, key:"review" },
+                { step: 5, title: 'Pay', completed: false, key:"pay" }
             ],
             coverageAreas: [
                 {
@@ -60,7 +67,7 @@ if ($('#travel-form').length) {
                 { img: 'affin.jpg', name: 'Affin Bank' },
             ],
             formData: {
-                idType: 'NRIC',
+                idType: 'N',
                 nric: '901010-14-5021',
                 country: 'Malaysia',
                 passport: '',
@@ -86,11 +93,18 @@ if ($('#travel-form').length) {
                 tncAgreement: false,
                 paymentMethod: 'Online Banking',
             },
+            calendar: {
+                disabledDates: {
+                    to: new Date(Date.now() - 8640000)
+                },
+            },
             currStep: null,
             showGetStartedConsent: true,
             countries: Countries,
             nomineeEditMode: false,
-            personalEditMode: false
+            personalEditMode: false,
+            selectedPlan: "",
+            selectedOptPlan: ""
         },
         computed: {
             countriesForCurrArea: function () {
@@ -145,6 +159,9 @@ if ($('#travel-form').length) {
                 this.showGetStartedConsent = value;
             },
             goToNextStep() {
+                if (this.currStep.step === 1 && !this.formData.pdpaAgreement) {
+                    return;
+                }
                 this.scrollTop().then(function() {
                     if (this.currStep.step === this.steps.length) {
                         return;
@@ -161,6 +178,8 @@ if ($('#travel-form').length) {
                     }
                     const prevStep = this.steps.find(s => s.step === this.currStep.step - 1);
                     this.currStep = prevStep;
+                    this.currStep.completed = false;
+                    
                 }.bind(this))
             },
             customDateFormatter(date) {
@@ -201,10 +220,34 @@ if ($('#travel-form').length) {
             },
             setPersonalEditMode(value) {
                 this.personalEditMode = value;
+            },
+            getHashValue(key) {
+                let matches = location.hash.match(new RegExp(key+'=([^&]*)'));
+                return matches ? matches[1] : null;
+            }
+        },
+        watch: {
+            selectedPlan(val){
+                this.selectedOptPlan = ""
             }
         },
         mounted() {
-            this.currStep = this.steps[0];
+            window.onbeforeunload = null;
+            let currentSlide = this.getHashValue('slide');
+            if(currentSlide){
+                for(let i=0,len=this.steps.length; i<len; i++){
+                    this.steps[i].completed = true;
+                    if(this.steps[i].key === currentSlide) {
+                        this.steps[i].completed = false;
+                        break;
+                    }
+                }
+                this.currStep = this.steps[this.parameter[currentSlide]];
+            } else {
+                this.currStep = this.steps[0];
+            }
+            
+
         }
     })
 }
