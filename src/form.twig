@@ -122,6 +122,7 @@
                                         { value: 'Single Trip' , checked:'checked' },
                                         { value: 'Annual Cover' },
                                     ],
+                                    vModel: 'selectedCoverageType',
                                     spacing: 'mb-4 d-flex'
                                 } %}
 
@@ -321,7 +322,7 @@
                                 </div>
                             </div>
 
-                            <div class="bg-w py-5 px-4 mb-3">
+                            <div v-if="selectedCoverageType === 'Single Trip'" class="bg-w py-5 px-4 mb-3">
                                 <h2 class="p2">Choose Your Optional Add-On</h2>
                                 <div class="selection-infobox-group row">
                                     <div class="col-12 col-lg-4">

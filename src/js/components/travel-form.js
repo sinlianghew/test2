@@ -104,7 +104,8 @@ if ($('#travel-form').length) {
             nomineeEditMode: false,
             personalEditMode: false,
             selectedPlan: "",
-            selectedOptPlan: ""
+            selectedOptPlan: "",
+            selectedCoverageType: "Single Trip"
         },
         computed: {
             countriesForCurrArea: function () {
@@ -229,12 +230,17 @@ if ($('#travel-form').length) {
         watch: {
             selectedPlan(val) {
                 this.selectedOptPlan = ""
+                console.log('selectedPlan', this.selectedPlan)
             },
             'formData.startDate'(val) {
                 console.log('startDate', this.formData.startDate);
             },
             'formData.endDate'(val) {
                 console.log('endDate', this.formData.endDate);
+            },
+            selectedCoverageType(val) {
+                console.log('selectedCoverageType Changed, reset selectedOptPlan')
+                this.selectedOptPlan = ""
             }
         },
         mounted() {
