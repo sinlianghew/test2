@@ -227,8 +227,14 @@ if ($('#travel-form').length) {
             }
         },
         watch: {
-            selectedPlan(val){
+            selectedPlan(val) {
                 this.selectedOptPlan = ""
+            },
+            'formData.startDate'(val) {
+                console.log('startDate', this.formData.startDate);
+            },
+            'formData.endDate'(val) {
+                console.log('endDate', this.formData.endDate);
             }
         },
         mounted() {
