@@ -105,7 +105,8 @@ if ($('#travel-form').length) {
             personalEditMode: false,
             selectedPlan: "",
             selectedOptPlan: "",
-            selectedCoverageType: "Single Trip"
+            selectedCoverageType: "Single Trip",
+            previousSelectedOptPlan: ""
         },
         computed: {
             countriesForCurrArea: function () {
@@ -225,6 +226,12 @@ if ($('#travel-form').length) {
             getHashValue(key) {
                 let matches = location.hash.match(new RegExp(key+'=([^&]*)'));
                 return matches ? matches[1] : null;
+            },
+            uncheck(val) {
+                if (val === this.previousSelectedOptPlan) {
+                    this.selectedOptPlan = "";
+                }
+                this.previousSelectedOptPlan = this.selectedOptPlan;
             }
         },
         watch: {

@@ -349,7 +349,8 @@
                                                 value: "sport_plan1",
                                                 classes: "mb-3 mb-lg-0 mr-lg-3",
                                                 allowed: "plan1",
-                                                vModel: "selectedOptPlan"
+                                                vModel: "selectedOptPlan",
+                                                uncheckFeature: true
                                             } %}
                                                 {% block top %}
                                                     <h3 class="m-0">Plan 1</h3>
@@ -383,11 +384,12 @@
 
                                             {% embed "templates/components/selection-infobox.twig" with {
                                                 type: "radio",
-                                                name: "chooseOptPlan",
+                                                name: "chooseOptPlan2",
                                                 value: "sport_plan2",
                                                 classes: "mb-3 mb-lg-0 mr-lg-3",
                                                 allowed: "plan2",
-                                                vModel: "selectedOptPlan"
+                                                vModel: "selectedOptPlan",
+                                                uncheckFeature: true
                                             } %}
                                                 {% block top %}
                                                     <h3 class="m-0">Plan 2</h3>
