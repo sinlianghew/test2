@@ -1,0 +1,24 @@
+<div class="subnav-homepage">
+    <div class="subnav-container container d-md-block d-flex justify-content-center">
+        <div class="row w-100">
+            {% set homeSubNav = [
+                    { class:'rounded-md-l-10  rounded-l-t10 bottom-line ',title: 'Travel', imgName:'plane-img' },
+                    { class:'rounded-r-t10 rounded-md-r-t0 v-line bottom-line ',title: 'Motor', imgName:'motor-img'},
+                    { class:'rounded-l-b10 rounded-md-l-b0 v-line v-line-m-hide',title: 'Personal Accident', imgName:'personal-accident-img'},
+                    { class:'rounded-md-r-10 rounded-r-b10 v-line',title: 'Lifestyle', imgName:'star-img'},
+                  
+                ] %}
+
+
+            {% for item in homeSubNav %}
+            <div class="box d-flex align-items-center flex-column col-md-3 col-6 justify-content-center {{item.class}}">
+                <div>
+                  <img class="{{item.imgName}}" src="assets/img/homepage-subnav-icon/{{item.imgName}}.png">
+                </div>
+                <p class="mb-0 mt-md-1 ">{{item.title}}</p>
+            </div>
+
+            {% endfor %}
+        </div>
+    </div>
+</div>

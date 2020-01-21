@@ -1,0 +1,25 @@
+{% extends "templates/partials/base.twig" %}
+
+{% block main %}
+
+<div class="homepage-wrapper">
+
+    <div class="jumbotron mb-0 align-items-center d-flex  justify-content-end bg-homepage rounded-0">
+        <div class="row">
+            <div class="col-md"></div>
+            <div class="text-left  col-12 col-md-8 mb-4">
+                <h1 class="title font-weight-bold cus-line-height">Insurance Protection</h1>
+                <h1 class="title font-weight-normal">for what you love most.</h1>
+                <h3 class="sub-title font-weight-normal mt-3">From your health to your home, MSIG protects
+                    the things that are close to your heart.</h3>
+            </div>
+        </div>
+            <div class="d-block d-md-none bg-blue bg-overlay"></div>
+    </div>
+
+    {% include "templates/components/subnav-homepage.twig" %}
+
+
+</div>
+
+{% endblock %}
