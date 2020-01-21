@@ -1,0 +1,48 @@
+<div class="card-slider-wrapper {{wrapperClass}}">
+    <div class="container">
+        <h1 class="pb-3">{{title}}</h1>
+
+        <div class=" pb-5" style="margin-left: -15px; overflow-x: auto;  overflow-y: hidden;  padding-left: 15px; padding-right: 25px; margin-right: -15px;">
+
+            <div class="d-flex">
+                <!-- card one -->
+                {% embed "main-card.twig" with { 
+                cardClass:'card-type-4 bg-white', 
+                imgName: 'plus-insurance.png', 
+                labelClass:'bg-blue',
+                label:'PROMOTION', 
+                catClassOne : 'color-primary-blue',
+                categoryOne : 'Private',
+                categoryTwo : 'Motorcycle',
+                title:'Drive with peace of mind this holiday sea...', 
+                btnView:' '
+            }%}
+
+                {% set cardList = [
+                
+            ] %}
+                {% endembed %}
+
+                <!-- card one -->
+                {% embed "main-card.twig" with { 
+                cardClass:'card-type-4 bg-white', 
+                imgName: 'plus-insurance.png', 
+                labelClass:'bg-blue',
+                label:'PROMOTION', 
+                catClassOne : 'color-primary-blue',
+                categoryOne : 'Private',
+                categoryTwo : 'Motorcycle',
+                title:'Drive with peace of mind this holiday sea...', 
+                btnView:' '
+            }%}
+
+                {% set cardList = [
+                
+            ] %}
+                {% endembed %}
+            </div>
+
+        </div>
+
+    </div>
+</div>
