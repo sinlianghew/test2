@@ -11,49 +11,40 @@
         desc : 'Keep you and your loved ones safe while you’re on the road. Choose from two plans for private car and motorcycle for coverage tailored to you.'
     } %}
 
-    <div class="bg-white pt-4 pt-md-5">
-        <div class=" container ">
+    <div class="bg-white pt-4 pt-md-5 pb-5 mb-3  mb-md-5">
+        <div class=" container pb-md-3">
 
-            <div class="row mr-3 ml-0 mb-4 mb-md-5">
-                <div class="col-6 p-0">
-                    {% include "templates/components/tab-button.twig"  with { 
-                        tabClass:'active',
-                        iconName: 'car',
-                        title: 'Private Car',
-                    } %}
-                </div>
-                <div class="col-6 p-0">
-                    {% include "templates/components/tab-button.twig"  with { 
-                        iconName: 'motorcycle',
-                        title: 'Private Car',
-                    } %}
-                </div>
-            </div>
+            
 
             <div>
-                <h4 class="title-header-1 mb-3 mb-md-4 color-primary-blue">Private Car Insurance Plans</h4>
+                <h4 class="title-header-1 mb-3 mb-md-4 color-primary-blue">All Products</h4>
             </div>
 
             <div class="d-flex flex-wrap justify-content-between">
 
                 <!-- card one -->
                 {% embed "templates/components/main-card.twig" with { 
-                    cardClass:'card-type-2', 
+                    cardClass:'card-type-2 mb-5 mb-md-0', 
                     imgName: 'plus-insurance.png', 
                     title:'MSIG Motor Plus Insurance',
+                    btnCTA : 'Learn More'
                 }%}
 
                 {% set cardList = [
                     { tickMark:' ', desc:'Comes with 7 pre-bundled add-ons, with the option to add more.', },
                     { tickMark:' ', desc:'Get fuller protection and save up to 25%.', },
                 ] %}
+
                 {% endembed %}
+
+                
 
                 <!-- card two -->
                 {% embed "templates/components/main-card.twig" with { 
-                    cardClass:'card-type-2', 
+                    cardClass:'card-type-2 mb-5 mb-md-0 cus-mt-top-70 mt-md-0', 
                     imgName: 'plus-insurance.png', 
                     title:'MSIG Motor Plus Insurance',
+                    btnCTA : 'Learn More'
                 }%}
 
                 {% set cardList = [
@@ -63,13 +54,11 @@
                 {% endembed %}
 
 
-
             </div>
 
-            <div class="text-center mt-md-0 pb-5">
+            <!-- <div class="text-center mt-md-0 pb-5">
                 <a href="#" role="button" class="btn btn-default btn-primary btn-l">Learn More</a>
-
-            </div>
+            </div> -->
         </div>
     </div>
 
