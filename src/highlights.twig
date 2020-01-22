@@ -1,0 +1,177 @@
+{% extends "templates/partials/base.twig" %}
+
+{% block main %}
+
+<div class="main-wrapper">
+ 
+    {% include "templates/components/banner-header-title.twig"  with { 
+        wrapperClass:"bg-grey",
+        textBoxClass :'text-center ',
+        title: 'Highlights',
+        desc : 'Stay up-to-date on the latest offers and news from us.'
+    } %}
+
+    <div class="bg-white pt-4 pt-md-5">
+        <div class=" container ">
+
+            <div class="d-flex flex-wrap justify-content-start">
+
+                <!-- card one -->
+                {% embed "templates/components/main-card.twig" with { 
+                    cardClass:'card-type-1', 
+                    imgName: 'travelRight.jpg', 
+                    labelClass:'bg-pink',
+                    label:'Announcement', 
+                    catClassOne : '',
+                    categoryOne : 'Travel',
+                    title:'TravelRight Plus Insurance Advisoryon Lombok',
+                    btnView: ' '
+                }%}
+
+                {% set cardList = [
+                    { desc:'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonum...', },
+                ] %}
+                {% endembed %}
+
+                  <!-- card two -->
+                  {% embed "templates/components/main-card.twig" with { 
+                    cardClass:'card-type-1', 
+                    imgName: 'travelRight.jpg', 
+                    labelClass:'bg-blue',
+                    label:'Promotion', 
+                    catClassOne : '',
+                    categoryOne : 'Private Car',
+                    categoryTwo : 'Motorcycle',
+                    title:'Drive with peace of mind this holiday season',
+                    btnView: ' '
+                }%}
+
+                {% set cardList = [
+                    { desc:'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonum...', },
+                ] %}
+                {% endembed %}
+
+                   <!-- card two -->
+                   {% embed "templates/components/main-card.twig" with { 
+                    cardClass:'card-type-1', 
+                    imgName: 'travelRight.jpg', 
+                    labelClass:'bg-primary-blue',
+                    label:'Promotion', 
+                    catClassOne : '',
+                    categoryOne : 'Private Car',
+                    categoryTwo : 'Motorcycle',
+                    title:'Drive with peace of mind this holiday season',
+                    btnView: ' '
+                }%}
+
+                {% set cardList = [
+                    { desc:'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonum...', },
+                ] %}
+                {% endembed %}
+
+                   <!-- card two -->
+                   {% embed "templates/components/main-card.twig" with { 
+                    cardClass:'card-type-1', 
+                    imgName: 'travelRight.jpg', 
+                    labelClass:'bg-primary-blue',
+                    label:'Promotion', 
+                    catClassOne : '',
+                    categoryOne : 'Private Car',
+                    categoryTwo : 'Motorcycle',
+                    title:'Drive with peace of mind this holiday season',
+                    btnView: ' '
+                }%}
+
+                {% set cardList = [
+                    { desc:'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonum...', },
+                ] %}
+                {% endembed %}
+
+                   <!-- card two -->
+                   {% embed "templates/components/main-card.twig" with { 
+                    cardClass:'card-type-1', 
+                    imgName: 'travelRight.jpg', 
+                    labelClass:'bg-primary-blue',
+                    label:'Promotion', 
+                    catClassOne : '',
+                    categoryOne : 'Private Car',
+                    categoryTwo : 'Motorcycle',
+                    title:'Drive with peace of mind this holiday season',
+                    btnView: ' '
+                }%}
+
+                {% set cardList = [
+                    { desc:'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonum...', },
+                ] %}
+                {% endembed %}
+
+
+
+            </div>
+
+            <div class="text-center mt-4 mt-md-0  pb-5">
+                <a href="#" role="button" class="btn btn-default btn-primary btn-l">Show More</a>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- feature slider  -->
+    {% embed "templates/components/card-slider-section.twig" with {
+        wrapperClass:"bg-grey pt-5  ",
+        title: 'Featured Highlights',
+    } %}
+    {% block content %}
+
+
+    <!-- card one -->
+    {% embed "templates/components/main-card.twig" with { 
+            cardClass:'card-type-4 bg-white', 
+            imgName: 'plus-insurance.png', 
+            labelClass:'bg-blue',
+            label:'PROMOTION', 
+            catClassOne : 'color-primary-blue',
+            categoryOne : 'Private',
+            categoryTwo : 'Motorcycle',
+            title:'Drive with peace of mind this holiday sea...', 
+            btnView:' '
+        }%}
+    {% endembed %}
+    <!-- card two -->
+    {% embed "templates/components/main-card.twig" with { 
+            cardClass:'card-type-4 bg-white', 
+            imgName: 'plus-insurance.png', 
+            labelClass:'bg-blue',
+            label:'PROMOTION', 
+            catClassOne : 'color-primary-blue',
+            categoryOne : 'Private',
+            categoryTwo : 'Motorcycle',
+            title:'Drive with peace of mind this holiday sea...', 
+            btnView:' '
+        }%}
+    {% endembed %}
+    <!-- card three -->
+    {% embed "templates/components/main-card.twig" with { 
+            cardClass:'card-type-4 bg-white', 
+            imgName: 'plus-insurance.png', 
+            labelClass:'bg-blue',
+            label:'PROMOTION', 
+            catClassOne : 'color-primary-blue',
+            categoryOne : 'Private',
+            categoryTwo : 'Motorcycle',
+            title:'Drive with peace of mind this holiday sea...', 
+            btnView:' '
+        }%}
+    {% endembed %}
+
+    {% endblock %}
+    {% endembed %}
+    <!-- feature slider end -->
+
+
+
+
+
+</div>
+{% endblock %}

@@ -1,20 +1,22 @@
-<div class="card-container {{cardClass}}">
+<div class="card-container  {{cardClass}}">
     <div class="main-card d-flex flex-column h-100 ">
         <div class="img-box"
             style="   background:url(../../src/assets/img/{{imgName}}) no-repeat; background-size: cover; background-position: center;">
-            <img style="opacity:0;" src="assets/img/{{imgName}}">
+            <img style="opacity:0" src="assets/img/{{imgName}}">
             <div class="card-label {{labelClass}}">{{label}}</div>
         </div>
 
         <div class="text-box h-100 {{textBoxClass}}">
             {% if categoryOne %}
             <div class="category-txt d-flex">
-                <p class="mb-2 {% if catClassOne %}{{catClassOne}}{%endif%}">{{categoryOne}}</p>
-                <p class="mb-2 ml-1 mr-1 color-primary-blue">|</p>
-                <p class="mb-2 {% if catClassTwo %}{{catClassTwo}}{%endif%}">{{categoryTwo}}</p>
+                <p class="mb-1 {% if catClassOne %}{{catClassOne}}{%endif%}">{{categoryOne}}</p>
+                {% if categoryTwo %} 
+                <p class="mb-1 ml-1 mr-1 color-primary-blue">|</p>
+                <p class="mb-1 {% if catClassTwo %}{{catClassTwo}}{%endif%}">{{categoryTwo}}</p>
+                {% endif %}
             </div>
             {% endif %}
-            <h2 class="title mb-2 mb-md-3">{{title}}</h2>
+            <h2 class="title mb-2 mb-md-2">{{title}}</h2>
 
 
             {% for item in cardList %}
@@ -28,26 +30,33 @@
                 </span>
                 {% endif %}
 
-                <p class="desc  mb-1 mb-md-2"> {{item.desc}} </p>
+                <p class="desc {% if descClass %}{{descClass}}{%endif%}"> {{item.desc}} </p>
             </div>
 
             {% endfor %}
 
-             
-        {% if  btnView %}
-        <div class="btn-view d-flex align-items-center">
-            <div class="icon-wrapper align-items-center d-flex  justify-content-center align-items-center mr-2">
-                {% include "icon.twig" with { iconName: 'left-arrow' } %}
+
+            {% if  btnView %}
+            <div class="btn-view d-flex align-items-center">
+                <div class="icon-wrapper align-items-center d-flex  justify-content-center align-items-center mr-2">
+                    {% include "icon.twig" with { iconName: 'left-arrow' } %}
+                </div>
+                <p class="mb-0 font-weight-bold bt1 color-primary-blue">
+                    View More
+                </p>
             </div>
-            <p class="mb-0 font-weight-bold bt1 color-primary-blue">
-                View More
-            </p>
+            {% endif %}
+
         </div>
-        {% endif %}
-        
-        </div>
-       
+
 
 
     </div>
+
+    {% if  btnCTA %}
+    <div class="text-center pt-4 pb-5">
+        <a href="#" role="button" class="btn btn-default btn-primary btn-l">{{btnCTA}}</a>
+    </div>
+    {% endif %}
+
 </div>

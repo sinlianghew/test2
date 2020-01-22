@@ -9,9 +9,12 @@
 }
 
 
+//font-title
+.ft-1{
+    font-size:32px;
+}
+
 //body text font
-
-
 .bt1 {
     font-weight: 700;
     font-size: 18px;
@@ -93,6 +96,10 @@ ol.roman {
     background-color: $color-primary-pink!important;
 }
 
+.bg-light-pink {
+    background-color: $color-light-pink!important;
+}
+
 .bg-blue {
     background-color: $color-primary-blue!important;
 }
@@ -109,7 +116,25 @@ ol.roman {
     background-color: $color-blue-3!important;
 }
 
+.bg-orange{
+    background-color:$color-orange!important;
+}
 
+.bg-purple{
+    background-color:$color-purple!important;
+}
+
+.bg-red{
+    background-color:$color-red!important;
+}
+
+.bg-green{
+    background-color:$color-green!important;
+}
+
+.bg-light-blue{
+    background-color:$color-light-blue!important;
+}
 
 
 
@@ -126,6 +151,11 @@ ol.roman {
     color: $color-primary-pink;
 }
 
+
+.color-light-pink {
+    color: $color-light-pink;
+}
+
 .color-primary-blue {
     color: $color-primary-blue;
 }
@@ -140,6 +170,18 @@ ol.roman {
 
 .color-blue-4 {
     color: $color-blue-4;
+}
+
+.color-orange {
+    color: $color-orange;
+}
+
+.color-purple {
+    color: $color-purple;
+}
+
+.color-red {
+    color: $color-red;
 }
 
 .color-green {
