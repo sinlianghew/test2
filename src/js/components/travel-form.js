@@ -74,7 +74,7 @@ if ($('#travel-form').length) {
                 pdpaAgreement: false,
                 dateOfBirth: '',
                 areaOfCoverage: 'Area 1',
-                startDate: null  ,
+                startDate: null,
                 endDate: null,
                 customerName: 'Henry Teo',
                 email: 'henryto@gmail.com',
@@ -97,6 +97,7 @@ if ($('#travel-form').length) {
                 disabledDates: {
                     to: new Date(Date.now() - 8640000)
                 },
+                
             },
             currStep: null,
             showGetStartedConsent: true,
@@ -123,7 +124,10 @@ if ($('#travel-form').length) {
             },
             fullAddress: function() {
                 return `${this.formData.addressLine1}, ${this.formData.addressLine2}, ${this.formData.postcode} ${this.formData.city}, ${this.formData.state}, ${this.formData.country}`;
-            }
+            },
+            endDateDisabledDates: function() {
+                return { to: this.formData.startDate }
+            },
         },
         updated() {
             if(window.matchMedia('(min-width: 992px)').matches){

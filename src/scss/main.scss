@@ -6,13 +6,16 @@
 @import "custom/variables";
 @import "custom/fonts";
 @import "node_modules/bootstrap/scss/root";
-@import "node_modules/bootstrap/scss/reboot";
+
 @import "node_modules/bootstrap/scss/type";
 
 /** Client base css **/
 body{font-size:1.0em;line-height:1.4;font-family:'pt_sansregular',Tahoma,Geneva,sans-serif;height:100%;background:#fff;overflow-x: hidden;}
 
 .travel-insurance-new {
+    /** Bootstrap Reboot only under travel-insurance-new scope **/
+    @import "node_modules/bootstrap/scss/reboot";
+
     font-size: 1em;
 	line-height: 1.4;
     font-family: 'pt_sansregular',Tahoma,Geneva,sans-serif;
@@ -35,6 +38,10 @@ body{font-size:1.0em;line-height:1.4;font-family:'pt_sansregular',Tahoma,Geneva,
     .error-message{
         padding-top: 3px;
         display: inline-block;
+    }
+
+    a:hover {
+        text-decoration: none;
     }
 /** End of Client base css **/
     

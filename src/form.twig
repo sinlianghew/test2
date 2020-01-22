@@ -74,13 +74,16 @@
                                 </div>
                                 <p class="bt1 mb-2">Date of Birth:</p>
                                 <div class="d-md-flex">
-                                    <div class="form-group variant-date-picker">
-                                        <datepicker class="form-control"
-                                            placeholder="DD/MM/YYYY"
-                                            :format="customDateFormatter"
-                                            v-model="formData.dateOfBirth">
-                                        </datepicker>
-                                        {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
+                                    <div class="mb-4">
+                                        <div class="form-group variant-date-picker mb-0">
+                                            <datepicker class="form-control"
+                                                placeholder="DD/MM/YYYY"
+                                                :format="customDateFormatter"
+                                                v-model="formData.dateOfBirth">
+                                            </datepicker>
+                                            {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
+                                        </div>
+                                        <small class="error-message text-primary font-italic">* Complete the Date field.</small>
                                     </div>
                                 </div>
                             </div>
@@ -194,7 +197,9 @@
                                                 placeholder="Select date"
                                                 :format="customDateFormatter"
                                                 v-model="formData.endDate"
-                                                :disabled-dates="calendar.disabledDates">
+                                                :disabled-dates="endDateDisabledDates"
+                                                :disabled="formData.startDate === null"
+                                            >
                                             </datepicker>
                                             {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
                                         </div>
@@ -906,7 +911,72 @@
                             </div>
 
                             <div class="bg-w pt-5 pb-3 px-4 mb-3">
-                                <h2 class="p2">Nominee Details</h2>
+                                <h2 class="p2 mb-4">Spouse</h2>
+
+                                <div class="row">
+                                    <div class="col-12">
+                                        <p class="bt1 mb-0">Nationality</p>
+                                        <p class="bt2">Non-Malaysian</p>
+                                        <div class="d-flex mb-4">
+                                            <div class="form-check mb-1">
+                                                <input type="radio" class="form-check-input" value="Malaysian">
+                                                <label class="form-check-label">Malaysian</label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input type="radio" class="form-check-input" value="Non-Malaysian" checked>
+                                                <label class="form-check-label">Non-Malaysian</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+
+                                {% set nomineeDetails = [
+                                    { title: 'Name (as per NRIC):', vModel: 'formData.nomineeName', error: "* Complete the Name as per NRIC filed." },
+                                    { title: 'NRIC No:', vModel: 'formData.nomineeNric', error: "* Complete the NRIC field." },
+                                    { title: 'Mobile No:', vModel: 'formData.nomineeMobileNo', error: "* Complete the Mobile field." },
+                                    { title: 'Relationship:', vModel: 'formData.nomineeRelationToCustomer', error: "* Complete the Relationship field." },
+                                ] %}
+
+                                
+
+                                <div class="row">
+                                    {% for item in nomineeDetails %}
+                                        <div class="col-12 col-md-6">
+                                            <p class="bt1 mb-0">{{ item.title }}</p>
+                                            <p class="bt2" v-if="!nomineeEditMode" v-html="{{ item.vModel }}"></p>
+                                            <div class="form-group" v-if="nomineeEditMode">
+                                                <input type="text" class="form-control" v-model="{{ item.vModel }}">
+                                                <small class="error-message text-primary font-italic">{{ item.error }}</small>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+
+                                <div class="d-flex justify-content-end" v-if="!nomineeEditMode">
+                                    <a href="#" @click.prevent="setNomineeEditMode(true)" class="btn btn-secondary btn-icon">
+                                        <div class="button-icon">
+                                            {% include "templates/components/icon.twig" with { iconName: 'plus', iconSize: 's' } %}
+                                        </div>
+                                        <span class="button-text">Edit</span>
+                                    </a>
+                                </div>
+
+                                <div class="d-flex justify-content-end mt-3" v-if="nomineeEditMode">
+                                    <a href="#" @click.prevent="setNomineeEditMode(false)" class="btn btn-primary btn-icon mr-3">
+                                        <div class="button-icon">
+                                            {% include "templates/components/icon.twig" with { iconName: 'close', iconSize: 's' } %}
+                                        </div>
+                                        <span class="button-text">Cancel</span>
+                                    </a>
+                                    <a href="#" @click.prevent="setNomineeEditMode(false)" class="btn btn-default btn-secondary">Save</a>
+                                </div>
+                            </div>
+
+
+
+                            <div class="bg-w pt-5 pb-3 px-4 mb-3">
+                                <h2 class="p2 mb-4">Nominee Details</h2>
 
                                 {% set nomineeDetails = [
                                     { title: 'Name (as per NRIC):', vModel: 'formData.nomineeName', error: "* Complete the Name as per NRIC filed." },
