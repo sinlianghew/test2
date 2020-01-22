@@ -1,0 +1,9 @@
+.banner-header-title {
+    min-height: 207px;
+
+    p{
+        @include media-breakpoint-up(md) {
+           width: 75%;
+        }  
+    }
+}
