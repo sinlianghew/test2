@@ -42,7 +42,7 @@
     .jumbotron {
         height: 95vh;
 
-        .row {
+        .container {
             z-index: 100;
         }
     }
@@ -89,7 +89,7 @@
                     height: 100%;
                     left: 0px;
                 }
-            }
+            } 
 
             &.bottom-line {
                 @include media-breakpoint-down(md) {
