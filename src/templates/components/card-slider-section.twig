@@ -1,0 +1,21 @@
+<div class="card-slider-wrapper  {{wrapperClass}}">
+    <div class="container">
+        <h1 class="pb-3 ft-1 font-weight-bold">{{title}}</h1>
+
+        <div class="pb-3"
+            style="margin-left: -15px; overflow-x: auto;  overflow-y: hidden;  padding-left: 15px; padding-right: 25px; margin-right: -15px;">
+
+            <div class="d-flex">
+                {% block content %}{% endblock %}
+            </div>
+
+        </div>
+
+        <div class="align-items-center d-block d-flex d-md-none fake-slider-dots justify-content-center pb-4">
+            <div class="dots active"></div>
+            <div class="dots"></div>
+            <div class="dots"></div>
+            <div class="dots"></div>
+        </div>
+    </div>
+</div>

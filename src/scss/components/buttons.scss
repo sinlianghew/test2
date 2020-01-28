@@ -24,7 +24,7 @@
         background-color: transparent !important;
         box-shadow: none !important;
     }
-    
+
 
     &.btn-primary {
         background-color: transparent;
@@ -71,4 +71,55 @@
             }
         }
     }
+}
+
+
+
+.tab-button {
+    position: relative;
+
+    .bottom-line {
+        width: 100%;
+        position: absolute;
+        bottom: 2px;
+        left: 0px;
+        height: 2px;
+        background: $color-blue-4;
+        border-radius: 30px;
+    }
+
+
+    .title {
+        font-size: 18px;
+        color: $color-blue-4;
+        font-weight: font-weight-bold;
+
+        @include media-breakpoint-up(md) {
+            font-size: 32px;
+        }
+    }
+
+    .icon {
+        stroke: transparent;
+        fill: $color-blue-4;
+    }
+
+    &.active {
+        .bottom-line {
+            bottom: 0px;
+            height: 5px;
+            background: $color-red;
+        }
+
+        .title {
+            font-weight: $font-weight-bold;
+            color: $color-primary-blue;
+        }
+
+        .icon {
+            stroke: transparent;
+            fill: $color-primary-blue;
+        }
+    }
+
 }

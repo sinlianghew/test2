@@ -67,14 +67,14 @@ if ($('#travel-form').length) {
                 { img: 'affin.jpg', name: 'Affin Bank' },
             ],
             formData: {
-                idType: 'NRIC',
+                idType: 'N',
                 nric: '901010-14-5021',
                 country: 'Malaysia',
                 passport: '',
                 pdpaAgreement: false,
                 dateOfBirth: '',
                 areaOfCoverage: 'Area 1',
-                startDate: null  ,
+                startDate: null,
                 endDate: null,
                 customerName: 'Henry Teo',
                 email: 'henryto@gmail.com',
@@ -93,11 +93,21 @@ if ($('#travel-form').length) {
                 tncAgreement: false,
                 paymentMethod: 'Online Banking',
             },
+            calendar: {
+                disabledDates: {
+                    to: new Date(Date.now() - 8640000)
+                },
+                
+            },
             currStep: null,
             showGetStartedConsent: true,
             countries: Countries,
             nomineeEditMode: false,
-            personalEditMode: false
+            personalEditMode: false,
+            selectedPlan: "",
+            selectedOptPlan: "",
+            selectedCoverageType: "Single Trip",
+            previousSelectedOptPlan: ""
         },
         computed: {
             countriesForCurrArea: function () {
@@ -114,7 +124,10 @@ if ($('#travel-form').length) {
             },
             fullAddress: function() {
                 return `${this.formData.addressLine1}, ${this.formData.addressLine2}, ${this.formData.postcode} ${this.formData.city}, ${this.formData.state}, ${this.formData.country}`;
-            }
+            },
+            endDateDisabledDates: function() {
+                return { to: this.formData.startDate }
+            },
         },
         updated() {
             if(window.matchMedia('(min-width: 992px)').matches){
@@ -152,6 +165,9 @@ if ($('#travel-form').length) {
                 this.showGetStartedConsent = value;
             },
             goToNextStep() {
+                if (this.currStep.step === 1 && !this.formData.pdpaAgreement) {
+                    return;
+                }
                 this.scrollTop().then(function() {
                     if (this.currStep.step === this.steps.length) {
                         return;
@@ -214,6 +230,28 @@ if ($('#travel-form').length) {
             getHashValue(key) {
                 let matches = location.hash.match(new RegExp(key+'=([^&]*)'));
                 return matches ? matches[1] : null;
+            },
+            uncheck(val) {
+                if (val === this.previousSelectedOptPlan) {
+                    this.selectedOptPlan = "";
+                }
+                this.previousSelectedOptPlan = this.selectedOptPlan;
+            }
+        },
+        watch: {
+            selectedPlan(val) {
+                this.selectedOptPlan = ""
+                console.log('selectedPlan', this.selectedPlan)
+            },
+            'formData.startDate'(val) {
+                console.log('startDate', this.formData.startDate);
+            },
+            'formData.endDate'(val) {
+                console.log('endDate', this.formData.endDate);
+            },
+            selectedCoverageType(val) {
+                console.log('selectedCoverageType Changed, reset selectedOptPlan')
+                this.selectedOptPlan = ""
             }
         },
         mounted() {
@@ -231,7 +269,6 @@ if ($('#travel-form').length) {
             } else {
                 this.currStep = this.steps[0];
             }
-            
             
 
         }

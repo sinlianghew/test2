@@ -41,23 +41,23 @@
                             <p>Please enter the details of the insured person</p>
                             <div class="d-flex mb-3">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="id_type" value="NRIC" id="id_type1" v-model="formData.idType">
-                                    <label class="form-check-label" for="id_type1">NRIC</label>
+                                    <input class="form-check-input" type="radio" name="id_type" value="Y" id="malaysian" v-model="formData.idType">
+                                    <label class="form-check-label" for="malaysian">NRIC</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="id_type" value="Passport" id="id_type2" v-model="formData.idType">
-                                    <label class="form-check-label" for="id_type2">Passport</label>
+                                    <input class="form-check-input" type="radio" name="id_type" value="N" id="no_malaysian" v-model="formData.idType">
+                                    <label class="form-check-label" for="no_malaysian">Passport</label>
                                 </div>
                             </div>
 
-                            <div class="d-flex" v-if="formData.idType === 'NRIC'">
+                            <div class="d-flex" v-if="formData.idType === 'Y'">
                                 <div class="form-group">
                                     <input type="text" class="form-control" name="nric" placeholder="xxxxxx-xx-xxxx" v-model="formData.nric">
                                     <small class="error-message text-primary font-italic">* Complete the NRIC field.</small>
                                 </div>
                             </div>
 
-                            <div v-if="formData.idType === 'Passport'">
+                            <div v-if="formData.idType === 'N'">
                                 <div class="d-md-flex">
                                     <div class="form-group mr-md-3">
                                         {% verbatim %}
@@ -74,17 +74,21 @@
                                 </div>
                                 <p class="bt1 mb-2">Date of Birth:</p>
                                 <div class="d-md-flex">
-                                    <div class="form-group variant-date-picker">
-                                        <datepicker class="form-control"
-                                            placeholder="DD/MM/YYYY"
-                                            :format="customDateFormatter"
-                                            v-model="formData.dateOfBirth">
-                                        </datepicker>
-                                        {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
+                                    <div class="mb-4">
+                                        <div class="form-group variant-date-picker mb-0">
+                                            <datepicker class="form-control"
+                                                placeholder="DD/MM/YYYY"
+                                                :format="customDateFormatter"
+                                                v-model="formData.dateOfBirth">
+                                            </datepicker>
+                                            {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
+                                        </div>
+                                        <small class="error-message text-primary font-italic">* Complete the Date field.</small>
                                     </div>
                                 </div>
                             </div>
 
+                            {% verbatim %}
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" name="agreement" id="agreement" v-model="formData.pdpaAgreement">
                                 <label class="form-check-label" for="agreement">
@@ -95,6 +99,7 @@
                                 </svg>
                                 <small class="error-message text-primary font-italic">* Oops, looks like you haven't ticked the box yet. Please do so to proceed</small>
                             </div>
+                            {% endverbatim %}
                         </div>
                     </div>
                 </div>
@@ -102,7 +107,7 @@
                     <a href="#" role="button" class="btn btn-default btn-outline-primary mb-3 mb-md-0" v-if="showGetStartedConsent">No</a>
                     <a href="#" role="button" class="btn btn-default btn-primary" @click.prevent="setShowGetStartedConsent(false)" v-if="showGetStartedConsent">Yes</a>
                     <a href="#" role="button" class="btn btn-default btn-outline-primary mb-3 mb-md-0" @click="setShowGetStartedConsent(true)" v-if="!showGetStartedConsent">Back</a>
-                    <a href="#" role="button" class="btn btn-default btn-primary" @click="goToNextStep()" v-if="!showGetStartedConsent">Continue</a>
+                    <a href="#" role="button" class="btn btn-default btn-primary" @click.prevent="goToNextStep()" v-if="!showGetStartedConsent">Continue</a>
                 </div>
             </div>
 
@@ -120,6 +125,7 @@
                                         { value: 'Single Trip' , checked:'checked' },
                                         { value: 'Annual Cover' },
                                     ],
+                                    vModel: 'selectedCoverageType',
                                     spacing: 'mb-4 d-flex'
                                 } %}
 
@@ -176,7 +182,8 @@
                                             <datepicker class="form-control"
                                                 placeholder="Select date"
                                                 :format="customDateFormatter"
-                                                v-model="formData.startDate">
+                                                v-model="formData.startDate"
+                                                :disabled-dates="calendar.disabledDates">
                                             </datepicker>
                                             {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
                                         </div>
@@ -189,7 +196,10 @@
                                             <datepicker class="form-control"
                                                 placeholder="Select date"
                                                 :format="customDateFormatter"
-                                                v-model="formData.endDate">
+                                                v-model="formData.endDate"
+                                                :disabled-dates="endDateDisabledDates"
+                                                :disabled="formData.startDate === null"
+                                            >
                                             </datepicker>
                                             {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
                                         </div>
@@ -237,7 +247,8 @@
                                                 type: "radio",
                                                 name: "choosePlan",
                                                 value: "plan1",
-                                                classes: "mb-3 mb-lg-0 mr-lg-3"
+                                                classes: "mb-3 mb-lg-0 mr-lg-3",
+                                                vModel: "selectedPlan"
                                             } %}
                                                 {% block top %}
                                                     <h3 class="m-0 d-lg-none">TravelRight Plus (Plan 1)</h3>
@@ -276,7 +287,8 @@
                                                 name: "choosePlan",
                                                 value: "plan2",
                                                 classes: "mb-3 mb-lg-0 mr-lg-3",
-                                                highlight: "Recommended" 
+                                                highlight: "Recommended",
+                                                vModel: "selectedPlan"
                                             } %}
                                                 {% block top %}
                                                     <h3 class="m-0 d-lg-none">TravelRight Plus (Plan 2)</h3>
@@ -315,7 +327,7 @@
                                 </div>
                             </div>
 
-                             <div class="bg-w py-5 px-4 mb-3">
+                            <div v-if="selectedCoverageType === 'Single Trip'" class="bg-w py-5 px-4 mb-3">
                                 <h2 class="p2">Choose Your Optional Add-On</h2>
                                 <div class="selection-infobox-group row">
                                     <div class="col-12 col-lg-4">
@@ -338,9 +350,12 @@
                                         <div class="d-lg-flex">
                                             {% embed "templates/components/selection-infobox.twig" with {
                                                 type: "radio",
-                                                name: "choosePlan",
+                                                name: "chooseOptPlan",
                                                 value: "sport_plan1",
-                                                classes: "mb-3 mb-lg-0 mr-lg-3"
+                                                classes: "mb-3 mb-lg-0 mr-lg-3",
+                                                allowed: "plan1",
+                                                vModel: "selectedOptPlan",
+                                                uncheckFeature: true
                                             } %}
                                                 {% block top %}
                                                     <h3 class="m-0">Plan 1</h3>
@@ -374,9 +389,12 @@
 
                                             {% embed "templates/components/selection-infobox.twig" with {
                                                 type: "radio",
-                                                name: "choosePlan",
+                                                name: "chooseOptPlan2",
                                                 value: "sport_plan2",
                                                 classes: "mb-3 mb-lg-0 mr-lg-3",
+                                                allowed: "plan2",
+                                                vModel: "selectedOptPlan",
+                                                uncheckFeature: true
                                             } %}
                                                 {% block top %}
                                                     <h3 class="m-0">Plan 2</h3>
@@ -436,7 +454,7 @@
                             <div class="bg-w py-5 px-4 mb-3">
                                 <h2 class="p2 mb-4">Personal Details</h2>
 
-                                <div class="row" v-if="formData.idType === 'Passport'">
+                                <div class="row" v-if="formData.idType === 'no_malaysian'">
                                     <div class="col-12 col-md-6">
                                         <div class="form-group">
                                             <p class="bt1">Country:</p>
@@ -487,7 +505,7 @@
                                                 field.</small>
                                         </div>
                                     </div>
-                                    <div class="col-12 col-md-6" v-if="formData.idType === 'Passport'">
+                                    <div class="col-12 col-md-6" v-if="formData.idType === 'no_malaysian'">
                                         <div class="form-group">
                                             <label class="bt1">Gender:</label>
                                             <select class="form-control" v-model="formData.gender">
@@ -499,7 +517,7 @@
                                                 field.</small>
                                         </div>
                                     </div>
-                                    <div class="col-12 col-md-6" v-if="formData.idType === 'Passport'">
+                                    <div class="col-12 col-md-6" v-if="formData.idType === 'no_malaysian'">
                                         <p class="bt1 mb-2">Date of Birth:</p>
                                         <div class="form-group variant-date-picker mb-0">
                                             <datepicker class="form-control" placeholder="DD/MM/YYYY"
@@ -893,7 +911,72 @@
                             </div>
 
                             <div class="bg-w pt-5 pb-3 px-4 mb-3">
-                                <h2 class="p2">Nominee Details</h2>
+                                <h2 class="p2 mb-4">Spouse</h2>
+
+                                <div class="row">
+                                    <div class="col-12">
+                                        <p class="bt1 mb-0">Nationality</p>
+                                        <p class="bt2">Non-Malaysian</p>
+                                        <div class="d-flex mb-4">
+                                            <div class="form-check mb-1">
+                                                <input type="radio" class="form-check-input" value="Malaysian">
+                                                <label class="form-check-label">Malaysian</label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input type="radio" class="form-check-input" value="Non-Malaysian" checked>
+                                                <label class="form-check-label">Non-Malaysian</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+
+                                {% set nomineeDetails = [
+                                    { title: 'Name (as per NRIC):', vModel: 'formData.nomineeName', error: "* Complete the Name as per NRIC filed." },
+                                    { title: 'NRIC No:', vModel: 'formData.nomineeNric', error: "* Complete the NRIC field." },
+                                    { title: 'Mobile No:', vModel: 'formData.nomineeMobileNo', error: "* Complete the Mobile field." },
+                                    { title: 'Relationship:', vModel: 'formData.nomineeRelationToCustomer', error: "* Complete the Relationship field." },
+                                ] %}
+
+                                
+
+                                <div class="row">
+                                    {% for item in nomineeDetails %}
+                                        <div class="col-12 col-md-6">
+                                            <p class="bt1 mb-0">{{ item.title }}</p>
+                                            <p class="bt2" v-if="!nomineeEditMode" v-html="{{ item.vModel }}"></p>
+                                            <div class="form-group" v-if="nomineeEditMode">
+                                                <input type="text" class="form-control" v-model="{{ item.vModel }}">
+                                                <small class="error-message text-primary font-italic">{{ item.error }}</small>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+
+                                <div class="d-flex justify-content-end" v-if="!nomineeEditMode">
+                                    <a href="#" @click.prevent="setNomineeEditMode(true)" class="btn btn-secondary btn-icon">
+                                        <div class="button-icon">
+                                            {% include "templates/components/icon.twig" with { iconName: 'plus', iconSize: 's' } %}
+                                        </div>
+                                        <span class="button-text">Edit</span>
+                                    </a>
+                                </div>
+
+                                <div class="d-flex justify-content-end mt-3" v-if="nomineeEditMode">
+                                    <a href="#" @click.prevent="setNomineeEditMode(false)" class="btn btn-primary btn-icon mr-3">
+                                        <div class="button-icon">
+                                            {% include "templates/components/icon.twig" with { iconName: 'close', iconSize: 's' } %}
+                                        </div>
+                                        <span class="button-text">Cancel</span>
+                                    </a>
+                                    <a href="#" @click.prevent="setNomineeEditMode(false)" class="btn btn-default btn-secondary">Save</a>
+                                </div>
+                            </div>
+
+
+
+                            <div class="bg-w pt-5 pb-3 px-4 mb-3">
+                                <h2 class="p2 mb-4">Nominee Details</h2>
 
                                 {% set nomineeDetails = [
                                     { title: 'Name (as per NRIC):', vModel: 'formData.nomineeName', error: "* Complete the Name as per NRIC filed." },

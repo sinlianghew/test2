@@ -6,13 +6,16 @@
 @import "custom/variables";
 @import "custom/fonts";
 @import "node_modules/bootstrap/scss/root";
-@import "node_modules/bootstrap/scss/reboot";
+
 @import "node_modules/bootstrap/scss/type";
 
 /** Client base css **/
-body{font-size:1.0em;line-height:1.4;font-family:'pt_sansregular',Tahoma,Geneva,sans-serif;height:100%;background:#fff;overflow-x: hidden;}
+body{font-size:1.0em;line-height:1.4;font-family:'pt_sansregular',Tahoma,Geneva,sans-serif;height:100%;background:#fff;overflow-x: hidden; margin:0px;}
 
 .travel-insurance-new {
+    /** Bootstrap Reboot only under travel-insurance-new scope **/
+    @import "node_modules/bootstrap/scss/reboot";
+  
     font-size: 1em;
 	line-height: 1.4;
     font-family: 'pt_sansregular',Tahoma,Geneva,sans-serif;
@@ -36,6 +39,10 @@ body{font-size:1.0em;line-height:1.4;font-family:'pt_sansregular',Tahoma,Geneva,
         padding-top: 3px;
         display: inline-block;
     }
+
+    a:hover {
+        text-decoration: none;
+    }
 /** End of Client base css **/
     
     /** Components **/
@@ -52,9 +59,15 @@ body{font-size:1.0em;line-height:1.4;font-family:'pt_sansregular',Tahoma,Geneva,
     @import "components/selection-infobox.scss";
     @import "components/list-variant-icon.scss";
     @import "components/travel-details.scss";
-    @import "components/buttons.scss";
     @import "components/list-variant-bank.scss";
     @import "components/vertical-scroller.scss";
+    @import "components/homepage.scss";
+    @import "components/cards.scss";
+    
+    @import "components/banner-header-title.scss";
+    @import "components/buttons.scss";
+    @import "components/rounded-corners.scss";
+
 
     /** Page Specific styling **/
     @import "pages/payment-completed.scss";

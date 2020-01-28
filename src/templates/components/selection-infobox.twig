@@ -1,10 +1,16 @@
-<div class="selection-infobox {{classes}}">
+<div class="selection-infobox {{classes}}"
+    {% if allowed %} :class="{disabled: selectedPlan !== '{{allowed}}'}" {% endif %}
+    {% if uncheckFeature %} @click="uncheck('{{value}}')" {% endif %}
+>
     <label class="d-block">
         <strong class="flag-recommended text-primary text-center d-block mb-2 {% if highlight == null %}invisible{% endif %}">
             {% include "icon.twig" with { iconName: 'star' } %}
             <span>{{highlight}}</span>
         </strong>
-        <input type="{{type}}" name="{{name}}" value="{{value}}" {% if vModel %} v-model="{{ vModel }}"{% endif %}/> 
+        <input type="{{type}}" name="{{name}}" value="{{value}}" 
+            {% if vModel %} v-model="{{ vModel }}"{% endif %} 
+            {% if allowed %} :disabled="selectedPlan !== '{{allowed}}'" {% endif %}
+        /> 
         <div class="box overflow-hidden">
             <div class="header-match-height">
                 <div class="box--header bg-p2 text-white p-3">
@@ -15,7 +21,7 @@
                     {% block icon %}
                     {% endblock %}
                 </div>
-            </div>
+            </div> 
             <div class="box--body px-3 pt-0 pb-3">
                 {% block bottom %}
                 {% endblock %}

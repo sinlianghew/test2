@@ -1,0 +1,11 @@
+.banner-header-title {
+    min-height: 207px;
+    p{
+        width:100%;
+        line-height: 20px;
+        @include media-breakpoint-up(md) {
+           width: 70vw;
+           line-height: 26px;
+        }  
+    }
+}

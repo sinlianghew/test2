@@ -1,3 +1,20 @@
+//add on title font size
+
+.title-header-1{
+    font-size: 20px;
+    font-weight: $font-weight-bold;
+    @include media-breakpoint-up(md) {
+        font-size: 32px;
+    }
+}
+
+
+//font-title
+.ft-1{
+    font-size:32px;
+}
+
+//body text font
 .bt1 {
     font-weight: 700;
     font-size: 18px;
@@ -32,6 +49,160 @@
 }
 
 
+
+
+
+//btn sizes
+
+.btn {
+    min-width: 158px;
+}
+
+
+.btn-l {
+    min-width: 220px;
+}
+
+
+ol.roman {
+    list-style-type: lower-roman;
+}
+
+
+
+/**NEW class FORMAT **/
+
+.bg-white {
+    background-color: #fff!important;
+}
+
+.bg-black {
+    background-color: #000!important;
+}
+
+.bg-lightGrey {
+    background-color: $color-light-grey!important;
+}
+
+.bg-grey{
+    background-color: $color-grey!important;
+}
+
+.bg-darkGrey {
+    background-color: $color-dark-grey!important;
+}
+
+.bg-pink {
+    background-color: $color-primary-pink!important;
+}
+
+.bg-light-pink {
+    background-color: $color-light-pink!important;
+}
+
+.bg-blue {
+    background-color: $color-primary-blue!important;
+}
+
+.bg-blue-2 {
+    background-color: $color-blue-2!important;
+}
+
+.bg-blue-3 {
+    background-color: $color-blue-3!important;
+}
+
+.bg-blue-4 {
+    background-color: $color-blue-3!important;
+}
+
+.bg-orange{
+    background-color:$color-orange!important;
+}
+
+.bg-purple{
+    background-color:$color-purple!important;
+}
+
+.bg-red{
+    background-color:$color-red!important;
+}
+
+.bg-green{
+    background-color:$color-green!important;
+}
+
+.bg-light-blue{
+    background-color:$color-light-blue!important;
+}
+
+
+
+//font color
+.color-black {
+    color: #000;
+}
+
+.color-white {
+    color: #fff;
+}
+
+.color-primary-pink {
+    color: $color-primary-pink;
+}
+
+
+.color-light-pink {
+    color: $color-light-pink;
+}
+
+.color-primary-blue {
+    color: $color-primary-blue;
+}
+
+.color-blue-2 {
+    color: $color-blue-2;
+}
+
+.color-blue-3 {
+    color: $color-blue-3;
+}
+
+.color-blue-4 {
+    color: $color-blue-4;
+}
+
+.color-orange {
+    color: $color-orange;
+}
+
+.color-purple {
+    color: $color-purple;
+}
+
+.color-red {
+    color: $color-red;
+}
+
+.color-green {
+    color: $color-green;
+}
+
+.color-light-blue {
+    color: $color-light-blue;
+}
+
+
+
+
+
+
+
+
+
+
+
+//old color class
 
 .p1 {
     color: $p1;
@@ -105,32 +276,10 @@
     background-color: #fff;
 }
 
-.bg-lightGrey {
-    background-color: #F8F8F8;
-}
-
-.bg-darkGrey {
-    background-color: #E6E5EC;
-}
 
 .black {
     color: #000;
 }
 
-.bg-black {
-    background-color: #000;
-}
 
-.btn {
-    min-width: 158px;
-}
-
-
-.btn-l {
-    min-width: 220px;
-}
-
-
-ol.roman {
-    list-style-type: lower-roman;
-}
+//old color class end

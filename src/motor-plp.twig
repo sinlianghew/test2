@@ -1,0 +1,122 @@
+{% extends "templates/partials/base.twig" %}
+
+{% block main %}
+
+<div class="main-wrapper">
+
+    {% include "templates/components/banner-header-title.twig"  with { 
+        wrapperClass:"bg-grey",
+        textBoxClass :'text-center ',
+        title: 'Motor',
+        desc : 'Keep you and your loved ones safe while you’re on the road. Choose from two plans for private car and motorcycle for coverage tailored to you.'
+    } %}
+
+    <div class="bg-white mb-3 mb-md-0 pb-4 pb-md-5 pt-4 pt-md-5">
+        <div class=" container ">
+
+            <div>
+                <h4 class="title-header-1 mb-3 mb-md-4 color-primary-blue">All Products</h4>
+            </div>
+
+            <div class="d-flex flex-wrap flex-md-nowrap justify-content-between">
+
+                <div>
+                    <!-- card one -->
+                    {% embed "templates/components/main-card.twig" with { 
+                        cardClass:'card-type-2 mb-md-4 ', 
+                        imgName: 'plus-insurance.png', 
+                        title:'MSIG Motor Plus Insurance',
+                    }%}
+                    {% set cardList = [
+                        { tickMark:' ', desc:'Comes with 7 pre-bundled add-ons, with the option to add more.', },
+                        { tickMark:' ', desc:'Get fuller protection and save up to 25%.', },
+                    ] %}
+                    {% endembed %}
+
+                    <div class="text-center pt-md-2 mb-md-0  mb-4 pb-3 pb-md-0">
+                        <a href="#" role="button" class="btn btn-default btn-primary btn-l">Learn More</a>
+                    </div>
+
+                </div>
+
+                <div>
+                    <!-- card two -->
+                    {% embed "templates/components/main-card.twig" with { 
+                        cardClass:'card-type-2 mb-md-4', 
+                        imgName: 'plus-insurance.png', 
+                        title:'MSIG Motor Plus Insurance',
+                    }%}
+                    {% set cardList = [
+                        { tickMark:' ', desc:'Comes with 7 pre-bundled add-ons, with the option to add more.', },
+                        { tickMark:' ', desc:'Get fuller protection and save up to 25%.', },
+                    ] %}
+                    {% endembed %}
+                    <div class="text-center pt-md-2 ">
+                        <a href="#" role="button" class="btn btn-default btn-primary btn-l">Learn More</a>
+                    </div>
+                </div>
+                
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- feature slider  -->
+    {% embed "templates/components/card-slider-section.twig" with {
+        wrapperClass:"bg-grey pt-5  ",
+        title: 'Featured Highlights',
+    } %}
+    {% block content %}
+
+
+    <!-- card one -->
+    {% embed "templates/components/main-card.twig" with { 
+            cardClass:'card-type-4 bg-white', 
+            imgName: 'plus-insurance.png', 
+            labelClass:'bg-blue',
+            label:'PROMOTION', 
+            catClassOne : '',
+            categoryOne : 'Private',
+            categoryTwo : 'Motorcycle',
+            title:'Drive with peace of mind this holiday sea...', 
+            btnView:' '
+        }%}
+    {% endembed %}
+    <!-- card two -->
+    {% embed "templates/components/main-card.twig" with { 
+            cardClass:'card-type-4 bg-white', 
+            imgName: 'plus-insurance.png', 
+            labelClass:'bg-blue',
+            label:'PROMOTION', 
+            catClassOne : '',
+            categoryOne : 'Private',
+            categoryTwo : 'Motorcycle',
+            title:'Drive with peace of mind this holiday sea...', 
+            btnView:' '
+        }%}
+    {% endembed %}
+    <!-- card three -->
+    {% embed "templates/components/main-card.twig" with { 
+            cardClass:'card-type-4 bg-white', 
+            imgName: 'plus-insurance.png', 
+            labelClass:'bg-blue',
+            label:'PROMOTION', 
+            catClassOne : '',
+            categoryOne : 'Private',
+            categoryTwo : 'Motorcycle',
+            title:'Drive with peace of mind this holiday sea...', 
+            btnView:' '
+        }%}
+    {% endembed %}
+
+    {% endblock %}
+    {% endembed %}
+    <!-- feature slider end -->
+
+
+
+
+
+</div>
+{% endblock %}
