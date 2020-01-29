@@ -101,11 +101,16 @@ body {
     }
 
     .travelTNC {
-        background: #fff;
+        color: #fff;
         a {
             float: right;
             background: url(../../src/assets/img/side-menu-close-btn.png) no-repeat center right;
         }
+
+        @include media-breakpoint-down(md) {
+            bottom: 5%;
+        }
+
     }
 
 
