@@ -79,6 +79,20 @@ body {
         box-shadow: 0px 18px 23px -22px rgba(225, 31, 39, 1);
     }
 
+
+    .formFamilyContainer {
+        background: transparent;
+        background: transparent;
+        border-radius: 0;
+        box-shadow: none;
+
+        .formFamily {
+            &.roundWrapperContent {
+                padding: 0px;
+            }
+        }
+    }
+
     /** End of Client base css **/
 
     /** Components **/
