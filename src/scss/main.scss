@@ -21,6 +21,11 @@ body {
 }
 
 .travel-insurance-new {
+
+    #travel-form{
+        opacity: 0;
+    }
+
     /** Bootstrap Reboot only under travel-insurance-new scope **/
     @import "node_modules/bootstrap/scss/reboot";
 
