@@ -48,6 +48,20 @@ if ($('#travel-form').length) {
                     countries: 'Malaysia (single trip between Peninsular and East Malaysia and vice versa).'
                 }
             ],
+            coverageAreasAnnual: [
+                {
+                    name: 'Area 1',
+                    countries: 'Australia, Brunei, Cambodia, China, Hong Kong, India, Indonesia, Japan, Korea, Laos, Macau, Maldives, Myanmar, New Zealand, Pakistan, Philippines, Singapore, Sri Lanka, Taiwan, Thailand and Vietnam.'
+                },
+                {
+                    name: 'Area 2',
+                    countries: 'Europe, Tibet, Nepal, Mongolia, Bhutan and Countries in Area 1.'
+                },
+                {
+                    name: 'Area 3',
+                    countries: 'Worldwide and countries in Area 1 and 2 but excluding Afghanistan, Cuba, Democratic Republic of Congo, Iran, Iraq, Sudan and Syria.'
+                },
+            ],
             banks:[
                 { img: 'maybank.jpg', name: 'Maybank2U' },
                 { img: 'maybank.jpg', name: 'Maybank2E' },

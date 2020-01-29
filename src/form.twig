@@ -147,10 +147,17 @@
                             <div class="d-md-flex">
                                 <div class="form-group">
                                     <label class="bt1" for="areaOfCoverage">Area of Coverage:</label>
-                                    <select name="areaOfCoverage" id="areaOfCoverage" class="form-control"
+                                    <select v-if="selectedCoverageType === 'Single Trip'" name="areaOfCoverage" id="areaOfCoverage" class="form-control"
                                         v-model="formData.areaOfCoverage">
                                         <option :value="area.name" v-for="area in coverageAreas"
                                             v-bind:key="coverageAreas.indexOf(area)">
+                                            {{ area.name }}
+                                        </option>
+                                    </select>
+                                    <select v-if="selectedCoverageType === 'Annual Cover'" name="areaOfCoverage" id="areaOfCoverage" class="form-control"
+                                        v-model="formData.areaOfCoverage">
+                                        <option :value="area.name" v-for="area in coverageAreasAnnual"
+                                            v-bind:key="coverageAreasAnnual.indexOf(area)">
                                             {{ area.name }}
                                         </option>
                                     </select>
