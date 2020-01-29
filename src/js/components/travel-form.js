@@ -7,6 +7,8 @@ import $ from 'jquery';
 import matchHeight from 'jquery-match-height';
 
 if ($('#travel-form').length) {
+
+    
     const travelForm = new Vue({
         el: '#travel-form',
         components: {
@@ -269,7 +271,8 @@ if ($('#travel-form').length) {
             } else {
                 this.currStep = this.steps[0];
             }
-            
+
+            document.getElementById("travel-form").style.opacity = "1";
 
         }
     })

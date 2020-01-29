@@ -21,6 +21,11 @@ body {
 }
 
 .travel-insurance-new {
+
+    #travel-form{
+        opacity: 0;
+    }
+
     /** Bootstrap Reboot only under travel-insurance-new scope **/
     @import "node_modules/bootstrap/scss/reboot";
 
@@ -77,6 +82,20 @@ body {
         background: rgba(225, 31, 39, 1);
         color: rgba(255, 255, 255, 1);
         box-shadow: 0px 18px 23px -22px rgba(225, 31, 39, 1);
+    }
+
+
+    .formFamilyContainer {
+        background: transparent;
+        background: transparent;
+        border-radius: 0;
+        box-shadow: none;
+
+        .formFamily {
+            &.roundWrapperContent {
+                padding: 0px;
+            }
+        }
     }
 
     /** End of Client base css **/
