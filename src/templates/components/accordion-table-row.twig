@@ -7,7 +7,7 @@
          <div class="col-md-6 col-12  title-desc">
              <div class="row align-items-center">
                  <div class="col-11 pr-0 ">
-                     <p class="mb-0 ">{{title}} 
+                     <p class="mb-0 color-black ">{{title}} 
                      </p>
                  </div>
                  <div class="col-1 p-0 arrow-dropdown  ">
@@ -33,26 +33,25 @@
      <div id="{{accordionNumber}}" class="collapse w-100 accordion-content {{item.hideRow}} " role="tabpanel"
          aria-labelledby="headingOne1" data-parent="#accordionEx">
          <div class="row m-0 h-100">
-             <div class="col-md-6 col-12 title-box  title-desc {{hideIfEmpty}}">
-                 <p> {{item.title}}</p>
+             <div class="col-md-6 col-12 title-box title-desc {{hideIfEmpty}}"> 
+                <p class="color-black text-center"> {{item.title}}</p>
 
              </div>
              <div class="col-md-6 col-12 p-0  plan-desc  ">
                  <div class="row m-0 h-100 ">
                      <div class="col-6 bg-lightGrey text-center justify-content-center   plan-box borderRight">
                          <div class=" d-md-none title-box justify-content-center   ">
-                             <p>PLAN 1</p>
+                            <p class="color-black text-center">PLAN 1</p>
                          </div>
-                         <p class="p-3 p-md-0 {{planDescStyle}}">
+                         <p class="p-3 p-md-0 color-black text-center {{planDescStyle}}">
                              {{item.planOneDesc}}
                          </p>
                      </div>
                      <div class="col-6 bg-p1 w text-center justify-content-center pr-md-3 pl-md-3  plan-box borderLeft">
                          <div class=" d-md-none title-box justify-content-center   ">
-                             <p class="w">PLAN 2</p>
+                            <p class="color-white text-center">PLAN 2</p>
                          </div>
-
-                         <p class="p-3 p-md-0 {{planDescStyle}}">
+                         <p class="p-3 p-md-0 color-white text-center {{planDescStyle}}">
                              {{item.planTwoDesc}}
                          </p>
                      </div>
