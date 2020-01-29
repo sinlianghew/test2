@@ -22,7 +22,7 @@ body {
 
 .travel-insurance-new {
 
-    #travel-form{
+    #travel-form {
         opacity: 0;
     }
 
@@ -31,7 +31,10 @@ body {
 
     font-size: 1em;
     line-height: 1.4;
-    font-family: 'pt_sansregular', Tahoma, Geneva, sans-serif;
+    font-family: 'pt_sansregular',
+    Tahoma,
+    Geneva,
+    sans-serif;
 
     input[type="radio"]+label,
     input[type="checkbox"]+label {
@@ -87,7 +90,6 @@ body {
 
     .formFamilyContainer {
         background: transparent;
-        background: transparent;
         border-radius: 0;
         box-shadow: none;
 
@@ -97,6 +99,20 @@ body {
             }
         }
     }
+
+    .travelTNC {
+        color: #fff;
+        a {
+            float: right;
+            background: url(../../src/assets/img/side-menu-close-btn.png) no-repeat center right;
+        }
+
+        @include media-breakpoint-down(md) {
+            bottom: 5%;
+        }
+
+    }
+
 
     /** End of Client base css **/
 
