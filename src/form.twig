@@ -210,7 +210,7 @@
                                     <p>Please note that your coverage will terminate at the earliest happening of the following:</p>
                                     <ol class="pl-3">
                                         <li>24 hours upon your arrival in Malaysia</li>
-                                        <li>Upon reaching your home or workplace in Malaysia (whichever is the earlier)</li>
+                                        <li>Upon reaching your home or workplace in Malaysia (whichever is earlier)</li>
                                         <li>Expiry date of your travel insurance policy</li>
                                     </ol>
                                     <p>The following benefits will not be applicable for travel insurance purchased less than 7 days from travel start date:</p>
@@ -232,14 +232,15 @@
                                         {% include "templates/components/list-variant-icon.twig" with {
                                             items: [
                                                 { iconName: 'tick-mark', content: 'Personal Accident' },
-                                                { iconName: 'tick-mark', content: 'Medical & Other Expenses' },
+                                                { iconName: 'tick-mark', content: 'Medical Expenses' },
+                                                { iconName: 'tick-mark', content: 'Emergency Medical Evacuation' },
                                                 { iconName: 'tick-mark', content: 'Luggage & Personal Effects' },
-                                                { iconName: 'tick-mark', content: 'Luggage & Delay <br/><i>(Every 6 hours)</i>' },
+                                                { iconName: 'tick-mark', content: 'Luggage Delay <br/><i>(Every 6 hours)</i>' },
                                                 { iconName: 'tick-mark', content: 'Travel Delay <br/><i>(Every 6 hours)</i>' },
                                             ],
                                             class: "d-none d-lg-block"
                                         } %}
-                                        <p class="bt2 d-none d-lg-block">View the full benefits <strong><a href="#" class="underline">HERE</a></strong></p>
+                                        <p class="bt2 d-none d-lg-block">View the full benefits <strong><a href="https://takeiteasy.msig.com.my/msigonline/resource/TravelRPlus_PolicyBooklet.pdf" target="blank" class="underline">HERE</a></strong></p>
                                     </div>
                                     <div class="col-12 col-lg-8">
                                         <div class="d-lg-flex">
@@ -272,9 +273,10 @@
                                                     {% include "templates/components/list-variant-icon.twig" with {
                                                         items: [
                                                             { iconName: 'tick-mark', content: '<span class="mr-2 mr-lg-0 bold d-lg-none">Personal Accident</span><span class="ml-2 ml-lg-0">250,000</span>' },
-                                                            { iconName: 'tick-mark', content: '<span class="mr-2 mr-lg-0 bold d-lg-none">Medical & Other Expenses</span><span class="ml-2 ml-lg-0">1,000,000</span>' },
+                                                            { iconName: 'tick-mark', content: '<span class="mr-2 mr-lg-0 bold d-lg-none">Medical Expenses</span><span class="ml-2 ml-lg-0">300,000</span>' },
+                                                            { iconName: 'tick-mark', content: '<span class="mr-2 mr-lg-0 bold d-lg-none">Emergency Medical Evacuation</span><span class="ml-2 ml-lg-0">1,000,000</span>' },
                                                             { iconName: 'tick-mark', content: '<span class="mr-2 mr-lg-0 bold d-lg-none">Luggage & Personal Effects</span><span class="ml-2 ml-lg-0">5,000</span>' },
-                                                            { iconName: 'tick-mark', content: '<span class="mr-2 mr-lg-0 bold d-lg-none">Luggage & Delay<br/><i>(Every 6 hours)</i></span><span class="ml-2 ml-lg-0">200</span>' },
+                                                            { iconName: 'tick-mark', content: '<span class="mr-2 mr-lg-0 bold d-lg-none">Luggage Delay<br/><i>(Every 6 hours)</i></span><span class="ml-2 ml-lg-0">200</span>' },
                                                             { iconName: 'tick-mark', content: '<span class="mr-2 mr-lg-0 bold d-lg-none">Travel Delay<br/><i>(Every 6 hours)</i></span><span class="ml-2 ml-lg-0">200</span>' },
                                                         ],
                                                         listWithLabelValue: true
@@ -312,9 +314,10 @@
                                                     {% include "templates/components/list-variant-icon.twig" with {
                                                         items: [
                                                             { iconName: 'tick-mark', content: '<span class="mr-2 mr-lg-0 bold d-lg-none">Personal Accident</span><span class="ml-2 ml-lg-0">350,000</span>' },
-                                                            { iconName: 'tick-mark', content: '<span class="mr-2 mr-lg-0 bold d-lg-none">Medical & Other Expenses</span><span class="ml-2 ml-lg-0">1,000,000</span>' },
+                                                            { iconName: 'tick-mark', content: '<span class="mr-2 mr-lg-0 bold d-lg-none">Medical Expenses</span><span class="ml-2 ml-lg-0">400,000</span>' },
+                                                            { iconName: 'tick-mark', content: '<span class="mr-2 mr-lg-0 bold d-lg-none">Emergency Medical Evacuation</span><span class="ml-2 ml-lg-0">1,000,000</span>' },
                                                             { iconName: 'tick-mark', content: '<span class="mr-2 mr-lg-0 bold d-lg-none">Luggage & Personal Effects</span><span class="ml-2 ml-lg-0">7,500</span>' },
-                                                            { iconName: 'tick-mark', content: '<span class="mr-2 mr-lg-0 bold d-lg-none">Luggage & Delay<br/><i>(Every 6 hours)</i></span><span class="ml-2 ml-lg-0">200</span>' },
+                                                            { iconName: 'tick-mark', content: '<span class="mr-2 mr-lg-0 bold d-lg-none">Luggage Delay<br/><i>(Every 6 hours)</i></span><span class="ml-2 ml-lg-0">200</span>' },
                                                             { iconName: 'tick-mark', content: '<span class="mr-2 mr-lg-0 bold d-lg-none">Travel Delay<br/><i>(Every 6 hours)</i></span><span class="ml-2 ml-lg-0">200</span>' },
                                                         ],
                                                         listWithLabelValue: true
@@ -322,7 +325,7 @@
                                                 {% endblock %}
                                             {% endembed %}
                                         </div>
-                                        <p class="bt2 d-lg-none">View the full benefits <strong><a href="#" class="underline">HERE</a></strong></p>
+                                        <p class="bt2 d-lg-none">View the full benefits <strong><a href="https://takeiteasy.msig.com.my/msigonline/resource/TravelRPlus_PolicyBooklet.pdf" target="blank" class="underline">HERE</a></strong></p>
                                     </div>
                                 </div>
                             </div>
