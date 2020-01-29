@@ -243,9 +243,12 @@ if ($('#travel-form').length) {
             setPersonalEditMode(value) {
                 this.personalEditMode = value;
             },
-            getHashValue(key) {
-                let matches = location.hash.match(new RegExp(key+'=([^&]*)'));
-                return matches ? matches[1] : null;
+            getUrlParamValue() {
+                var vars = {};
+                var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+                    vars[key] = value;
+                });
+                return vars;
             },
             uncheck(val) {
                 if (val === this.previousSelectedOptPlan) {
@@ -272,7 +275,9 @@ if ($('#travel-form').length) {
         },
         mounted() {
             window.onbeforeunload = null;
-            let currentSlide = this.getHashValue('slide');
+            let currentSlide = this.getUrlParamValue()['slide'];
+
+            
             if(currentSlide){
                 for(let i=0,len=this.steps.length; i<len; i++){
                     this.steps[i].completed = true;
