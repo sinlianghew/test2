@@ -1,14 +1,14 @@
-const path =                    require("path")
-const fs =                      require("fs")
-const HtmlWebpackPlugin =       require("html-webpack-plugin")
-const MiniCssExtractPlugin =    require("mini-css-extract-plugin")
-const CssUrlRelativePlugin =    require("css-url-relative-plugin")
-const webpack =                 require("webpack");
-const SVGSpritemapPlugin =      require("svg-spritemap-webpack-plugin");
-const CopyPlugin =              require("copy-webpack-plugin");
+const path = require("path")
+const fs = require("fs")
+const HtmlWebpackPlugin = require("html-webpack-plugin")
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
+const CssUrlRelativePlugin = require("css-url-relative-plugin")
+const webpack = require("webpack");
+const SVGSpritemapPlugin = require("svg-spritemap-webpack-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
 
 const pages = fs.readdirSync(path.resolve(__dirname, "src"))
-                .filter(fileName => fileName.endsWith(".twig"))
+    .filter(fileName => fileName.endsWith(".twig"))
 
 module.exports = {
     entry: "./src/js/index.js",
@@ -16,7 +16,7 @@ module.exports = {
         extensions: [".js", ".scss", ".css"],
         alias: {
             assets: path.resolve(__dirname, 'src/assets'),
-            'vue$': 'vue/dist/vue.esm.js' 
+            'vue$': 'vue/dist/vue.esm.js'
         }
     },
     plugins: [
@@ -31,7 +31,7 @@ module.exports = {
             }
         }),
         new MiniCssExtractPlugin({
-            filename: "css/bundle.css"
+            filename: "css/[name].css"
         }),
         new CssUrlRelativePlugin(),
         new webpack.ProvidePlugin({
@@ -50,6 +50,12 @@ module.exports = {
             Tab: "exports-loader?Tab!bootstrap/js/dist/tab",
             Tooltip: "exports-loader?Tooltip!bootstrap/js/dist/tooltip",
             Util: "exports-loader?Util!bootstrap/js/dist/util",
-        })
+        }),
+
+        new CopyPlugin([{
+            from: 'src/vendor', // this is the path relative to the webpack config files
+            to: 'vendor' // this will send it to the output folder which is /dist
+        }]),
+
     ]
 }

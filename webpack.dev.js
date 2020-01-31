@@ -53,7 +53,11 @@ module.exports = merge(common, {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: ['@babel/preset-env']
+                        presets: [
+                            '@babel/preset-env',{
+                                "targets" : ['>1%']
+                            }
+                        ]
                     }
                 }
             },
@@ -83,7 +87,8 @@ module.exports = merge(common, {
                         }
                     }
                 ]
-            }
+            },
+          
         ]
     },
     devtool: "cheap-module-source-map"
