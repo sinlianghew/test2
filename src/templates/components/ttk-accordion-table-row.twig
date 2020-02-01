@@ -1,0 +1,72 @@
+ <!--TTK Accordion card one-->
+ <div class="w-100 accordion-content-wrapper {{hideWrapper}}">
+     <!-- Card header -->
+     <div class="title-box collapsed h-line {{hideArrow}}" role="tab" id="headingOne1" data-toggle="collapse"
+         data-parent="#accordionEx" href="#{{accordionNumber}}" aria-expanded="true" aria-controls="content">
+
+         <div class="col-md-6 col-12  title-desc">
+             <div class="row align-items-center">
+                 <div class="col-11 pr-0 ">
+                     <p class="mb-0 color-black ">{{title}} </p>
+                 </div>
+                 <div class="col-1 p-0 arrow-dropdown  ">
+                     {% include "icon.twig" with { iconName: 'arrow-black'  } %}
+                 </div>
+             </div>
+         </div>
+
+         <div class="col-6 d-md-block d-none ">
+             <div class="row">
+                 <div class="rowGrey title-box justify-content-center">
+                     <h3>{{planTitle1}}</h3>
+                 </div>
+             </div>
+         </div>
+
+
+
+     </div>
+
+     {% for item in PlanList %}
+     <!-- Card body  1-->
+     <div id="{{accordionNumber}}" class="collapse w-100 accordion-content {{item.hideRow}} " role="tabpanel"
+         aria-labelledby="headingOne1" data-parent="#accordionEx">
+
+         {% if item.topTitle %}
+         <div class="row d-md-none d-block mr-3 ml-3 mt-3 mb-3 h-100 ">
+             <div class="col-12 bg-white title-box justify-content-center ">
+                 <p class="font-weight-bold color-black ">{{item.topTitle}}</h3>
+             </div>
+             <div class="col-12 rowGrey title-box justify-content-center">
+                 <p class="font-weight-bold color-black ">{{planTitle1}}</h3>
+             </div>
+         </div>
+         {% endif %}
+
+         {% if item.title %}
+         <div class="row m-0 h-100  pr-3 pl-3 p-md-0">
+             <div class="col-md-6 col-12 title-desc title-box justify-content-start {{itemTitleClass}}">
+                 <p class="color-black text-left"> {{item.title}}</p>
+             </div>
+
+             {% if item.planOneDesc %}
+             <div class="col-md-6 col-12 p-0  plan-desc  ">
+                 <div class="m-0 h-100 rowGrey ">
+                     <div class=" text-center justify-content-center  plan-box">
+                         <p class="p-2 p-md-0 color-black text-center {{item.planDescStyle}}">
+                             {{item.planOneDesc}}
+                         </p>
+                     </div>
+                 </div>
+             </div>
+             {% endif %}
+
+         </div>
+         {% endif %}
+         
+     </div>
+     {% endfor %}
+
+
+ </div>
+ <!-- Accordion card one end-->

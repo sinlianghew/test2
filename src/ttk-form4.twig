@@ -1,0 +1,333 @@
+{% extends "templates/partials/base.twig" %}
+
+{% block main %}
+
+
+<div id="travel-form" class="form-wizard" style="opacity: 1;">
+    <div class="container py-5">
+        <h1>Tie The Knot Insurance</h1>
+
+        {% embed "templates/components/steppers-html.twig" %}
+        {% set stepList = [ 
+            {stepclass:' completed', stepNum: '1', step :'Get Started'},
+            {stepclass:'completed', stepNum: '2', step :'Event Details'},
+            {stepclass:'completed', stepNum: '3', step :'Personal details'},
+            {stepclass:'current', stepNum: '4', step :'REVIEW'},
+            {stepclass:' ', stepNum: '5', step :'PAY'}
+         ] %}
+        {% endembed %}
+    </div>
+
+    <div class="bg-p2d py-5 wizard-sections">
+
+        <div class="wizard-section-4 ">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 col-md-8">
+                        <div class="bg-w pt-5 pb-3 px-4 mb-4">
+                            <h2 class="p2 mb-4">Personal Details</h2>
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <p class="bt1 mb-0">Name (as per NRIC):</p>
+                                    <p class="bt2">Henry Teo</p>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <p class="bt1 mb-0">NRIC No:</p>
+                                    <p class="bt2">901010-14-5021</p>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <p class="bt1 mb-0">Email:</p>
+                                    <p class="bt2">henryto@gmail.com</p>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <p class="bt1 mb-0">Mobile No:</p>
+                                    <p class="bt2">012-216 2534</p>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <p class="bt1 mb-0">Address:</p>
+                                    <p class="bt2">7, Lorong Bahagia 2, Taman Tun Dr Ismail, 60000 Kuala Lumpur,
+                                        Wilayah Persekutuan, Malaysia</p>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-end">
+                                <a href="#" class="btn btn-secondary btn-icon">
+                                    <div class="button-icon">
+                                        <svg class="icon icon-s">
+                                            <use xlink:href="assets/icons/icons.svg#sprite-plus"
+                                                href="assets/icons/icons.svg#sprite-plus"></use>
+                                        </svg>
+                                    </div>
+                                    <span class="button-text">Edit</span>
+                                </a>
+                            </div>
+
+                        </div>
+
+                        <!-- malaysian -->
+                        <div class="bg-w pt-5 pb-3 px-4 mb-4">
+                            <h2 class="p2 mb-4">Spouse-to-be Details</h2>
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <p class="bt1 mb-0">Nationality:</p>
+                                    <p class="bt2">Malaysian</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <p class="bt1 mb-0">Name (as per NRIC):</p>
+                                    <p class="bt2">Teo Wei Ming</p>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <p class="bt1 mb-0">NRIC No:</p>
+                                    <p class="bt2">801116-14-5497</p>
+                                </div>
+
+                            </div>
+                            <div class="d-flex justify-content-end"><a href="#" class="btn btn-secondary btn-icon">
+                                    <div class="button-icon"><svg class="icon icon-s">
+                                            <use xlink:href="assets/icons/icons.svg#sprite-plus"
+                                                href="assets/icons/icons.svg#sprite-plus"></use>
+                                        </svg></div> <span class="button-text">Edit</span>
+                                </a></div>
+                            <!---->
+                        </div>
+
+                        <!-- non malaysian -->
+                        <div class="bg-w pt-5 pb-3 px-4 mb-4">
+                            <h2 class="p2 mb-4">Spouse-to-be Details</h2>
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <p class="bt1 mb-0">Nationality:</p>
+                                    <p class="bt2">Non-Malaysian</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <p class="bt1 mb-0">Country:</p>
+                                    <p class="bt2">Indonesia</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <p class="bt1 mb-0">Name (as per Passport):</p>
+                                    <p class="bt2">Teo Wei Ming</p>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <p class="bt1 mb-0">Passport No.:</p>
+                                    <p class="bt2">A1567932</p>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <p class="bt1 mb-0">Gender:</p>
+                                    <p class="bt2">Female</p>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <p class="bt1 mb-0">Date of Birth:</p>
+                                    <p class="bt2">12/12/1988</p>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end"><a href="#" class="btn btn-secondary btn-icon">
+                                    <div class="button-icon"><svg class="icon icon-s">
+                                            <use xlink:href="assets/icons/icons.svg#sprite-plus"
+                                                href="assets/icons/icons.svg#sprite-plus"></use>
+                                        </svg></div> <span class="button-text">Edit</span>
+                                </a></div>
+                            <!---->
+                        </div>
+
+                        <!-- edit non malaysian -->
+                        <div class="bg-w py-5 px-4 mb-4">
+                            <div class="d-flex">
+                                <h2 class="p2 mb-4">Spouse-to-be Details</h2>
+                            </div>
+
+                            <p class="bt1">Nationality</p>
+                            <div class="d-flex mb-4">
+                                <div class="form-check mb-1">
+                                    <input type="radio" class="form-check-input" value="Malaysian">
+                                    <label class="form-check-label">Malaysian</label>
+                                </div>
+                                <div class="form-check mb-1">
+                                    <input type="radio" class="form-check-input" value="Non-Malaysian" checked>
+                                    <label class="form-check-label">Non-Malaysian</label>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <p class="bt1">Country:</p>
+                                    <div class="form-group">
+                                        {% verbatim %}
+                                        <select class="form-control">
+                                            <option disabled hidden selected value="">Select a country</option>
+                                            <option v-for="country in allCountries"
+                                                v-bind:key="allCountries.indexOf(country)" :value="country">
+                                                {{ country }}</option>
+                                        </select>
+                                        {% endverbatim %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label class="bt1">Name (as per Passport):</label>
+                                        <input type="text" class="form-control" placeholder="e.g. Lisa Teo">
+                                        <small class="error-message text-primary font-italic">* Complete the Name as per
+                                            NRIC filed.</small>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label class="bt1">Passport No.:</label>
+                                        <input type="text" class="form-control" placeholder="e.g. 888888-88-8888">
+                                        <small class="error-message text-primary font-italic">* Complete the Passport No
+                                            field.</small>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <p class="bt1">Gender:</p>
+                                    <div class="form-group">
+                                        <select class="form-control">
+                                            <option disabled="disabled" hidden="hidden" selected="selected" value="">
+                                                Select Option
+                                            </option>
+                                            <option value="Male">Male</option>
+                                            <option value="Femaale"> Femaale</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-12 col-md-6">
+                                    <p class="bt1">Date of Birth:</p>
+                                    <div class="form-group variant-date-picker mb-0">
+                                        <datepicker class="form-control" placeholder="DD/MM/YYYY"
+                                            :format="customDateFormatter">
+                                        </datepicker>
+                                        {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
+                                    </div>
+                                    <small class="error-message text-primary font-italic">* Please enter valid
+                                        DOB.</small>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-end mt-4 pt-3">
+                                <a href="#" class="btn btn-primary btn-icon mr-3">
+                                    <div class="button-icon">
+                                        {% include "templates/components/icon.twig" with { iconName: 'close', iconSize: 's' } %}
+                                    </div>
+                                    <span class="button-text">Cancel</span>
+                                </a>
+                                <a href="#" class="btn btn-default btn-secondary">Save</a>
+                            </div>
+                        </div>
+
+
+                        <div class="form-check mb-5">
+                            <input type="checkbox" name="tncAgreement" id="tncAgreement" class="form-check-input">
+                            <label for="tncAgreement" class="form-check-label pr-md-5">
+                                By ticking this box, I hereby acknowledge that I have read the <a href="#">Product
+                                    Disclosure Sheet</a> and agree to the <a href="#">Terms and Conditions</a>.
+                            </label>
+                            <svg class="icon icon-m tick-mark">
+                                <use xlink:href="assets/icons/icons.svg#sprite-tick-mark"
+                                    href="assets/icons/icons.svg#sprite-tick-mark"></use> 
+                            </svg>
+                        </div>
+                        <div class="pt-4 wizard-navigation d-none d-md-flex">
+                            <a href="#" role="button" class="btn btn-default btn-outline-primary">Back</a>
+                            <a href="#" role="button" class="btn btn-default btn-primary">Continue</a>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="summary-pane">
+                            <div class="section-header bg-p2 py-3 px-4">
+                                <h2 class="w">Summary</h2>
+                            </div>
+                            <div class="bg-w py-3 px-4">
+                                <p class="bt1">Coverage</p>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>Type <span class="float-right px-1"> : </span></td>
+                                            <td>Single Trip</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Area <span class="float-right px-1"> : </span></td>
+                                            <td>Area 4</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Period <span class="float-right px-1"> : </span></td>
+                                            <td>20/08/2019 - 19/09/2019 (30 Days)</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Plan <span class="float-right px-1"> : </span></td>
+                                            <td>Plan 2</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <hr>
+                                <p class="bt1">No. of Insured</p>
+                                <p>1 Person</p>
+                                <hr>
+                                <p class="text-right bt1 pr-3">RM</p>
+                                <div class="bg-p2c d-flex justify-content-between px-3 py-3 rounded mb-3">
+                                    <p class="bt2 mb-0">Basic Premium</p>
+                                    <p class="bt2 mb-0">58.00</p>
+                                </div>
+                                <p class="text-left bt1 pr-3 pb-0">Add-On</p>
+                                <div class="d-flex justify-content-between pr-3 pb-3 mb-3">
+                                    <p class="bt2 mb-0">Sports Fan Add-On</p>
+                                    <p class="bt2 mb-0">15.00</p>
+                                </div>
+                                <div class="d-flex justify-content-between pr-3 py-3 mb-3">
+                                    <p class="bt1 mb-0">Total Add-On</p>
+                                    <p class="bt1 mb-0">15.00</p>
+                                </div>
+                                <div class="bg-p2c px-3 py-4 mb-3 rounded">
+                                    <div class="d-flex justify-content-between">
+                                        <p class="bt2 mb-0">Gross Premium</p>
+                                        <p class="bt2 mb-0">58.00</p>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <p class="bt2 mb-0">Rebate (25%)</p>
+                                        <p class="bt2 mb-0">(14.50)</p>
+                                    </div>
+                                    <div class="divider"></div>
+                                    <div class="d-flex justify-content-between">
+                                        <p class="bt2 mb-0"><strong>Subtotal</strong></p>
+                                        <p class="bt2 mb-0"><strong>43.50</strong></p>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <p class="bt2 mb-0">Service Tax (6%)</p>
+                                        <p class="bt2 mb-0">0.00</p>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <p class="bt2 mb-0">Stamp Duty</p>
+                                        <p class="bt2 mb-0">10.00</p>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <p class="bt1 p2">Total Amount Payable</p>
+                                    <p class="h2 p2 pr-3">0.00</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container pt-4 wizard-navigation d-md-none"><a href="#" role="button"
+                    class="btn btn-default btn-outline-primary mb-3 mb-md-0">Back</a> <a href="#" role="button"
+                    class="btn btn-default btn-primary">Continue</a></div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+{% endblock %}

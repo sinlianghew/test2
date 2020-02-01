@@ -1,0 +1,257 @@
+{% extends "templates/partials/base.twig" %}
+
+{% block main %}
+
+
+<div id="travel-form" class="form-wizard" style="opacity: 1;">
+    <div class="container py-5">
+        <h1>Tie The Knot Insurance</h1>
+
+        {% embed "templates/components/steppers-html.twig" %}
+        {% set stepList = [ 
+            {stepclass:' completed', stepNum: '1', step :'Get Started'},
+            {stepclass:'completed', stepNum: '2', step :'Event Details'},
+            {stepclass:'current ', stepNum: '3', step :'Personal details'},
+            {stepclass:' ', stepNum: '4', step :'REVIEW'},
+            {stepclass:' ', stepNum: '5', step :'PAY'}
+         ] %}
+        {% endembed %}
+    </div>
+
+    <div class="bg-p2d py-5 wizard-sections">
+
+        <div class="wizard-section-3">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 col-md-8">
+                        <div class="bg-w py-5 px-4 mb-4">
+                            <div class="d-flex">
+                                <h2 class="p2 mb-4">Personal Details #1</h2>
+                                <span>
+                                    {% include "templates/components/tool-tip.twig" with {
+                                     toolContent: 'You or your spouse-to-be must be Malaysian or Permanent Resident of Malaysia.'    
+                                } %}
+                                </span>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="customerName" class="bt1">Name (as per NRIC):</label>
+                                        <input id="customerName" type="text" placeholder="eg: Jack Lee"
+                                            class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="nricNo" class="bt1">NRIC No.:</label>
+                                        <input id="nricNo" type="text" class="form-control" placeholder="NRIC">
+                                        <small class="error-message text-primary font-italic">* Complete the NRIC
+                                            field.</small>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="customerEmail" class="bt1">Email:</label>
+                                        <input id="customerEmail" type="text" class="form-control"
+                                            placeholder="e.g. hteoro@gmail.com">
+                                        <small class="error-message text-primary font-italic">* Complete the Email
+                                            field.</small>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="mobileNo" class="bt1">Mobile No.:</label>
+                                        <input id="mobileNo" type="text" class="form-control"
+                                            placeholder="e.g. 01x-xxxxxxx">
+                                        <small class="error-message text-primary font-italic">* Complete the Mobile
+                                            field.</small>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group"><label for="address1" class="bt1">Address:</label>
+                                        <input id="address1" type="text" placeholder="First Line" class="form-control">
+                                        <small class="error-message text-primary font-italic">* Complete the
+                                            Address
+                                            field.</small></div>
+                                    <div class="form-group"><input id="address2" type="text" placeholder="Second Line"
+                                            class="form-control"></div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group variant-icon"><label for="postcode"
+                                            class="bt1">Postcode</label>
+                                        <div class="input-wrapper"><input id="postcode" type="text"
+                                                placeholder="Find postcode" class="form-control"> <svg
+                                                class="icon icon-m">
+                                                <use xlink:href="assets/icons/icons.svg#sprite-search"
+                                                    href="assets/icons/icons.svg#sprite-search"></use>
+                                            </svg></div>
+                                        <small class="error-message text-primary font-italic">* Complete the Postal Code
+                                            field.</small>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group"><label for="city" class="bt1">City:</label>
+                                        <input id="city" type="text" disabled="disabled" placeholder="city"
+                                            class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="state" class="bt1">State:</label>
+                                        <input id="state" type="text" disabled="disabled" placeholder="state"
+                                            class="form-control"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- malaysian -->
+                        <div class="bg-w py-5 px-4 mb-4">
+                            <div class="d-flex">
+                                <h2 class="p2 mb-4">Spouse-to-be Details</h2>
+                            </div>
+
+                            <p class="bt1">Nationality:</p>
+                            <div class="d-flex mb-4">
+                                <div class="form-check mb-1">
+                                    <input type="radio" class="form-check-input" value="Malaysian" checked>
+                                    <label class="form-check-label">Malaysian</label>
+                                </div>
+                                <div class="form-check mb-1">
+                                    <input type="radio" class="form-check-input" value="Non-Malaysian">
+                                    <label class="form-check-label">Non-Malaysian</label>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label class="bt1">Name (as per NRIC):</label>
+                                        <input type="text" class="form-control" placeholder="e.g. Lisa Teo">
+                                        <small class="error-message text-primary font-italic">* Complete the Name as per
+                                            NRIC filed.</small>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label class="bt1">NRIC No.:</label>
+                                        <input type="text" class="form-control" placeholder="e.g. 888888-88-8888">
+                                        <small class="error-message text-primary font-italic">* Complete the NRIC
+                                            field.</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <!-- non malaysian -->
+                        <div class="bg-w py-5 px-4 mb-4">
+                            <div class="d-flex">
+                                <h2 class="p2 mb-4">Spouse-to-be Details</h2>
+                            </div>
+
+                            <p class="bt1">Nationality</p>
+                            <div class="d-flex mb-4">
+                                <div class="form-check mb-1">
+                                    <input type="radio" class="form-check-input" value="Malaysian">
+                                    <label class="form-check-label">Malaysian</label>
+                                </div>
+                                <div class="form-check mb-1">
+                                    <input type="radio" class="form-check-input" value="Non-Malaysian" checked>
+                                    <label class="form-check-label">Non-Malaysian</label>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <p class="bt1">Country:</p>
+                                    <div class="form-group">
+                                        {% verbatim %}
+                                        <select class="form-control">
+                                            <option disabled hidden selected value="">Select a country</option>
+                                            <option v-for="country in allCountries"
+                                                v-bind:key="allCountries.indexOf(country)" :value="country">
+                                                {{ country }}</option>
+                                        </select>
+                                        {% endverbatim %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label class="bt1">Name (as per Passport):</label>
+                                        <input type="text" class="form-control" placeholder="e.g. Lisa Teo">
+                                        <small class="error-message text-primary font-italic">* Complete the Name as per
+                                            NRIC filed.</small>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label class="bt1">Passport No.:</label>
+                                        <input type="text" class="form-control" placeholder="e.g. 888888-88-8888">
+                                        <small class="error-message text-primary font-italic">* Complete the Passport No
+                                            field.</small>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <p class="bt1">Gender:</p>
+                                    <div class="form-group">
+                                        <select class="form-control">
+                                            <option disabled="disabled" hidden="hidden" selected="selected" value="">
+                                                Select Option
+                                            </option>
+                                            <option value="Male">Male</option>
+                                            <option value="Femaale"> Femaale</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="col-12 col-md-6">
+                                    <p class="bt1">Date of Birth:</p>
+                                    <div class="form-group variant-date-picker mb-0">
+                                        <datepicker class="form-control" placeholder="DD/MM/YYYY"
+                                            :format="customDateFormatter">
+                                        </datepicker>
+                                        {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
+                                    </div>
+                                    <small class="error-message text-primary font-italic">* Please enter valid
+                                        DOB.</small>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="pt-4 wizard-navigation d-none d-md-flex">
+                            <a href="#" role="button" class="btn btn-default btn-outline-primary">Back</a>
+                            <a href="#" role="button" class="btn btn-default btn-primary">Continue</a>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-4">
+                        {% include "templates/components/ttk-summary-pane.twig" %}
+                    </div>
+                </div>
+            </div>
+            <div class="container pt-4 wizard-navigation d-md-none"><a href="#" role="button"
+                    class="btn btn-default btn-outline-primary mb-3 mb-md-0">Back</a> <a href="#" role="button"
+                    class="btn btn-default btn-primary">Continue</a></div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+{% endblock %}

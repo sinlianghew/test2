@@ -14,7 +14,12 @@
         </div>
     </div>
 
-    {% include "templates/components/subnav-pdp.twig" %}
+    {% include "templates/components/subnav-pdp.twig" with { 
+        title1 : 'ABOUT',
+        title2 : 'BENEFITS',
+        title3 : 'ADD-ON',
+        title4 : 'LEARN MORE'
+    } %}
 
 
     <div class="container mt-md-5 mt-4 pt-2 pt-md-0">
