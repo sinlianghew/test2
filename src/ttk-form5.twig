@@ -1,0 +1,195 @@
+{% extends "templates/partials/base.twig" %}
+
+{% block main %}
+
+
+<div id="travel-form" class="form-wizard" style="opacity: 1;">
+    <div class="container py-5">
+        <h1>Tie The Knot Insurance</h1>
+
+
+        {% embed "templates/components/steppers-html.twig" %}
+        {% set stepList = [ 
+            {stepclass:' completed', stepNum: '1', step :'Get Started'},
+            {stepclass:'completed', stepNum: '2', step :'Event Details'},
+            {stepclass:'completed', stepNum: '3', step :'Personal details'},
+            {stepclass:'completed', stepNum: '4', step :'REVIEW'},
+            {stepclass:'current', stepNum: '5', step :'PAY'}
+         ] %}
+        {% endembed %}
+    </div>
+
+    <div class="bg-p2d py-5 wizard-sections">
+        <div class="wizard-section-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 col-md-8">
+                        <div class="bg-w py-5 px-4 mb-3">
+                            <h2 class="p2 mb-4">Payment</h2>
+                            <p class="bt1 color-black font-weight-bold mb-0">Payment Method:</p>
+                            <div class="vertical-scroller mb-5">
+                                <div class="d-flex">
+
+                                    <!-- card one -->
+                                    {% embed "templates/components/selection-infobox.twig" with {
+                                        type: "radio",
+                                        name: "choosePayment",
+                                        value: "Online Banking",
+                                        classes: "mb-3 mb-lg-0 mr-3",
+                                        vModel: 'formData.paymentMethod'
+                                    } %}
+
+                                    {% block top %}
+                                    <h3 class="m-0">Online Banking</h3>
+                                    {% endblock %}
+
+                                    {% block icon %}
+                                    {% include "templates/components/icon.twig" with { iconName: 'fpx', iconSize: '4xl' } %}
+                                    {% endblock %}
+                                    {% endembed %}
+
+                                    <!-- card two -->
+                                    {% embed "templates/components/selection-infobox.twig" with {
+                                        type: "radio",
+                                        name: "choosePayment",
+                                        value: "Credit/Debit Card",
+                                        classes: "mb-3 mb-lg-0 mr-3",
+                                        vModel: 'formData.paymentMethod'
+                                    
+                                    } %}
+                                    {% block top %}
+                                    <h3 class="m-0">Credit/Debit Card</h3>
+                                    {% endblock %}
+
+                                    {% block icon %}
+                                    {% include "templates/components/icon.twig" with { iconName: 'credit-card', iconSize: '4xl' } %}
+                                    {% endblock %}
+                                    {% endembed %}
+
+                                    <!-- card 3 -->
+                                    {% embed "templates/components/selection-infobox.twig" with {
+                                        type: "radio",
+                                        name: "choosePayment",
+                                        value: "E-Wallet",
+                                        classes: "mb-3 mb-lg-0 mr-3",
+                                        vModel: 'formData.paymentMethod'
+                                    
+                                    } %}
+                                    {% block top %}
+                                    <h3 class="m-0">E-Wallet</h3>
+                                    {% endblock %}
+
+                                    {% block icon %}
+                                    {% include "templates/components/icon.twig" with { iconName: 'ewallets', iconSize: '4xl' } %}
+                                    {% endblock %}
+                                    {% endembed %}
+                                </div>
+                            </div>
+
+                            <div v-if="formData.paymentMethod === 'Credit/Debit Card'">
+                                <img src="assets/img/visa-master-logo.jpg" alt="Visa and Mastercard logo"
+                                    class="img-fluid mb-4">
+                                <div class="row">
+                                    <div class="col-12 col-md-7">
+                                        <div class="form-group">
+                                            <label class="bt1">Card Number:</label>
+                                            <input class="form-control" type="text" placeholder="xxxx-xxxx-xxxx-xxxx"
+                                                name="cardNumber">
+                                            <small class="error-message text-primary font-italic">* Complete the Name as
+                                                per card field.</small>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="bt1">Name on Card:</label>
+                                            <input class="form-control" type="text" placeholder="Name on Card"
+                                                name="nameOnCard">
+                                            <small class="error-message text-primary font-italic">* Please enter a valid
+                                                Visa / MasterCard No.</small>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-7">
+                                                <label class="bt1">Expiration Date:</label>
+                                                <input class="form-control" type="text" placeholder="MM/YY"
+                                                    name="expirationDate">
+                                                <small class="error-message text-primary font-italic">* Complete the
+                                                    Expiry (MM/YY) field.</small>
+                                            </div>
+                                            <div class="form-group col-5">
+                                                <label class="bt1">CVV:</label>
+                                                <input class="form-control" type="text" placeholder="xxx" name="CVV">
+                                                <small class="error-message text-primary font-italic">* Complete the CVC
+                                                    field.</small>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div v-if="formData.paymentMethod === 'Online Banking'">
+                                <p class="bt1 mb-2">Bank:</p>
+
+                                {% verbatim %}
+                                <select class="form-control">
+                                    <option disabled hidden selected value="">Select a Bank</option>
+                                    <option v-for="(bank, index) in banks" v-bind:key="index" :value="bank.name">
+                                        {{ bank.name }}</option>
+                                </select>
+                                {% endverbatim %}
+
+                                <p><small>Note: You need to have an active internet banking account with any of the FPX
+                                        performing banks to use FPX.</small></p>
+
+                                <p class="bt1 mb-2">Email Address: <small class="font-italic">(For transaction
+                                        status)</small></p>
+
+                                <div class="row">
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" placeholder="e.g. hteoro@gmail.com">
+                                            <small class="error-message text-primary font-italic">* Complete the Email
+                                                field.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div v-if="formData.paymentMethod === 'E-Wallet'">
+                                <p class="bt1">Select Your Preferred E-Wallet:</p>
+                                {% include "templates/components/list-variant-bank.twig" with {
+                                banks: [ { img: 'boost.jpg', name: 'Boost' } ]
+                                            } %}
+                            </div>
+
+                        </div>
+                        <div class="container d-none d-md-block">
+                            <p class="bt2 mb-5">By clicking <strong>"Pay Now"</strong> button, you agree to FPX's <a
+                                    href="#" target="_blank">Terms & Conditions</a>.</p>
+                        </div>
+                        <div class="pt-4 wizard-navigation d-none d-md-flex">
+                            <a href="#" role="button" class="btn btn-default btn-outline-primary"
+                                @click.prevent="goToPrevStep()">Back</a>
+                            <a href="/payment-completed.html" role="button" class="btn btn-default btn-primary">Pay
+                                Now</a>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        {% include "templates/components/ttk-summary-pane.twig" %}
+                    </div>
+                </div>
+            </div>
+            <div class="container pt-4 wizard-navigation d-md-none">
+                <p class="bt2 mb-5">By clicking <strong>"Pay
+                        Now"</strong> button, you agree to FPX's <a href="#" target="_blank">Terms & Conditions</a>.</p>
+
+                <a href="#" role="button" class="btn btn-default btn-outline-primary mb-3 mb-md-0">Back</a>
+                <a href="/payment-completed.html" role="button" class="btn btn-default btn-primary">Pay Now</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+{% endblock %}

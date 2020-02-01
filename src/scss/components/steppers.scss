@@ -3,7 +3,7 @@
     flex-wrap: nowrap;
     justify-content: space-between;
     height: 100px;
-    
+
     .nav-item.step {
         display: flex;
         flex-direction: column;
@@ -71,7 +71,7 @@
         font-weight: bold;
         visibility: hidden;
         text-transform: uppercase;
-        font-size: 14px;
+        // font-size: 14px;
         user-select: none;
         text-align: center;
         transition: 0.3s ease;
@@ -79,6 +79,10 @@
         white-space: nowrap;
         bottom: 0;
         transform: translateY(50%);
+        font-size: 12px;
+        font-weight: $font-weight-bold;
+        color: $color-primary-blue;
+
     }
 
     /** Different state overrides **/
@@ -97,6 +101,7 @@
                 visibility: visible;
             }
         }
+
         &.completed {
             .step-indicator {
                 background-color: $p2;
@@ -116,9 +121,11 @@
         .step-title {
             opacity: 1;
             visibility: visible;
-            font-size: 14px;
-            margin-top: 10px;
+            // font-size: 14px;
+            // margin-top: 10px;
             position: relative;
+            margin-top: 6px;
+            font-size: 18px;
         }
 
         .nav-item.step {

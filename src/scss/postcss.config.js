@@ -5,7 +5,7 @@ if (process.env.NODE_ENV == "production") {
     module.exports = {
         plugins: [
             autoprefixerPlugin,
-            require("cssnano")
+            // require("cssnano")
         ]
     }
 } else {

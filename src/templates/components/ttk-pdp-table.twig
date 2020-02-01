@@ -1,0 +1,99 @@
+<div class="pdp-table ttk-table mb-5">
+    <div class="container">
+
+        <div class="d-none d-md-block">
+            <div class="row ">
+                <div class="col-6 title-box">
+                    <h3>Benefits</h3>
+                </div>
+                <div class="col-6 bg-w title-box justify-content-center">
+                    <h3>Maximum Benefits Payable (RM)</h3>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="accordion md-accordion row" id="accordionEx" role="tablist" aria-multiselectable="true">
+            <!-- accordion list start -->
+
+            <!-- Table row 1 -->
+            {% embed "ttk-accordion-table-row.twig" with {
+                accordionNumber: "accordion1",
+                title: "Section 1 - Cancellation or Rearrangement",
+                planTitle1 :"Up to 80,000",
+                hideArrow :"disable-md-click", 
+            } %}
+
+            {% set PlanList = [
+                { topTitle : 'Maximum Benefits Payable (RM)'},
+            ] %}
+            {% endembed %}
+
+            
+            <!-- Table row 2 -->
+            {% embed "ttk-accordion-table-row.twig" with {
+                accordionNumber: "accordion2",
+                title: "Section 2 - Loss/Damage to Wedding Attire",
+                planTitle1 :"Up to 3,000",
+                hideArrow :"disable-md-click", 
+            } %}
+
+            {% set PlanList = [
+                { topTitle : 'Maximum Benefits Payable (RM)'},
+            ] %}
+            {% endembed %}
+
+
+            <!-- Table row 3 -->
+            {% embed "ttk-accordion-table-row.twig" with {
+                accordionNumber: "accordion3",
+                title: "Section 3 - Loss of Supplier Deposits",
+                planTitle1 :"Up to 10,000",
+                hideArrow :"disable-md-click", 
+            } %}
+
+            {% set PlanList = [
+                { topTitle : 'Maximum Benefits Payable (RM)'},
+            ] %}
+            {% endembed %}
+
+
+            <!-- Table row 4 -->
+            {% embed "ttk-accordion-table-row.twig" with {
+                accordionNumber: "accordion4",
+                title: "Section 4 -  Loss/Damage to Photos/Videos",
+                planTitle1 :"Up to 5,000",
+                hideArrow :"disable-md-click", 
+            } %}
+
+            {% set PlanList = [
+                { topTitle : 'Maximum Benefits Payable (RM)'},
+            ] %}
+            {% endembed %}
+
+
+            <!-- Table row 5 -->
+            {% embed "ttk-accordion-table-row.twig" with {
+                accordionNumber: "accordion5",
+                title: "Section 5 - Personal Accident",
+                planTitle1 :"25,000 Per Insured",
+            } %}
+
+            {% set PlanList = [
+                { topTitle : 'Maximum Benefits Payable (RM)',  title: '<b>A.</b> Accidental Death', planOneDesc: '100%'},
+                { title: '<b>B.</b> Permanent total disablement as specified below:', planDescStyle:'d-none d-md-block ', planOneDesc: ' '},
+                { title: '<span class="ml-md-2 mr-md-1">i.</span> Permanent total paralysis of all limbs', planOneDesc: '100%'},
+                { title: '<span class="ml-md-2 mr-md-1">ii.</span> Total and permanent loss of use of both hands or both feet', planOneDesc: '100%'},
+                { title: '<span class="ml-md-2 mr-md-1">iii.</span> Total and permanent loss of all sight in both eyes', planOneDesc: '100%'},
+                { title: '<span class="ml-md-2 mr-md-1">iv.</span> Total and permanent loss of speech and hearing of both ears', planOneDesc: '100%'},
+                { title: '<span class="ml-md-2 mr-md-1">v.</span> Total and permanent loss of use of one hand or one foot', planOneDesc: '50%'},
+                { title: '<span class="ml-md-2 mr-md-1">vi.</span> Total and permanent loss of all sight in one eye', planOneDesc: '50%'},
+                ] %}
+            {% endembed %}
+
+            <!-- accordion list end -->
+        </div>
+
+
+    </div>
+</div>

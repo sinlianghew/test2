@@ -57,7 +57,13 @@ module.exports = merge(common, {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: ['@babel/preset-env']
+                        presets: [
+                            [
+                                '@babel/preset-env', { 
+                                    "targets": ['> 1%']
+                                }
+                            ]
+                        ]
                     }
                 }
             },
@@ -66,7 +72,12 @@ module.exports = merge(common, {
                 use: [
                     // Transform css and extract into separate single bundle
                     // Required to generate the file
-                    { loader: MiniCssExtractPlugin.loader },
+                    { 
+                        loader: MiniCssExtractPlugin.loader,
+                        options: {
+                            publicPath: '/spa-assets/',
+                        },
+                    },
 
                     // Handles url() and @imports
                     { 
@@ -83,9 +94,10 @@ module.exports = merge(common, {
                     {
                         loader: "sass-loader",
                         options: {
-                            implementation: require("sass")
+                            implementation: require("sass"),
+                            outputStyle: 'expanded'
                         }
-                    }
+                    } 
                 ]
             }
         ]

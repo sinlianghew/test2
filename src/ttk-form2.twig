@@ -1,0 +1,194 @@
+{% extends "templates/partials/base.twig" %}
+
+{% block main %}
+
+
+<div id="travel-form" class="form-wizard" style="opacity: 1;">
+    <div class="container py-5">
+        <h1>Tie The Knot Insurance</h1>
+
+        {% embed "templates/components/steppers-html.twig" %}
+        {% set stepList = [ 
+            {stepclass:' completed', stepNum: '1', step :'Get Started'},
+            {stepclass:'current', stepNum: '2', step :'Event Details'},
+            {stepclass:' ', stepNum: '3', step :'Personal details'},
+            {stepclass:' ', stepNum: '4', step :'REVIEW'},
+            {stepclass:' ', stepNum: '5', step :'PAY'}
+         ] %}
+        {% endembed %}
+    </div>
+
+    <div class="bg-p2d py-5 wizard-sections">
+
+        <div class="wizard-section-2">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 col-md-8">
+                        <div class="bg-w py-5 px-4 mb-4">
+                            <div class="d-flex">
+                                <h2 class="p2 mb-4">Event Details #1</h2>
+                                <span> {% include "templates/components/tool-tip.twig" %} </span>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+
+                                    <p class="bt1 mb-2">Event Date:</p>
+                                    <div class="form-group variant-date-picker mb-0">
+                                        <datepicker class="form-control" placeholder="Select date"
+                                            :format="customDateFormatter" v-model="formData.startDate">
+                                        </datepicker>
+                                        {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
+                                    </div>
+
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="venuName" class="bt1">Venue Name:</label>
+                                        <input id="venuName" type="text" value="Hotel Royal Chulan"
+                                            class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group"><label for="address1" class="bt1">Address:</label>
+                                        <input id="address1" type="text" placeholder="First Line" class="form-control">
+                                        <small class="error-message text-primary font-italic">* Complete the
+                                            Address
+                                            field.</small></div>
+                                    <div class="form-group"><input id="address2" type="text" placeholder="Second Line"
+                                            class="form-control"></div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group variant-icon"><label for="postcode"
+                                            class="bt1">Postcode</label>
+                                        <div class="input-wrapper"><input id="postcode" type="text"
+                                                placeholder="Find postcode" class="form-control"> <svg
+                                                class="icon icon-m">
+                                                <use xlink:href="assets/icons/icons.svg#sprite-search"
+                                                    href="assets/icons/icons.svg#sprite-search"></use>
+                                            </svg></div> <small class="error-message text-primary font-italic">*
+                                            Complete the Postal Code
+                                            field.</small>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group"><label for="city" class="bt1">City:</label> <input id="city"
+                                            type="text" disabled="disabled" value="Kuala Lumpur" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group"><label for="state" class="bt1">State:</label> <input
+                                            id="state" type="text" disabled="disabled"
+                                            value="Wilayah Persekutuan , Malaysia" class="form-control"></div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="bg-w py-5 px-4 mb-4">
+                            <div class="d-flex">
+                                <h2 class="p2 mb-4">Event Details #2:</h2>
+                                <span> {% include "templates/components/tool-tip.twig" %} </span>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+
+                                    <p class="bt1 mb-2">Event Date:</p>
+                                    <div class="form-group variant-date-picker mb-0">
+                                        <datepicker class="form-control" placeholder="Select date"
+                                            :format="customDateFormatter" v-model="formData.startDate">
+                                        </datepicker>
+                                        {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
+                                    </div>
+
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="venuName" class="bt1">Venue Name:</label>
+                                        <input id="venuName" type="text" value="Hotel Royal Chulan"
+                                            class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group"><label for="address1" class="bt1">Address:</label>
+                                        <input id="address1" type="text" placeholder="First Line" class="form-control">
+                                        <small class="error-message text-primary font-italic">* Complete the
+                                            Address
+                                            field.</small></div>
+                                    <div class="form-group"><input id="address2" type="text" placeholder="Second Line"
+                                            class="form-control"></div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group variant-icon"><label for="postcode"
+                                            class="bt1">Postcode</label>
+                                        <div class="input-wrapper"><input id="postcode" type="text"
+                                                placeholder="Find postcode" class="form-control"> <svg
+                                                class="icon icon-m">
+                                                <use xlink:href="assets/icons/icons.svg#sprite-search"
+                                                    href="assets/icons/icons.svg#sprite-search"></use>
+                                            </svg></div> <small class="error-message text-primary font-italic">*
+                                            Complete the Postal Code
+                                            field.</small>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group"><label for="city" class="bt1">City:</label> <input id="city"
+                                            type="text" disabled="disabled" placeholder="City" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group"><label for="state" class="bt1">State:</label> <input
+                                            id="state" type="text" disabled="disabled" placeholder="State"
+                                            class="form-control"></div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end mt-4">
+                                <a href="#" class="btn btn-primary btn-icon">
+                                    <div class="button-icon">
+                                        <svg class="icon icon-s">
+                                            <use xlink:href="assets/icons/icons.svg#sprite-close"
+                                                href="assets/icons/icons.svg#sprite-close"></use>
+                                        </svg>
+                                    </div>
+                                    <span class="button-text">Remove</span>
+                                </a>
+                            </div>
+
+                        </div>
+
+                        <div class="d-flex justify-content-end mb-5">
+                            <a href="#" class="btn btn-secondary btn-icon">
+                                <div class="button-icon">
+                                    <svg class="icon icon-s">
+                                        <use xlink:href="assets/icons/icons.svg#sprite-plus"
+                                            href="assets/icons/icons.svg#sprite-plus"></use>
+                                    </svg>
+                                </div>
+                                <span class="button-text">Add Additional Event(s)</span>
+                            </a>
+                        </div>
+                        <div class="pt-4 wizard-navigation d-none d-md-flex">
+                            <a href="#" role="button" class="btn btn-default btn-outline-primary">Back</a>
+                            <a href="#" role="button" class="btn btn-default btn-primary">Continue</a>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-4">
+                        {% include "templates/components/ttk-summary-pane.twig" %}
+                    </div>
+                </div>
+            </div>
+            <div class="container pt-4 wizard-navigation d-md-none"><a href="#" role="button"
+                    class="btn btn-default btn-outline-primary mb-3 mb-md-0">Back</a> <a href="#" role="button"
+                    class="btn btn-default btn-primary">Continue</a></div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+{% endblock %}

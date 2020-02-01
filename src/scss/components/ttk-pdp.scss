@@ -1,0 +1,115 @@
+.ttk-wrapper {
+    .bg-ttk {
+        background: url(../../src/assets/img/ttk-bg.png) no-repeat;
+        background-size: cover;
+        background-position: center;
+    }
+
+
+    .subnav-ttk-wrapper {
+        @include media-breakpoint-up(md) {
+            .navbar .navbar-collapse .navbar-nav .nav-item .nav-link {
+                line-height: 1.6rem;
+                padding: 27px 33px;
+            }
+
+        }
+
+    }
+
+    .ttk-table {
+        .accordion-content-wrapper {
+            .rowGrey {
+                background-color: #E7E7EF !important;
+            }
+
+
+            .accordion-content {
+                @include media-breakpoint-down(md) {
+                    .title-box {
+                        min-height: 40px;
+                    }
+
+                    .title-desc {
+                        min-height: 40px;
+                        padding-top: 18px;
+                        padding-bottom: 6px;
+                        padding-left: 6px;
+                    }
+                }
+            }
+
+        }
+    }
+
+    .static-pdp-table {
+
+        background: transparent;
+
+        @include media-breakpoint-down(md) {
+            .h-line {
+                border: 0;
+            }
+
+            h1 {
+                font-size: 32px;
+            }
+        }
+
+        .main-title {
+            height: 40px;
+
+            @include media-breakpoint-up(md) {
+                height: 70px;
+            }
+        }
+
+        .table-content {
+
+            @include media-breakpoint-down(md) {
+                .title {
+                    height: 40px;
+                }
+            }
+
+            .content-box {
+                min-height: 40px;
+
+                @include media-breakpoint-up(md) {
+                    min-height: 70px;
+                }
+
+            }
+
+            &.lastRowBlue {
+                background: $color-primary-blue;
+
+                @include media-breakpoint-down(md) {
+                    margin-top: 20px;
+                }
+
+                .lastRowTitle {
+                    p {
+                        color: white;
+                    }
+                }
+
+                p {
+                    @include media-breakpoint-up(md) {
+                        color: white;
+                        font-size: 20px;
+                    }
+                }
+
+                .content-box {
+
+                    @include media-breakpoint-up(md) {
+                        background: $color-primary-blue !important;
+                    }
+                }
+            }
+        }
+    }
+
+
+}

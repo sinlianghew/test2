@@ -296,3 +296,11 @@ if ($('#travel-form').length) {
         }
     })
 }
+
+$(document).ready(function() {
+    $("body").tooltip({ selector: '[data-toggle=tooltip]' });
+    // $('body').tooltip({ boundary: 'window' })
+    $("a").tooltip();
+
+
+});

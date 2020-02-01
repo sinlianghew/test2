@@ -1,0 +1,16 @@
+
+
+<div class="nav variant-steppers">
+    {% for item in stepList %}
+    <div class=" nav-item step {{item.stepclass}}">
+        <div class="step-indicator"><span>
+               {{item.stepNum}}
+            </span> <svg class="icon icon-s tick-mark">
+                <use xlink:href="assets/icons/icons.svg#sprite-tick-mark"
+                    href="assets/icons/icons.svg#sprite-tick-mark"></use>
+            </svg></div>
+        <div class="step-title">{{item.step}}</div>
+    </div>
+
+    {% endfor %}
+</div>
