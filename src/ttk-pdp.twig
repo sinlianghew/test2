@@ -51,18 +51,17 @@
     <div class="bg-darkGrey pt-md-5 pt-4 mt-3 mt-md-0 pb-5">
         <div class="container static-pdp-table pt-md-2 ">
             <h1 class=" mb-3 mb-md-5">Premium</h1>
-            <div class="row  main-title d-block d-md-flex align-items-center h-line">
+            <div class="row  main-title d-block d-md-flex align-items-center h-line px-3 px-md-0 ">
                 <div class="col-4">
-                    <p class=" font-weight-bold mb-0 bt5 color-black"></p>
                 </div>
                 <div class="col bg-w h-100 d-flex align-items-center justify-content-center bg-lightGrey ">
                     <p class=" font-weight-bold mb-0 text-center bt5 color-black">Plans (RM)</p>
                 </div>
             </div>
 
-            <div class="  main-title row align-items-center h-line">
+            <div class="  main-title row align-items-center h-line px-3 px-md-0 ">
                 <div class="col-4 d-none d-md-block">
-                    <p class=" font-weight-bold mb-0 bt5 color-black"> Premium</p>
+                    <p class=" font-weight-bold mb-0 bt5 color-black px-md-2"> Premium</p>
                 </div>
                 <div class="col-md-4 col-6 bg-w h-100 d-flex align-items-center justify-content-center bg-white ">
                     <p class=" font-weight-bold mb-0 text-center bt5 color-black"> 1 Year Cover</p>
@@ -73,18 +72,18 @@
             </div>
 
             {% set staticTableRow = [
-                { title: 'Premium Payable', content1: '380.00', content2: '500.00'},
-                { title: 'Less 25% Rebate', content1: '95.00', content2: '125.00'},
-                { title: 'Plus 6% Service Tax', content1: '17.10', content2: '22.50'},
-                { title: 'Plus Stamp Duty ', content1: '10.00', content2: '10.00'},
-                { contentClass: 'lastRowBlue', titleClass:"lastRowTitle justify-content-center justify-content-md-start", title: 'Total Premium', content1: '312.10', content2: '407.50' },
+                { contentClass:'px-3 px-md-0', title: 'Premium Payable', content1: '380.00', content2: '500.00'},
+                { contentClass:'px-3 px-md-0', title: 'Less 25% Rebate', content1: '95.00', content2: '125.00'},
+                { contentClass:'px-3 px-md-0', title: 'Plus 6% Service Tax', content1: '17.10', content2: '22.50'},
+                { contentClass:'px-3 px-md-0', title: 'Plus Stamp Duty ', content1: '10.00', content2: '10.00'},
+                { contentClass: 'lastRowBlue  px-0', titleClass:"lastRowTitle justify-content-center justify-content-md-start", title: 'Total Premium', content1: '312.10', content2: '407.50' },
             ] %}
 
             {% for item in staticTableRow %}
 
-            <div class="row table-content align-items-center h-line {{item.contentClass}}">
-                <div class="col-12 col-md-4 title d-flex align-items-center mt-2 mt-md-0 {{item.titleClass}}">
-                    <p class=" font-weight-bold bt2 mb-0 color-black">{{item.title}}
+            <div class="row table-content align-items-center h-line {{item.contentClass}}  ">
+                <div class="col-12 col-md-4 title d-flex align-items-center mt-2 mt-md-0 p-0 px-md-4 {{item.titleClass}}">
+                    <p class=" font-weight-bold bt2  mb-1 color-black">{{item.title}}
                     </p>
                 </div>
 

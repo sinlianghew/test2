@@ -1,17 +1,23 @@
-
 .tooltip-inner {
     background-color: $color-primary-blue;
     opacity: 1;
+    font-size: 12px;
+    text-align: left;
+    padding: 18px;
 }
+
 .tooltip.bs-tooltip-right .arrow:before {
     border-right-color: $color-primary-blue !important;
 }
+
 .tooltip.bs-tooltip-left .arrow:before {
     border-right-color: $color-primary-blue !important;
 }
+
 .tooltip.bs-tooltip-bottom .arrow:before {
     border-right-color: $color-primary-blue !important;
 }
+
 .tooltip.bs-tooltip-top .arrow:before {
     border-right-color: $color-primary-blue !important;
 }
