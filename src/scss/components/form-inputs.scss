@@ -1,11 +1,13 @@
 .form-group {
     min-width: 100%;
     @include media-breakpoint-up(lg) {
-        min-width: 320px;
-    }
+        // min-width: 320px;
+        min-width: 275px;
+    } 
     .form-control {
         border-radius: 0;
         border-color: $p2;
+        color: #000;
         //min-width: 200px;
 
         &[disabled] {
