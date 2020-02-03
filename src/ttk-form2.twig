@@ -27,7 +27,9 @@
                         <div class="bg-w py-5 px-4 mb-4">
                             <div class="d-flex">
                                 <h2 class="p2 mb-4">Event Details #1</h2>
-                                <span> {% include "templates/components/tool-tip.twig" %} </span>
+                                <span> {% include "templates/components/tool-tip.twig" with {
+                                    toolContent: 'Event date must be at least 6 months from today.' 
+                                } %} </span>
                             </div>
 
                             <div class="row">
@@ -64,7 +66,7 @@
                                             class="bt1">Postcode:</label>
                                         <div class="input-wrapper"><input id="postcode" type="text"
                                                 placeholder="Find postcode" class="form-control"> <svg
-                                                class="icon icon-m">
+                                                class="icon icon-s mr-2">
                                                 <use xlink:href="assets/icons/icons.svg#sprite-search"
                                                     href="assets/icons/icons.svg#sprite-search"></use>
                                             </svg></div> <small class="error-message text-primary font-italic">*
@@ -89,7 +91,9 @@
                         <div class="bg-w py-5 px-4 mb-4">
                             <div class="d-flex">
                                 <h2 class="p2 mb-4">Event Details #2:</h2>
-                                <span> {% include "templates/components/tool-tip.twig" %} </span>
+                                <span> {% include "templates/components/tool-tip.twig"  with {
+                                    toolContent: 'Event date must be at least 6 months from today.' 
+                                } %} </span> 
                             </div>
                             <div class="row">
                                 <div class="col-12 col-md-6">
@@ -125,7 +129,7 @@
                                             class="bt1">Postcode:</label>
                                         <div class="input-wrapper"><input id="postcode" type="text"
                                                 placeholder="Find postcode" class="form-control"> <svg
-                                                class="icon icon-m">
+                                                class="icon icon-s mr-2">
                                                 <use xlink:href="assets/icons/icons.svg#sprite-search"
                                                     href="assets/icons/icons.svg#sprite-search"></use>
                                             </svg></div> <small class="error-message text-primary font-italic">*
@@ -170,7 +174,7 @@
                             </a>
                         </div>
                         <div class="pt-4 wizard-navigation d-none d-md-flex">
-                            <a href="#" role="button" class="btn btn-default btn-outline-primary">Back</a>
+                            <a href="#" role="button" class="btn btn-default btn-outline-primary mr-4">Back</a>
                             <a href="#" role="button" class="btn btn-default btn-primary">Continue</a>
                         </div>
                     </div>
@@ -180,9 +184,10 @@
                     </div>
                 </div>
             </div>
-            <div class="container pt-4 wizard-navigation d-md-none"><a href="#" role="button"
-                    class="btn btn-default btn-outline-primary mb-3 mb-md-0">Back</a> <a href="#" role="button"
-                    class="btn btn-default btn-primary">Continue</a></div>
+            <div class="container pt-4 wizard-navigation d-md-none">
+                <a href="#" role="button" class="btn btn-default btn-primary  mb-3 mb-md-0 ">Continue</a>
+                <a href="#" role="button" class="btn btn-default btn-outline-primary">Back</a>
+            </div>
         </div>
 
     </div>

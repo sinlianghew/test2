@@ -4,6 +4,9 @@
             style="   background:url(../../src/assets/img/{{imgName}}) no-repeat; background-size: cover; background-position: center;">
             <img style="opacity:0" src="assets/img/{{imgName}}">
             <div class="card-label {{labelClass}}">{{label}}</div>
+            {% if rebateNum %}
+            <div class="card-label label-rebate">{{rebateNum}}% Rebate</div>
+            {%endif%}
         </div>
 
         <div class="text-box h-100 {{textBoxClass}}">

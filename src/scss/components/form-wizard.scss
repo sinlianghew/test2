@@ -2,29 +2,40 @@
     .wizard-navigation {
         display: flex;
         flex-direction: column;
-        
+
         @include media-breakpoint-up(md) {
             flex-direction: row;
             justify-content: flex-end;
-            
+
             .btn {
                 margin-right: 1rem;
-    
+
                 &:last-child {
                     margin-right: 0;
                 }
 
-              
+
             }
         }
 
-        .btn{ 
-            &.btn-outline-primary{
-                color:$color-red;
-                &:hover{
-                    color:#fff;
+        .btn {
+            &.btn-outline-primary {
+                color: $color-red;
+
+                &:hover {
+                    color: #fff;
                 }
             }
+        }
+    }
+
+    .summary-pane {
+        .rounded {
+            border-radius: 10px!important;
+        }
+
+        hr {
+            background: $color-primary-blue;
         }
     }
 }

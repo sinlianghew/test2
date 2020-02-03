@@ -1,10 +1,12 @@
 .homepage-wrapper {
 
+
+
     .cus-line-height {
         line-height: 3rem;
     }
 
-  
+
     .title {
         color: #fff;
         font-size: 40px;
@@ -20,6 +22,7 @@
         font-size: 16px;
         line-height: 20px;
         font-weight: $font-weight-normal;
+
         @include media-breakpoint-up(md) {
             color: $color-primary-blue;
             font-size: 20px;
@@ -34,6 +37,7 @@
         background: url(../../src/assets/img/homepage.png) no-repeat;
         background-size: cover;
         background-position-x: 26%;
+
         @include media-breakpoint-up(md) {
             background-position: center;
         }
@@ -47,6 +51,51 @@
         }
     }
 
+
+
+}
+
+// homepage wrapper end
+
+
+.rebate-label-banner {
+    
+    @include media-breakpoint-up(md) {
+        top: -2rem;
+    }
+    .rebate-label {
+        font-family: $font-family-base;
+        text-transform: uppercase;
+        position: relative;
+        z-index: 100;
+        color: #fff;
+        font-weight: $font-weight-bold;
+        min-width: 89px;
+        height: 30px;
+        font-size: 14px;
+        padding: 6px 10px;
+        top: 0;
+        left: 0;
+        width: 98px;
+        background: $color-orange;
+        margin-bottom: 8px;
+
+        @include media-breakpoint-up(md) {
+            margin-bottom: 18px;
+        }
+
+        &:after {
+            content: "";
+            width: 0;
+            height: 0;
+            border-top: 15px solid transparent;
+            border-left: 10px solid $color-orange;
+            border-bottom: 15px solid transparent;
+            position: absolute;
+            top: 0;
+            right: -10px;
+        }
+    }
 
 
 }
@@ -89,7 +138,7 @@
                     height: 100%;
                     left: 0px;
                 }
-            } 
+            }
 
             &.bottom-line {
                 @include media-breakpoint-down(md) {
