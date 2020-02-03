@@ -1,4 +1,5 @@
 /** Helpers and Utilities **/
+
 @import "node_modules/bootstrap/scss/functions";
 @import "node_modules/bootstrap/scss/mixins";
 @import "node_modules/bootstrap/scss/variables";
@@ -8,6 +9,8 @@
 @import "node_modules/bootstrap/scss/root";
 
 @import "node_modules/bootstrap/scss/type";
+@import "node_modules/bootstrap/scss/tooltip"; 
+ 
 
 /** Client base css **/
 body {
@@ -135,8 +138,6 @@ body {
     @import "components/homepage.scss";
     @import "components/cards.scss";
     @import "components/ttk-pdp.scss";
-    @import "components/tooltip.scss";
-
 
     @import "components/banner-header-title.scss";
     @import "components/buttons.scss";
@@ -177,13 +178,15 @@ body {
     @import "node_modules/bootstrap/scss/close";
     @import "node_modules/bootstrap/scss/toasts";
     @import "node_modules/bootstrap/scss/modal";
-    @import "node_modules/bootstrap/scss/tooltip";
+  
     @import "node_modules/bootstrap/scss/popover";
     @import "node_modules/bootstrap/scss/carousel";
     @import "node_modules/bootstrap/scss/spinners";
     @import "node_modules/bootstrap/scss/utilities";
     @import "node_modules/bootstrap/scss/print";
 }
+@import "components/tooltip.scss"; 
+
 
 /** Bootstrap **/
 // @import "node_modules/bootstrap/scss/bootstrap.scss";

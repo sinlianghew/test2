@@ -1,8 +1,17 @@
-.red-tooltip+.tooltip>
-.tooltip-inner {
-    background-color: #f00!important;
-}
 
-.tooltip {
-    background-color: #f00!important;
+.tooltip-inner {
+    background-color: $color-primary-blue;
+    opacity: 1;
+}
+.tooltip.bs-tooltip-right .arrow:before {
+    border-right-color: $color-primary-blue !important;
+}
+.tooltip.bs-tooltip-left .arrow:before {
+    border-right-color: $color-primary-blue !important;
+}
+.tooltip.bs-tooltip-bottom .arrow:before {
+    border-right-color: $color-primary-blue !important;
+}
+.tooltip.bs-tooltip-top .arrow:before {
+    border-right-color: $color-primary-blue !important;
 }

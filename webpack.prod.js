@@ -75,7 +75,7 @@ module.exports = merge(common, {
                     { 
                         loader: MiniCssExtractPlugin.loader,
                         options: {
-                            publicPath: '/spa-assets/',
+                            publicPath: './spa-assets/',
                         },
                     },
 
