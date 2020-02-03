@@ -15,7 +15,7 @@ module.exports = {
     resolve: {
         extensions: [".js", ".scss", ".css"],
         alias: {
-            assets: path.resolve(__dirname, 'src/assets'),
+            assets: path.resolve(__dirname, 'src/spa-assets'),
             'vue$': 'vue/dist/vue.esm.js'
         }
     },
@@ -25,9 +25,9 @@ module.exports = {
             filename: page.replace(".twig", ".html"),
             inject: true
         })),
-        new SVGSpritemapPlugin("src/assets/icons/**/*.svg", {
+        new SVGSpritemapPlugin("src/spa-assets/icons/**/*.svg", {
             output: {
-                filename: "assets/icons/icons.svg",
+                filename: "spa-assets/icons/icons.svg",
             }
         }),
         new MiniCssExtractPlugin({

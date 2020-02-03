@@ -107,7 +107,7 @@ body {
         color: #fff;
         a {
             float: right;
-            background: url(../../src/assets/img/side-menu-close-btn.png) no-repeat center right;
+            background: url(../../src/spa-assets/img/side-menu-close-btn.png) no-repeat center right;
         }
 
         @include media-breakpoint-down(md) {
@@ -185,8 +185,59 @@ body {
     @import "node_modules/bootstrap/scss/utilities";
     @import "node_modules/bootstrap/scss/print";
 }
+
 @import "components/tooltip.scss"; 
 
+
+// copy from client css
+.travelTNC {
+    color: #fff;
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+.travelTNC>a {
+    text-indent: 100%;
+    float: right;
+    background: url(../spa-assets/img/side-menu-close-btn.png) no-repeat center right
+}
+
+@media(max-width: 991.98px) {
+    .travelTNC {
+        bottom: 5%
+    }
+}
+
+@media(min-width: 768px) {
+    .travelTNC {
+        height: 44%;
+    }
+}
+
+.travel-insurance-new .d-flex.hidden {
+    display: none !important;
+}
+
+.travel-insurance-new .pdp-table .accordion .accordion-content-wrapper .icon {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+.travel-insurance-new .pdp-table .accordion .accordion-content-wrapper .collapsed .icon {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+    -webkit-transition: -webkit-transform .5s ease;
+    transition: -webkit-transform .5s ease;
+    transition: transform .5s ease;
+    transition: transform .5s ease, -webkit-transform .5s ease
+}
+
+@media(max-width: 767px) {
+    .travel-insurance-new .pdp-table .accordion .accordion-content-wrapper .title-box {
+        background: #fff
+    }
+}
+// copy client css end
 
 /** Bootstrap **/
 // @import "node_modules/bootstrap/scss/bootstrap.scss";

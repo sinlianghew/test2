@@ -51,7 +51,8 @@
 
     .icon {
         position: absolute;
-        top: 50%;
+        // top: 50%;
+        top: 20px;
         right: 10px;
         transform: translateY(-50%);
         pointer-events: none;

@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Datepicker from 'vuejs-datepicker';
 import moment from 'moment';
-import Countries from '../../assets/json/countries.json';
+import Countries from '../../spa-assets/json/countries.json';
 import _ from 'lodash';
 import $ from 'jquery';
 import matchHeight from 'jquery-match-height';
@@ -298,5 +298,7 @@ if ($('#travel-form').length) {
 }
 
 $(document).ready(function() {
-    $('[data-toggle="tooltip"]').tooltip();
-});
+    // $('[data-toggle="tooltip"]').tooltip();
+    $("body").tooltip({ selector: '[data-toggle=tooltip]' });
+}); 
+ 
