@@ -51,7 +51,13 @@
         }
     }
 
+    .topText-60 {
+        top: -2rem;
 
+        @include media-breakpoint-up(md) {
+            top: -60px;
+        }
+    }
 
 }
 
@@ -59,10 +65,11 @@
 
 
 .rebate-label-banner {
-    
+
     @include media-breakpoint-up(md) {
         top: -2rem;
     }
+
     .rebate-label {
         font-family: $font-family-base;
         text-transform: uppercase;

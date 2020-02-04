@@ -1,0 +1,136 @@
+{% extends "templates/partials/base.twig" %}
+
+{% block main %}
+
+<div class="travel-details detail-page-wrapper bg-lightGrey">
+
+    <div class="jumbotron text-center mb-0 align-items-center d-flex  justify-content-center justify-content-md-start"
+        style="background:url(../../src/spa-assets/img/bg-travelRight-banner.png) no-repeat; background-size: cover; background-position: center;">
+
+        <div class="text-md-left text-center container">
+            <!-- desktop -->
+            <h1 class="d-none d-md-block  mb-3 color-primary-blue">TravelRight Plus Insurance </h1>
+            <h1 class="d-none d-md-block mb-3 color-primary-blue font-weight-normal">Advisory on Lombok</h1>
+
+            <!-- mobile -->
+            <h1 class="d-block d-md-none ft-1 mb-3 color-primary-blue">TravelRight Plus </h1>
+            <h1 class="d-block d-md-none ft-1 mb-3 color-primary-blue">Insurance </h1>
+            <h1 class="d-block d-md-none ft-1 mb-3 color-primary-blue"> Advisory on Lombok</h1>
+
+        </div>
+    </div>
+
+
+
+
+
+    <div class="container mt-md-5 mt-4 pt-3 pt-md-0">
+        <p class="color-blue-3 bt7 mb-0">12 December 2019 </p>
+        <h1 class="title-header-2 color-black font-weight-bold mb-3 mb-md-4">Important Notice:</h1>
+
+        <p class="bt4"> On 5 August 2018, a 6.9 magnitude earthquake struck Lombok and also affected Bali. Although
+            flights are reported to be operating as usual, there may be delays, disruptions or cancellations in the
+            forthcoming days. </p>
+        <p class="bt4 mb-0"> In the event of flight delay or cancellation due to the earthquake, claims may be submitted
+            under the benefits and sections detailed in the Advisory Notice below. </p>
+
+
+        <p class="color-black  bt4 font-weight-bold pt-4 mt-3 mt-md-0 pt-md-5 mb-4 pb-md-0 pb-md-3">Download the Notice below to learn more.</p>
+
+
+        <div class="row  pb-md-5 pb-4 mb-3 mb-md-0">
+            <a class="col-md-4 col-12 d-flex  align-items-center">
+                <span>
+                    {% include "templates/components/icon.twig" with { iconName: 'pdf' , iconSize:'xxl' } %}</span>
+                <p class="ml-2 font-weight-normal p1 mb-0 bt4">Advisory Notice</p>
+            </a>
+
+            <div class="col-4 d-none d-md-block"></div>
+        </div>
+
+    
+
+    </div>
+
+    <div class="bg-grey">
+
+
+        <!-- feature slider  -->
+        {% embed "templates/components/card-slider-section.twig" with {
+        wrapperClass:"bg-grey pt-5  ",
+        title: 'Discover More Highlights',
+    } %}
+        {% block content %}
+
+
+        <!-- card one -->
+        {% embed "templates/components/main-card.twig" with { 
+            cardClass:'card-type-4 bg-white', 
+            imgName: 'ride-protect.png', 
+            labelClass:'bg-blue',
+            label:'PROMOTION', 
+            catClassOne : '',
+            categoryOne : 'Motorcycle',
+            categoryTwo : '',
+            title:'Ride Protected with MSIG Motorcycle', 
+            btnView:' '
+        }%}
+        {% endembed %}
+
+        <!-- card two -->
+        {% embed "templates/components/main-card.twig" with { 
+            cardClass:'card-type-4 bg-white', 
+            imgName: 'date-to-adventure.png', 
+            labelClass:'bg-blue',
+            label:'PROMOTION', 
+            catClassOne : '',
+            categoryOne : 'Travel',
+            categoryTwo : '',
+            title:'Date To Adventure', 
+            btnView:' '
+        }%}
+        {% endembed %}
+
+
+        <!-- card three -->
+        {% embed "templates/components/main-card.twig" with { 
+            cardClass:'card-type-4 bg-white', 
+            imgName: 'celebrate-raya.png', 
+            labelClass:'bg-blue',
+            label:'PROMOTION', 
+            catClassOne : '',
+            categoryOne : 'Private Car',
+            categoryTwo : '',
+            title:'Get Insured with Celebrate Raya', 
+            btnView:' '
+        }%}
+        {% endembed %}
+
+        <!-- card four -->
+        {% embed "templates/components/main-card.twig" with { 
+            cardClass:'card-type-4 bg-white', 
+            imgName: 'senang-raya.png', 
+            labelClass:'bg-blue',
+            label:'PROMOTION', 
+            catClassOne : '',
+            categoryOne : 'travel',
+            categoryTwo : '',
+            title:'Get Insured with Celebrate Raya', 
+            btnView:' '
+        }%}
+        {% endembed %}
+
+
+
+        {% endblock %}
+        {% endembed %}
+        <!-- feature slider end -->
+
+    </div>
+
+
+
+
+</div>
+
+{% endblock %}

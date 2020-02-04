@@ -300,5 +300,15 @@ if ($('#travel-form').length) {
 $(document).ready(function() {
     // $('[data-toggle="tooltip"]').tooltip();
     $("body").tooltip({ selector: '[data-toggle=tooltip]' });
+
+    if ($('.popup-wrapper').length) {
+        
+        $(".btn-close").click(function(){
+            $(".popup-wrapper").hide();
+        });
+    
+    }
+
+
 }); 
  
