@@ -32,7 +32,7 @@ module.exports = merge(common, {
                     loader: "file-loader",
                     options: {
                         name: "[name].[hash].[ext]",
-                        outputPath: "assets/img"
+                        outputPath: "spa-assets/img"
                     }
                 }
             },
@@ -43,7 +43,7 @@ module.exports = merge(common, {
                     loader: "file-loader",
                     options: {
                         name: "[name].[hash].[ext]",
-                        outputPath: "assets/fonts"
+                        outputPath: "spa-assets/fonts"
                     }
                 }
             },

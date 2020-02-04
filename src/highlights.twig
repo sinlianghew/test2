@@ -29,7 +29,7 @@
                 }%}
 
                 {% set cardList = [
-                    { desc:'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonum...', },
+                    { desc:'Lorem ipsum dolor sit amet nonum...', },
                 ] %}
                 {% endembed %}
 
@@ -55,8 +55,8 @@
                    {% embed "templates/components/main-card.twig" with { 
                     cardClass:'card-type-1', 
                     imgName: 'travelRight.jpg', 
-                    labelClass:'bg-primary-blue',
-                    label:'Promotion', 
+                    labelClass:'bg-purple',
+                    label:'New Add-on', 
                     catClassOne : '',
                     categoryOne : 'Private Car',
                     categoryTwo : 'Motorcycle',
@@ -73,8 +73,9 @@
                    {% embed "templates/components/main-card.twig" with { 
                     cardClass:'card-type-1', 
                     imgName: 'travelRight.jpg', 
-                    labelClass:'bg-primary-blue',
-                    label:'Promotion', 
+                    rebateNum :'25',
+                    labelClass:'bg-purple',
+                    label:'New Add-on', 
                     catClassOne : '',
                     categoryOne : 'Private Car',
                     categoryTwo : 'Motorcycle',
@@ -91,7 +92,7 @@
                    {% embed "templates/components/main-card.twig" with { 
                     cardClass:'card-type-1', 
                     imgName: 'travelRight.jpg', 
-                    labelClass:'bg-primary-blue',
+                    labelClass:'bg-blue',
                     label:'Promotion', 
                     catClassOne : '',
                     categoryOne : 'Private Car',
@@ -101,7 +102,7 @@
                 }%}
 
                 {% set cardList = [
-                    { desc:'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonum...', },
+                    { desc:'Lorem ipsum dolor sit amet, consetetur  sadipscing elitr, sed diam nonum...', },
                 ] %}
                 {% endembed %}
 
@@ -111,7 +112,6 @@
 
             <div class="text-center mt-md-0  pb-4 mb-3 mb-md-0 pb-md-5">
                 <a href="#" role="button" class="btn btn-default btn-primary btn-l">Show More</a>
-
             </div>
         </div>
     </div>

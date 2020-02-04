@@ -6,7 +6,7 @@ select.form-control {
     box-sizing: border-box;
     -webkit-appearance: none;
     -moz-appearance: none;
-    background: transparent url('../../src/assets/img/expand-icon.png') right 10px center no-repeat;
+    background: transparent url('../../src/spa-assets/img/expand-icon.png') right 10px center no-repeat;
     padding-right: 40px;
     @include media-breakpoint-up(lg) {
         max-width: 325px;

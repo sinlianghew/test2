@@ -1,6 +1,9 @@
 .ttk-wrapper {
+    a{
+        cursor: pointer;
+    }
     .bg-ttk {
-        background: url(../../src/assets/img/ttk-bg.png) no-repeat;
+        background: url(../../src/spa-assets/img/ttk-bg.png) no-repeat;
         background-size: cover;
         background-position: center;
     }
@@ -10,7 +13,7 @@
         @include media-breakpoint-up(md) {
             .navbar .navbar-collapse .navbar-nav .nav-item .nav-link {
                 line-height: 1.6rem;
-                padding: 27px 33px;
+                padding: 27px 5.4rem;
             }
 
         }
@@ -86,6 +89,8 @@
 
                 @include media-breakpoint-down(md) {
                     margin-top: 20px;
+                    margin-right: 0.25rem;
+                    margin-left: 0.25rem;
                 }
 
                 .lastRowTitle {

@@ -13,7 +13,7 @@ module.exports = merge(common, {
     output: {
         path: path.resolve(__dirname, "dist"),
         filename: 'js/[name].js',
-        // publicPath: '~/Assets/' // comment this out when building for Firebase
+        // publicPath: '~/spa-assets/' // comment this out when building for Firebase
     },
     module: {
         rules: [
@@ -36,7 +36,7 @@ module.exports = merge(common, {
                     loader: "file-loader",
                     options: {
                         name: "[name].[ext]",
-                        outputPath: "assets/img"
+                        outputPath: "spa-assets/img"
                     }
                 }
             },
@@ -47,7 +47,7 @@ module.exports = merge(common, {
                     loader: "file-loader",
                     options: {
                         name: "[name].[ext]",
-                        outputPath: "assets/fonts"
+                        outputPath: "spa-assets/fonts"
                     }
                 }
             },
@@ -75,7 +75,7 @@ module.exports = merge(common, {
                     { 
                         loader: MiniCssExtractPlugin.loader,
                         options: {
-                            publicPath: '/spa-assets/',
+                            publicPath: './',
                         },
                     },
 
