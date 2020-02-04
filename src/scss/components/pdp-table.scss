@@ -52,6 +52,12 @@
                 }
             }
 
+            .icon {
+                transform: rotate(0deg);
+                transition: transform .5s;
+                will-change: transform;
+            }
+
             .collapsed {
                 @include media-breakpoint-down(md) {
                     margin-bottom: 24px;
@@ -59,14 +65,6 @@
 
                 .icon {
                     transform: rotate(-90deg);
-                    -webkit-transition: -webkit-transform .5s ease;
-                    -ms-transition: -ms-transform .5s ease;
-                    transition: transform .5s ease;
-
-                    &.collapsed {
-                        transform: rotate(0deg);
-
-                    }
                 }
             }
 
@@ -226,6 +224,9 @@
         background-color: #E6E5EC;
     }
 
+    &.variant-sport {
+        background-color: transparent;
+    }
     .main-title {
         height: 90px;
     }
