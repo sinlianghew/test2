@@ -105,7 +105,11 @@ body {
 
     .travelTNC {
         color: #fff;
+        overflow: hidden;
+        overflow-y: auto;
+
         a {
+            text-indent: 100%;
             float: right;
             background: url(../../src/spa-assets/img/side-menu-close-btn.png) no-repeat center right;
         }
