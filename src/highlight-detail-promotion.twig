@@ -1,0 +1,181 @@
+{% extends "templates/partials/base.twig" %}
+
+{% block main %}
+
+<div class="travel-details detail-page-wrapper bg-lightGrey">
+
+    <div class="jumbotron text-center mb-0 align-items-center d-flex  justify-content-center"
+        style="background:url(../../src/spa-assets/img/bg-highlight-detail.jpg) no-repeat; background-size: cover; background-position: center;">
+
+        <div>
+            <!-- desktop -->
+            <h1 class="d-none d-md-block  mb-3 color-white">Drive with</h1>
+            <h1 class="d-none d-md-block mb-3 color-white font-weight-normal">peace of mind this holiday season</h1>
+
+            <!-- mobile -->
+            <h1 class="d-block d-md-none ft-1 mb-3 color-white">Drive with </h1>
+            <h1 class="d-block d-md-none ft-1 mb-3 color-white"> peace of mind this</h1>
+            <h1 class="d-block d-md-none ft-1 mb-3 color-white"> holiday season</h1>
+
+
+            <p class="bt4 color-white">01 December 2019 - 31 December 2020</p>
+            <a href="./form.html" role="button" class="mt-5 btn btn-l btn-default btn-secondary">View Product</a>
+
+        </div>
+    </div>
+
+
+
+
+
+    <div class="container mt-md-5 mt-4 pt-3 pt-md-0">
+        <h1 class="title-header-2 color-black font-weight-bold mb-3 mb-md-4">About this Promotion</h1>
+
+        <p class="bt4">
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
+            dolore
+            magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
+        </p>
+        <p class="bt4">
+            Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit
+            amet,
+            consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
+            sed diam
+            voluptua.
+        </p>
+
+        <div class="d-flex justify-content-center my-4 youtube-wrapper">
+            <iframe src="https://www.youtube.com/embed/tgA6qPo1SD0" frameborder="0"
+                allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+
+        <p class="font-weight-bold color-black bt6">Promotion Period: 01 December 2019 - 31 December 2020 </p>
+
+        <div class="divider-2 my-4 my-md-5"></div>
+
+        <h1 class="title-header-2 color-black font-weight-bold mb-3 mb-md-4">Terms & Conditions</h1>
+        <ol class="pl-3">
+            <li class="bt5 color-black pl-md-3 pl-3 ml-1 ml-md-0 mb-4 pb-md-2 "><span> Lorem ipsum dolor sit amet,
+                    consetetur
+                    sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
+                </span> </li>
+            <li class="bt5 color-black pl-md-3 pl-3 ml-1 ml-md-0 mb-4 pb-md-2 "><span> Lorem ipsum
+                    sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
+                </span> </li>
+            <li class="bt5 color-black pl-md-3 pl-3 ml-1 ml-md-0 mb-4 pb-md-2 "><span> Lorem ipsum dolor sit amet,
+                    consetetur
+                    sadipscing elitr, sed diam nonumy eirmod tempor labore et dolore
+                </span> </li>
+            <li class="bt5 color-black pl-md-3 pl-3 ml-1 ml-md-0 mb-4 pb-md-2 "><span>
+                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+                </span> </li>
+            <li class="bt5 color-black pl-md-3 pl-3 ml-1 ml-md-0 mb-4 pb-md-2 "><span>
+                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+                    labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
+                    et ea rebum. Stet clita kasd
+                </span> </li>
+
+        </ol>
+
+
+        <p class="color-black  bt4 font-weight-bold pt-2 pt-md-4">Download the fine print below to learn more.</p>
+
+
+        <div class="row pt-md-2 mt-4">
+            <a class="col-md-4 col-12 d-flex mb-4 align-items-center">
+                <span>
+                    {% include "templates/components/icon.twig" with { iconName: 'pdf' , iconSize:'xxl' } %}</span>
+                <p class="ml-2 font-weight-normal p1 mb-0 bt4">Terms & Conditions </p>
+            </a>
+
+            <div class="col-4 d-none d-md-block"></div>
+        </div>
+
+        <div class="d-flex justify-content-center pb-5 ">
+            <a href="./form.html" role="button" class="mt-4  btn btn-l btn-default btn-primary">View Product</a>
+        </div>
+
+    </div>
+
+    <div class="bg-grey">
+
+
+        <!-- feature slider  -->
+        {% embed "templates/components/card-slider-section.twig" with {
+        wrapperClass:"bg-grey pt-5  ",
+        title: 'Discover More Highlights',
+    } %}
+        {% block content %}
+
+
+        <!-- card one -->
+        {% embed "templates/components/main-card.twig" with { 
+            cardClass:'card-type-4 bg-white', 
+            imgName: 'ride-protect.png', 
+            labelClass:'bg-blue',
+            label:'PROMOTION', 
+            catClassOne : '',
+            categoryOne : 'Motorcycle',
+            categoryTwo : '',
+            title:'Ride Protected with MSIG Motorcycle', 
+            btnView:' '
+        }%}
+        {% endembed %}
+        
+        <!-- card two -->
+        {% embed "templates/components/main-card.twig" with { 
+            cardClass:'card-type-4 bg-white', 
+            imgName: 'date-to-adventure.png', 
+            labelClass:'bg-blue',
+            label:'PROMOTION', 
+            catClassOne : '',
+            categoryOne : 'Travel',
+            categoryTwo : '',
+            title:'Date To Adventure', 
+            btnView:' '
+        }%}
+        {% endembed %}
+
+
+        <!-- card three -->
+        {% embed "templates/components/main-card.twig" with { 
+            cardClass:'card-type-4 bg-white', 
+            imgName: 'celebrate-raya.png', 
+            labelClass:'bg-blue',
+            label:'PROMOTION', 
+            catClassOne : '',
+            categoryOne : 'Private Car',
+            categoryTwo : '',
+            title:'Get Insured with Celebrate Raya', 
+            btnView:' '
+        }%}
+        {% endembed %}
+
+         <!-- card four -->
+         {% embed "templates/components/main-card.twig" with { 
+            cardClass:'card-type-4 bg-white', 
+            imgName: 'senang-raya.png', 
+            labelClass:'bg-blue',
+            label:'PROMOTION', 
+            catClassOne : '',
+            categoryOne : 'travel',
+            categoryTwo : '',
+            title:'Get Insured with Celebrate Raya', 
+            btnView:' '
+        }%}
+        {% endembed %}
+
+
+
+        {% endblock %}
+        {% endembed %}
+        <!-- feature slider end -->
+
+    </div>
+
+
+
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "templates/partials/base.twig" %}
+
+{% block main %}
+
+<div class="homepage-wrapper">
+
+    <div class="jumbotron mb-0 align-items-center d-flex  justify-content-end bg-homepage rounded-0">
+        <div class="container">
+            <div class="row">
+                <div class="col-md"></div>
+                <!-- rebate-label-banner  add this class to text-wrapper -->
+                <div class="text-left  col-md  mb-md-4 mb-5 pb-5 pb-md-0 mr-md-4  text-wrapper topText-60">
+                    <!-- <div class="rebate-label">25% REBATE</div> -->
+                    <h1 class="title font-weight-bold cus-line-height">TravelRight </h1>
+                    <h1 class="title font-weight-normal">with MSIG</h1>
+                    <h3 class="sub-title font-weight-normal mt-3">Enjoy <span class="font-weight-bold">10% off</span>
+                        when you buy travel insurance.</h3>
+                    <a href="#" role="button" class="btn btn-default btn-primary btn-l mt-5 pt-md-3">Learn More</a>
+                </div>
+            </div>
+        </div>
+        <div class="d-block d-md-none bg-blue bg-overlay"></div>
+    </div>
+
+    {% include "templates/components/subnav-homepage.twig" %}
+</div>
+
+
+<!-- popupmodal -->
+
+
+
+<!-- Modal -->
+<div class="popup-wrapper ">
+
+    <div class="modal show d-block " id="exampleModalCenter" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+
+
+                <div class="button-icon btn-close"><svg class="icon icon-s">
+                        <use xlink:href="spa-assets/icons/icons.svg#sprite-close-popup"
+                            href="spa-assets/icons/icons.svg#sprite-close-popup"></use>
+                    </svg></div>
+                <div class="bg-white modal-body p-0 row">
+
+                    <div class="col-md-6 col-12 p-0"
+                        style="background:url(../../src/spa-assets/img/important-notice.png) no-repeat; background-size: cover; background-position: center;">
+                        <img style="opacity: 0;" src="spa-assets/img/important-notice.png">
+                    </div>
+                    <div class="col-md-6 col-12 align-items-center d-flex p-0">
+                        <div class="text-box">
+                            <h1 class="color-primary-blue title-header-2 mb-3 mb-md-4 ">Important Notice:</h1>
+                            <p>Please note that we will be performing a site
+                                maintenance during the following time:
+                                22 January 2020 (Sunday) 9pm - 10pm.
+                            </p>
+                            <p> Apologise for any inconvenience caused.</p>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-popup"></div>
+</div>
+<!-- popup modal end -->
+{% endblock %}

@@ -1,0 +1,16 @@
+.detail-page-wrapper {
+
+    .youtube-wrapper {
+        iframe {
+
+            width: 322px;
+            height: 189px;
+
+            @include media-breakpoint-up(md) {
+                width: 904px;
+                height: 387px;
+            }
+        }
+
+    }
+}

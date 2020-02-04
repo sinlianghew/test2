@@ -1,17 +1,28 @@
 //add on title font size
 
-.title-header-1{
+.title-header-1 {
     font-size: 20px;
     font-weight: $font-weight-bold;
+
     @include media-breakpoint-up(md) {
         font-size: 32px;
     }
 }
 
 
+.title-header-2 {
+    font-size: 32px;
+    font-weight: $font-weight-bold;
+
+    @include media-breakpoint-up(md) {
+        font-size: 44px;
+    }
+}
+
+
 //font-title
-.ft-1{
-    font-size:32px;
+.ft-1 {
+    font-size: 32px;
 }
 
 
@@ -19,11 +30,22 @@
 .bt1 {
     font-weight: 700;
     font-size: 18px;
+
+    @include media-breakpoint-up(md) {
+        font-size: 18px;
+
+    }
+
 }
 
 .bt2 {
     font-weight: 400;
     font-size: 16px;
+
+    @include media-breakpoint-up(md) {
+        font-size: 18px;
+    }
+
 }
 
 
@@ -34,27 +56,37 @@
 
 .bt4 {
     font-size: 18px;
-}
 
-.bt5{
-    font-size: 16px;
-}
-
-@include media-breakpoint-up(md) {
-    .bt1 {
-        font-size: 18px;
-    }
-
-    .bt2 {
-        font-size: 18px;
-    }
-
-    .bt4 {
+    @include media-breakpoint-up(md) {
         font-size: 20px;
     }
-    .bt5{
-        font-size: 20px
+}
+
+.bt5 {
+    font-size: 16px;
+
+    @include media-breakpoint-up(md) {
+        font-size: 20px;
     }
+
+}
+
+.bt6 {
+    font-size: 18px;
+
+    @include media-breakpoint-up(md) {
+        font-size: 24px;
+    }
+
+}
+
+.bt7 {
+    font-size: 12px;
+
+    @include media-breakpoint-up(md) {
+        font-size: 18px;
+    }
+
 }
 
 
@@ -82,67 +114,67 @@ ol.roman {
 /**NEW class FORMAT **/
 
 .bg-white {
-    background-color: #fff!important;
+    background-color: #fff !important;
 }
 
 .bg-black {
-    background-color: #000!important;
+    background-color: #000 !important;
 }
 
 .bg-lightGrey {
-    background-color: $color-light-grey!important;
+    background-color: $color-light-grey !important;
 }
 
-.bg-grey{
-    background-color: $color-grey!important;
+.bg-grey {
+    background-color: $color-grey !important;
 }
 
 .bg-darkGrey {
-    background-color: $color-dark-grey!important;
+    background-color: $color-dark-grey !important;
 }
 
 .bg-pink {
-    background-color: $color-primary-pink!important;
+    background-color: $color-primary-pink !important;
 }
 
 .bg-light-pink {
-    background-color: $color-light-pink!important;
+    background-color: $color-light-pink !important;
 }
 
 .bg-blue {
-    background-color: $color-primary-blue!important;
+    background-color: $color-primary-blue !important;
 }
 
 .bg-blue-2 {
-    background-color: $color-blue-2!important;
+    background-color: $color-blue-2 !important;
 }
 
 .bg-blue-3 {
-    background-color: $color-blue-3!important;
+    background-color: $color-blue-3 !important;
 }
 
 .bg-blue-4 {
-    background-color: $color-blue-3!important;
+    background-color: $color-blue-4 !important;
 }
 
-.bg-orange{
-    background-color:$color-orange!important;
+.bg-orange {
+    background-color: $color-orange !important;
 }
 
-.bg-purple{
-    background-color:$color-purple!important;
+.bg-purple {
+    background-color: $color-purple !important;
 }
 
-.bg-red{
-    background-color:$color-red!important;
+.bg-red {
+    background-color: $color-red !important;
 }
 
-.bg-green{
-    background-color:$color-green!important;
+.bg-green {
+    background-color: $color-green !important;
 }
 
-.bg-light-blue{
-    background-color:$color-light-blue!important;
+.bg-light-blue {
+    background-color: $color-light-blue !important;
 }
 
 
