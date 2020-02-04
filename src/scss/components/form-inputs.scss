@@ -19,6 +19,10 @@
             //min-width: 315px;
         }
     }
+
+    select.form-control[disabled] {
+        background-image: none;
+    }
 }
 
 .form-row {
