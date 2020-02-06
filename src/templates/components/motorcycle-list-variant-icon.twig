@@ -1,0 +1,21 @@
+<ul class="list variant-icon mb-0 {{class}}">
+	{% for key, item in items %}        
+        <li class="mb-2 row-match-height {% if listWithLabelValue == true %}pl-lg-0 text-lg-center{% endif %}">
+            {% if listWithLabelValue == true %}
+                <div class="list-icon">
+                    {% include "icon.twig" with { iconName: item.iconName, iconSize: 's' } %}
+                </div> 
+                <div class="list-content d-flex justify-content-between d-lg-block w-100 text-left ml-md-4">
+                    {{ item.content }}
+                </div>
+            {% else %}
+                <div class="list-icon">
+                    {% include "icon.twig" with { iconName: item.iconName, iconSize: 's' } %}
+                </div>
+                <div class="list-content">
+                    {{ item.content }}
+                </div>
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>

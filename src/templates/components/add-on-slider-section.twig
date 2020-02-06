@@ -1,0 +1,32 @@
+<div class="card-slider-wrapper  {{wrapperClass}}">
+    <div class="container">
+        <h1 class="pb-3 ft-1 font-weight-bold">{{title}}</h1>
+
+        <div class="pb-3  m-slider-none ">
+
+            <div class="d-flex m-flex-wrap ">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+
+
+
+        <div class="d-md-none d-flex justify-content-center">
+
+            <a href="#" class="btn btn-secondary btn-icon mr-3">
+                <div class="button-icon">
+                    <svg class="icon icon-s tick-mark">
+                        <use xlink:href="spa-assets/icons/icons.svg#sprite-arrow-dropdown"
+                            href="spa-assets/icons/icons.svg#sprite-arrow-dropdown"></use>
+                    </svg>
+                </div>
+                <span class="button-text">View More</span>
+            </a>
+
+        </div>
+        <div class="align-items-center d-none d-md-flex fake-slider-dots justify-content-center pb-4">
+            <div class="dots active"></div>
+            <div class="dots"></div>
+        </div>
+    </div>
+</div>
