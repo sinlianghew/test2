@@ -1,0 +1,402 @@
+{% extends "templates/partials/base.twig" %}
+
+{% block main %}
+
+<div class="travel-details motorcycle-wrapper bg-lightGrey">
+
+    <div class="alert-banner bg-red p-3">
+        <div class="d-flex container">
+            <span>
+                <img src="spa-assets/img/alert-img.png">
+            </span>
+            <p class="bt2 color-white pl-2 pr-md-5  pr-2 font-weight-bold mb-0 ">Notice:
+                <span class="d-block d-md-inline ">
+                    Our website will undergo a schedule maintenance on 18 Dec
+                    (Wednesday)
+                    10pm to 19 Dec (Thursday)
+                    12am.
+                    During this period, our Motor will not be available. Apologise for any inconvenience caused.</span>
+            </p>
+
+            <span>
+                {% include "templates/components/icon.twig" with { iconName: 'close', iconSize:'icon-m color-white'} %}
+            </span>
+        </div>
+    </div>
+
+
+    <div class="jumbotron text-center mb-0 align-items-center d-flex  justify-content-center bg-motorcycle"
+        style="background:url(../../src/spa-assets/img/bg-motorcycle.png) no-repeat; background-size: cover; background-position: center;">
+
+        <div>
+            <!-- <img src="spa-assets/img/travelright-icon-white.png"> -->
+            {% include "templates/components/icon.twig" with { iconName: 'motorcycle-1', iconSize:'customSize color-white'} %}
+            <h1 class="w mb-3">Motorcycle Insurance</h1>
+            <a href="./form.html" role="button" class="mt-5 btn btn-l btn-default btn-primary">Apply Now</a>
+
+        </div>
+    </div>
+
+    {% include "templates/components/subnav-pdp.twig" with { 
+        subnavclass : 'subnav-motorcycle-wrapper',
+        title1 : 'ABOUT',
+        title2 : 'PRODUCTS',
+        title3 : 'ADD-ON',
+        title4 : 'LEARN MORE'
+    } %}
+
+
+    <div class="container mt-md-5 mt-4 pt-2 pt-md-0">
+        <p class="bt4">This annual comprehensive policy provides insurance against liability to other parties for injury
+            or death, damage to other
+            parties’ property, and accidental or fire damage to your motorcycle or theft of your motorcycle.
+        </p>
+
+
+
+        <p class="bt4 mb-md-2 mb-3"> Optional benefits that you may wish to purchase by paying additional premium: </p>
+        {% set benefitList = [
+            {desc:'Rider’s Personal Accident (Non-Tariff)* '},
+            {desc:'All Riders '},
+            {desc:'Strike, Riot and Civil Commotion*'},
+            {desc:'Special Perils*'},
+            {desc:'Legal Liability to Pillion'}
+        ] %}
+
+        {% for item in benefitList %}
+        <div class="d-flex">
+            <span class="mr-2">
+                {% include "templates/components/icon.twig" with { iconName: 'tick-mark', iconSize:'tickCustom'} %}
+            </span>
+            <p class="bt4 mb-2"> {{item.desc}}</p>
+        </div>
+        {% endfor %}
+
+
+
+        <p class="bt4 mt-3 mb-4 pb-3 mb-md-5 pb-md-0">*For Comprehensive Motorcycle only. </p>
+
+
+        <p class="bt4 color-red font-weight-bold mb-2">PLEASE NOTE</p>
+        <p class="bt4 mb-3 mb-md-1">This policy <b>does not</b> cover losses, such as: </p>
+        {% set loseList = [
+            {desc:'Your own death or bodily injury due to a motor accident.**º'},
+            {desc:'Your liability against claims from your pillion on your motorcycle.** '},
+            {desc:'Loss/damage arising from act of nature, e.g. flood, landslide and landslip.**'},
+            {desc:'Consequential loss, depreciation, wear and tear, mechanical or electrical breakdown failures or breakages. '},
+            {desc:'War and related risks.'}
+        ] %}
+
+        {% for item in loseList %}
+        <div class="d-flex">
+            <span
+                class="mr-2">{% include "templates/components/icon.twig" with { iconName: 'close-popup', iconSize:'icon-s customClose'} %}</span>
+            <p class="bt4 mb-2"> {{item.desc}}</p>
+        </div>
+        {% endfor %}
+
+        <p class="bt4 mt-3 mb-3"> Your own death or bodily injury due to a motor accident.**º Your liability against
+            claims from your pillion on your motorcycle.** Loss/damage arising from act of nature, e.g. flood, landslide
+            and landslip.** Consequential loss, depreciation, wear and tear, mechanical or electrical breakdown failures
+            or breakages. War and related risks.</p>
+        <p class="bt4 mb-2"> ** These may be insured separately for additional premiums.</p>
+        <p class="bt4 mb-4 pb-3 mb-md-5 pb-md-0">º This exclusion is not applicable to Motorcycle 3PA Insurance.</p>
+
+        <div class="divider mt-4 mt-md-5 bg-p2c "></div>
+    </div>
+
+    <div class="container mt-md-5 mt-4 mb-4 pt-3 pt-md-0">
+        <h1> Our Products </h1>
+        <p class="mt-md-4 mt-3">We offer <b>two types</b> of Motorcycle Insurance products: </p>
+        <div class="row px-3">
+            <div class="col-md col-12 rounded-10 bg-blue-4 px-4 py-3 mr-md-3">
+                <p class="bt4 mx-md-3 color-black text-center mb-0">Our <b>Comprehensive Motorcycle</b> provides Third
+                    Party, Fire and Theft Cover plus loss or physical damage to your own motorcycle due to
+                    accidental collision or overturning.</p>
+            </div>
+            <div class="col-md col-12 rounded-10 bg-blue-4 px-4 py-3 mt-3 mt-md-0 ">
+                <p class="bt4 mx-md-3 color-black text-center mb-0">Our <b>Motorcycle 3PA Insurance</b> provides Third
+                    Party Cover with additional personal accident cover to the policyholder, and any Authorised Riders
+                    as a rider, whilst using the insured motorcycle.</p>
+            </div>
+        </div>
+
+        <p class="bt4 color-black mt-3 pt-md-4 mb-md-0 mb-4">The Motorcycle Insurance product and add-ons you choose
+            will influence your total premium amount.
+        </p>
+        <p class="bt4 color-black"><em>You can view an example in the table below:</em></p>
+    </div>
+
+    <div class=" pt-md-5 pt-4 mt-3 mt-md-0 pb-5">
+        <div class="container static-pdp-table-motorcycle pt-md-2 ">
+            <div class="row d-block d-md-flex align-items-center h-line px-3 px-md-0 ">
+                <!-- desktop -->
+                <div class="col-4 d-none d-md-flex align-items-center justify-content-md-start ">
+                    <p class=" font-weight-bold mb-0 text-center bt5 color-black">Motorcycle Information</p>
+                </div>
+                <!-- mmobile -->
+                <div class=" d-md-none col-12 d-flex align-items-center justify-content-center bg-white ">
+                    <p class="py-2 font-weight-bold mb-0 text-center bt5 color-black">Motorcycle Information</p>
+                </div>
+
+
+                <div class="col-md-4 col-12 h-100 d-flex align-items-center justify-content-start bg-d-white py-md-4  ">
+                    <ul class="mb-0 px-1 px-md-5 mb-0 mt-3 mt-md-0">
+                        <li class="color-black mb-0 bt2">Year of Manufacture : 2016</li>
+                        <li class="color-black mb-0 bt2">Model : Yamaha 135LC</li>
+                    </ul>
+                </div>
+                <div
+                    class="col-md-4 col-12  h-100 d-flex align-items-center justify-content-start bg-d-white py-md-4  ">
+                    <ul class="mb-0 px-1 px-md-5">
+                        <li class="color-black mb-0 bt2">Sum Insured : RM6,900 </li>
+                        <li class="color-black mb-0 bt2">No Claim Discount : 25%</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="  main-title row align-items-center h-line px-3 px-md-0 ">
+                <div class="col-md-4 col-12 px-md-3 px-0 bg-m-white">
+                    <p class=" font-weight-bold mb-0 bt5 color-black px-md-2 text-md-left text-center py-2"> Product</p>
+                </div>
+                <div
+                    class="col-md-4 col-6  h-100 d-flex align-items-center justify-content-center bg-darkGrey py-md-4 ">
+                    <p class=" font-weight-bold mb-0 text-center bt5 color-black"> Comprehensive Motorcycle Insurance
+                    </p>
+                </div>
+                <div class="col-md-4 col-6  h-100 d-flex align-items-center justify-content-center bg-red py-md-4 ">
+                    <p class=" font-weight-bold mb-0 text-center bt5 color-white">Motorcycle 3PA Insurance</p>
+                </div>
+            </div>
+
+            {% set staticTableRow = [
+                { 
+                    contentClass:'px-3 px-md-0 hide-h-line table-content', 
+                    contentBoxClass :'d-none d-md-block',
+                    titleClass :'bg-m-white justify-content-center justify-content-md-start',
+                    titleStyle : 'font-weight-bold ',
+                    title: 'Basic Coverage', content1: '', content2: ''},
+                { 
+                    contentClass:'px-3 px-md-0 hide-h-line ', 
+                    contentBoxClass :'py-3',
+                    contentStyle:'d-md-block',
+                    num:'1',
+                    title: 'Third Party bodily injury or death', tickBlack:' ', tickWhite:' '},
+                { 
+                    contentClass:'px-3 px-md-0 hide-h-line ', 
+                    contentBoxClass :'py-3',
+                    contentStyle:'d-md-block',
+                    num:'2',
+                    title: 'Third Party property loss or damage damage', tickBlack:' ', tickWhite:' '},
+
+                { 
+                    contentClass:'px-3 px-md-0 hide-h-line ', 
+                    contentBoxClass :'py-3',
+                    contentStyle:'d-md-block',
+                    num:'3',
+                    title: 'Loss or damage to your own motorcycle due to accidental fire, theft or accident', tickBlack:' ', closeWhite:' '},
+                { 
+                    contentClass:'px-3 px-md-0 hide-h-line table-content', 
+                    titleClass :'bg-m-white justify-content-center justify-content-md-start',
+                    titleStyle : 'font-weight-bold ',
+                    contentBoxClass:'d-flex',
+                    contentDescStyle:'font-weight-bold',
+                    title: 'Estimated Basic Premium', content1: 'RM 245.00', content2: 'RM 50.00'},
+
+                { 
+                    contentClass:'px-3 px-md-0 hide-h-line table-content', 
+                    contentBoxClass :'d-none d-md-block',
+                    titleClass :'bg-m-white justify-content-center justify-content-md-start',
+                    titleStyle : 'font-weight-bold ',
+                    title: 'Additional Coverage ', content1: '', content2: ''},
+                    
+                { 
+                     contentClass:'px-3 px-md-0 hide-h-line ', 
+                    contentBoxClass :'py-3',
+                    contentStyle:'d-md-block',
+                    num:'',
+                    title: "Rider's Personal Accident (Non-Tariff)", content1:'Optional Add-On', content2:'Optional Add-On'},
+                { 
+                     contentClass:'px-3 px-md-0 hide-h-line ', 
+                    contentBoxClass :'py-3',
+                    contentStyle:'d-md-block',
+                    num:'',
+                    title: "All Riders", content1:'Optional Add-On', content2:'Optional Add-On'},
+                       
+              
+                { 
+                    contentClass: 'lastRowBlue px-0 bg-blue ', 
+                    titleClass:"lastRowTitle justify-content-center justify-content-md-start  py-md-3  align-items-center", 
+                    contentBoxClass:'py-md-3',
+                    title: 'Estimated Total Premium', content1: 'RM 287.60', content2: 'RM 87.00' },
+            ] %}
+
+            {% for item in staticTableRow %}
+
+            <div class="row  align-items-center h-line {{item.contentClass}}  ">
+                <div class="col-12 col-md-4 title d-flex  mt-2 mt-md-0 p-0 px-md-4 {{item.titleClass}}">
+                    {% if item.num %}
+                    <p class="bt2  mb-1 color-black mr-1 ">{{item.num}}.</p>
+                    {% endif %}
+
+                    <p class="  bt2  mb-1 color-black {{item.titleStyle}}">{{item.title}}
+                    </p>
+                </div>
+
+                <div
+                    class="col-6 col-md-4 content-box  justify-content-center text-center  bg-darkGrey {{item.contentBoxClass}} ">
+
+                    <div
+                        class="col-12 title p-0 d-flex  align-items-center justify-content-center {{item.contentStyle}} ">
+                        <p class=" bt2 mb-0 color-black {{item.contentDescStyle}} ">{{item.content1}}
+                        </p>
+
+                        {% if item.tickBlack %}
+                        {% include "templates/components/icon.twig" with { iconName: 'tick-mark', iconSize:'tickCustom color-black'} %}
+                        {% endif %}
+
+                        </span>
+                    </div>
+
+                </div>
+                <div
+                    class="col-6 col-md-4 bg-p1 content-box  justify-content-center text-center {{item.contentBoxClass}} ">
+
+                    <div
+                        class="col-12 title p-0 d-flex  align-items-center  justify-content-center {{item.contentStyle}}">
+                        <p class=" bt2 mb-0 color-white {{item.contentDescStyle}}">{{item.content2}}</p>
+
+                        {% if item.tickWhite %}
+                        {% include "templates/components/icon.twig" with { iconName: 'tick-mark', iconSize:'tickCustom color-white'} %}
+                        {% endif %}
+
+
+                        {% if item.closeWhite %}
+                        {% include "templates/components/icon.twig" with { iconName: 'close', iconSize:'tickCustom color-white'} %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            {% endfor %}
+
+
+        </div>
+    </div>
+
+
+    <!-- feature slider  -->
+    {% embed "templates/components/add-on-slider-section.twig" with {
+        wrapperClass:"bg-grey pt-5 pb-5  ",
+        title: 'Add-On',
+    } %}
+    {% block content %}
+
+
+    <!-- card one -->
+    {% embed "templates/components/main-card.twig" with { 
+            cardClass:'card-type-5 bg-red ', 
+            textBoxClass :'p-0',
+            imgName: 'rider-personal.png', 
+            title:"Rider’s Personal Accident (Non-Tariff)", 
+           
+        }%}
+    {% endembed %}
+
+    <!-- card two -->
+    {% embed "templates/components/main-card.twig" with { 
+            cardClass:'card-type-5 bg-red ', 
+            textBoxClass :'p-0',
+            imgName: 'all-rider.png', 
+            title:"All Rider", 
+           
+        }%}
+    {% endembed %}
+
+    <!-- card three -->
+    {% embed "templates/components/main-card.twig" with { 
+            cardClass:'card-type-5 bg-red ', 
+            textBoxClass :'p-0',
+            imgName: 'riot.png', 
+            title:"Strike, Riot and Civil Commotion", 
+           
+        }%}
+    {% endembed %}
+
+    <!-- card four -->
+    {% embed "templates/components/main-card.twig" with { 
+            cardClass:'card-type-5 bg-red ', 
+            textBoxClass :'p-0',
+            imgName: 'special-perils.png', 
+            title:"Special Perils", 
+           
+        }%}
+    {% endembed %}
+
+    <!-- card four -->
+    {% embed "templates/components/main-card.twig" with { 
+            cardClass:'card-type-5 bg-red ', 
+            textBoxClass :'p-0',
+            imgName: 'legal-liability.png', 
+            title:" Legal Liability to Pillion", 
+           
+        }%}
+    {% endembed %}
+
+
+
+
+    {% endblock %}
+    {% endembed %}
+    <!-- feature slider end -->
+
+    <!-- promotion widget -->
+    {% include "templates/components/promotion-widget.twig" with {
+            class:'bg-d-white-m-none pt-3',
+            title:'Promotion'
+        }%}
+    <!-- promotion widget -->
+
+    <div class="bg-w pt-5 pb-4">
+        <div class="container">
+            <h1 class=" mb-3 font-weight-bold">Learn More</h1>
+            <p class="bt4">MSIG Motorcycle Insurance provides you with one year of coverage, which you can renew
+                annually. </p>
+            <p class="bt4 font-weight-bold">Download the coverage details below to learn more.</p>
+
+            <div class="row mt-5">
+                <a class="col-md-4 col-12 d-flex mb-4 align-items-center">
+                    <span>
+                        {% include "templates/components/icon.twig" with { iconName: 'pdf' , iconSize:'xxl' } %}</span>
+                    <p class="ml-2 font-weight-normal p1 mb-0 bt4"> Product Disclosure Sheet </p>
+                </a>
+                <a class="col-md-4 col-12 d-flex align-items-center">
+                    <span>{% include "templates/components/icon.twig" with { iconName: 'pdf' , iconSize:'xxl' } %}
+                    </span>
+                    <p class=" ml-2 font-weight-normal p1 mb-0 bt4 mt-4 mt-md-0"> Policy Wording- Comprehensive
+                        Motorcycle Insurance</p>
+                </a>
+
+                <a class="col-md-4 col-12 d-flex align-items-baseline">
+                    <span>{% include "templates/components/icon.twig" with { iconName: 'pdf' , iconSize:'xxl' } %}
+                    </span>
+                    <p class=" ml-2 font-weight-normal p1 mb-0 bt4 mt-4 mt-md-0">Policy Wording- Motorcycle 3PA
+                        Insurance</p>
+                </a>
+
+                <div class="col-4 d-none d-md-block"></div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-center mb-4">
+            <a href="./form.html" role="button" class="mt-5 btn btn-l btn-default btn-primary">Apply Now</a>
+        </div>
+
+    </div>
+
+
+
+
+</div>
+
+{% endblock %}

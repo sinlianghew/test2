@@ -1,0 +1,195 @@
+.motorcycle-wrapper {
+
+    .rounded-10 {
+        border-radius: 10px;
+    }
+
+    a {
+        cursor: pointer;
+    }
+
+    .bg-motorycle {
+        background: url(../../src/spa-assets/img/bg-motorcycle.png) no-repeat;
+        background-size: cover;
+        background-position: center;
+    }
+
+    .icon-customSize {
+        height: 3.5rem;
+        width: 4.4rem;
+
+        @include media-breakpoint-up(md) {
+            height: 5.4rem;
+            width: 7.8rem;
+        }
+    }
+
+    .icon-tickCustom {
+        width: 15px;
+        height: 12px;
+    }
+
+    .customClose {
+        stroke: black;
+    }
+
+    .subnav-motorcycle-wrapper {
+        @include media-breakpoint-up(md) {
+            .navbar .navbar-collapse .navbar-nav .nav-item .nav-link {
+                line-height: 1.6rem;
+                padding: 27px 5.4rem;
+            }
+        }
+
+    }
+
+
+    .static-pdp-table-motorcycle {
+
+        .bg-m-white {
+            @include media-breakpoint-down(md) {
+                background: white;
+            }
+        }
+
+        .bg-d-white {
+            @include media-breakpoint-up(md) {
+                background: white;
+            }
+        }
+
+        .bg-m-grey {
+            @include media-breakpoint-down(md) {
+                background: #E6E5EC;
+            }
+        }
+
+        .bg-d-grey {
+            @include media-breakpoint-up(md) {
+                background: #E6E5EC;
+            }
+        }
+
+        .hide-h-line {
+            border: 0;
+        }
+
+        background: transparent;
+
+        @include media-breakpoint-down(md) {
+            .h-line {
+                border: 0;
+            }
+
+            h1 {
+                font-size: 32px;
+            }
+        }
+
+        .main-title {
+            height: 80px;
+            margin-bottom: 40px;
+            margin-top: 20px;
+
+            @include media-breakpoint-up(md) {
+                height: 90px;
+                margin-bottom: auto;
+                margin-top: auto;
+            }
+        }
+
+        .table-content {
+            @include media-breakpoint-down(md) {
+                .title {
+                    height: 30px;
+                }
+            }
+
+            .content-box {
+                min-height: 40px;
+
+                @include media-breakpoint-up(md) {
+                    min-height: 70px;
+                }
+
+            }
+
+        }
+
+
+        .lastRowBlue {
+            // background: $color-primary-blue;
+
+
+
+            .content-box {
+                &:last-child {
+                    @include media-breakpoint-up(md) {
+                        background: #0D0A32 !important;
+
+                    }
+                }
+            }
+
+            @include media-breakpoint-down(md) {
+                margin-top: 20px;
+                margin-right: 0.25rem;
+                margin-left: 0.25rem;
+            }
+
+            .title {
+                @include media-breakpoint-down(md) {
+                    height: 40px;
+                }
+            }
+
+            .lastRowTitle {
+                p {
+                    color: white;
+                }
+            }
+
+            p {
+                @include media-breakpoint-up(md) {
+                    color: white;
+                    font-size: 20px;
+                }
+            }
+
+            .content-box {
+
+                @include media-breakpoint-up(md) {
+                    background: $color-primary-blue !important;
+                }
+            }
+        }
+
+    }
+
+
+}
+
+
+.alert-banner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.promotion-widget {
+
+    .bg-promotion {
+        background: url(../../src/spa-assets/img/bg-m-highlight-detail.png) no-repeat;
+        background-size: cover;
+        background-position: center;
+    }
+
+    .bg-d-white-m-none {
+        background: transparent;
+
+        @include media-breakpoint-up(md) {
+            background: white;
+        }
+    }
+}

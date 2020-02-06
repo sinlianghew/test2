@@ -1,0 +1,194 @@
+{% extends "templates/partials/base.twig" %}
+
+{% block main %}
+
+
+<div id="travel-form" class="form-wizard" style="opacity: 1;">
+    <div class="container py-5">
+        <h1>Tie The Knot Insurance</h1>
+
+        {% embed "templates/components/steppers-html.twig" %}
+        {% set stepList = [ 
+            {stepclass:' completed', stepNum: '1', step :'Get Started'},
+            {stepclass:'completed', stepNum: '2', step :'Fill In Details'},
+            {stepclass:'completed ', stepNum: '3', step :'Choose Add-Ons'},
+            {stepclass:'current', stepNum: '4', step :'REVIEW'},
+            {stepclass:' ', stepNum: '5', step :'PAY'}
+         ] %}
+        {% endembed %}
+    </div>
+
+    <div class="bg-p2d py-5 wizard-sections">
+
+        <div class="wizard-section-4 ">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 col-md-8">
+                        <div class="bg-w py-5 pb-3 px-4 mb-4">
+                            <h2 class="p2 mb-4">Motorcycle Details</h2>
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <p class="bt1 mb-0">Motorcycle Registration No.:</p>
+                                    <p class="bt2">WXX 1234</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <p class="bt1 mb-0">Motorcycle Make:</p>
+                                    <p class="bt2">Honda</p>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <p class="bt1 mb-0">Motorcycle Model:</p>
+                                    <p class="bt2">AFS</p>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <p class="bt1 mb-0">Year of Make:</p>
+                                    <p class="bt2">2008</p>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <p class="bt1 mb-0">Variant:</p>
+                                    <p class="bt2">11OMCSG</p>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <p class="bt1 mb-0">Motorcycle Location::</p>
+                                    <p class="bt2">Johor</p>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <p class="bt1 mb-0">Sum Insured Value:</p>
+                                    <p class="bt2">Basic Premium</p>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <p class="bt1 mb-0">Cubic Capacity:</p>
+                                    <p class="bt2">200</p>
+                                </div>
+
+                            </div>
+                            <div class="d-flex justify-content-end"><a href="#" class="btn btn-secondary btn-icon">
+                                    <div class="button-icon"><svg class="icon icon-s">
+                                            <use xlink:href="spa-assets/icons/icons.svg#sprite-pencil-1"
+                                                href="spa-assets/icons/icons.svg#sprite-pencil-1"></use>
+                                        </svg></div> <span class="button-text">Edit</span>
+                                </a></div>
+                            <!---->
+                        </div>
+
+
+                        <div class="bg-w py-5 pb-3 px-4 mb-4">
+                            <h2 class="p2 mb-4">Rider Details</h2>
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <p class="bt1 mb-0">Name (as per NRIC):</p>
+                                    <p class="bt2">Henry Teo</p>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <p class="bt1 mb-0">NRIC No.:</p>
+                                    <p class="bt2">901010-14-5021</p>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <p class="bt1 mb-0">Email:</p>
+                                    <p class="bt2">henryto@gmail.com</p>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <p class="bt1 mb-0">Mobile No.:</p>
+                                    <p class="bt2">012-216 2534</p>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <p class="bt1 mb-0">Address:</p>
+                                    <p class="bt2">7, Lorong Bahagia 2, Taman Tun Dr Ismail, 60000 Kuala Lumpur,
+                                        Wilayah Persekutuan, Malaysia</p>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <p class="bt1 mb-0">Gender:</p>
+                                    <p class="bt2">Male</p>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <p class="bt1 mb-0">Marital Status:</p>
+                                    <p class="bt2">Married</p>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <p class="bt1 mb-0">Occuptation:</p>
+                                    <p class="bt2">Consultant</p>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-end">
+                                <a href="#" class="btn btn-secondary btn-icon">
+                                    <div class="button-icon">
+                                        <svg class="icon icon-s">
+                                            <use xlink:href="spa-assets/icons/icons.svg#sprite-pencil-1"
+                                                href="spa-assets/icons/icons.svg#sprite-pencil-1"></use>
+                                        </svg>
+                                    </div>
+                                    <span class="button-text">Edit</span>
+                                </a>
+                            </div>
+
+                        </div>
+
+
+                        <div class="bg-w py-5 pb-3 px-4 mb-4">
+                            <h2 class="p2 mb-4">Road Tax Renewal</h2>
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <p class="bt1 mb-0">Collection Method::</p>
+                                    <p class="bt2">Home Delivery</p>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <p class="bt1 mb-0">Mailing Address:</p>
+                                    <p class="bt2">7, Lorong Bahagia 2, Taman Tun Dr Ismail, 60000 Kuala Lumpur,
+                                        Wilayah Persekutuan, Malaysia</p>
+                                </div>
+                            </div>
+
+
+                            <div class="d-flex justify-content-end">
+                                <a href="#" class="btn btn-secondary btn-icon">
+                                    <div class="button-icon">
+                                        <svg class="icon icon-s">
+                                            <use xlink:href="spa-assets/icons/icons.svg#sprite-pencil-1"
+                                                href="spa-assets/icons/icons.svg#sprite-pencil-1"></use>
+                                        </svg>
+                                    </div>
+                                    <span class="button-text">Edit</span>
+                                </a>
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-check mb-5">
+                            <input type="checkbox" name="tncAgreement" id="tncAgreement" class="form-check-input">
+                            <label for="tncAgreement" class="form-check-label pr-md-5">
+                                By ticking this box, I hereby acknowledge that I have read the <a class="underline" href="#">Product
+                                    Disclosure Sheet</a> and agree to the <a href="#" class="underline">Terms and
+                                    Conditions</a>.
+                            </label>
+                            <svg class="icon icon-m tick-mark">
+                                <use xlink:href="spa-assets/icons/icons.svg#sprite-tick-mark"
+                                    href="spa-assets/icons/icons.svg#sprite-tick-mark"></use>
+                            </svg>
+                        </div>
+                        <div class="pt-4 wizard-navigation d-none d-md-flex">
+                            <a href="#" role="button" class="btn btn-default btn-outline-primary mr-4">Back</a>
+                            <a href="#" role="button" class="btn btn-default btn-primary">Continue</a>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        {% include "templates/components/ttk-summary-pane.twig" %}
+                    </div>
+                </div>
+            </div>
+            <div class="container pt-4 wizard-navigation d-md-none">
+                <a href="#" role="button" class="btn btn-default btn-primary mb-3 mb-md-0">Continue</a>
+                <a href="#" role="button" class="btn btn-default btn-outline-primary ">Back</a>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+{% endblock %}
