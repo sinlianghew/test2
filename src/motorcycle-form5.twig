@@ -136,7 +136,7 @@
                                                 Visa / MasterCard No.</small>
                                         </div>
 
-                                        <div class="form-row">
+                                        <div class="d-flex">
                                             <div class="form-group col-7">
                                                 <label class="bt1">Expiration Date:</label>
                                                 <input class="form-control" type="text" placeholder="MM/YY"
@@ -145,9 +145,13 @@
                                                     Expiry (MM/YY) field.</small>
                                             </div>
                                             <div class="form-group col-5">
-                                                <label class="bt1">CVV:</label>
+                                                <label class="bt1">CVV
+                                                    <span class="d-inline-flex"> {% include "templates/components/tool-tip.twig" with {
+                                                        toolContent: 'Event date must be at least 6 months from today.' 
+                                                    } %} </span>
+                                                </label>
                                                 <input class="form-control" type="text" placeholder="xxx" name="CVV">
-                                                <small class="error-message text-primary font-italic">* Complete the CVC
+                                                <small class="error-message text-primary font-italic">* Complete the CVV
                                                     field.</small>
                                             </div>
                                         </div>
@@ -161,7 +165,7 @@
                             <div>
                                 <p class="bt1">Select Your Preferred E-Wallet:</p>
                                 {% include "templates/components/list-variant-bank.twig" with {
-                                    banks: [ { img: 'boost.jpg', name: 'Boost' } ]
+                                    banks: [ { img: 'boost.png', name: 'Boost' } ]
                                 } %}
                             </div>
 
@@ -170,7 +174,7 @@
 
                         <div class="container d-none d-md-block">
                             <p class="bt2 mb-5">By clicking <strong>"Pay Now"</strong> button, you agree to FPX's
-                                <a href="#" target="_blank" class="underline" >Terms & Conditions</a>.
+                                <a href="#" target="_blank" class="underline">Terms & Conditions</a>.
                             </p>
                         </div>
 
@@ -190,7 +194,8 @@
                     <a href="#" target="_blank" class="underline">Terms & Conditions</a>.
                 </p>
 
-                <a href="/payment-completed.html" role="button" class="btn btn-default btn-primary mb-3 mb-md-0">Pay Now</a>
+                <a href="/payment-completed.html" role="button" class="btn btn-default btn-primary mb-3 mb-md-0">Pay
+                    Now</a>
                 <a href="#" role="button" class="btn btn-default btn-outline-primary ">Back</a>
             </div>
         </div>
