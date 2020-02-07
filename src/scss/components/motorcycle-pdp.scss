@@ -34,6 +34,17 @@
     }
 
     .subnav-motorcycle-wrapper {
+
+
+
+        @media (min-width:992px) and (-webkit-min-device-pixel-ratio:0) {
+
+            .navbar .navbar-collapse .navbar-nav .nav-item .nav-link {
+                padding: 27px 5rem;
+            }
+
+        }
+
         @include media-breakpoint-up(md) {
             .navbar .navbar-collapse .navbar-nav .nav-item .nav-link {
                 line-height: 1.6rem;
@@ -41,10 +52,19 @@
             }
         }
 
+
+
     }
 
 
-    .static-pdp-table-motorcycle {
+    .static-table-motorcycle {
+        .h-line {
+            @include media-breakpoint-down(md) {
+                border: 0;
+            }
+
+            border-bottom: 1px solid #cccccc;
+        }
 
         .bg-m-white {
             @include media-breakpoint-down(md) {
@@ -101,7 +121,7 @@
         .table-content {
             @include media-breakpoint-down(md) {
                 .title {
-                    height: 30px;
+                    height: 40px;
                 }
             }
 
@@ -132,7 +152,7 @@
             }
 
             @include media-breakpoint-down(md) {
-                margin-top: 20px;
+                margin-top: 4px;
                 margin-right: 0.25rem;
                 margin-left: 0.25rem;
             }

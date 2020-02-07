@@ -128,7 +128,7 @@
     </div>
 
     <div class=" pt-md-5 pt-4 mt-3 mt-md-0 pb-5">
-        <div class="container static-pdp-table-motorcycle pt-md-2 ">
+        <div class="container static-table-motorcycle pt-md-2 ">
             <div class="row d-block d-md-flex align-items-center h-line px-3 px-md-0 ">
                 <!-- desktop -->
                 <div class="col-4 d-none d-md-flex align-items-center justify-content-md-start ">
@@ -149,7 +149,7 @@
                 <div
                     class="col-md-4 col-12  h-100 d-flex align-items-center justify-content-start bg-d-white py-md-4  ">
                     <ul class="mb-0 px-1 px-md-5">
-                        <li class="color-black mb-0 bt2">Sum Insured : RM6,900 </li>
+                        <li class="color-black mb-0 bt2">Sum Insured : RM6,900</li>
                         <li class="color-black mb-0 bt2">No Claim Discount : 25%</li>
                     </ul>
                 </div>
@@ -171,13 +171,13 @@
 
             {% set staticTableRow = [
                 { 
-                    contentClass:'px-3 px-md-0 hide-h-line table-content', 
+                    contentClass:'px-3 px-md-0 hide-h-line  table-content', 
                     contentBoxClass :'d-none d-md-block',
-                    titleClass :'bg-m-white justify-content-center justify-content-md-start',
+                    titleClass :'bg-m-white justify-content-center justify-content-md-start align-items-center',
                     titleStyle : 'font-weight-bold ',
                     title: 'Basic Coverage', content1: '', content2: ''},
                 { 
-                    contentClass:'px-3 px-md-0 hide-h-line ', 
+                    contentClass:'px-3 px-md-0  hide-h-line  ', 
                     contentBoxClass :'py-3',
                     contentStyle:'d-md-block',
                     num:'1',
@@ -190,51 +190,49 @@
                     title: 'Third Party property loss or damage damage', tickBlack:' ', tickWhite:' '},
 
                 { 
-                    contentClass:'px-3 px-md-0 hide-h-line ', 
-                    contentBoxClass :'py-3',
+                    contentClass:'px-3 px-md-0  ', 
+                    contentBoxClass :'py-3 pb-md-5',
                     contentStyle:'d-md-block',
                     num:'3',
                     title: 'Loss or damage to your own motorcycle due to accidental fire, theft or accident', tickBlack:' ', closeWhite:' '},
                 { 
-                    contentClass:'px-3 px-md-0 hide-h-line table-content', 
-                    titleClass :'bg-m-white justify-content-center justify-content-md-start',
+                    contentClass:'px-3 px-md-0  table-content', 
+                    titleClass :'bg-m-white justify-content-center justify-content-md-start align-items-center',
                     titleStyle : 'font-weight-bold ',
-                    contentBoxClass:'d-flex',
+                    contentBoxClass:'d-flex  pt-1 pt-md-0',
                     contentDescStyle:'font-weight-bold',
                     title: 'Estimated Basic Premium', content1: 'RM 245.00', content2: 'RM 50.00'},
 
                 { 
                     contentClass:'px-3 px-md-0 hide-h-line table-content', 
                     contentBoxClass :'d-none d-md-block',
-                    titleClass :'bg-m-white justify-content-center justify-content-md-start',
+                    titleClass :'bg-m-white justify-content-center justify-content-md-start align-items-center',
                     titleStyle : 'font-weight-bold ',
                     title: 'Additional Coverage ', content1: '', content2: ''},
                     
                 { 
-                     contentClass:'px-3 px-md-0 hide-h-line ', 
+                    contentClass:'px-3 px-md-0 hide-h-line ', 
                     contentBoxClass :'py-3',
                     contentStyle:'d-md-block',
                     num:'',
                     title: "Rider's Personal Accident (Non-Tariff)", content1:'Optional Add-On', content2:'Optional Add-On'},
                 { 
-                     contentClass:'px-3 px-md-0 hide-h-line ', 
+                    contentClass:'px-3 px-md-0 hide-h-line ', 
                     contentBoxClass :'py-3',
                     contentStyle:'d-md-block',
                     num:'',
                     title: "All Riders", content1:'Optional Add-On', content2:'Optional Add-On'},
-                       
-              
                 { 
-                    contentClass: 'lastRowBlue px-0 bg-blue ', 
-                    titleClass:"lastRowTitle justify-content-center justify-content-md-start  py-md-3  align-items-center", 
+                    contentClass: 'lastRowBlue px-0 ', 
+                    titleClass:"lastRowTitle justify-content-center justify-content-md-start py-md-3 align-items-center bg-blue", 
                     contentBoxClass:'py-md-3',
                     title: 'Estimated Total Premium', content1: 'RM 287.60', content2: 'RM 87.00' },
             ] %}
 
             {% for item in staticTableRow %}
 
-            <div class="row  align-items-center h-line {{item.contentClass}}  ">
-                <div class="col-12 col-md-4 title d-flex  mt-2 mt-md-0 p-0 px-md-4 {{item.titleClass}}">
+            <div class="row  h-line {{item.contentClass}}  ">
+                <div class="col-12 col-md-4 title d-flex mt-3  mt-md-0 p-0 px-md-4 {{item.titleClass}}">
                     {% if item.num %}
                     <p class="bt2  mb-1 color-black mr-1 ">{{item.num}}.</p>
                     {% endif %}
@@ -298,8 +296,7 @@
             cardClass:'card-type-5 bg-red ', 
             textBoxClass :'p-0',
             imgName: 'rider-personal.png', 
-            title:"Rider’s Personal Accident (Non-Tariff)", 
-           
+            title:"Rider’s Personal Accident (Non-Tariff)",         
         }%}
     {% endembed %}
 

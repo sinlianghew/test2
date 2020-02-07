@@ -282,6 +282,7 @@
 
 
     &.card-type-5 {
+        position: relative;
         border-radius: 9px;
         min-width: 156px;
         max-width: 156px;
@@ -321,6 +322,29 @@
         }
 
 
+        &:before {
+            content: " ";
+            box-shadow: 13px 30px 30px -6px rgba(224, 31, 39, 0.5);
+            -moz-box-shadow: 13px 30px 30px -6px rgba(224, 31, 39, 0.5);
+            -webkit-box-shadow: 13px 30px 30px -6px rgba(224, 31, 39, 0.5);
+            -o-box-shadow: 13px 30px 30px -6px rgba(224, 31, 39, 0.5);
+            border-radius: 30px;
+            position: absolute;
+            height: 42px;
+            width: 131px;
+            bottom: 23px;
+            z-index: 0;
+            left: 5px;
+
+            @include media-breakpoint-up(md) {
+                height: 140px;
+                width: 230px;
+                bottom: 8px;
+                left: 0px;
+                border-radius: 50%;
+            }
+        }
+
     }
 }
 
@@ -339,7 +363,7 @@
     .m-flex-wrap {
         @include media-breakpoint-down(md) {
             flex-wrap: wrap;
-            
+
         }
     }
 
