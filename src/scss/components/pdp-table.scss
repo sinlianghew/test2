@@ -228,7 +228,11 @@
         background-color: transparent;
     }
     .main-title {
-        height: 90px;
+        height: 36px;
+
+        @include media-breakpoint-up(md) {
+            height: 90px;
+        }
     }
 
     .plan-box {
