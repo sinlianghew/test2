@@ -62,29 +62,38 @@ module.exports = merge(common, {
                 use: [
                     // Transform css and extract into separate single bundle
                     // Required to generate the file
-                    { loader: MiniCssExtractPlugin.loader },
+                    { loader: 'style-loader' },
 
                     // Handles url() and @imports
                     { 
                         loader: "css-loader",
                         // options: { url: false }
+                        options: { 
+                            sourceMap: true
+                        }
                     },
 
                     // apply postcss transforms like autoprefixer and minify
-                    { loader: "postcss-loader" },
+                    { 
+                        loader: "postcss-loader", 
+                        options: { 
+                            sourceMap: true
+                        } 
+                    },
 
-                    "resolve-url-loader",
+                    // "resolve-url-loader",
                     
                     // transform SASS to CSS
                     {
                         loader: "sass-loader",
                         options: {
-                            implementation: require("sass")
+                            implementation: require("sass"),
+                            sourceMap: true
                         }
                     }
                 ]
             }
         ]
     },
-    devtool: "cheap-module-source-map"
+    devtool: "source-map"
 })
