@@ -1,3 +1,11 @@
+.selection-infobox-group {
+    @include media-breakpoint-up(md) {
+        .copy-h-spacer {
+            margin-top: calc(22px + 8px);
+        }
+    }
+}
+
 .selection-infobox {
     color: $p2;
     width: 100%;
@@ -5,7 +13,6 @@
     @include media-breakpoint-up(lg) {
         width: 50%;
     }
-
 
     input[type="radio"],
     input[type="checkbox"] {
