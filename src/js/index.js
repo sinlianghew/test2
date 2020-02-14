@@ -3,6 +3,7 @@ import "../scss/main.scss"
 
 // Polyfills for Internet Explorer
 import "core-js/stable";
+import "regenerator-runtime/runtime";
 
 // SVG Polyfill for Internet Explorer
 import svg4everybody from 'svg4everybody';
@@ -14,8 +15,10 @@ import "bootstrap"
 
 // Vue Related Stuff
 import Vue from 'vue';
-import Vuelidate from 'vuelidate';
-Vue.use(Vuelidate);
+import VueTheMask from 'vue-the-mask';
+Vue.use(VueTheMask);
 
 // Import the JS components
+import "./components/validations"
 import "./components/travel-form"
+import "./components/motorcycle-form"

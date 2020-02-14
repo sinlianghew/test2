@@ -1,0 +1,427 @@
+{% extends "templates/partials/base.twig" %}
+
+{% block main %}
+
+{% verbatim %}
+<div id="motorcycle-form" class="form-wizard">
+    <div class="container py-5">
+        <h1>Motorcycle Insurance</h1>
+        <!-- Steppers -->
+        <div class="nav variant-steppers">
+            <div :class="{
+                'nav-item step': true,
+                'current': currStep == step,
+                'completed': step.completed
+            }" v-for="step in steps" v-bind:key="steps.indexOf(step)">
+                <div class="step-indicator">
+                    <span>
+                        {{ step.stepNum }}
+                    </span>
+                    <svg class="icon icon-s tick-mark">
+                        <use xlink:href="spa-assets/icons/icons.svg#sprite-tick-mark" href="spa-assets/icons/icons.svg#sprite-tick-mark"></use>
+                    </svg>
+                </div>
+                <div class="step-title">{{ step.title }}</div>
+            </div>
+        </div>
+        <!-- Steppers -->
+    </div>
+
+    <div class="bg-p2d py-5 wizard-sections">
+        <validation-observer v-slot="{ handleSubmit }" ref="form">
+            <form @submit.prevent="handleSubmit(onSubmit)">
+                <fieldset class="wizard-section-1" v-if="currStep && currStep.stepNum == 1">
+                    <div class="container">
+                        <div class="bg-w py-5 px-md-5 px-3 mx-md-2">
+                            <h2 class="p2">Get Started</h2>
+
+                            <div class="bt2 mt-4" v-if="steps[0].showPrescreen">
+                                <p>
+                                    Please make sure you meet the following conditions.
+                                </p>
+                                <ol class="pl-3">
+                                    <li>You are between 16 and 75 years old.</li>
+                                    <li>Your Motorcycle is 250 c.c and below.</li>
+                                    <li>Your Motorcycle sum insured does not exceed RM30,000.</li>
+                                    <li>Your Motorcycle is not older than 15 years old (comprehensive) or 40 years old (3PA).
+                                    </li>
+                                    <li>Your next policy renewal date is within 60 days.</li>
+                                </ol>
+                            </div>
+
+                            <div class="row mt-4 pt-2" v-if="!steps[0].showPrescreen">
+                                <div class="col-md-4 col-12">
+                                    <div class="d-flex mb-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" 
+                                                type="radio"
+                                                name="id_type"
+                                                value="nric"
+                                                id="id_type1"
+                                                v-model="formData['1'].policyHolderIdType">
+                                            <label class="form-check-label" for="id_type1">NRIC</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input"
+                                                type="radio"
+                                                name="id_type"
+                                                value="passport"
+                                                id="id_type2"
+                                                v-model="formData['1'].policyHolderIdType">
+                                            <label class="form-check-label" for="id_type2">Passport</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex flex-column">
+                                        <validation-provider v-slot="{ errors }" :rules="{ required: !isIdNric }">
+                                            <div class="form-group" v-if="!isIdNric">
+                                                <select :class="{
+                                                    'form-control': true,
+                                                    'is-invalid': errors.length > 0
+                                                }" v-model="formData['1'].country">
+                                                    <option disabled hidden selected value="">Select a country</option>
+                                                    <option v-for="country in countries"
+                                                        v-bind:key="countries.indexOf(country)"
+                                                        :value="country.code">
+                                                        {{ country.name }}
+                                                    </option>
+                                                </select>
+                                                <div class="invalid-feedback">
+                                                    <small class="error-message text-primary font-italic">
+                                                        * Complete the country field.
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </validation-provider>
+                                        <validation-provider v-slot="{ errors, failedRules }" rules="required">
+                                            <div class="form-group">
+                                                <input type="text"
+                                                    :class="{
+                                                        'form-control': true,
+                                                        'is-invalid': errors.length > 0
+                                                    }"
+                                                    :name="isIdNric ? 'NRIC' : 'Passport'"
+                                                    :placeholder="isIdNric ? 'XXXXXX-XX-XXXX' : 'Passport No.'"
+                                                    v-mask="isIdNric ? '######-##-####' : 'XXXXXXXXXXXXXX'"
+                                                    v-model="formData['1'].policyHolderNric">
+                                                <div class="invalid-feedback font-italic">
+                                                    {{ errors[0] }}
+                                                </div>
+                                            </div>
+                                        </validation-provider>
+                                        
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 col-12">
+                                    <p class="bt1 mb-2 mt-1">Motorcycle Registration No.:</p>
+                                    <div class="row">
+                                        <div class="col-12 col-md-6">
+                                            <validation-provider v-slot="{ errors }" rules="required">
+                                                <div class="form-group">
+                                                    <input type="text"
+                                                        :class="{
+                                                            'form-control': true,
+                                                            'is-invalid': errors.length > 0
+                                                        }"
+                                                        placeholder="eg: WWW 3333 W"
+                                                        name='Vehicle Registration No.'
+                                                        v-model="formData['1'].motorRegistrationNo">
+                                                    <div class="invalid-feedback">
+                                                        {{ errors[0] }}
+                                                    </div>
+                                                </div>
+                                            </validation-provider>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bt2 mt-4 pt-2" v-if="!steps[0].showPrescreen">
+                                <validation-provider v-slot="{ errors }" rules="mustBeTrue">
+                                    <div class="form-check">
+                                        <input type="checkbox"
+                                            name="agreement"
+                                            id="agreement"
+                                            :class="{
+                                                'form-check-input': true,
+                                                'is-invalid': errors.length > 0
+                                            }"
+                                            v-model="formData['1'].agreement">
+                                        <label for="agreement" class="form-check-label">
+                                            I have read and understood MSIG's <a href="#" class="underline">Privacy Notice</a> and
+                                            agree to MSIG
+                                            processing my personal data for the purposes and in the manners set out in the Privacy
+                                            Notice.
+                                        </label>
+                                        <svg class="icon icon-m tick-mark">
+                                            <use xlink:href="spa-assets/icons/icons.svg#sprite-tick-mark"
+                                                href="spa-assets/icons/icons.svg#sprite-tick-mark"></use>
+                                        </svg>
+                                        <div class="invalid-feedback font-italic" v-if="errors.length > 0">
+                                            * Oops, looks like you haven't ticked the box yet. Please do so to proceed
+                                        </div>
+                                    </div>
+                                </validation-provider>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container pt-4 wizard-navigation d-flex flex-column flex-md-row"><a href="#" role="button">
+                        <a class="btn btn-default btn-outline-primary order-1 order-md-0"
+                            v-if="steps[0].showPrescreen">No</a>
+                        <a href="#" 
+                            role="button"
+                            class="btn btn-default btn-primary mb-3 mb-md-0"
+                            v-if="steps[0].showPrescreen"
+                            @click.prevent="setPrescreen(false)">
+                            Yes</a>
+                        <a class="btn btn-default btn-outline-primary order-1 order-md-0" 
+                            @click.prevent="setPrescreen(true)"
+                            v-if="!steps[0].showPrescreen">Back</a>
+                        <button class="btn btn-default btn-primary mb-3 mb-md-0" v-if="!steps[0].showPrescreen">
+                            Continue
+                        </button>
+                    </div>
+                </fieldset>
+
+                <fieldset class="wizard-section-2" v-if="currStep && currStep.stepNum == 2">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12 col-md-8">
+                                <div class="bg-w py-5 px-4 mb-4">
+                                    <div class="d-flex">
+                                        <h2 class="p2 mb-4">Motorcycle Details</h2>
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label for="venuName" class="bt1">Motorcycle Make:</label>
+                                                <input id="venuName" disabled type="text" value="Honda" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label for="venuName" class="bt1">Motorcycle Model:</label>
+                                                <input id="venuName" type="text" disabled value="AFS" class="form-control">
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label for="venuName" class="bt1">Year of Make:</label>
+                                                <input id="venuName" type="text" disabled value="2008" class="form-control">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+                                            <p class="bt1 mb-2">Variant:</p>
+                                            <div class="form-group">
+                                                <select class="form-control">
+                                                    <option disabled="disabled" hidden="hidden" selected="selected" value="">
+                                                        Select Variant
+                                                    </option>
+                                                    <option value="Male">Male</option>
+                                                    <option value="Femaale"> Female</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-12 col-md-6">
+                                            <p class="bt1 mb-2">Motorcycle Location:</p>
+                                            <div class="form-group">
+                                                <select class="form-control">
+                                                    <option disabled hidden selected value="">Select a state</option>
+                                                    <option>Perlis</option>
+                                                    <option>Kedah</option>
+                                                    <option>Perak</option>
+                                                    <option>Pulau Pinang</option>
+                                                    <option>Selangor</option>
+                                                    <option>Melaka</option>
+                                                    <option>Negeri Sembilan</option>
+                                                    <option>Johor</option>
+                                                    <option>Pahang</option>
+                                                    <option>Terengganu</option>
+                                                    <option>Kelantan</option>
+                                                    <option>Sarawak</option>
+                                                    <option>WP Labuan</option>
+                                                    <option>Sabah</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label for="venuName" class="bt1">Sum Insured Value:</label>
+                                                <input id="venuName" type="text" value="Estimated value" class="form-control">
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label for="venuName" class="bt1">Cubic Capacity:</label>
+                                                <input id="venuName" type="text" disabled value="200" class="form-control">
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group variant-icon"><label for="postcode" class="bt1">Loan Provider
+                                                    (Optional):</label>
+                                                <div class="input-wrapper"><input id="load" type="text"
+                                                        placeholder="Find Loan Provider" class="form-control"> <svg
+                                                        class="icon icon-s mr-2">
+                                                        <use xlink:href="spa-assets/icons/icons.svg#sprite-search"
+                                                            href="spa-assets/icons/icons.svg#sprite-search"></use>
+                                                    </svg></div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+                                <div class="bg-w py-5 px-4 mb-4">
+                                    <div class="d-flex">
+                                        <h2 class="p2 mb-4">Rider Details</h2>
+                                    
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label class="bt1">Name (as per NRIC):</label>
+                                                <input type="text" class="form-control" placeholder="e.g. Lisa Teo">
+                                                <small class="error-message text-primary font-italic">* Complete the Name as per
+                                                    NRIC field.</small>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label class="bt1">NRIC No.:</label>
+                                                <input type="text" class="form-control" placeholder="e.g. 888888-88-8888">
+                                                <small class="error-message text-primary font-italic">* Complete the NRIC
+                                                    field.</small>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label for="customerEmail" class="bt1">Email:</label>
+                                                <input id="customerEmail" type="text" class="form-control error-input"
+                                                    value="e.g. hteoro@gmail.com">
+                                                <small class="error-message text-primary font-italic">* Complete the Email
+                                                    field.</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label for="mobileNo" class="bt1">Mobile No.:</label>
+                                                <input id="mobileNo" type="text" class="form-control"
+                                                    placeholder="e.g. 01x-xxxxxxx">
+                                                <small class="error-message text-primary font-italic">* Complete the Mobile
+                                                    field.</small>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group"><label for="address1" class="bt1">Address:</label>
+                                                <input id="address1" type="text" placeholder="First Line" class="form-control">
+                                                <small class="error-message text-primary font-italic">* Complete the
+                                                    Address
+                                                    field.</small></div>
+                                            <div class="form-group"><input id="address2" type="text" placeholder="Second Line"
+                                                    class="form-control"></div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group variant-icon"><label for="postcode"
+                                                    class="bt1">Postcode:</label>
+                                                <div class="input-wrapper"><input id="postcode" type="text"
+                                                        placeholder="Find postcode" class="form-control"> <svg
+                                                        class="icon icon-s mr-2">
+                                                        <use xlink:href="spa-assets/icons/icons.svg#sprite-search"
+                                                            href="spa-assets/icons/icons.svg#sprite-search"></use>
+                                                    </svg></div>
+                                                <small class="error-message text-primary font-italic">* Complete the Postal Code
+                                                    field.</small>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group"><label for="city" class="bt1">City:</label>
+                                                <input id="city" type="text" disabled="disabled" placeholder="city"
+                                                    class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label for="state" class="bt1">State:</label>
+                                                <input id="state" type="text" disabled="disabled" placeholder="state"
+                                                    class="form-control"></div>
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label for="state" class="bt1">Gender:</label>
+                                                <input id="state" type="text" disabled="disabled" placeholder="Male"
+                                                    class="form-control"></div>
+                                        </div>
+
+
+                                        <div class="col-12 col-md-6">
+                                            <p class="bt1 mb-2">Martial Status:</p>
+                                            <div class="form-group">
+                                                <select class="form-control">
+                                                    <option disabled="disabled" hidden="hidden" selected="selected" value="">
+                                                        Select Option
+                                                    </option>
+                                                    <option value="Single">Single</option>
+                                                    <option value="Married"> Married</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label for="state" class="bt1">Occupation:</label>
+                                                <input id="state" type="text" placeholder="eg: Architect" class="form-control">
+                                            </div>
+                                        </div>
+
+
+
+                                    </div>
+
+
+                                </div>
+
+
+
+                                <div class="pt-4 wizard-navigation d-none d-md-flex">
+                                    <a href="#" role="button" class="btn btn-default btn-outline-primary mr-4" @click="goToPrevStep()">Back</a>
+                                    <a href="#" role="button" class="btn btn-default btn-primary">Continue</a>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-4">
+                                {% include "templates/components/motorcycle-summary-pane.twig" %}
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </validation-observer>
+    </div>
+</div>
+{% endverbatim %}
+{% endblock %}
