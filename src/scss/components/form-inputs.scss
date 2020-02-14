@@ -25,6 +25,10 @@
             color: $color-red;
             border-color: $color-red;
         }
+
+        &.is-invalid ~ .invalid-feedback {
+            display: block;
+        }
     }
 
     select.form-control[disabled] {
