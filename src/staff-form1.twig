@@ -1,0 +1,70 @@
+{% extends "templates/partials/base.twig" %}
+
+{% block main %}
+
+
+<div id="travel-form" class="form-wizard" style="opacity: 1;">
+    <div class="container py-5">
+        <h1>Motorcycle Insurance</h1>
+
+        {% embed "templates/components/steppers-html.twig" %}
+        {% set stepList = [ 
+            {stepclass:' current', stepNum: '1', step :'Get Started'},
+            {stepclass:' ', stepNum: '2', step :'Choose a plan'},
+            {stepclass:' ', stepNum: '3', step :'fill in details'},
+            {stepclass:' ', stepNum: '4', step :'REVIEW'},
+            {stepclass:' ', stepNum: '5', step :'PAY'}
+         ] %}
+        {% endembed %}
+
+    </div>
+
+
+    <div class="bg-p2d py-5 wizard-sections">
+        <div class="wizard-section-1">
+            <div class="container">
+                <div class="bg-w py-5 px-md-5 px-3 mx-md-2">
+                    <h2 class="p2">Get Started</h2>
+                    <div class="bt2 mt-4">
+                        <p>
+                            This insurance policy is for:
+                        </p>
+                    </div>
+
+                    <div class="row ">
+                        <div class="col-md-4 col-12">
+                            <div class="form-group mb-0">
+                                {% verbatim %}
+                                <select class="form-control">
+                                    <option disabled hidden selected value="">Select Option</option>
+                                    <option value="Myself"> Myself</option>
+                                    <option value="My Spouse"> My Spouse</option>
+                                    <option value="My parents(s)"> My parents(s)</option>
+                                    <option value="My child(ren)"> My child(ren)</option>
+                                    <option value="My sibling(s)"> My sibling(s)</option>
+                                    <option value="My parent(s)-in-law"> My parent(s)-in-law</option>
+                                    <option value="My sibling(s)-in-law"> My sibling(s)-in-law</option>
+                                    <option value="My grandparent(s)"> My grandparent(s)</option>
+                                    <option value="My grandparent(s)-in-law"> My grandparent(s)-in-law</option>
+                                    <option value="My relative(s)"> My relative(s)</option>
+                                    <option value="My friend(s)"> My friend(s)</option>
+                                </select>
+                                {% endverbatim %}
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="container pt-4 wizard-navigation d-flex flex-column flex-md-row"><a href="#" role="button">
+                    <a class="btn btn-default btn-outline-primary  order-1 order-md-0">Back</a>
+                    <a href="#" role="button" class="btn btn-default btn-primary mb-3 mb-md-0">Continue</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
