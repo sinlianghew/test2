@@ -22,3 +22,8 @@ Vue.use(VueTheMask);
 import "./components/validations"
 import "./components/travel-form"
 import "./components/motorcycle-form"
+import "./components/sticky-sidebar.min"
+
+
+//global sticky sidebar 
+// follow summary-pane  for other summary pane html
