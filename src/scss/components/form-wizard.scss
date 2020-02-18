@@ -21,7 +21,7 @@
 
                 .btn {
                     margin-right: 1rem;
-    
+
                     &:first-child {
                         margin-right: 0;
                     }
@@ -41,12 +41,13 @@
     }
 
     .summary-pane {
+
         .rounded {
-            border-radius: 10px!important;
+            border-radius: 10px !important;
         }
 
         hr {
             background: $color-primary-blue;
         }
     }
-}
+} 

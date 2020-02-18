@@ -3,17 +3,22 @@ import Datepicker from 'vuejs-datepicker';
 import moment from 'moment';
 import Countries from '../../spa-assets/json/countries.json';
 import _ from 'lodash';
+// import StickySidebar from 'sticky-sidebar'; 
 import $ from 'jquery';
 import matchHeight from 'jquery-match-height';
+// import VueStickyDirective from '@renatodeleao/vue-sticky-directive'
 
 if ($('#travel-form').length) {
 
-    
+
     const travelForm = new Vue({
         el: '#travel-form',
         components: {
             Datepicker
         },
+        // directives: {
+        //     'sticky': VueStickyDirective
+        // },
         data: {
             parameter: {
                 get_started: 0,
@@ -23,15 +28,38 @@ if ($('#travel-form').length) {
                 pay: 4,
 
             },
-            steps: [
-                { step: 1, title: 'Get Started', completed: false, key:"get_started" },
-                { step: 2, title: 'Choose a Plan', completed: false, key:"choose_a_plan" },
-                { step: 3, title: 'Fill In Details', completed: false, key:"fill_in_details" },
-                { step: 4, title: 'Review', completed: false, key:"review" },
-                { step: 5, title: 'Pay', completed: false, key:"pay" }
-            ],
-            coverageAreas: [
+            steps: [{
+                    step: 1,
+                    title: 'Get Started',
+                    completed: false,
+                    key: "get_started"
+                },
                 {
+                    step: 2,
+                    title: 'Choose a Plan',
+                    completed: false,
+                    key: "choose_a_plan"
+                },
+                {
+                    step: 3,
+                    title: 'Fill In Details',
+                    completed: false,
+                    key: "fill_in_details"
+                },
+                {
+                    step: 4,
+                    title: 'Review',
+                    completed: false,
+                    key: "review"
+                },
+                {
+                    step: 5,
+                    title: 'Pay',
+                    completed: false,
+                    key: "pay"
+                }
+            ],
+            coverageAreas: [{
                     name: 'Area 1',
                     countries: 'Australia, Brunei, Cambodia, China, Hong Kong, India, Indonesia, Japan, Korea, Laos, Macau, Maldives, Myanmar, New Zealand, Pakistan, Philippines, Singapore, Sri Lanka, Taiwan, Thailand and Vietnam.'
                 },
@@ -48,8 +76,7 @@ if ($('#travel-form').length) {
                     countries: 'Malaysia (single trip between Peninsular and East Malaysia and vice versa).'
                 }
             ],
-            coverageAreasAnnual: [
-                {
+            coverageAreasAnnual: [{
                     name: 'Area 1',
                     countries: 'Australia, Brunei, Cambodia, China, Hong Kong, India, Indonesia, Japan, Korea, Laos, Macau, Maldives, Myanmar, New Zealand, Pakistan, Philippines, Singapore, Sri Lanka, Taiwan, Thailand and Vietnam.'
                 },
@@ -62,25 +89,78 @@ if ($('#travel-form').length) {
                     countries: 'Worldwide and countries in Area 1 and 2 but excluding Afghanistan, Cuba, Democratic Republic of Congo, Iran, Iraq, Sudan and Syria.'
                 },
             ],
-            banks:[
-                { img: 'maybank.jpg', name: 'Maybank2U' },
-                { img: 'maybank.jpg', name: 'Maybank2E' },
-                { img: 'ocbc.jpg', name: 'OCBC Bank' },
-                { img: 'rhb.jpg', name: 'RHB' },
-                { img: 'standard-chartered.jpg', name: 'Standard Chartered' },
-                { img: 'uob.jpg', name: 'UOB Bank' },
-                { img: 'ambank.jpg', name: 'AmBank' },
-                { img: 'bank-islam.jpg', name: 'Bank Islam' },
-                { img: 'bank-rakyat.jpg', name: 'Bank Rakyat' },
-                { img: 'bank-muamalat.jpg', name: 'Bank Muamalat' },
-                { img: 'bsn.jpg', name: 'BSN' },
-                { img: 'cimb.jpg', name: 'CIMB Clicks' },
-                { img: 'hlb.jpg', name: 'Hong Leong Bank' },
-                { img: 'hsbc.jpg', name: 'HSBC Bank' },
-                { img: 'kuwait.jpg', name: 'KFH' },
-                { img: 'public.jpg', name: 'Public Bank' },
-                { img: 'alliance.jpg', name: 'Alliance Bank' },
-                { img: 'affin.jpg', name: 'Affin Bank' },
+            banks: [{
+                    img: 'maybank.jpg',
+                    name: 'Maybank2U'
+                },
+                {
+                    img: 'maybank.jpg',
+                    name: 'Maybank2E'
+                },
+                {
+                    img: 'ocbc.jpg',
+                    name: 'OCBC Bank'
+                },
+                {
+                    img: 'rhb.jpg',
+                    name: 'RHB'
+                },
+                {
+                    img: 'standard-chartered.jpg',
+                    name: 'Standard Chartered'
+                },
+                {
+                    img: 'uob.jpg',
+                    name: 'UOB Bank'
+                },
+                {
+                    img: 'ambank.jpg',
+                    name: 'AmBank'
+                },
+                {
+                    img: 'bank-islam.jpg',
+                    name: 'Bank Islam'
+                },
+                {
+                    img: 'bank-rakyat.jpg',
+                    name: 'Bank Rakyat'
+                },
+                {
+                    img: 'bank-muamalat.jpg',
+                    name: 'Bank Muamalat'
+                },
+                {
+                    img: 'bsn.jpg',
+                    name: 'BSN'
+                },
+                {
+                    img: 'cimb.jpg',
+                    name: 'CIMB Clicks'
+                },
+                {
+                    img: 'hlb.jpg',
+                    name: 'Hong Leong Bank'
+                },
+                {
+                    img: 'hsbc.jpg',
+                    name: 'HSBC Bank'
+                },
+                {
+                    img: 'kuwait.jpg',
+                    name: 'KFH'
+                },
+                {
+                    img: 'public.jpg',
+                    name: 'Public Bank'
+                },
+                {
+                    img: 'alliance.jpg',
+                    name: 'Alliance Bank'
+                },
+                {
+                    img: 'affin.jpg',
+                    name: 'Affin Bank'
+                },
             ],
             formData: {
                 idType: 'N',
@@ -113,7 +193,7 @@ if ($('#travel-form').length) {
                 disabledDates: {
                     to: new Date(Date.now() - 8640000)
                 },
-                
+
             },
             currStep: null,
             showGetStartedConsent: true,
@@ -132,25 +212,27 @@ if ($('#travel-form').length) {
             allCountries: function () {
                 let self = this;
                 let keys = Object.keys(this.countries);
-                let countryNames = keys.map(function(k) {
+                let countryNames = keys.map(function (k) {
                     return self.countries[k].trim()
                 })
                 countryNames = _.orderBy(countryNames, null, ['asc'])
                 return countryNames
             },
-            fullAddress: function() {
+            fullAddress: function () {
                 return `${this.formData.addressLine1}, ${this.formData.addressLine2}, ${this.formData.postcode} ${this.formData.city}, ${this.formData.state}, ${this.formData.country}`;
             },
-            endDateDisabledDates: function() {
-                return { to: this.formData.startDate }
+            endDateDisabledDates: function () {
+                return {
+                    to: this.formData.startDate
+                }
             },
         },
         updated() {
-            if(window.matchMedia('(min-width: 992px)').matches){
+            if (window.matchMedia('(min-width: 992px)').matches) {
                 this.rowMatchHeight();
             }
         },
-        methods: {  
+        methods: {
             rowMatchHeight() {
                 let group = document.querySelectorAll('.selection-infobox-group');
                 group.forEach((item) => {
@@ -184,7 +266,7 @@ if ($('#travel-form').length) {
                 if (this.currStep.step === 1 && !this.formData.pdpaAgreement) {
                     return;
                 }
-                this.scrollTop().then(function() {
+                this.scrollTop().then(function () {
                     if (this.currStep.step === this.steps.length) {
                         return;
                     }
@@ -194,14 +276,14 @@ if ($('#travel-form').length) {
                 }.bind(this))
             },
             goToPrevStep() {
-                this.scrollTop().then(function() {
+                this.scrollTop().then(function () {
                     if (this.currStep.step === 1) {
                         return;
                     }
                     const prevStep = this.steps.find(s => s.step === this.currStep.step - 1);
                     this.currStep = prevStep;
                     this.currStep.completed = false;
-                    
+
                 }.bind(this))
             },
             customDateFormatter(date) {
@@ -218,7 +300,7 @@ if ($('#travel-form').length) {
                 }
                 $("body, html").animate({
                     scrollTop: offset
-                }, 800, function() {
+                }, 800, function () {
                     defer.resolve()
                 })
                 return defer;
@@ -235,7 +317,7 @@ if ($('#travel-form').length) {
                 this.formData.familyMembers.push(fields)
             },
             removeFamilyMember(familyMember) {
-                this.formData.familyMembers = this.formData.familyMembers.filter(m => m !== familyMember)   
+                this.formData.familyMembers = this.formData.familyMembers.filter(m => m !== familyMember)
             },
             setNomineeEditMode(value) {
                 this.nomineeEditMode = value;
@@ -245,7 +327,7 @@ if ($('#travel-form').length) {
             },
             getUrlParamValue() {
                 var vars = {};
-                var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+                var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
                     vars[key] = value;
                 });
                 return vars;
@@ -277,11 +359,11 @@ if ($('#travel-form').length) {
             window.onbeforeunload = null;
             let currentSlide = this.getUrlParamValue()['slide'];
 
-            
-            if(currentSlide){
-                for(let i=0,len=this.steps.length; i<len; i++){
+
+            if (currentSlide) {
+                for (let i = 0, len = this.steps.length; i < len; i++) {
                     this.steps[i].completed = true;
-                    if(this.steps[i].key === currentSlide) {
+                    if (this.steps[i].key === currentSlide) {
                         this.steps[i].completed = false;
                         break;
                     }
@@ -297,18 +379,31 @@ if ($('#travel-form').length) {
     })
 }
 
-$(document).ready(function() {
+$(document).ready(function () {
     // $('[data-toggle="tooltip"]').tooltip();
-    $("body").tooltip({ selector: '[data-toggle=tooltip]' });
+    $("body").tooltip({
+        selector: '[data-toggle=tooltip]'
+    });
 
     if ($('.popup-wrapper').length) {
-        
-        $(".btn-close").click(function(){
+        $(".btn-close").click(function () {
             $(".popup-wrapper").hide();
         });
-    
+    }
+
+    if ($('#sidebar').length) {
+
+        //#sidebar have to be wrapped in #main-content 
+        const stickySidebar = new StickySidebar('#sidebar', {
+            topSpacing: 0,
+            bottomSpacing: 0,
+            containerSelector: false,
+            innerWrapperSelector: '.sidebar__inner',
+            resizeSensor: true,
+            stickyClass: 'is-affixed',
+            minWidth: 0
+        });
     }
 
 
-}); 
- 
+});
