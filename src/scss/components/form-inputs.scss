@@ -12,6 +12,7 @@
         color: #000;
         //min-width: 200px;
 
+
         &[disabled] {
             border: none;
             background-color: $p2c;
@@ -26,14 +27,19 @@
             border-color: $color-red;
         }
 
-        &.is-invalid ~ .invalid-feedback {
+        &.is-invalid~.invalid-feedback {
             display: block;
         }
     }
 
     select.form-control[disabled] {
         background-image: none;
+
     }
+
+
+
+
 }
 
 .form-row {
