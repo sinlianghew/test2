@@ -15,12 +15,23 @@
                 <div class="bg-w py-5 px-4">
                     <h2 class="p2">Get Started</h2>
 
+
+                    <div :class="{
+                        'bt2': true,
+                        'd-none': !showGetStartedConsent1
+                    }">
+                        <p>
+                           ONE AAAAA Please make sure you meet the following conditions:
+                        </p>
+
+                    </div>
+
                     <div :class="{
                             'bt2': true,
-                            'd-none': !showGetStartedConsent
+                            'd-none': !showGetStartedConsent2
                         }">
                         <p>
-                            Please make sure you meet the following conditions:
+                          two  Please make sure you meet the following conditions:
                         </p>
                         <ol class="pl-3">
                             <li>The journey you intend to insure begins and ends in Malaysia, except for Single Trip
@@ -37,9 +48,9 @@
 
                     <div :class="{
                             'bt2': true,
-                            'd-none': showGetStartedConsent
+                            'd-none': !showGetStartedConsent
                         }">
-                        <p>Please enter the details of the Insured Person</p>
+                        <p>  three Please enter the details of the Insured Person</p>
                         <div class="d-flex mb-3">
                             <div class="form-check mr-5">
                                 <input class="form-check-input" type="radio" name="id_type" value="Y" id="malaysian"
@@ -111,17 +122,30 @@
                         </div>
                         {% endverbatim %}
                     </div>
+
+
                 </div>
             </div>
             <div class="container pt-4 wizard-navigation">
-                <a href="#" role="button" class="btn btn-default btn-outline-primary mb-3 mb-md-0"
-                    v-if="showGetStartedConsent">No</a>
+                
+                    <a href="#" role="button" class="btn btn-default btn-outline-primary mb-3 mb-md-0"
+                    v-if="showGetStartedConsent1">No11</a>
                 <a href="#" role="button" class="btn btn-default btn-primary"
-                    @click.prevent="setShowGetStartedConsent(false)" v-if="showGetStartedConsent">Yes</a>
+                    @click.prevent="setShowGetStartedConsent1(false); setShowGetStartedConsent2(true);" v-if="showGetStartedConsent1">Yes11</a>
+
                 <a href="#" role="button" class="btn btn-default btn-outline-primary mb-3 mb-md-0"
-                    @click="setShowGetStartedConsent(true)" v-if="!showGetStartedConsent">Back</a>
+                @click="setShowGetStartedConsent1(true); setShowGetStartedConsent2(false)" v-if="showGetStartedConsent2">No2</a>
+                <a href="#" role="button" class="btn btn-default btn-primary"
+                    @click.prevent="setShowGetStartedConsent2(false); setShowGetStartedConsent(true); " v-if="showGetStartedConsent2">Yes2</a>
+
+
+                <a href="#" role="button" class="btn btn-default btn-outline-primary mb-3 mb-md-0"
+                    @click="setShowGetStartedConsent2(true); setShowGetStartedConsent(false);" v-if="showGetStartedConsent">Back</a>
                 <a href="#" role="button" class="btn btn-default btn-primary" @click.prevent="goToNextStep()"
-                    v-if="!showGetStartedConsent">Continue</a>
+                    v-if="showGetStartedConsent">Continue</a>
+
+
+
             </div>
         </div>
 
@@ -147,15 +171,15 @@
                             <div class="d-md-flex">
                                 <div class="form-group">
                                     <label class="bt1" for="areaOfCoverage">Area of Coverage:</label>
-                                    <select v-if="selectedCoverageType === 'Single Trip'" name="areaOfCoverage" id="areaOfCoverage" class="form-control"
-                                        v-model="formData.areaOfCoverage">
+                                    <select v-if="selectedCoverageType === 'Single Trip'" name="areaOfCoverage"
+                                        id="areaOfCoverage" class="form-control" v-model="formData.areaOfCoverage">
                                         <option :value="area.name" v-for="area in coverageAreas"
                                             v-bind:key="coverageAreas.indexOf(area)">
                                             {{ area.name }}
                                         </option>
                                     </select>
-                                    <select v-if="selectedCoverageType === 'Annual Cover'" name="areaOfCoverage" id="areaOfCoverage" class="form-control"
-                                        v-model="formData.areaOfCoverage">
+                                    <select v-if="selectedCoverageType === 'Annual Cover'" name="areaOfCoverage"
+                                        id="areaOfCoverage" class="form-control" v-model="formData.areaOfCoverage">
                                         <option :value="area.name" v-for="area in coverageAreasAnnual"
                                             v-bind:key="coverageAreasAnnual.indexOf(area)">
                                             {{ area.name }}
@@ -206,26 +230,26 @@
                                 <div class="col-12 col-lg-6">
                                     <p class="bt1 mt-4 mt-lg-0">End Date:</p>
                                     <div class="form-group variant-date-picker mb-0">
-                                        <datepicker class="form-control"
-                                            placeholder="Select date"
-                                            :format="customDateFormatter"
-                                            v-model="formData.endDate"
+                                        <datepicker class="form-control" placeholder="Select date"
+                                            :format="customDateFormatter" v-model="formData.endDate"
                                             :disabled-dates="endDateDisabledDates"
-                                            :disabled="formData.startDate === null"
-                                        >
+                                            :disabled="formData.startDate === null">
                                         </datepicker>
                                         {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
                                     </div>
-                                    <small class="error-message text-primary font-italic">* Complete the End Date field.</small>
+                                    <small class="error-message text-primary font-italic">* Complete the End Date
+                                        field.</small>
                                 </div>
                                 <div class="bt2">
-                                    <p>Please note that your coverage will terminate at the earliest happening of the following:</p>
+                                    <p>Please note that your coverage will terminate at the earliest happening of the
+                                        following:</p>
                                     <ol class="pl-3">
                                         <li>24 hours upon your arrival in Malaysia</li>
                                         <li>Upon reaching your home or workplace in Malaysia (whichever is earlier)</li>
                                         <li>Expiry date of your travel insurance policy</li>
                                     </ol>
-                                    <p>The following benefits will not be applicable for travel insurance purchased less than 7 days from travel start date:</p>
+                                    <p>The following benefits will not be applicable for travel insurance purchased less
+                                        than 7 days from travel start date:</p>
                                     <ol class="pl-3">
                                         <li>Section 7: Travel Cancellation</li>
                                         <li>Section 14: Loss of Travel Deposit</li>
@@ -253,11 +277,13 @@
                                             ],
                                             class: "d-none d-lg-block"
                                         } %}
-                                        <p class="bt2 d-none d-lg-block">View the full benefits <strong><a href="https://takeiteasy.msig.com.my/msigonline/resource/TravelRPlus_PolicyBooklet.pdf" target="blank" class="underline">HERE</a></strong></p>
-                                    </div>
-                                    <div class="col-12 col-lg-8">
-                                        <div class="d-lg-flex">
-                                            {% embed "templates/components/selection-infobox.twig" with {
+                                    <p class="bt2 d-none d-lg-block">View the full benefits <strong><a
+                                                href="https://takeiteasy.msig.com.my/msigonline/resource/TravelRPlus_PolicyBooklet.pdf"
+                                                target="blank" class="underline">HERE</a></strong></p>
+                                </div>
+                                <div class="col-12 col-lg-8">
+                                    <div class="d-lg-flex">
+                                        {% embed "templates/components/selection-infobox.twig" with {
                                                 type: "radio",
                                                 name: "choosePlan",
                                                 value: "plan1",
@@ -335,24 +361,28 @@
                                                         ],
                                                         listWithLabelValue: true
                                                     } %}
-                                                {% endblock %}
+                                        {% endblock %}
                                         {% endembed %}
                                     </div>
-                                    <p class="bt2 d-lg-none">View the full benefits <strong><a href="https://takeiteasy.msig.com.my/msigonline/resource/TravelRPlus_PolicyBooklet.pdf" target="blank" class="underline">HERE</a></strong></p>
+                                    <p class="bt2 d-lg-none">View the full benefits <strong><a
+                                                href="https://takeiteasy.msig.com.my/msigonline/resource/TravelRPlus_PolicyBooklet.pdf"
+                                                target="blank" class="underline">HERE</a></strong></p>
                                 </div>
                             </div>
                         </div>
 
-                            <div v-if="selectedCoverageType === 'Single Trip'" class="bg-w py-5 px-4 mb-3">
-                                <h2 class="p2">Choose Your Optional Add-On</h2>
-                                <div class="selection-infobox-group row">
-                                    <div class="col-12 col-lg-4">
-                                        <div class="header-match-height">
-                                            <p class="h2 mt-5">Sports Fans</p>
-                                            <p class="bt1 mb-0 pb-2">Travelling and can’t wait to cheer for your favourite sports team? Make sure you are covered with the Sports Fans add-on for additional protection!</p> 
-                                        </div>
-                                        <p class="bt1 d-none d-lg-block mb-1">Benefits</p>
-                                        {% include "templates/components/list-variant-icon.twig" with {
+                        <div v-if="selectedCoverageType === 'Single Trip'" class="bg-w py-5 px-4 mb-3">
+                            <h2 class="p2">Choose Your Optional Add-On</h2>
+                            <div class="selection-infobox-group row">
+                                <div class="col-12 col-lg-4">
+                                    <div class="header-match-height">
+                                        <p class="h2 mt-5">Sports Fans</p>
+                                        <p class="bt1 mb-0 pb-2">Travelling and can’t wait to cheer for your favourite
+                                            sports team? Make sure you are covered with the Sports Fans add-on for
+                                            additional protection!</p>
+                                    </div>
+                                    <p class="bt1 d-none d-lg-block mb-1">Benefits</p>
+                                    {% include "templates/components/list-variant-icon.twig" with {
                                             items: [
                                                 { iconName: 'tick-mark', content: 'Additional Indemnity for Personal Accident' },
                                                 { iconName: 'tick-mark', content: 'Extended Accommodation Cover' },
@@ -1239,7 +1269,7 @@
                     @click.prevent="goToPrevStep()">Back</a>
                 <a href="/payment-completed.html" role="button" class="btn btn-default btn-primary">Pay Now</a>
             </div>
-            
+
         </div>
 
     </div>

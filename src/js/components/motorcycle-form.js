@@ -180,7 +180,7 @@ $(function() {
                     method: 'GET',
                     url: baseUrl + '/api/content/render/false/type/json/limit/0/query/+structureName:TieRefCity%20+(conhost:ceaa0d75-448c-4885-a628-7f0c35d374bd%20conhost:SYSTEM_HOST)%20+live:true/orderby/TieRefCity.postcode',
                 }).done(function(data) {
-                    console.log(data)
+                    console.log("this?", data)
                 })
             },
             mounted: function() {

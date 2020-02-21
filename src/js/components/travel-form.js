@@ -196,7 +196,9 @@ if ($('#travel-form').length) {
 
             },
             currStep: null,
-            showGetStartedConsent: true,
+            showGetStartedConsent1: true,
+            showGetStartedConsent2: false,
+            showGetStartedConsent: false,
             countries: Countries,
             nomineeEditMode: false,
             personalEditMode: false,
@@ -261,6 +263,12 @@ if ($('#travel-form').length) {
             },
             setShowGetStartedConsent(value) {
                 this.showGetStartedConsent = value;
+            },
+            setShowGetStartedConsent1(value) {
+                this.showGetStartedConsent1 = value;
+            },
+            setShowGetStartedConsent2(value) {
+                this.showGetStartedConsent2 = value;
             },
             goToNextStep() {
                 if (this.currStep.step === 1 && !this.formData.pdpaAgreement) {
