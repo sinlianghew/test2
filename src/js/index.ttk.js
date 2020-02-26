@@ -21,6 +21,9 @@ Vue.use(VueTheMask);
 // Import the JS components
 import "./components/validations"
 import "./components/ttk-form";
+//ttk only reference
+import "./components/motorcycle-form";
+import "./components/travel-form";
 
 
 //stick side bar plugin start
