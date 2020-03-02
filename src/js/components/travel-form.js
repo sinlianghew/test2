@@ -414,4 +414,10 @@ $(document).ready(function () {
     }
 
 
+    
+    if ($('.homepage-wrapper').length) {
+            $(".footer-wrapper").css('position', 'fixed');
+    }
+
+
 });
