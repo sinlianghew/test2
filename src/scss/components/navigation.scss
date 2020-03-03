@@ -17,6 +17,10 @@
             width: 72px;
         }
 
+        a{
+            cursor: pointer;
+        }
+
     }
 
     @include media-breakpoint-up(md) {
@@ -128,12 +132,13 @@
                         color: black;
                         font-size: 16px;
                         border-bottom: 1px solid $color-primary-blue;
-                        padding-top:7px;
-                        padding-bottom:7px;
+                        padding-top: 7px;
+                        padding-bottom: 7px;
 
-                        &:last-child{
+                        &:last-child {
                             border-bottom: 0;
                         }
+
                         @include media-breakpoint-down(md) {
                             font-size: 18px;
                         }
@@ -175,6 +180,132 @@
 
         }
 
+    }
+
+
+    .nav-menu {
+        background: #2580b9;
+        overflow-x: hidden;
+        position: fixed;
+        right: -100%;
+        top: 0;
+        z-index: 9999;
+        width: 95%;
+        height: 100%;
+        display: block;
+        bottom: 0;
+        transition: right 0.7s ease; 
+
+        @include media-breakpoint-up(md) {
+            right: -300px;
+            width: 280px;
+        }
+
+        
+        &.showMenu{
+            right: 0px;
+        }
+
+        .btn-close {
+            background: transparent;
+            border: none;
+            &:focus{
+                outline:none;
+            }
+            .icon {
+                width: 10px;
+                height: 10px;
+            }
+        }
+
+        .main-nav {
+            list-style: none;
+            list-style-image: none;
+            padding: 0;
+            margin-bottom: 24px;
+
+            .naviArrow {
+                padding-bottom: 24px;
+
+                .icon {
+                    height: 12px;
+                    width: 12px;
+                    margin-right: 12px;
+                    transition: transform 0.2s linear;
+                }
+
+                .social {
+                    font-weight: $font-weight-normal;
+
+                    .icon {
+                        height: 14px;
+                        width: 14px;
+                    }
+                }
+
+                &.show {
+
+                    .icon {
+                        transform: rotate(90deg);
+                    }
+                }
+
+                .dropdown-menu {
+                    position: relative;
+                    top: auto;
+                    left: 0;
+                    z-index: 1000;
+                    float: none;
+                    min-width: 10rem;
+                    padding: 16px 0 0;
+                    margin: 0;
+                    font-size: 16px;
+                    text-align: left;
+                    list-style: none;
+                    background-color: transparent;
+                    background-clip: padding-box;
+                    border: none;
+                    border-radius: 0;
+                    border-top: 1px solid white;
+                    border-bottom: 1px solid white;
+
+                    &.show {
+                        margin-top: 16px;
+                        position: relative !important;
+                        transform: translate3d(0px, 0px, 0px) !important;
+                    }
+
+                    .dropdown-item {
+                        padding: 0 30px;
+                        margin-bottom: 16px;
+
+                        &:hover{
+                            background:transparent;
+                        }
+                    }
+                }
+            }
+
+            li {
+                color: white;
+                border-bottom: none;
+                border-top: none;
+                padding: 0;
+                margin-left: 24px;
+                margin-right: 16px;
+                font-size: 16px;
+                font-weight: $font-weight-bold;
+
+                a {
+                    color: white;
+                }
+
+                p {
+                    font-size: 12px;
+                    font-weight: $font-weight-normal;
+                }
+            }
+        }
     }
 
 

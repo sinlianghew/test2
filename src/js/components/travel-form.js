@@ -414,10 +414,17 @@ $(document).ready(function () {
     }
 
 
-    
+    //changes the footer to fix only in homepage
     if ($('.homepage-wrapper').length) {
-            $(".footer-wrapper").css('position', 'fixed');
+        $(".footer-wrapper").css('position', 'fixed');
     }
 
+    $(".hamburger-menu").click(function () {
+        $('#newNavMenu').addClass('showMenu');
+    });
+    
+    $(".nav-menu .btn-close").click(function () {
+        $('#newNavMenu').removeClass('showMenu');
+    });
 
 });
