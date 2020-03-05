@@ -419,6 +419,7 @@ $(document).ready(function () {
         $(".footer-wrapper").css('position', 'fixed');
     }
 
+    //nav menu
     $(".hamburger-menu").click(function () {
         $('#newNavMenu').addClass('showMenu');
     });
@@ -426,5 +427,6 @@ $(document).ready(function () {
     $(".nav-menu .btn-close").click(function () {
         $('#newNavMenu').removeClass('showMenu');
     });
+    
 
 });

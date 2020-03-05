@@ -238,6 +238,7 @@
                     font-weight: $font-weight-normal;
 
                     .icon {
+                        margin-right: 10px;
                         height: 14px;
                         width: 14px;
                     }
@@ -249,7 +250,12 @@
                         transform: rotate(90deg);
                     }
                 }
-
+                
+                .dropdown-btn{
+                    .icon{
+                        margin-right: 9px;
+                    }
+                }
                 .dropdown-menu {
                     position: relative;
                     top: auto;
@@ -276,7 +282,7 @@
                     }
 
                     .dropdown-item {
-                        padding: 0 30px;
+                        padding: 0 23px;
                         margin-bottom: 16px;
 
                         &:hover{
