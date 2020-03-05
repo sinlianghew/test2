@@ -423,7 +423,7 @@ $(document).ready(function () {
     $(".hamburger-menu").click(function () {
         $('#newNavMenu').addClass('showMenu');
     });
-    
+     
     $(".nav-menu .btn-close").click(function () {
         $('#newNavMenu').removeClass('showMenu');
     });
