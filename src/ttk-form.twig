@@ -1,0 +1,626 @@
+{% extends "templates/partials/base.twig" %}
+
+{% block main %}
+
+<div class="form-wizard" id="ttk-form">
+    <div class="container py-5">
+        <h1>Tie The Knot </h1>
+        {% include "templates/components/steppers.twig" %}
+    </div>
+
+    <div class="bg-p2d py-5 wizard-sections">
+        <validation-observer v-slot="{ handleSubmit }" ref="form">
+            <form @submit.prevent="handleSubmit(onSubmit)">
+
+                <fieldset class="wizard-section-1" v-if="currStep && currStep.step == 1">
+                    <div class="container">
+
+                        <div class="bg-w py-5 px-4">
+                            <h2 class="p2">Get Started</h2>
+
+                            <div :class="{
+                                'bt2': true,
+                                'd-none': !showGetStartedConsent
+                            }">
+                                <p>
+                                    Please make sure you meet the following conditions.
+                                </p>
+                                <ol class="pl-3">
+                                    <li>You and your spouse-to-be are between 18 and 70 years old.</li>
+                                    <li>You or your spouse-to-be must be Malaysian or Permanent Resident of Malaysia.
+                                    </li>
+                                    <li> Your wedding and/or reception venue(s) are in Malaysia.</li>
+                                    <li>You and your spouse-to-be are not aware of any circumstances which may give rise
+                                        to a
+                                        loss.</li>
+                                    <li>You and your spouse-to-be are not suffering from any physical, psychological, or
+                                        other
+                                        medical conditions.</li>
+                                </ol>
+
+
+                                {% verbatim %}
+                                <validation-provider v-slot="{ errors }" rules="mustBeTrue">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="agreement" id="agreement"
+                                            v-model="formData['1'].pdpaAgreement">
+                                        <label class="form-check-label" for="agreement">
+                                            I have read and understood MSIG's <a href="#" class="underline">Privacy
+                                                Notice</a> and agree to MSIG processing my personal data for the
+                                            purposes and in the manners set out in the Privacy Notice.
+                                        </label>
+                                        <svg class="icon icon-m tick-mark">
+                                            <use xlink:href="spa-assets/icons/icons.svg#sprite-tick-mark"
+                                                href="spa-assets/icons/icons.svg#sprite-tick-mark"></use>
+                                        </svg>
+
+                                        <div class="error-message" v-if="errors.length > 0">*
+                                            Oops, looks like you haven't ticked the box yet. Please do so to proceed.
+                                        </div>
+                                    </div>
+                                </validation-provider>
+
+                                <!-- test one -->
+                                <validation-provider v-slot="{ errors }" :rules="{ required: !isIdNric }">
+                                    <div class="form-group">
+                                        <select :class="{
+                                                'form-control': true,
+                                                'is-invalid': errors.length > 0
+                                            }" v-model="formData['1'].country">
+                                            <option disabled hidden selected value="">Select a country</option>
+                                            <option v-for="country in countries" v-bind:key="country.code"
+                                                :value="country.code">
+                                                {{ country.name }}
+                                            </option>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            <small class="error-message text-primary font-italic">
+                                                * Complete the country field.
+                                            </small>
+                                        </div>
+                                    </div>
+                                </validation-provider>
+                                <!-- test one -->
+                                {% endverbatim %}
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="container pt-4 wizard-navigation ">
+                        <a href="#" role="button" class="btn btn-default btn-outline-primary order-2 order-md-1"
+                            v-if="showGetStartedConsent">Back</a>
+                        <button class=" btn btn-default btn-primary mb-3 mb-md-0 order-1  order-md-2"
+                            v-if="showGetStartedConsent">Continue</button>
+                    </div>
+                </fieldset>
+
+
+                <fieldset class="wizard-section-2" v-if="currStep && currStep.step == 2">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12 col-md-8">
+                                <div class="bg-w py-5 px-4 mb-3">
+
+                                    <div class="d-flex">
+                                        <h2 class="p2 mb-4">Event Details #1</h2>
+                                        <span> {% include "templates/components/tool-tip.twig" with {
+                                                    toolContent: 'Event date must be at least 6 months from today.' 
+                                                } %} </span>
+                                    </div>
+
+                                    <div class="row">
+
+                                        <div class="col-12 col-md-6">
+                                            <p class="bt1 mb-2">Event Date:</p>
+                                            <validation-provider v-slot="{ errors }" rules="required">
+                                                <div class="form-group variant-date-picker mb-0">
+                                                    <datepicker :class="{
+                                                        'form-control': true,
+                                                        'is-invalid': errors.length > 0
+                                                    }" placeholder="Select date" :format="customDateFormatter"
+                                                        v-model="formData['2'].startDate">
+                                                    </datepicker>
+                                                    {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
+                                                </div>
+                                                <div class="error-message" v-if="errors.length > 0">* Select a date.
+                                                </div>
+                                            </validation-provider>
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+                                            <validation-provider v-slot="{ errors }" rules="required">
+                                                <div class="form-group">
+                                                    <label for="eventName1" class="bt1">Venue Name:</label>
+                                                    <input type="text" :class="{
+                                                        'form-control': true,
+                                                        'is-invalid': errors.length > 0
+                                                    }" placeholder="Hotel Royal Chulan"
+                                                        v-model="formData['2'].eventName1">
+
+                                                    <div class="error-message" v-if="errors.length > 0">
+                                                        * Complete the Venue Name field.
+                                                    </div>
+
+                                                </div>
+                                            </validation-provider>
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+                                            <validation-provider v-slot="{ errors }" rules="required">
+                                                <div class="form-group">
+                                                    <label for="address1" class="bt1">Address:</label>
+                                                    <input type="text" :class="{
+                                                        'form-control': true,
+                                                        'is-invalid': errors.length > 0
+                                                    }" placeholder="First Line"
+                                                        v-model="formData['2'].eventAddressLine1">
+                                                    <div class="error-message" v-if="errors.length > 0">* Complete the
+                                                        Address field.</div>
+                                                </div>
+                                            </validation-provider>
+
+                                            <div class="form-group">
+                                                <input class="form-control" type="text" placeholder="Second Line"
+                                                    v-model="formData['2'].eventAddressLine2">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+                                            <validation-provider v-slot="{ errors }" rules="required">
+                                                <div class="form-group variant-icon">
+                                                    <label for="postcode" class="bt1">Postcode:</label>
+                                                    <div class="input-wrapper">
+                                                        <input type="text" :class="{
+                                                            'form-control': true,
+                                                            'is-invalid': errors.length > 0
+                                                        }" placeholder="Find postcode"
+                                                            v-model="formData['2'].eventPostCode1">
+                                                        <svg class="icon icon-s mr-2">
+                                                            <use xlink:href="spa-assets/icons/icons.svg#sprite-search"
+                                                                href="spa-assets/icons/icons.svg#sprite-search"></use>
+                                                        </svg>
+                                                    </div>
+                                                    <div class="error-message" v-if="errors.length > 0">* Complete the
+                                                        Postal Code field.</div>
+                                                </div>
+                                            </validation-provider>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label for="city" class="bt1">City:</label>
+                                                <input type="text" disabled="disabled" placeholder="City"
+                                                    class="form-control" v-model="formData['2'].eventCity1">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group"><label for="state" class="bt1">State:</label>
+                                                <input type="text" disabled="disabled" placeholder="State"
+                                                    class="form-control" v-model="formData['2'].eventState1">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <!-- add event -->
+                                <div class="bg-w py-5 px-4 mb-3" v-for="(event, index) in formData['2'].eventDetails">
+                                    {% verbatim %}
+
+                                    <div class="d-flex">
+                                        <h2 class="p2">Event Details #{{index + 1 + 1}}</h2>
+                                        <span>
+                                            <div class="ml-2 btn-tooltip" data-toggle="tooltip" data-placement="right"
+                                                title="Event date must be at least 6 months from today."> ?
+                                            </div>
+                                        </span>
+                                    </div>
+
+                                    {% endverbatim %}
+
+                                    <div class="row">
+
+                                        <div class="col-12 col-md-6">
+                                            <p class="bt1 mb-2">Event Date:</p>
+                                            <validation-provider v-slot="{ errors }" rules="required">
+                                                <div class="form-group variant-date-picker mb-0">
+                                                    <datepicker :class="{
+                                                            'form-control': true,
+                                                            'is-invalid': errors.length > 0
+                                                        }" placeholder="Select date" :format="customDateFormatter"
+                                                        v-model="formData['2'].startDate">
+                                                    </datepicker>
+                                                    {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
+                                                </div>
+                                                <div class="error-message" v-if="errors.length > 0">* Select a date.
+                                                </div>
+                                            </validation-provider>
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+                                            <validation-provider v-slot="{ errors }" rules="required">
+                                                <div class="form-group">
+                                                    <label for="eventName1" class="bt1">Venue Name:</label>
+                                                    <input type="text" :class="{
+                                                        'form-control': true,
+                                                        'is-invalid': errors.length > 0
+                                                    }" placeholder="Hotel Royal Chulan"
+                                                        v-model="formData['2'].eventName1">
+
+                                                    <div class="error-message" v-if="errors.length > 0">
+                                                        * Complete the Venue Name field.
+                                                    </div>
+
+                                                </div>
+                                            </validation-provider>
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+                                            <validation-provider v-slot="{ errors }" rules="required">
+                                                <div class="form-group"><label for="address1"
+                                                        class="bt1">Address:</label>
+                                                    <input type="text" class="form-control" placeholder="First Line"
+                                                        v-model="formData['2'].eventAddressLine1">
+                                                    <div class="error-message" v-if="errors.length > 0">* Complete the
+                                                        Address field.</div>
+                                                </div>
+                                            </validation-provider>
+                                            <div class="form-group">
+                                                <input class="form-control" type="text" placeholder="Second Line"
+                                                    v-model="formData['2'].eventAddressLine2">
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-12 col-md-6">
+                                            <validation-provider v-slot="{ errors }" rules="required">
+                                                <div class="form-group variant-icon">
+                                                    <label for="postcode" class="bt1">Postcode:</label>
+                                                    <div class="input-wrapper">
+                                                        <input type="text" :class="{
+                                                                'form-control': true,
+                                                                'is-invalid': errors.length > 0
+                                                            }" placeholder="Find postcode"
+                                                            v-model="formData['2'].eventPostCode1">
+                                                        <svg class="icon icon-s mr-2">
+                                                            <use xlink:href="spa-assets/icons/icons.svg#sprite-search"
+                                                                href="spa-assets/icons/icons.svg#sprite-search"></use>
+                                                        </svg>
+                                                    </div>
+                                                    <div class="error-message" v-if="errors.length > 0">* Complete the
+                                                        Postal Code field.</div>
+                                                </div>
+                                            </validation-provider>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label for="city" class="bt1">City:</label>
+                                                <input type="text" disabled="disabled" placeholder="City"
+                                                    class="form-control" v-model="formData['2'].eventCity1">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group"><label for="state" class="bt1">State:</label>
+                                                <input type="text" disabled="disabled" placeholder="State"
+                                                    class="form-control" v-model="formData['2'].eventState1">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-end">
+                                        <a href="#" class="btn btn-primary btn-icon"
+                                            @click.prevent="removeEventDetails(event)">
+                                            <div class="button-icon">
+                                                {% include "templates/components/icon.twig" with { iconName: 'close', iconSize: 's' } %}
+                                            </div>
+                                            <span class="button-text">Remove</span>
+                                        </a>
+                                    </div>
+
+                                </div>
+                                <!-- add event end -->
+
+                                <div class="d-flex justify-content-end mb-3">
+                                    <a href="#" @click.prevent="addEventDetails()" class="btn btn-secondary btn-icon">
+                                        <div class="button-icon">
+                                            {% include "templates/components/icon.twig" with { iconName: 'plus', iconSize: 's' } %}
+                                        </div>
+                                        <span class="button-text">Add Additional Event(s)</span>
+                                    </a>
+                                </div>
+
+                                <div class="pt-4 wizard-navigation d-none d-md-flex">
+                                    <a href="#" role="button" class="btn btn-default btn-outline-primary"
+                                        @click.prevent="goToPrevStep()">Back</a>
+                                    <button class="btn btn-default btn-primary">Continue</button>
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-12 col-md-4">
+                                {% include "templates/components/ttk-summary-pane.twig" %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="container pt-4 wizard-navigation d-md-none">
+                        <button type="reset" class="btn btn-default btn-primary  mb-3 mb-md-0">Continue</button>
+                        <a href="#" role="button" class="btn btn-default btn-outline-primary"
+                            @click="goToPrevStep()">Back</a>
+                    </div>
+                </fieldset>
+
+                <fieldset class="wizard-section-3" v-if="currStep && currStep.step == 3">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12 col-md-8">
+                                <div class="bg-w py-5 px-4 mb-4">
+                                    <div class="d-flex">
+                                        <h2 class="p2 mb-4">Personal Details #1</h2>
+                                        <span>
+                                            {% include "templates/components/tool-tip.twig" with {
+                                                     toolContent: 'You or your spouse-to-be must be Malaysian or Permanent Resident of Malaysia.'    
+                                                } %}
+                                        </span>
+                                    </div>
+
+                                    <div class="row">
+
+                                        <div class="col-12 col-md-6">
+                                            <validation-provider immediate v-slot="{ errors }" rules="required">
+                                                <div class="form-group">
+                                                    <label for="policyHolderName" class="bt1">aaName (as per
+                                                        NRIC):</label>
+                                                    <input type="text" :class="{
+                                                            'form-control': true,
+                                                            'is-invalid': errors.length > 0
+                                                        }" placeholder="l Chulan"
+                                                        v-model="formData['3'].policyHolderName">
+
+                                                    <div class="error-message" v-if="errors.length > 0">
+                                                        * Complete the Name as per NRIC field.
+                                                    </div>
+
+                                                </div>
+                                            </validation-provider>
+
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+
+                                            <validation-provider v-slot="{ errors }" rules="required">
+                                                <div class="form-group">
+                                                    <label for="policyHolderNRIC" class="bt1">NRIC No.:</label>
+                                                    <input type="text" :class="{
+                                                        'form-control': true,
+                                                        'is-invalid': errors.length > 0
+                                                    }" placeholder="NRIC" v-model="formData['3'].policyHolderNRIC">
+                                                    <div class="error-message" v-if="errors.length > 0">
+                                                        * Complete the Name as per NRIC field.
+                                                    </div>
+                                                </div>
+                                            </validation-provider>
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label for="customerEmail" class="bt1">Email:</label>
+                                                <input id="customerEmail" type="text" class="form-control"
+                                                    placeholder="e.g. hteoro@gmail.com">
+                                                <small class="error-message text-primary font-italic">* Complete the
+                                                    Email
+                                                    field.</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label for="mobileNo" class="bt1">Mobile No.:</label>
+                                                <input id="mobileNo" type="text" class="form-control"
+                                                    placeholder="e.g. 01x-xxxxxxx">
+                                                <small class="error-message text-primary font-italic">* Complete the
+                                                    Mobile
+                                                    field.</small>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group"><label for="address1" class="bt1">Address:</label>
+                                                <input id="address1" type="text" placeholder="First Line"
+                                                    class="form-control">
+                                                <small class="error-message text-primary font-italic">* Complete the
+                                                    Address
+                                                    field.</small></div>
+                                            <div class="form-group"><input id="address2" type="text"
+                                                    placeholder="Second Line" class="form-control"></div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group variant-icon"><label for="postcode"
+                                                    class="bt1">Postcode:</label>
+                                                <div class="input-wrapper"><input id="postcode" type="text"
+                                                        placeholder="Find postcode" class="form-control"> <svg
+                                                        class="icon icon-s mr-2">
+                                                        <use xlink:href="spa-assets/icons/icons.svg#sprite-search"
+                                                            href="spa-assets/icons/icons.svg#sprite-search"></use>
+                                                    </svg></div>
+                                                <small class="error-message text-primary font-italic">* Complete the
+                                                    Postal Code
+                                                    field.</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group"><label for="city" class="bt1">City:</label>
+                                                <input id="city" type="text" disabled="disabled" placeholder="city"
+                                                    class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label for="state" class="bt1">State:</label>
+                                                <input id="state" type="text" disabled="disabled" placeholder="state"
+                                                    class="form-control"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="bg-w py-5 px-4 mb-4">
+                                    <div class="d-flex">
+                                        <h2 class="p2 mb-4">Spouse-to-be Details</h2>
+                                    </div>
+
+                                    <div class="row">
+                                        <!-- test two -->
+                                        <validation-provider v-slot="{ errors }" :rules="{ required: !isIdNric }">
+                                            {% verbatim %}
+                                                <div class="form-group">
+                                                    <select :class="{
+                                                            'form-control': true,
+                                                            'is-invalid': errors.length > 0
+                                                        }" v-model="formData['1'].country">
+                                                        <option disabled hidden selected value="">Select a country</option>
+                                                        <option v-for="country in countries"
+                                                            v-bind:key="country.code"
+                                                            :value="country.code">
+                                                            {{ country.name }}
+                                                        </option>
+                                                    </select>
+                                                    <div class="invalid-feedback">
+                                                        <small class="error-message text-primary font-italic">
+                                                            * Complete the country field.
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            {% endverbatim %}
+                                        </validation-provider>
+                                        <!-- test two -->
+
+                                        <div class="col-md-6 col-12">
+                                            <div class="d-flex mb-3">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="id_type"
+                                                        value="nric" id="id_type1"
+                                                        v-model="formData['3'].policyHolderIdType">
+                                                    <label class="form-check-label" for="id_type1">NRIC</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="id_type"
+                                                        value="passport" id="id_type2"
+                                                        v-model="formData['3'].policyHolderIdType">
+                                                    <label class="form-check-label" for="id_type2">Passport</label>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="d-flex flex-column">
+                                                <!-- <validation-provider v-slot="{ errors }" :rules="{ required: !isIdNric }">
+                                                            <div class="form-group" v-if="!isIdNric">
+                                                                <select :class="{
+                                                                    'form-control': true,
+                                                                    'is-invalid': errors.length > 0
+                                                                }" v-model="formData['1'].country">
+                                                                    <option disabled hidden selected value="">Select a country</option>
+                                                                    <option v-for="country in countries"
+                                                                        v-bind:key="country.code"
+                                                                        :value="country.code">
+                                                                        {{ country.name }}
+                                                                    </option>
+                                                                </select>
+                                                                <div class="invalid-feedback">
+                                                                    <small class="error-message text-primary font-italic">
+                                                                        * Complete the country field.
+                                                                    </small>
+                                                                </div>
+                                                            </div>
+                                                        </validation-provider> -->
+                                                <!-- <validation-provider v-slot="{ errors, failedRules }" rules="required">
+
+                                                            <div class="form-group">
+                                                                <label v-if="!isIdNric">Name (as per Passport):</label>
+                                                                <label v-if="isIdNric">Name (as per NRIC):</label>
+                                                                <input type="text"
+                                                                    :class="{
+                                                                        'form-control': true,
+                                                                        'is-invalid': errors.length > 0
+                                                                    }"
+                                                                    :name="isIdNric ? 'NRIC' : 'Passport'"
+                                                                    :placeholder="isIdNric ? 'XXXXXX-XX-XXXX' : 'Passport No.'"
+                                                                    v-mask="isIdNric ? '######-##-####' : 'XXXXXXXXXXXXXX'"
+                                                                    v-model="formData['3'].policyHolderNric">
+                                                                <div class="invalid-feedback font-italic">
+                                                                    {{ errors[0] }}
+                                                                </div>
+                                                            </div>
+                                                        </validation-provider> -->
+
+                                            </div>
+                                        </div>
+                                        <!-- malaysian -->
+                                        <div class="col-12 col-md-6" v-if="isIdNric">
+                                            <validation-provider v-slot="{ errors, failedRules }" rules="required">
+
+                                                <div class="form-group">
+                                                    <label>Name (as per NRIC):</label>
+                                                    <input type="text" :class="{
+                                                                            'form-control': true,
+                                                                            'is-invalid': errors.length > 0
+                                                                        }" :name="isIdNric ? 'NRIC' : 'Passport'"
+                                                        :placeholder="isIdNric ? 'XXXXXX-XX-XXXX' : 'Passport No.'"
+                                                        v-mask="isIdNric ? '######-##-####' : 'XXXXXXXXXXXXXX'"
+                                                        v-model="formData['3'].policyHolderName">
+                                                    <div class="invalid-feedback font-italic">
+                                                        Complete the Name as per NRIC field.
+                                                    </div>
+                                                </div>
+                                            </validation-provider>
+                                        </div>
+
+                                        <!-- non malaysian -->
+                                        <div class="col-12 col-md-6" v-if="!isIdNric">
+                                            <label>Name (as per Passport):</label>
+                                            <label v-if="isIdNric">Name (as per NRIC):</label>
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+
+
+                                <div class="pt-4 wizard-navigation d-none d-md-flex">
+                                    <a href="#" role="button" class="btn btn-default btn-outline-primary"
+                                        @click.prevent="goToPrevStep()">Back</a>
+                                    <button class="btn btn-default btn-primary">Continue</button>
+
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-4">
+                                {% include "templates/components/ttk-summary-pane.twig" %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container pt-4 wizard-navigation d-md-none">
+                        <button class="btn btn-default btn-primary mb-3 mb-md-0">Continue</button>
+                        <a href="#" role="button" class="btn btn-default btn-outline-primary "
+                            @click="goToPrevStep()">Back</a>
+                    </div>
+                </fieldset>
+
+            </form>
+        </validation-observer>
+    </div>
+</div>
+
+{% endblock %}
