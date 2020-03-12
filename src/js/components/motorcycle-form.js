@@ -12,6 +12,7 @@ const baseUrl = 'https://takeiteasy.msig.com.my';
 
 $(function() {
     if ($('#motorcycle-form').length > 0) {
+        console.log("motor")
         const motorcycleForm = new Vue({
             el: '#motorcycle-form',
             data: {

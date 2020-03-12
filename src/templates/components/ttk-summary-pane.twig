@@ -1,9 +1,31 @@
-<div class="summary-pane" id="sidebar">
+<div class="summary-pane sticky-top" id="sidebar">
 	<div class="section-header bg-p2 py-3 px-4">
 		<h2 class="w">Summary</h2>
 	</div>
 	<div class="bg-w py-3 px-4">
-		<p class="bt1">Event Details #1</p>
+		{% verbatim %}
+			<div v-for="(event, index) in formData['2'].eventDetails">
+				<p class="bt1">Event Details #{{ index + 1 }}</p>
+				<table>
+					<tr>
+						<td width="68px">Date <span class="float-right pr-1"> : </span></td>
+						<td>15/03/2020</td>
+						<!-- <td>{{ event.eventDate }}</!--> 
+					</tr>
+					<tr>
+						<td width="68px">Venue <span class="float-right pr-1"> : </span></td>
+						<td>{{ event.eventName }}</td>
+					</tr>
+					<tr>
+						<td valign="top" width="68px">Address <span class="float-right pr-1"> : </span></td>
+						<td>{{ event.eventAddressLine1 + ' ' + event.eventAddressLine2 }}</td>
+					</tr>
+		
+				</table>
+				<hr />
+			</div>
+		{% endverbatim %}
+		<!-- <p class="bt1">Event Details #2</p>
 		<table>
 			<tr>
 				<td width="68px">Date <span class="float-right pr-1"> : </span></td>
@@ -21,26 +43,7 @@
 			</tr>
 
 		</table>
-		<hr />
-		<p class="bt1">Event Details #2</p>
-		<table>
-			<tr>
-				<td width="68px">Date <span class="float-right pr-1"> : </span></td>
-				<td>28/01/2021 (Tue)</td>
-			</tr>
-			<tr>
-				<td width="68px">Venue <span class="float-right pr-1"> : </span></td>
-				<td>Hotel Royal Chulan </td>
-			</tr>
-			<tr>
-				<td valign="top" width="68px">Address <span class="float-right pr-1"> : </span></td>
-				<td>7, Lorong Bahagia 2, TTDI,
-					60000 Kuala Lumpur,
-					Wilayah Persekutuan, Malaysia</td>
-			</tr>
-
-		</table>
-		<hr />
+		<hr /> -->
 
 		<p class="bt1">Coverage</p>
 		<table>

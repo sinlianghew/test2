@@ -81,7 +81,7 @@
                                                 }" v-model="formData['1'].country">
                                                     <option disabled hidden selected value="">Select a country</option>
                                                     <option v-for="country in countries"
-                                                        v-bind:key="countries.indexOf(country)"
+                                                        v-bind:key="country.code"
                                                         :value="country.code">
                                                         {{ country.name }}
                                                     </option>

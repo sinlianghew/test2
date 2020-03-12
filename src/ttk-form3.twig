@@ -175,7 +175,8 @@
                                         <select class="form-control">
                                             <option disabled hidden selected value="" class="italic">Select a country</option>
                                             <option v-for="country in allCountries"
-                                                v-bind:key="allCountries.indexOf(country)" :value="country">
+                                                v-bind:key="allCountries.indexOf(country)" 
+                                                :value="country">
                                                 {{ country }}</option>
                                         </select>
                                         {% endverbatim %}

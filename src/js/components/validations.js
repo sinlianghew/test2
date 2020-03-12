@@ -14,8 +14,13 @@ extend('mustBeTrue', {
             return false;
         }
         return true;
+        
+    },
+    message:function(fieldName,placeholders){
+        return `* wow the ${fieldName} field.`
     }
-})
+});
 
+  
 // similar to how merchant code is done, we need to restrict concessions
 // this is for maybank, we need to tie concessions to merchant code

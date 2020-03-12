@@ -61,9 +61,13 @@ body {
     }
 
     .error-message {
+        font-size:12px;
+        font-style: italic;
         padding-top: 3px;
         display: inline-block;
+        color:$color-red;
     }
+
 
     a:hover {
         text-decoration: none;

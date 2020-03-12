@@ -188,6 +188,7 @@ if ($('#travel-form').length) {
                 nomineeRelationToCustomer: 'Father',
                 tncAgreement: false,
                 paymentMethod: 'Online Banking',
+              
             },
             calendar: {
                 disabledDates: {
