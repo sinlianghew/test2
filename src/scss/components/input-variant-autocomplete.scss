@@ -1,0 +1,29 @@
+.form-group.variant-autocomplete {
+    .vbt-autcomplete-list {
+        position: absolute;
+        z-index: 1;
+
+        .vbst-item {     
+            transition: 0.1s ease;
+                  
+            &:first-child {
+                border-top-left-radius: 0;
+                border-top-right-radius: 0;
+            }
+
+            &:last-child {
+                border-bottom-left-radius: 0;
+                border-bottom-right-radius: 0;
+            }
+
+            &:not(:last-child) {
+                border-bottom-color: $p2;
+            }
+
+            &:hover {
+                background-color: $p2;
+                color: #fff;
+            }
+        }
+    }
+}
