@@ -20,7 +20,7 @@ Vue.use(VueTheMask);
 
 // Import the JS components
 import "./components/validations"
-import "./components/travel-form"
+// import "./components/travel-form"
 import "./components/motorcycle-form"
 
 
