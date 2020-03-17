@@ -7,7 +7,7 @@ const { CleanWebpackPlugin } =      require("clean-webpack-plugin") // only need
 module.exports = merge(common, {
     mode: "production",
     optimization: {
-		minimize: false
+		// minimize: false
 	},
     entry: "./src/js/index.js",
     output: {
@@ -60,7 +60,7 @@ module.exports = merge(common, {
                         presets: [
                             [
                                 '@babel/preset-env', { 
-                                    "targets": ['> 1%']
+                                    "targets": ['> 1%', 'last 2 versions']
                                 }
                             ]
                         ]
