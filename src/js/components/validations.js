@@ -31,7 +31,7 @@ extend('validName', {
     validate: function (value) {
         // Sample: Kelvin Lee @ Rogers A/L T'Challa
         if (value.length === 0) return true;
-        const regex = /^[(\w*)(@)(/)(')(\s)(\-)]+$/g;
+        const regex = /^[((a-zA-Z)*)(@)(/)(')(\s)(\-)]+$/g;
         return regex.test(value)
     }
 })
