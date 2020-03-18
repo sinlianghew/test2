@@ -1,9 +1,11 @@
+
 .tooltip-inner {
     background-color: $color-primary-blue;
     opacity: 1;
     font-size: 12px;
     text-align: left;
     padding: 18px;
+    pointer-events: none;
 }
 
 .tooltip.bs-tooltip-right .arrow:before {
@@ -11,7 +13,7 @@
 }
 
 .tooltip.bs-tooltip-left .arrow:before {
-    border-right-color: $color-primary-blue !important;
+    border-left-color: $color-primary-blue !important;
 }
 
 .tooltip.bs-tooltip-bottom .arrow:before {
@@ -20,4 +22,18 @@
 
 .tooltip.bs-tooltip-top .arrow:before {
     border-right-color: $color-primary-blue !important;
+}
+
+
+@include media-breakpoint-down(xs) {
+    .tooltip {
+        top: -58px !important;
+        left: 20% !important;
+
+        .arrow {
+            top: 68px!important;
+            transform: rotate(90deg);
+            left: 125px;
+        }
+    }
 }

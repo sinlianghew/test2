@@ -312,26 +312,26 @@ $(function () {
                     })
                     return defer;
                 },
-                addFamilyMember() {
-                    console.log("yes family")
-                    let fields = {
-                        relationToCustomer: 'Spouse',
-                        nationality: 'Malaysian',
-                        country: '',
-                        name: '',
-                        nric: '',
-                        dateOfBirth: ''
-                    }
-                    this.formData['3'].familyMembers.push(fields)
-                },
-                removeFamilyMember(familyMember) {
-                    this.formData['3'].familyMembers = this.formData['3'].familyMembers.filter(m => m !== familyMember)
-                },
+                // addFamilyMember() {
+                //     console.log("yes family")
+                //     let fields = {
+                //         relationToCustomer: 'Spouse',
+                //         nationality: 'Malaysian',
+                //         country: '',
+                //         name: '',
+                //         nric: '',
+                //         dateOfBirth: ''
+                //     }
+                //     this.formData['3'].familyMembers.push(fields)
+                // },
+                // removeFamilyMember(familyMember) {
+                //     this.formData['3'].familyMembers = this.formData['3'].familyMembers.filter(m => m !== familyMember)
+                // },
                 addEventDetails: function () {
                     console.log("yes details")
                     let fields = {
                         eventName: '',
-                        eventDate: null,
+                        // eventDate: null,
                         eventAddressLine1: '',
                         eventAddressLine2: '',
                         eventPostCode: '',
@@ -419,6 +419,7 @@ $(function () {
 
 $(document).ready(function () {
     // $('[data-toggle="tooltip"]').tooltip();
+    
     $("body").tooltip({
         selector: '[data-toggle=tooltip]'
     });

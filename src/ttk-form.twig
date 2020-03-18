@@ -93,8 +93,9 @@
                                         <h2 class="p2">Event Details #{{index + 1}}</h2>
                                         <span>
                                             <div class="ml-2 btn-tooltip" data-toggle="tooltip" data-placement="right"
-                                                title="Event date must be at least 6 months from today."> ?
+                                                title="Event date must be at least 6 months from today."> ? Hover over me
                                             </div>
+                                            <!-- <a   class="ml-2 "  href="#" data-placement="right" data-toggle="tooltip" title="Event date must be at least 6 months from today.">Hover over me</a> -->
                                         </span>
                                     </div>
 
@@ -112,9 +113,11 @@
                                                         }" placeholder="Select date" :format="customDateFormatter"
                                                         v-model="event.eventDate">
                                                     </datepicker>
+                                                   
                                                     {% include "templates/components/icon.twig" with { iconName: 'calendar' } %}
                                                 </div>
 
+                                              
                                                 <div class="error-message" v-if="errors.length > 0">* Select a date.
                                                 </div>
                                             </validation-provider>
@@ -798,7 +801,7 @@
                                     class="underline">Terms and Conditions</a>.
                                 {% endblock %}
                                 {% endembed %}
-
+ 
                                 <div class="pt-4 wizard-navigation d-none d-md-flex">
                                     <a href="#" role="button" class="btn btn-default btn-outline-primary"
                                         @click.prevent="goToPrevStep()">Back</a>
