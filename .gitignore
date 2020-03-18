@@ -1,3 +1,9 @@
 node_modules
 dist
 files_version
+
+# firebase
+.firebase/
+firebase-debug.log*
+logs
+*.log
