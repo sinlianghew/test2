@@ -9,7 +9,9 @@ module.exports = merge(common, {
     optimization: {
 		// minimize: false
 	},
-    entry: "./src/js/index.js",
+    entry: {
+        'main.ttk': "./src/js/index.ttk.js"
+    },
     output: {
         path: path.resolve(__dirname, "dist"),
         filename: 'js/[name].js',

@@ -20,8 +20,12 @@ extend('mustBeTrue', {
             return false;
         }
         return true;
+        
+    },
+    message:function(fieldName,placeholders){
+        return `* wow the ${fieldName} field.`
     }
-})
+});
 
 extend('validName', {
     validate: function (value) {

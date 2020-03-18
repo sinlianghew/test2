@@ -16,6 +16,7 @@ const baseUrl = document.querySelector('input[name=tieBaseUrl]').value;
  */
 $(function() {
     if ($('#motorcycle-form').length > 0) {
+        console.log("motor")
         const motorcycleForm = new Vue({
             el: '#motorcycle-form',
             data: {

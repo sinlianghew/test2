@@ -27,8 +27,15 @@
             border-color: $color-red;
         }
 
+        &.is-invalid {
+            border: 1px solid $color-red;
+            background-image: none;
+        }
+
         &.is-invalid~.invalid-feedback {
             display: block;
+            font-size:12px;
+            font-style: italic;
         }
     }
 
