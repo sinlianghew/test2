@@ -7,6 +7,9 @@ import VueBootstrapTypeahead from 'vue-typeahead-bootstrap/dist/VueBootstrapType
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import { extractDOB } from '../helpers/utilities';
 // import Datepicker from 'vuejs-datepicker';
+import MotorcycleSummaryPane from '../components/motorcycle-summary-pane';
+Vue.component('motor-summary-pane', MotorcycleSummaryPane)
+
 
 
 const baseUrl = document.querySelector('input[name=tieBaseUrl]').value;
@@ -54,22 +57,29 @@ $(function() {
                         agreement: false
                     },
                     2: {
-                        motorVehicleLocation: '', // a.k.a. state
+                        motorVehicleLocation: 'WP Kuala Lumpur', // a.k.a. state
                         curMktValue: 0,
                         motorLoanProvider: '',
-                        policyHolderName: '',
-                        policyHolderEmail: '',
-                        policyHolderMobileNo: '',
-                        policyHolderAddressLine1: '',
-                        policyHolderAddressLine2: '',
-                        policyHolderGender: '',
-                        addressPostcode: '',
+                        policyHolderName: 'Testing',
+                        policyHolderEmail: 'test@growthops.asia',
+                        policyHolderMobileNo: '0175963434',
+                        policyHolderAddressLine1: '123 Jalan Impian',
+                        policyHolderAddressLine2: 'Taman Impian',
+                        policyHolderGender: '', // remember to use computed property instead
+                        addressPostcode: '47810',
                         addressState: '',
                         addressCity: '',
-                        policyHolderMaritalStatus: '',
+                        policyHolderMaritalStatus: 'Single',
                         policyHolderOccupation: ''
                     },
-                    3: {}
+                    3: {
+                        motorPlusPlan: null,
+                        motorAddRiderPA: '',
+                        motorAddLegalLiabilityToPassengers: '',
+                        motorAddLegalLiabilityOfPassengers: '',
+                        motorAddSpecialPerils: '',
+                        motorAddSRCC: ''
+                    }
                 },
                 currStep: null,
                 underwrittenRules: {},
@@ -158,12 +168,16 @@ $(function() {
                         }
                     } else if (this.currStep.stepNum == '2') {
                         const premium = await this.calculatePremiumAsync()
-                        console.log(premium)
+                        this.formData['3'] = {
+                            ...this.formData['3'],
+                            ...premium
+                        }
                     }
 
                     await this.scrollTop();
                     this.currStep.completed = true;
                     this.currStep = this.steps[this.steps.indexOf(this.currStep) + 1];
+
                 },
                 goToPrevStep: async function () {
                     if (this.steps.indexOf(this.currStep) == 0) {
@@ -366,7 +380,8 @@ $(function() {
                     
                     const apiResp = await $.ajax({
                         method: 'POST',
-                        url: this.baseUrl + '/dotCMS/purchase/buynow',
+                        // url: this.baseUrl + '/dotCMS/purchase/buynow',
+                        url: 'http://www.mocky.io/v2/5e7200e33300004f0044c5a1',
                         dataType: 'json',
                         data: {
                             action: 'calculatePremium',
@@ -384,7 +399,7 @@ $(function() {
                             coverageStartDate: this.formData['2'].nxtNCDEffDt,
                             coverageExpiryDate: this.formData['2'].nxtNCDExpDt,
                             policyHolderNRIC: this.formData['1'].policyHolderNric, // TODO: CHECK THIS, could be passport
-                            policyHolderGender: this.formData['2'].policyHolderGender,
+                            policyHolderGender: this.policyHolderGender,
                             policyHolderMalaysian: this.isIdNric ? 'Y' : 'N',
                             policyHolderDateOfBirth: moment(this.policyHolderDob).format('DD/MM/YYYY'),
                             motorCc: this.formData['2'].motorCc,
@@ -408,6 +423,23 @@ $(function() {
                     }).promise()
 
                     return apiResp;
+                },
+                formatAsCurrency: function (number) {
+                    return number.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                },
+                initializeTooltips: function () {
+                    this.$nextTick().then(() => {
+                        const currStepNum = this.currStep.stepNum;
+                        const $tooltips = $(this.$el).find(`.wizard-section-${currStepNum} [data-toggle=tooltip]`);
+                        $tooltips.each(function() {
+                            if (!$(this).hasClass('tooltip-initialized')) {
+                                $(this).tooltip()
+                                $(this).addClass('tooltip-initialized')
+                            } else {
+                                $(this).tooltip('update')
+                            }
+                        })
+                    })
                 }
             },
             computed: {
@@ -431,6 +463,11 @@ $(function() {
                 }
             },
             watch: {
+                currStep: function (step) {
+                    if (step.stepNum === '3') {
+                        
+                    }
+                },
                 "formData.2.addressPostcode": _.debounce(function (postcode) {
                     this.getPostcodesAsync(postcode)
                 }, 500),
@@ -524,6 +561,7 @@ $(function() {
             },
             mounted: function() {
                 this.currStep = this.steps[0]
+                this.onSubmit().then(() => this.onSubmit())
                 // this.steps[0].showPrescreen = false;
             }
         })
