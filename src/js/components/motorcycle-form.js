@@ -4,11 +4,11 @@ import _ from 'lodash';
 import { mask, masked } from 'vue-the-mask';
 import moment from 'moment';
 import VueBootstrapTypeahead from 'vue-typeahead-bootstrap/dist/VueBootstrapTypeahead.umd';
-
+import { ValidationProvider, ValidationObserver } from 'vee-validate'
+import { extractDOB } from '../helpers/utilities';
 // import Datepicker from 'vuejs-datepicker';
 
 
-import { ValidationProvider, ValidationObserver } from 'vee-validate'
 const baseUrl = document.querySelector('input[name=tieBaseUrl]').value;
 
 /**
@@ -23,6 +23,9 @@ $(function() {
                 productCode: 'MCY',
                 partnerCode: $('input[name="partnerCode"]').val(),
                 productName: 'Motorcycle',
+                staffId: $('input[name="staffId"]').val(),
+                staffRelationship: $('input[name="staffRelationship"]').val(),
+
                 steps: [
                     { stepNum: '1', title: 'Get Started', completed: false, showPrescreen: true },
                     { stepNum: '2', title: 'Fill In Details', completed: false },
@@ -44,10 +47,10 @@ $(function() {
                     1: {
                         policyHolderIdType: 'nric',
                         country: '',
-                        // policyHolderNric: '870523-06-6009',
-                        // motorRegistrationNo: 'VBQ7136',
-                        policyHolderNric: '',
-                        motorRegistrationNo: '',
+                        policyHolderNric: '870523-06-6009',
+                        motorRegistrationNo: 'VBQ7136',
+                        // policyHolderNric: '',
+                        // motorRegistrationNo: '',
                         agreement: false
                     },
                     2: {
@@ -126,7 +129,7 @@ $(function() {
                             ...this.formData['2'],
                             ...motorDetails
                         }
-                        
+
                         // Find the make information e.g. Toyota, Honda etc
                         const motorMakesFound = await this.findVehicleMakeByCode(motorDetails.motorMakeCode)
                         this.currMotorMakeInfo = motorMakesFound[0]
@@ -140,11 +143,12 @@ $(function() {
                         console.log(motorNCD)
                         // Might not be needed
 
-                        const motorSumInsured = await this.findVehicleSumInsured(motorDetails)
+                        const motorSumInsured = await this.findVehicleSumInsured()
                         this.formData['2'] = {
                             ...this.formData['2'],
                             ...motorSumInsured
                         }
+                        this.formData['2'].sumInsuredType = this.formData['2'].sumInsuredType === 'MarketValue' ? 'marketValue' : 'recomendedValue';
                         
                         if (!motorSumInsured.canProceed) {
                             // show the user the form
@@ -152,6 +156,9 @@ $(function() {
                         } else {
                             
                         }
+                    } else if (this.currStep.stepNum == '2') {
+                        const premium = await this.calculatePremiumAsync()
+                        console.log(premium)
                     }
 
                     await this.scrollTop();
@@ -234,7 +241,7 @@ $(function() {
 
                     return apiResponse.contentlets;
                 },
-                findVehicleSumInsured: async function (motorDetails) {
+                findVehicleSumInsured: async function () {
                     const apiResponse = await $.ajax({
                         type: "POST",
                         url: baseUrl + '/dotCMS/purchase/buynow',
@@ -354,6 +361,53 @@ $(function() {
                             scrollTop: $errors.first().offset().top - 10
                         }, 500)
                     }
+                },
+                calculatePremiumAsync: async function () {
+                    
+                    const apiResp = await $.ajax({
+                        method: 'POST',
+                        url: this.baseUrl + '/dotCMS/purchase/buynow',
+                        dataType: 'json',
+                        data: {
+                            action: 'calculatePremium',
+                            memberRelationship: 'Driver', // TODO: CHECK THIS! , seems like motorPlus only will have smtg else
+                            motorNvic: this.formData['2'].nvic,
+                            motorVehicleLocation: this.formData['1'].motorRegistrationNo,
+                            motorNxtNcdLevel: this.formData['2'].nxtNCDDiscount,
+                            motorAddLegalLiabilityToPassengers: '', // TODO: CHECK THIS!
+                            motorAddLegalLiabilityOfPassengers: '', // TODO: CHECK THIS!
+                            motorAddSpecialPerils: '', // TODO: CHECK THIS
+                            motorAddSRCC: '', // TODO: CHECK THIS
+                            motorAddRiderPA: '', // TODO: CHECK THIS
+                            productCode: this.productCode,
+                            partnerCode: this.partnerCode,
+                            coverageStartDate: this.formData['2'].nxtNCDEffDt,
+                            coverageExpiryDate: this.formData['2'].nxtNCDExpDt,
+                            policyHolderNRIC: this.formData['1'].policyHolderNric, // TODO: CHECK THIS, could be passport
+                            policyHolderGender: this.formData['2'].policyHolderGender,
+                            policyHolderMalaysian: this.isIdNric ? 'Y' : 'N',
+                            policyHolderDateOfBirth: moment(this.policyHolderDob).format('DD/MM/YYYY'),
+                            motorCc: this.formData['2'].motorCc,
+                            motorMakeCode: this.formData['2'].motorMakeCode,
+                            motorYearOfMake: this.formData['2'].motorYearOfMake,
+                            motorModelCode: this.formData['2'].motorModelCode,
+                            motorChassisNo: this.formData['2'].motorRiskDataChassisNo,
+                            motorRegistrationNo: this.formData['1'].motorRegistrationNo,
+                            motorSeat: this.formData['2'].seat,
+                            motorStyle: this.formData['2'].style,
+                            motorVariant: this.formData['2'].variant,
+                            motorTransmission: this.formData['2'].transmission,
+                            motorFamily: this.formData['2'].family,
+                            motorMake: this.formData['2'].make,
+                            motorVehiclePremiumValue: this.formData['2'].sumInsuredType, // confusing naming here
+                            dpfstatus: this.formData['2'].dpfStatus, // this passed back during NCD checking
+                            staffId: this.staffId,
+                            staffRelationship: this.staffRelationship,
+                            productName: this.productName
+                        }
+                    }).promise()
+
+                    return apiResp;
                 }
             },
             computed: {
@@ -370,6 +424,10 @@ $(function() {
                             this.formData['2'].policyHolderGender = value
                         }
                     }
+                },
+                policyHolderDob: function () {
+                    const nric = this.formData['1'].policyHolderNric;
+                    return extractDOB(nric);
                 }
             },
             watch: {
@@ -422,6 +480,23 @@ $(function() {
                             }, []),
                             'name'
                         )
+                })
+
+                $.ajax({
+                    method: 'GET',
+                    url: this.createDotCMSQueryURL('TieRefState', {}, true),
+                    dataType: 'json'
+                }).done((data) => {
+                    this.states = _.sortBy(
+                        data.contentlets.reduce((acc, content) => {
+                            acc.push({
+                                name: content.stateDescription,
+                                code: content.stateCode
+                            })
+                            return acc;
+                        }, []),
+                        'name'
+                    )
                 })
 
                 // $.ajax({
