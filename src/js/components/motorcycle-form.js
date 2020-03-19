@@ -10,15 +10,13 @@ import { extractDOB } from '../helpers/utilities';
 import MotorcycleSummaryPane from '../components/motorcycle-summary-pane';
 Vue.component('motor-summary-pane', MotorcycleSummaryPane)
 
-
-
-const baseUrl = document.querySelector('input[name=tieBaseUrl]').value;
-
 /**
  * Staff Relation: ['Direct Relationship']
  */
 $(function() {
     if ($('#motorcycle-form').length > 0) {
+        const baseUrl = document.querySelector('input[name=tieBaseUrl]').value;
+        
         const motorcycleForm = new Vue({
             el: '#motorcycle-form',
             data: {
