@@ -16,6 +16,7 @@ module.exports = {
     resolve: {
         extensions: [".js", ".scss", ".css"],
         alias: {
+            '@': path.resolve(__dirname, 'src'),
             assets: path.resolve(__dirname, 'src/spa-assets'),
             'vue$': 'vue/dist/vue.esm.js'
         }
