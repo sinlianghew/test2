@@ -1,9 +1,17 @@
 export default {
     template: '#summary-pane-template',
-    props: ['formData', 'currStepNum'],
+    props: ['formData', 'currStepNum', 'showSpecialAddOns'],
     data: function () {
-        return {
-
+        return {}
+    },
+    computed: {
+        isAnySpecialAddOnSelected: function () {
+            const addOnSelection = [
+                this.formData['3'].motorAddSRCC,
+                this.formData['3'].motorAddSpecialPerils,
+                this.formData['3'].motorAddLegalLiabilityOfPassengers
+            ]
+            return addOnSelection.some(addOn => addOn === true)
         }
     },
     methods: {
