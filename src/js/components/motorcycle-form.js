@@ -169,10 +169,12 @@ $(function() {
                         }
 
                         if (!motorDetails.canProceed) {
-                            let errorMessage = await this.findErrorByErrorCodeAsync(motorDetails.errorCode)
-                            let $errorMessage = $('<p>' + errorMessage + '</p>')
-                            $errorMessage.find('a').attr('href', 'tel:' + this.supportTel).html(this.supportTel)
-                            this.errorMessage = $errorMessage.html();
+                            if (motorDetails.errorCode) {
+                                let errorMessage = await this.findErrorByErrorCodeAsync(motorDetails.errorCode)
+                                let $errorMessage = $('<p>' + errorMessage + '</p>')
+                                $errorMessage.find('a').attr('href', 'tel:' + this.supportTel).html(this.supportTel)
+                                this.errorMessage = $errorMessage.html();
+                            }
                             
                             if (!this.developmentMode) {
                                 return this.canProceed = false;
@@ -239,13 +241,14 @@ $(function() {
                     this.currStep = this.steps[this.steps.indexOf(this.currStep) - 1];
                 },
                 checkNCD: async function () {
-                    // 002 server down, cant access info
-                    // 005 cant renew due to validity more than 60 days
-                    // 007 Please note that you can only purchase a new policy up to 60 days before your current policy renewal date. Please contact 1-800-88-6744 for assistance. For any further enquiries, please email us at msig_online@my.msig-asia.com
-                    // 008 made year > 20 years
+                    let apiUrl = baseUrl + '/dotCMS/purchase/buynow';
+                    if (this.developmentMode) {
+                        apiUrl = 'https://www.mocky.io/v2/5e748d7b300000d431a5f463'
+                    }
+
                     const apiResponse = await $.ajax({
                         method: 'POST',
-                        url: baseUrl + '/dotCMS/purchase/buynow',
+                        url: apiUrl,
                         data: {
                             action: 'motorNcdCheck',
                             motorRegistrationNo: this.formData['1'].motorRegistrationNo,
@@ -308,9 +311,15 @@ $(function() {
                     return apiResponse.contentlets;
                 },
                 findVehicleSumInsured: async function () {
+
+                    let apiUrl = baseUrl + '/dotCMS/purchase/buynow';
+                    if (this.developmentMode) {
+                        apiUrl = 'https://www.mocky.io/v2/5e748c373000007e00a5f455'
+                    }
+
                     const apiResponse = await $.ajax({
                         type: "POST",
-                        url: baseUrl + '/dotCMS/purchase/buynow',
+                        url: apiUrl,
                         dataType: 'json',
                         data: {
                             action: "findMotorcycleSumInsured",
@@ -344,7 +353,6 @@ $(function() {
                         errorCode
                     }
                     const dotCMSQueryURL = this.createDotCMSQueryURL('TieRefBancaMotorErrorMessage', queryObj, true)
-
                     const apiResp = await $.ajax({
                         method: 'GET',
                         dataType: 'json',

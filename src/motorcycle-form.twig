@@ -356,7 +356,7 @@
                                         </div>
 
                                         <div class="col-12 col-md-6">
-                                            <validation-provider rules="required" v-slot="{ errors, failedRules }">
+                                            <validation-provider rules="required|email" v-slot="{ errors, failedRules }">
                                                 <div class="form-group">
                                                     <label class="bt1">Email:</label>
                                                     <input type="text" 
@@ -366,26 +366,28 @@
                                                         }"
                                                         v-model="formData['2'].policyHolderEmail"
                                                         placeholder="e.g. hteoro@gmail.com">
-                                                    <small class="error-message text-primary font-italic" v-if="failedRules.required">
-                                                        * Complete the Email field.
+                                                    <small class="error-message text-primary font-italic" v-if="errors.length > 0">
+                                                        <span v-if="failedRules.required">* Complete the Email field.</span>
+                                                        <span v-else-if="failedRules.email">Please check email address</span>
                                                     </small>
                                                 </div>
                                             </validation-provider>
                                         </div>
 
                                         <div class="col-12 col-md-6">
-                                            <validation-provider rules="required" v-slot="{ errors, failedRules }">
+                                            <validation-provider rules="required|integer|max:11" v-slot="{ errors, failedRules }">
                                                 <div class="form-group">
                                                     <label class="bt1">Mobile No.:</label>
-                                                    <input type="text"
+                                                    <input type="tel"
                                                         :class="{
                                                             'form-control': true,
                                                             'is-invalid': errors.length > 0
                                                         }"
                                                         v-model="formData['2'].policyHolderMobileNo"
                                                         placeholder="e.g. 01x-xxxxxxx">
-                                                    <small class="error-message text-primary font-italic" v-if="failedRules.required">
-                                                        * Complete the Mobile field.
+                                                    <small class="error-message text-primary font-italic" v-if="errors.length > 0">
+                                                        <span v-if="failedRules.required">* Complete the Mobile field.</span>
+                                                        <span v-else-if="failedRules.integer || failedRules.max">Please check mobile number.</span>
                                                     </small>
                                                 </div>
                                             </validation-provider>
@@ -522,18 +524,26 @@
                                         </div>
 
                                         <div class="col-12 col-md-6">
-
-                                            <div class="form-group">
-                                                <label for="state" class="bt1">Occupation:</label>
-                                                <input id="state" type="text" placeholder="eg: Architect" class="form-control">
-                                            </div>
+                                            <validation-provider rules="required" v-slot="{ errors, failedRules }">
+                                                <div class="form-group">
+                                                    <label for="occupation" class="bt1">Occupation:</label>
+                                                    <input id="occupation"
+                                                        type="text"
+                                                        placeholder="eg: Architect"
+                                                        :class="{
+                                                            'form-control': true,
+                                                            'is-invalid': errors.length > 0
+                                                        }"
+                                                        v-model="formData['2'].policyHolderOccupation">
+                                                    <div class="small error-message text-primary font-italic" v-if="errors.length > 0">
+                                                        <span v-if="failedRules.required">
+                                                            * Complete the Occupation field.
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </validation-provider>
                                         </div>
-
-
-
                                     </div>
-
-
                                 </div>
 
                                 <div class="pt-4 wizard-navigation d-none d-md-flex">
@@ -1484,7 +1494,7 @@
 
                                         <div class="row">
                                             <div class="col-12 col-md-6">
-                                                <validation-provider rules="required" v-slot="{ errors, failedRules }">
+                                                <validation-provider rules="required|email" v-slot="{ errors, failedRules }">
                                                     <div class="form-group">
                                                         <input type="text" 
                                                             :class="{
@@ -1493,8 +1503,9 @@
                                                             }"
                                                             placeholder="e.g. hteoro@gmail.com"
                                                             v-model="formData['5'].fpxEmail">
-                                                        <small class="error-message text-primary font-italic" v-if="failedRules.required">
-                                                            * Complete the Email field.
+                                                        <small class="error-message text-primary font-italic" v-if="errors.length > 0">
+                                                            <span v-if="failedRules.required">* Complete the Email field.</span>
+                                                            <span v-else-if="failedRules.email">Please check email address</span>
                                                         </small>
                                                     </div>
                                                 </validation-provider>
@@ -1656,7 +1667,7 @@
                             href="spa-assets/icons/icons.svg#sprite-tick-mark"></use>
                     </svg>
                     <div class="invalid-feedback font-italic d-block pl-2 ml-1">
-                        This disables checking NCD error codes.
+                        This disables checking NCD error codes and uses mock APIs.
                     </div>
                 </div>
             </div>
