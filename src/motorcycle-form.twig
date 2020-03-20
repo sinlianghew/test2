@@ -356,7 +356,7 @@
                                         </div>
 
                                         <div class="col-12 col-md-6">
-                                            <validation-provider rules="required" v-slot="{ errors, failedRules }">
+                                            <validation-provider rules="required|email" v-slot="{ errors, failedRules }">
                                                 <div class="form-group">
                                                     <label class="bt1">Email:</label>
                                                     <input type="text" 
@@ -366,8 +366,9 @@
                                                         }"
                                                         v-model="formData['2'].policyHolderEmail"
                                                         placeholder="e.g. hteoro@gmail.com">
-                                                    <small class="error-message text-primary font-italic" v-if="failedRules.required">
-                                                        * Complete the Email field.
+                                                    <small class="error-message text-primary font-italic" v-if="errors.length > 0">
+                                                        <span v-if="failedRules.required">* Complete the Email field.</span>
+                                                        <span v-else-if="failedRules.email">Please check email address</span>
                                                     </small>
                                                 </div>
                                             </validation-provider>
@@ -1484,7 +1485,7 @@
 
                                         <div class="row">
                                             <div class="col-12 col-md-6">
-                                                <validation-provider rules="required" v-slot="{ errors, failedRules }">
+                                                <validation-provider rules="required|email" v-slot="{ errors, failedRules }">
                                                     <div class="form-group">
                                                         <input type="text" 
                                                             :class="{
@@ -1493,8 +1494,9 @@
                                                             }"
                                                             placeholder="e.g. hteoro@gmail.com"
                                                             v-model="formData['5'].fpxEmail">
-                                                        <small class="error-message text-primary font-italic" v-if="failedRules.required">
-                                                            * Complete the Email field.
+                                                        <small class="error-message text-primary font-italic" v-if="errors.length > 0">
+                                                            <span v-if="failedRules.required">* Complete the Email field.</span>
+                                                            <span v-else-if="failedRules.email">Please check email address</span>
                                                         </small>
                                                     </div>
                                                 </validation-provider>
