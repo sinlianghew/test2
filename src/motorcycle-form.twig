@@ -12,9 +12,10 @@
     <input type="hidden" name="staffId" value="">
     <input type="hidden" name="staffRelationship" value="">
     <input type="hidden" name="branchCode" value="">
+    <input type="hidden" name="supportTel" value="1-800-88-6744">
     
 
-    <div class="container py-5">
+    <div class="container py-5" v-if="canProceed">
         <h1>Motorcycle Insurance</h1>
         <!-- Steppers -->
         <div class="nav variant-steppers">
@@ -37,11 +38,11 @@
         <!-- Steppers -->
     </div>
 
-    <div class="bg-p2d py-5 wizard-sections">
+    <div class="bg-p2d py-5 wizard-sections position-relative" v-if="canProceed">
         <validation-observer v-slot="{ handleSubmit }" ref="form">
             <form @submit.prevent="handleSubmit(onSubmit)">
 
-                <fieldset class="wizard-section-1" v-if="currStep && currStep.stepNum == 1">
+                <fieldset class="wizard-section-1" v-if="currStep && currStep.stepNum === '1'">
                     <div class="container">
                         <div class="bg-w py-5 px-md-5 px-3 mx-md-2">
                             <h2 class="p2">Get Started</h2>
@@ -209,7 +210,7 @@
                     </div>
                 </fieldset>
 
-                <fieldset class="wizard-section-2" v-if="currStep && currStep.stepNum == 2">
+                <fieldset class="wizard-section-2" v-if="currStep && currStep.stepNum === '2'">
                     <div class="container">
                         <div class="row">
                             <div class="col-12 col-md-8">
@@ -415,7 +416,7 @@
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-6">
-                                            <validation-provider rules="required|min:5|max:5" v-slot="{ errors, failedRules }">
+                                            <validation-provider rules="required|min:5|max:5|integer" v-slot="{ errors, failedRules, valid }">
                                                 <div class="form-group variant-icon variant-autocomplete">
                                                     <label class="bt1">Postcode:</label>
                                                 
@@ -427,6 +428,7 @@
                                                         :max-matches="5"
                                                         :input-class="errors.length > 0 ? 'is-invalid' : ''"
                                                         @hit="handlePostcodeHit($event)"
+                                                        maxlength="5"
                                                     >
                                                         <template slot="append">
                                                             <svg class="icon icon-s mr-2">
@@ -439,7 +441,7 @@
                                                         <span v-if="failedRules.required">
                                                             * Complete the Postal Code field.
                                                         </span>
-                                                        <span v-else-if="failedRules.min || failedRules.max">
+                                                        <span v-else-if="failedRules.min || failedRules.max || failedRules.integer">
                                                             Please enter a valid Postal Code.
                                                         </span>
                                                     </div>
@@ -544,18 +546,18 @@
                             <div class="col-12 col-md-4">
                                 <motor-summary-pane 
                                     :curr-step-num="currStep.stepNum"
-                                    :form-data="formData" />
+                                    :form-data="formData"
+                                />
                             </div>
                         </div>
                     </div>
                 </fieldset>
 
-                <fieldset class="wizard-section-3" v-if="currStep && currStep.stepNum == 3">
+                <fieldset class="wizard-section-3" v-if="currStep && currStep.stepNum === '3'">
                     <div class="container">
                         <div class="row">
                             <div class="col-12 col-md-8">
                                 <div class="bg-w py-4 px-4 mb-3">
-
                                     <!-- Plan Selection Boxes -->
                                     <h2 class="p2 mb-4 mt-3">Please Select Your Preferred Plan</h2>
                                     <div class="selection-infobox-group row motorcycle-selection">
@@ -781,11 +783,11 @@
                                     </div>
                                     <!-- Plan Selection Boxes -->
 
+                                    <!-- Checkboxes for add-ons -->
                                     <div class="check-list-container" v-if="formData['3'].motorPlusPlan === ''">
                                         <div class="d-flex mt-5">
                                             <h2 class="p2 mb-0">Pre-Bundled Add-On</h2>
                                         </div>
-                                        <small><em>The following Add-Ons are offered for this plan.</em></small>
                                         <div class="checkbox-list  mb-5 mt-4 ">
                                             <div class="d-flex align-items-baseline">
                                                 <span>
@@ -799,7 +801,7 @@
                                                     <div class="ml-2 btn-tooltip"
                                                         data-toggle="tooltip"
                                                         data-placement="right"
-                                                        title="Event date must be at least 6 months from today.">
+                                                        title="Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa, necessitatibus.">
                                                         ?
                                                     </div>
                                                 </span>
@@ -812,12 +814,15 @@
                                             <h2 class="p2">Choose More Optional Add-On</h2>
                                         </div>
 
-                                        <div class="checkbox-list">
+                                        <div class="checkbox-list" v-if="formData['3'].motorPlusPlan === 'Y'">
                                             <div class="d-flex align-items-md-center">
                                                 <div class="form-check">
-                                                    <input type="checkbox" name="all-rider" id="all-rider"
+                                                    <input type="checkbox"
+                                                        id="motorAddRiderPA"
+                                                        v-model="formData['3'].motorAddRiderPA"
                                                         class="form-check-input">
-                                                    <label for="all-rider" class="form-check-label bt2"> All Riders
+                                                    <label for="motorAddRiderPA" class="form-check-label bt2">
+                                                        Rider's Personal Accident (Non-Tariff)
                                                     </label>
                                                     <svg class="icon icon-m tick-mark">
                                                         <use xlink:href="spa-assets/icons/icons.svg#sprite-tick-mark"
@@ -827,24 +832,55 @@
                                                 <span>
                                                     <div class="ml-2 btn-tooltip" data-toggle="tooltip"
                                                         data-placement="right"
-                                                        title="Event date must be at least 6 months from today.">
+                                                        title="Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa, necessitatibus.">
+                                                        ?
+                                                    </div>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="checkbox-list my-4">
+                                            <div class="d-flex align-items-md-center">
+                                                <div class="form-check">
+                                                    <input type="checkbox"
+                                                        id="allRiderPlan"
+                                                        v-model="formData['3'].allRiderPlan"
+                                                        class="form-check-input">
+                                                    <label for="allRiderPlan" class="form-check-label bt2">
+                                                        All Riders
+                                                    </label>
+                                                    <svg class="icon icon-m tick-mark">
+                                                        <use xlink:href="spa-assets/icons/icons.svg#sprite-tick-mark"
+                                                            href="spa-assets/icons/icons.svg#sprite-tick-mark"></use>
+                                                    </svg>
+                                                </div>
+                                                <span>
+                                                    <div class="ml-2 btn-tooltip" data-toggle="tooltip"
+                                                        data-placement="right"
+                                                        title="Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa, necessitatibus.">
                                                         ?
                                                     </div>
                                                 </span>
                                             </div>
                                             
-                                            <div class="ml-4 pl-2 font-italic">
+                                            <div class="ml-4 pl-2 font-italic" v-if="!formData['3'].allRiderPlan">
                                                 <small class="color-red"><b>"You are choosing Single Rider coverage"</b></small>
                                                 <br>
                                                 <small class="color-red">Important Note: There will be no coverage in the event of your motorcycle ridden by any other person.</small>
                                             </div>
                                         </div>
 
-
-                                        <div class="checkbox-list  mb-4 mt-4">
-                                            <div class="d-flex align-items-md-baseline">
+                                        <div class="checkbox-list my-4">
+                                            <div :class="{
+                                                'd-flex align-items-md-baseline': true,
+                                                'disabled-check': formData['3'].motorPlusPlan === ''
+                                            }">
                                                 <div class="form-check">
-                                                    <input type="checkbox" name="riot" id="riot"
+                                                    <input type="checkbox"
+                                                        name="riot"
+                                                        id="riot"
+                                                        v-model="formData['3'].motorAddSRCC"
+                                                        :disabled="formData['3'].motorPlusPlan === ''"
                                                         class="form-check-input">
                                                     <label for="riot" class="form-check-label bt2">
                                                         Strike, Riot and Civil Commotion
@@ -857,19 +893,52 @@
                                                 <span>
                                                     <div class="ml-2 btn-tooltip" data-toggle="tooltip"
                                                         data-placement="right"
-                                                        title="Event date must be at least 6 months from today.">
+                                                        title="Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa, necessitatibus.">
                                                         ?
                                                     </div>
                                                 </span>
                                             </div>
                                         </div>
 
-                                        <div class="checkbox-list  mb-4 mt-4">
-                                            <div class="d-flex align-items-md-baseline disabled-check">
+                                        <div class="checkbox-list my-4">
+                                            <div :class="{
+                                                'd-flex align-items-md-baseline': true,
+                                                'disabled-check': formData['3'].motorPlusPlan === ''
+                                            }">
                                                 <div class="form-check">
-                                                    <input type="checkbox" name="agreement" disabled id="agreement"
+                                                    <input type="checkbox"
+                                                        name="motorAddSpecialPerils"
+                                                        id="motorAddSpecialPerils"
+                                                        v-model="formData['3'].motorAddSpecialPerils"
+                                                        :disabled="formData['3'].motorPlusPlan === ''"
                                                         class="form-check-input">
-                                                    <label for="agreement" class="form-check-label bt2">
+                                                    <label for="motorAddSpecialPerils" class="form-check-label bt2">
+                                                        Special Perils
+                                                    </label>
+                                                    <svg class="icon icon-m tick-mark">
+                                                        <use xlink:href="spa-assets/icons/icons.svg#sprite-tick-mark"
+                                                            href="spa-assets/icons/icons.svg#sprite-tick-mark"></use>
+                                                    </svg>
+                                                </div>
+                                                <span>
+                                                    <div class="ml-2 btn-tooltip" data-toggle="tooltip"
+                                                        data-placement="right"
+                                                        title="Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa, necessitatibus.">
+                                                        ?
+                                                    </div>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="checkbox-list my-4">
+                                            <div class="d-flex align-items-md-baseline">
+                                                <div class="form-check">
+                                                    <input type="checkbox"
+                                                        name="motorAddLegalLiabilityOfPassengers"
+                                                        id="motorAddLegalLiabilityOfPassengers"
+                                                        v-model="formData['3'].motorAddLegalLiabilityOfPassengers"
+                                                        class="form-check-input">
+                                                    <label for="motorAddLegalLiabilityOfPassengers" class="form-check-label bt2">
                                                         Legal Liability to Pillion
                                                     </label>
                                                     <svg class="icon icon-m tick-mark">
@@ -880,67 +949,68 @@
                                                 <span>
                                                     <div class="ml-2 btn-tooltip" data-toggle="tooltip"
                                                         data-placement="right"
-                                                        title="Event date must be at least 6 months from today.">
+                                                        title="Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa, necessitatibus.">
                                                         ?
                                                     </div>
                                                 </span>
                                             </div>
                                         </div>
-
-
                                     </div>
-
+                                    <!-- Checkboxes for add-ons -->
                                 </div>
 
+                                <!-- Roadtax Form -->
                                 <div class="bg-w py-5 px-4 mb-4">
                                     <div class="d-flex">
                                         <h2 class="p2 mb-0">Renew Road Tax?</h2>
-
                                     </div>
 
-                                    <div class="row mt-md-3 mt-4 ">
-
+                                    <div class="row mt-md-3 mt-4">
                                         <div class="col-md-12 col-12">
                                             <div class="d-flex mb-4">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="id_type"
-                                                        value="NRIC" id="id_type1" v-model="formData.idType">
-                                                    <label class="form-check-label" for="id_type1">Yes</label>
+                                                    <input class="form-check-input"
+                                                        type="radio"
+                                                        name="isRenewRoadtax1"
+                                                        value="Y"
+                                                        id="isRenewRoadtax1"
+                                                        v-model="formData['3'].isRenewRoadtax">
+                                                    <label class="form-check-label" for="isRenewRoadtax1">Yes</label>
                                                 </div>
                                                 <div class="form-check ml-5">
-                                                    <input class="form-check-input" type="radio" name="id_type"
-                                                        value="Passport" id="id_type2" v-model="formData.idType">
-                                                    <label class="form-check-label" for="id_type2">No</label>
+                                                    <input class="form-check-input"
+                                                        type="radio"
+                                                        name="isRenewRoadtax2"
+                                                        value=""
+                                                        id="isRenewRoadtax2"
+                                                        v-model="formData['3'].isRenewRoadtax">
+                                                    <label class="form-check-label" for="isRenewRoadtax2">No</label>
                                                 </div>
                                             </div>
-
                                         </div>
 
-
-                                        <div class="col-12 col-md-9">
+                                        <div class="col-12 col-md-6">
                                             <p class="bt1 mb-2">Collection Method:</p>
                                             <div class="form-group mb-0">
-                                                <select class="form-control">
-                                                    <option disabled="disabled" hidden="hidden" selected="selected"
-                                                        value="">
-                                                        Home/ Office Delivery
-                                                    </option>
-                                                    <option value="Single">Single</option>
-                                                    <option value="Married"> Married</option>
+                                                <select class="form-control" v-model="formData['3'].roadtaxCollectionMethod">
+                                                    <option value="homeOfficeDelivery">Home/Office Delivery</option>
+                                                    <option value="selfCollection">Self Collection</option>
                                                 </select>
-                                                <small>For all deliveries, you are required to provide your MyKAD for
-                                                    biometric
-                                                    verification. If the MyKAD is faulty,
-                                                    the Logistics Officer will take a snapchat of your MyKAD. </small>
+                                                <small>
+                                                    For all deliveries, you are required to provide your MyKAD for biometric verification. If the MyKAD is faulty, the Logistics Officer will take a snapchat of your MyKAD.
+                                                </small>
                                             </div>
                                         </div>
 
-
-                                        <div class="col-12 bt2  py-4">
+                                        <div class="col-12 bt2 py-4">
                                             <div class="form-check">
-                                                <input type="checkbox" name="agreement" id="agreement"
-                                                    class="form-check-input">
-                                                <label for="agreement" class="form-check-label">
+                                                <input type="checkbox" 
+                                                    name="roadtaxDelAddrSameAsMotor" 
+                                                    id="roadtaxDelAddrSameAsMotor"
+                                                    class="form-check-input"
+                                                    v-model="formData['3'].roadtaxDelAddrSameAsMotor"
+                                                    @change="handleRoadtaxAddrSameChange">
+                                                <label for="roadtaxDelAddrSameAsMotor" class="form-check-label">
                                                     Use the same address as my Motorcycle insurance
                                                 </label>
                                                 <svg class="icon icon-m tick-mark">
@@ -950,24 +1020,33 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-12 col-md-12">
+                                        <div class="col-12 col-md-6">
                                             <p class="bt1 mb-2">Mailing Address for your road tax:</p>
                                             <div class="form-group mb-0">
-                                                <select class="form-control">
-                                                    <option disabled="disabled" hidden="hidden" selected="selected"
+                                                <select class="form-control"
+                                                    :disabled="formData['3'].roadtaxDelAddrSameAsMotor === true"
+                                                    v-model="formData['3'].roadtaxDelRegion">
+                                                    <option disabled="disabled"
+                                                        hidden="hidden"
+                                                        selected="selected"
                                                         value="">
                                                         East or West Malaysia
                                                     </option>
                                                     <option value="East">East Malaysia</option>
                                                     <option value="West"> West Malaysia</option>
                                                 </select>
-
                                             </div>
                                         </div>
 
+                                        <div class="col-md-6"></div>
+
                                         <div class="col-12 col-md-6">
-                                            <div class="form-group mt-2 mb-0 ">
-                                                <input type="text" class="form-control" placeholder="First Line">
+                                            <div class="form-group mt-2 mb-0">
+                                                <input type="text"
+                                                    class="form-control"
+                                                    placeholder="First Line"
+                                                    v-model="formData['3'].roadtaxAddressLine1"
+                                                    :disabled="formData['3'].roadtaxDelAddrSameAsMotor === true">
                                             </div>
                                         </div>
 
@@ -975,51 +1054,70 @@
 
                                         <div class="col-12 col-md-6">
                                             <div class="form-group mt-2 mb-0 ">
-                                                <input type="text" class="form-control" placeholder="Second Line">
+                                                <input type="text"
+                                                    class="form-control"
+                                                    placeholder="Second Line"
+                                                    v-model="formData['3'].roadtaxAddressLine2"
+                                                    :disabled="formData['3'].roadtaxDelAddrSameAsMotor === true">
                                             </div>
                                         </div>
 
                                         <div class="col-md-6"></div>
 
+                                        <!-- TODO: convert this to autocomplete -->
                                         <div class="col-12 col-md-6">
                                             <div class="form-group variant-icon mt-2 mb-0">
-                                                <!-- <label for="postcode" class="bt1">Loan Provider (Optional):</label> -->
-                                                <div class="input-wrapper"><input id="load" type="text"
-                                                        placeholder="Find Postcode" class="form-control"> <svg
-                                                        class="icon icon-s mr-2">
+                                                <div class="input-wrapper">
+                                                    <input id="load"
+                                                        type="text"
+                                                        placeholder="Find Postcode"
+                                                        class="form-control"
+                                                        v-model="formData['3'].roadtaxPostcode"
+                                                        :disabled="formData['3'].roadtaxDelAddrSameAsMotor === true"> 
+                                                    <svg class="icon icon-s mr-2">
                                                         <use xlink:href="spa-assets/icons/icons.svg#sprite-search"
                                                             href="spa-assets/icons/icons.svg#sprite-search"></use>
-                                                    </svg></div>
+                                                    </svg>
+                                                </div>
                                             </div>
                                         </div>
 
                                         <div class="col-md-6"></div>
+
                                         <div class="col-12 col-md-6">
                                             <div class="form-group mt-2 mb-0 ">
-                                                <input type="text" class="form-control" disabled placeholder="City">
+                                                <input type="text"
+                                                    class="form-control"
+                                                    disabled
+                                                    placeholder="City"
+                                                    v-model="formData['3'].roadtaxCity">
                                             </div>
                                         </div>
 
-                                        <div class="col-12 mt-3 ">
-                                            <small><em>*Note: Delivery charges are based on MyEG's rate. Click <a
-                                                        class="underline italic" href="">here</a> to view rates for your
-                                                    area.</em></small>
+                                        <div class="col-12 mt-3">
+                                            <small>
+                                                <em>
+                                                    *Note: Delivery charges are based on MyEG's rate. Click
+                                                    <a class="underline italic" href="">here</a> to view rates for your
+                                                    area.
+                                                </em>
+                                            </small>
                                         </div>
-
                                     </div>
-
-
-
                                 </div>
+                                <!-- Roadtax Form -->
 
                                 <div class="pt-4 wizard-navigation d-none d-md-flex">
                                     <a @click.prevent="goToPrevStep()" href="#" role="button" class="btn btn-default btn-outline-primary mr-4">Back</a>
-                                    <a href="#" role="button" class="btn btn-default btn-primary">Continue</a>
+                                    <a @click.prevent="onSubmit()" href="#" role="button" class="btn btn-default btn-primary">Continue</a>
                                 </div>
                             </div>
 
                             <div class="col-12 col-md-4">
-                                <motor-summary-pane :form-data="formData" :curr-step-num="currStep.stepNum" />
+                                <motor-summary-pane 
+                                    :form-data="formData"
+                                    :curr-step-num="currStep.stepNum"
+                                />
                             </div>
                         </div>
                     </div>
@@ -1028,8 +1126,197 @@
                         <a href="#" role="button" class="btn btn-default btn-outline-primary ">Back</a>
                     </div>
                 </fieldset>
+
+                <fieldset class="wizard-section-4" v-if="currStep && currStep.stepNum === '4'">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12 col-md-8">
+                                <div class="bg-w py-5 pb-3 px-4 mb-4">
+                                    <h2 class="p2 mb-4">Motorcycle Details</h2>
+                                    <div class="row">
+                                        <div class="col-12 col-md-6">
+                                            <p class="bt1 mb-0">Motorcycle Registration No.:</p>
+                                            <p class="bt2">{{ formData['1'].motorRegistrationNo }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 col-md-6">
+                                            <p class="bt1 mb-0">Motorcycle Make:</p>
+                                            <p class="bt2">{{ formData['2'].make }}</p>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <p class="bt1 mb-0">Motorcycle Model:</p>
+                                            <p class="bt2">{{ formData['2'].family }}</p>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <p class="bt1 mb-0">Year of Make:</p>
+                                            <p class="bt2">{{ formData['2'].motorYearOfMake }}</p>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <p class="bt1 mb-0">Variant:</p>
+                                            <p class="bt2">{{ formData['2'].variant }}</p>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <p class="bt1 mb-0">Motorcycle Location:</p>
+                                            <p class="bt2">{{ formData['2'].motorVehicleLocation }}</p>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <p class="bt1 mb-0">Sum Insured Value:</p>
+                                            <p class="bt2">{{ formData['2'].sumInsuredType === 'marketValue' ? 'Market Value' : 'Recommended Value' }}</p>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <p class="bt1 mb-0">Cubic Capacity:</p>
+                                            <p class="bt2">{{ formData['2'].motorCc }}</p>
+                                        </div>
+
+                                    </div>
+                                    <div class="d-flex justify-content-end">
+                                        <a href="#" class="btn btn-secondary btn-icon">
+                                            <div class="button-icon">
+                                                <svg class="icon icon-s">
+                                                    <use xlink:href="spa-assets/icons/icons.svg#sprite-pencil-1"
+                                                        href="spa-assets/icons/icons.svg#sprite-pencil-1"></use>
+                                                </svg>
+                                            </div>
+                                            <span class="button-text">Edit</span>
+                                        </a>
+                                    </div>
+                                </div>
+
+
+                                <div class="bg-w py-5 pb-3 px-4 mb-4">
+                                    <h2 class="p2 mb-4">Rider Details</h2>
+                                    <div class="row">
+                                        <div class="col-12 col-md-6">
+                                            <p class="bt1 mb-0">Name (as per NRIC):</p>
+                                            <p class="bt2">{{ formData['2'].policyHolderName }}</p>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <p class="bt1 mb-0">NRIC No.:</p>
+                                            <p class="bt2">{{ formData['1'].policyHolderNric }}</p>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <p class="bt1 mb-0">Email:</p>
+                                            <p class="bt2">{{ formData['2'].policyHolderEmail }}</p>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <p class="bt1 mb-0">Mobile No.:</p>
+                                            <p class="bt2">{{ formData['2'].policyHolderMobileNo }}</p>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <p class="bt1 mb-0">Address:</p>
+                                            <p class="bt2">{{ formData['2'].policyHolderAddressLine1 + ', ' + formData['2'].policyHolderAddressLine2 }}</p>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <p class="bt1 mb-0">Gender:</p>
+                                            <p class="bt2">{{ policyHolderGender === 'M' ? 'Male' : 'Female' }}</p>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <p class="bt1 mb-0">Marital Status:</p>
+                                            <p class="bt2">{{ formData['2'].policyHolderMaritalStatus }}</p>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <p class="bt1 mb-0">Occuptation:</p>
+                                            <p class="bt2">{{ formData['2'].policyHolderOccupation }}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-end">
+                                        <a href="#" class="btn btn-secondary btn-icon">
+                                            <div class="button-icon">
+                                                <svg class="icon icon-s">
+                                                    <use xlink:href="spa-assets/icons/icons.svg#sprite-pencil-1"
+                                                        href="spa-assets/icons/icons.svg#sprite-pencil-1"></use>
+                                                </svg>
+                                            </div>
+                                            <span class="button-text">Edit</span>
+                                        </a>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="bg-w py-5 pb-3 px-4 mb-4" v-if="formData['3'].isRenewRoadtax">
+                                    <h2 class="p2 mb-4">Road Tax Renewal</h2>
+                                    <div class="row">
+                                        <div class="col-12 col-md-6">
+                                            <p class="bt1 mb-0">Collection Method:</p>
+                                            <p class="bt2">{{ formData['3'].roadtaxCollectionMethod === 'homeOfficeDelivery' ? 'Home Delivery' : 'Self Collection' }}</p>
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+                                            <p class="bt1 mb-0">Mailing Address:</p>
+                                            <p class="bt2">{{ formData['3'].roadtaxAddressLine1 + ', ' + formData.roadtaxAddressLine2 }}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-end">
+                                        <a href="#" class="btn btn-secondary btn-icon">
+                                            <div class="button-icon">
+                                                <svg class="icon icon-s">
+                                                    <use xlink:href="spa-assets/icons/icons.svg#sprite-pencil-1"
+                                                        href="spa-assets/icons/icons.svg#sprite-pencil-1"></use>
+                                                </svg>
+                                            </div>
+                                            <span class="button-text">Edit</span>
+                                        </a>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-check mb-5">
+                                    <input type="checkbox" name="tncAgreement" id="tncAgreement" class="form-check-input">
+                                    <label for="tncAgreement" class="form-check-label pr-md-5">
+                                        By ticking this box, I hereby acknowledge that I have read the <a class="underline" href="#">Product
+                                            Disclosure Sheet</a> and agree to the <a href="#" class="underline">Terms and
+                                            Conditions</a>.
+                                    </label>
+                                    <svg class="icon icon-m tick-mark">
+                                        <use xlink:href="spa-assets/icons/icons.svg#sprite-tick-mark"
+                                            href="spa-assets/icons/icons.svg#sprite-tick-mark"></use>
+                                    </svg>
+                                </div>
+                                <div class="pt-4 wizard-navigation d-none d-md-flex">
+                                    <a @click.prevent="goToPrevStep()" href="#" role="button" class="btn btn-default btn-outline-primary mr-4">Back</a>
+                                    <a href="#" role="button" class="btn btn-default btn-primary">Checkout</a>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <motor-summary-pane 
+                                    :form-data="formData"
+                                    :curr-step-num="currStep.stepNum"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container pt-4 wizard-navigation d-md-none">
+                        <a href="#" role="button" class="btn btn-default btn-primary mb-3 mb-md-0">Checkout</a>
+                        <a href="#" role="button" class="btn btn-default btn-outline-primary ">Back</a>
+                    </div>
+                </fieldset>
             </form>
         </validation-observer>
+
+        <div class="page-loader">
+            <div class="spinner-container">
+                <div class="spinner-border text-secondary" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="error-container py-5 bg-p2d" v-if="!canProceed">
+        <div class="container">
+            <div class="bg-w py-5">
+                <div class="text-center">
+                    <img src="~@/spa-assets/img/prescreen-error-icon.png" alt="Error" class="img-responsive mb-3">
+                    <h3>Sorry, we are unable to proceed with your request online.</h3>
+                </div>
+                <div class="bt2 text-center" v-html="errorMessage"></div>
+                <p class="bt2 text-center">For any further enquiries, please email us at <a href="mailto:msig_online@my.msig-asia.com">msig_online@my.msig-asia.com</a>.</p>
+            </div>
+        </div>
     </div>
 </div>
 {% endverbatim %}

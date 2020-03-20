@@ -53,8 +53,11 @@
 					<p class="bt2 mb-0">Loading (100%)</p>
 					<p class="bt2 mb-0"></p>
 				</div> -->
-				
-				<div class="d-flex justify-content-between mb-4">
+				<div class="d-flex justify-content-between" v-if="formData['3'].allRiderPlan">
+					<p class="bt2 mb-0">All Riders</p>
+					<p class="bt2 mb-0">{{ formatAsCurrency(formData['3'].allRiderPlanPremium) }}</p>
+				</div>
+				<div class="d-flex justify-content-between">
 					<p class="bt2 mb-0">NCD ({{ formData['2'].nxtNCDDiscount }}%)</p>
 					<p class="bt2 mb-0">({{ formatAsCurrency(formData['3'].ncdAmount) }})</p>
 				</div>
@@ -64,22 +67,32 @@
 				</div>
 			</div>
 
-			<div class="px-3" v-if="false">
-				<div class=" d-flex justify-content-between mb-4">
-					<p class="bt2 mb-0 font-weight-bold ">Add-Ons</p>
-					<p class="bt2 mb-0 font-weight-bold">Nil</p>
+			<div class="px-3" v-if="isAnySpecialAddOnSelected || formData['3'].motorPlusPlan === ''">
+				<div class=" d-flex justify-content-between mb-2">
+					<p class="bt2 mb-0 font-weight-bold">Add-Ons</p>
 				</div>
-				<div class="d-flex justify-content-between mb-2">
+				<div class="d-flex justify-content-between mb-2" v-if="formData['3'].motorPlusPlan === ''">
+					<div class="bt2 mb-0 pr-3">
+						<p>Motorcycle 3PA Insurance</p>
+						<p class="pl-3">Rider's Personal Accident (Non-Tariff)</p>
+					</div>
+					<p class="bt2 mb-0">{{ formatAsCurrency(formData['3'].addRiderPAPremium) }}</p>
+				</div>
+				<div class="d-flex justify-content-between mb-2" v-if="formData['3'].motorAddSRCC">
 					<p class="bt2 mb-0 pr-3">Strike, Riot and Civil Commotion</p>
-					<p class="bt2 mb-0">33.75</p>
+					<p class="bt2 mb-0">{{ formatAsCurrency(formData['3'].addSRCCPremium) }}</p>
 				</div>
-				<div class="d-flex justify-content-between mb-2">
+				<div class="d-flex justify-content-between mb-2" v-if="formData['3'].motorAddSpecialPerils">
 					<p class="bt2 mb-0 pr-3">Special Perils</p>
-					<p class="bt2 mb-0">33.75</p>
+					<p class="bt2 mb-0">{{ formatAsCurrency(formData['3'].addSpecialPerilsPremium) }}</p>
+				</div>
+				<div class="d-flex justify-content-between mb-2" v-if="formData['3'].motorAddLegalLiabilityOfPassengers">
+					<p class="bt2 mb-0 pr-3">Legal Liability To Pillion</p>
+					<p class="bt2 mb-0">{{ formatAsCurrency(formData['3'].addLegalLiabilityOfPassengersPremium) }}</p>
 				</div>
 				<div class="d-flex justify-content-between pt-3 pb-4">
-					<p class="bt2 mb-0 pr-3">Total Add-Ons</p>
-					<p class="bt2 mb-0">101.75</p>
+					<p class="bt2 mb-0 pr-3"><strong>Total Add-Ons</strong></p>
+					<p class="bt2 mb-0"><strong>{{ formatAsCurrency(formData['3'].totalAdditionalCoveragePremium) }}</strong></p>
 				</div>
 			</div>
 

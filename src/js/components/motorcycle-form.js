@@ -5,7 +5,7 @@ import { mask, masked } from 'vue-the-mask';
 import moment from 'moment';
 import VueBootstrapTypeahead from 'vue-typeahead-bootstrap/dist/VueBootstrapTypeahead.umd';
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
-import { extractDOB } from '../helpers/utilities';
+import { extractDOB, createDotCMSQueryURL } from '../helpers/utilities';
 // import Datepicker from 'vuejs-datepicker';
 import MotorcycleSummaryPane from '../components/motorcycle-summary-pane';
 Vue.component('motor-summary-pane', MotorcycleSummaryPane)
@@ -16,16 +16,18 @@ Vue.component('motor-summary-pane', MotorcycleSummaryPane)
 $(function() {
     if ($('#motorcycle-form').length > 0) {
         const baseUrl = document.querySelector('input[name=tieBaseUrl]').value;
-        
+
         const motorcycleForm = new Vue({
             el: '#motorcycle-form',
             data: {
+                developmentMode: true,
                 baseUrl,
                 productCode: 'MCY',
                 partnerCode: $('input[name="partnerCode"]').val(),
                 productName: 'Motorcycle',
                 staffId: $('input[name="staffId"]').val(),
                 staffRelationship: $('input[name="staffRelationship"]').val(),
+                supportTel: $('input[name="supportTel"]').val(),
 
                 steps: [
                     { stepNum: '1', title: 'Get Started', completed: false, showPrescreen: true },
@@ -34,6 +36,11 @@ $(function() {
                     { stepNum: '4', title: 'REVIEW', completed: false },
                     { stepNum: '5', title: 'PAY', completed: false }
                 ],
+                currStep: null,
+
+                loading: false, // this controls the spinner
+                canProceed: true,
+                errorMessage: null,
 
                 // Data pulled in from dotCMS on pageload
                 countries: null,
@@ -42,6 +49,7 @@ $(function() {
                 // Data used by the auto complete
                 postcodeSearch: '',
                 postcodeSuggestions: [],
+                currSelectedPostcode: '',
                 loanProviderSuggestions: [],
 
                 formData: {
@@ -76,10 +84,19 @@ $(function() {
                         motorAddLegalLiabilityToPassengers: '',
                         motorAddLegalLiabilityOfPassengers: '',
                         motorAddSpecialPerils: '',
-                        motorAddSRCC: ''
+                        motorAddSRCC: '',
+                        allRiderPlan: '',
+                        isRenewRoadtax: null,
+                        roadtaxCollectionMethod: 'homeOfficeDelivery',
+                        roadtaxDelAddrSameAsMotor: false,
+                        roadtaxDelRegion: '',
+                        roadtaxAddressLine1: '',
+                        roadtaxAddressLine2: '',
+                        roadtaxPostcode: '',
+                        roadtaxCity: ''
                     }
                 },
-                currStep: null,
+                
                 underwrittenRules: {},
                 hexTokens: {
                     F: {
@@ -104,6 +121,7 @@ $(function() {
                 masked
             },
             methods: {
+                createDotCMSQueryURL,
                 setPrescreen: function (value) {
                     this.steps[0].showPrescreen = value;
                 },
@@ -121,11 +139,9 @@ $(function() {
                     return defer;
                 },
                 onSubmit: async function () {
-                    console.log('submitting')
-                    console.log(this.currStep)
-
+                    this.loading = true;
                     if (this.currStep.stepNum == '1') {
-
+                        
                         const isBlacklisted = await this.checkBlacklist();
                         if (isBlacklisted) {
                             return;
@@ -138,18 +154,28 @@ $(function() {
                             ...motorDetails
                         }
 
-                        // Find the make information e.g. Toyota, Honda etc
-                        const motorMakesFound = await this.findVehicleMakeByCode(motorDetails.motorMakeCode)
-                        this.currMotorMakeInfo = motorMakesFound[0]
+                        if (!motorDetails.canProceed) {
+                            let errorMessage = await this.findErrorByErrorCodeAsync(motorDetails.errorCode)
+                            let $errorMessage = $('<p>' + errorMessage + '</p>')
+                            $errorMessage.find('a').attr('href', 'tel:' + this.supportTel).html(this.supportTel)
+                            this.errorMessage = $errorMessage.html();
+                            
+                            if (!this.developmentMode) {
+                                return this.canProceed = false;
+                            }
+                        }
+                        // // Find the make information e.g. Toyota, Honda etc
+                        // const motorMakesFound = await this.findVehicleMakeByCode(motorDetails.motorMakeCode)
+                        // this.currMotorMakeInfo = motorMakesFound[0]
 
-                        // Find the model information e.g. LC, RC, Wave etc
-                        const motorModelsFound = await this.findVehicleModelByCode(motorDetails.motorModelCode)
-                        this.foundMotorModels = motorModelsFound;
+                        // // Find the model information e.g. LC, RC, Wave etc
+                        // const motorModelsFound = await this.findVehicleModelByCode(motorDetails.motorModelCode)
+                        // this.foundMotorModels = motorModelsFound;
 
-                        // Might not be needed 
-                        const motorNCD = await this.findVehicleNCD(motorDetails.nxtNCDLevel, motorDetails.nxtNCDDiscount)
-                        console.log(motorNCD)
-                        // Might not be needed
+                        // // Might not be needed 
+                        // const motorNCD = await this.findVehicleNCD(motorDetails.nxtNCDLevel, motorDetails.nxtNCDDiscount)
+                        // console.log(motorNCD)
+                        // // Might not be needed
 
                         const motorSumInsured = await this.findVehicleSumInsured()
                         this.formData['2'] = {
@@ -159,6 +185,7 @@ $(function() {
                         this.formData['2'].sumInsuredType = this.formData['2'].sumInsuredType === 'MarketValue' ? 'marketValue' : 'recomendedValue';
                         
                         if (!motorSumInsured.canProceed) {
+                            
                             // show the user the form
                             // ' The car sum insured is not available in the system.  Please download the application form <a style="width: auto; height: auto; display: inline-block; line-height: initial; background: transparent;text-decoration:underline" href="../../resource/Motor_ProposalForm.pdf" target="_blank"><b><u> here </u></b></a> and email to us.'
                         } else {
@@ -175,7 +202,7 @@ $(function() {
                     await this.scrollTop();
                     this.currStep.completed = true;
                     this.currStep = this.steps[this.steps.indexOf(this.currStep) + 1];
-
+                    this.loading = false;
                 },
                 goToPrevStep: async function () {
                     if (this.steps.indexOf(this.currStep) == 0) {
@@ -285,6 +312,20 @@ $(function() {
 
                     return apiResponse;
                 },
+                findErrorByErrorCodeAsync: async function (errorCode) {
+                    const queryObj = {
+                        errorCode
+                    }
+                    const dotCMSQueryURL = this.createDotCMSQueryURL('TieRefBancaMotorErrorMessage', queryObj, true)
+
+                    const apiResp = await $.ajax({
+                        method: 'GET',
+                        dataType: 'json',
+                        url: dotCMSQueryURL
+                    })
+
+                    return apiResp.contentlets[0].errorMessage
+                },
                 checkBlacklist: async function () {
                     const apiResp = await $.ajax({
                         method: 'POST',
@@ -299,20 +340,6 @@ $(function() {
                     }).promise()
 
                     return apiResp.isBlacklisted;
-                },
-                createDotCMSQueryURL: function (structureName, queryObj, isLive) {
-                    let endpoint = baseUrl + '/api/content/render/false/type/json/limit/0/query/+structureName:' + structureName;
-                    endpoint += '%20+(conhost:ceaa0d75-448c-4885-a628-7f0c35d374bd%20conhost:SYSTEM_HOST)';
-
-                    if (isLive) {
-                        endpoint += '%20'
-                    }
-                    let queryString = ''
-                    for (let key of Object.keys(queryObj)) {
-                        queryString += `%20+${structureName}.${key}:${queryObj[key]}`
-                    }
-
-                    return endpoint + queryString;
                 },
                 getPostcodesAsync: async function (postcode) {
                     const dotCMSQueryURL = baseUrl +
@@ -362,6 +389,7 @@ $(function() {
                     }).promise()
 
                     this.formData['2'].addressState = stateApiResp.contentlets[0].stateDescription;
+                    this.currSelectedPostcode = cityObj;
                 },
                 getDayName: function (dateString) {
                     return moment(dateString, 'DD/MM/YYYY').format('ddd')
@@ -438,6 +466,28 @@ $(function() {
                             }
                         })
                     })
+                },
+                handleRoadtaxAddrSameChange: function () {
+                    if (this.formData['3'].roadtaxDelAddrSameAsMotor) {
+                        const applicantCity = this.formData['2'].addressCity;
+                        
+                        let region = 'West';
+                        if (['sabah', 'sarawak'].includes(applicantCity)) {
+                            region = 'East';
+                        }
+
+                        this.formData['3'].roadtaxDelRegion = region;
+                        this.formData['3'].roadtaxAddressLine1 = this.formData['2'].policyHolderAddressLine1;
+                        this.formData['3'].roadtaxAddressLine2 = this.formData['2'].policyHolderAddressLine2;
+                        this.formData['3'].roadtaxPostcode = this.formData['2'].addressPostcode;
+                        this.formData['3'].roadtaxCity = this.formData['2'].addressCity;
+                    } else {
+                        this.formData['3'].roadtaxDelRegion = '';
+                        this.formData['3'].roadtaxAddressLine1 = '';
+                        this.formData['3'].roadtaxAddressLine2 = '';
+                        this.formData['3'].roadtaxPostcode = '';
+                        this.formData['3'].roadtaxCity = '';
+                    }
                 }
             },
             computed: {
@@ -461,13 +511,25 @@ $(function() {
                 }
             },
             watch: {
-                currStep: function (step) {
-                    if (step.stepNum === '3') {
-                        
+                "formData.2.addressPostcode": _.debounce(async function (postcode) {
+                    console.log(postcode)
+                    await this.getPostcodesAsync(postcode)
+
+                    if (postcode.length === 5 && this.currSelectedPostcode && this.currSelectedPostcode.postcode != postcode) {
+                        this.currSelectedPostcode = null;
                     }
-                },
-                "formData.2.addressPostcode": _.debounce(function (postcode) {
-                    this.getPostcodesAsync(postcode)
+
+                    if (postcode.length === 5 && !this.currSelectedPostcode) {
+                        let suggestion = this.postcodeSuggestions.find(s => s.postcode == postcode);
+                        if (!suggestion) {
+                            console.log('postcode not found in suggestions')
+                            return;
+                        }
+                        
+                        this.formData['2'].addressCity = suggestion.cityDescription;
+                        this.formData['2'].addressState = this.states.find(s => s.code === suggestion.stateCode).name;
+                        return;
+                    }
                 }, 500),
                 "formData.1.policyHolderNric": function (value) {
                     if (this.isIdNric) {
@@ -476,7 +538,19 @@ $(function() {
                 },
                 "formData.2.motorLoanProvider": _.debounce(function (name) {
                     this.getLoanProvidersAsync(name)
-                }, 500)
+                }, 500),
+                "formData.3.motorPlusPlan": function (value) {
+                    if (value === '') {
+                        this.formData['3'].motorAddLegalLiabilityOfPassengers = false
+                        this.formData['3'].motorAddSRCC = false
+                    }
+                },
+                loading: function (value) {
+                    if (value) {
+                        return $('.page-loader').fadeIn()
+                    }
+                    $('.page-loader').fadeOut()
+                }
             },
             created: function() {
                 const self = this;
@@ -559,8 +633,12 @@ $(function() {
             },
             mounted: function() {
                 this.currStep = this.steps[0]
-                this.onSubmit().then(() => this.onSubmit())
+                // this.onSubmit()
+                //     .then(() => this.onSubmit())
+                //     .then(() => this.onSubmit())
                 // this.steps[0].showPrescreen = false;
+
+                $('.page-loader').fadeOut()
             }
         })
     }
