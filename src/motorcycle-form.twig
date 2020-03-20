@@ -41,7 +41,6 @@
     <div class="bg-p2d py-5 wizard-sections position-relative" v-if="canProceed">
         <validation-observer v-slot="{ handleSubmit }" ref="form">
             <form @submit.prevent="handleSubmit(onSubmit)">
-
                 <fieldset class="wizard-section-1" v-if="currStep && currStep.stepNum === '1'">
                     <div class="container">
                         <div class="bg-w py-5 px-md-5 px-3 mx-md-2">
@@ -550,6 +549,10 @@
                                 />
                             </div>
                         </div>
+                    </div>
+                    <div class="container pt-4 wizard-navigation d-md-none">
+                        <a @click.prevent="onSubmit()" href="#" role="button" class="btn btn-default btn-primary mb-3 mb-md-0">Continue</a>
+                        <a @click.prevent="goToPrevStep()" href="#" role="button" class="btn btn-default btn-outline-primary ">Back</a>
                     </div>
                 </fieldset>
 
@@ -1122,8 +1125,8 @@
                         </div>
                     </div>
                     <div class="container pt-4 wizard-navigation d-md-none">
-                        <a href="#" role="button" class="btn btn-default btn-primary mb-3 mb-md-0">Continue</a>
-                        <a href="#" role="button" class="btn btn-default btn-outline-primary ">Back</a>
+                        <a @click.prevent="onSubmit()" href="#" role="button" class="btn btn-default btn-primary mb-3 mb-md-0">Continue</a>
+                        <a @click.prevent="goToPrevStep()" href="#" role="button" class="btn btn-default btn-outline-primary ">Back</a>
                     </div>
                 </fieldset>
 
@@ -1183,7 +1186,6 @@
                                     </div>
                                 </div>
 
-
                                 <div class="bg-w py-5 pb-3 px-4 mb-4">
                                     <h2 class="p2 mb-4">Rider Details</h2>
                                     <div class="row">
@@ -1235,7 +1237,6 @@
 
                                 </div>
 
-
                                 <div class="bg-w py-5 pb-3 px-4 mb-4" v-if="formData['3'].isRenewRoadtax">
                                     <h2 class="p2 mb-4">Road Tax Renewal</h2>
                                     <div class="row">
@@ -1263,22 +1264,24 @@
                                     </div>
                                 </div>
 
-
-                                <div class="form-check mb-5">
-                                    <input type="checkbox" name="tncAgreement" id="tncAgreement" class="form-check-input">
+                                <div class="form-check d-none d-md-block">
+                                    <input type="checkbox" 
+                                        name="tncAgreement" 
+                                        id="tncAgreement" 
+                                        class="form-check-input"
+                                        v-model="formData['4'].tncAgreement">
                                     <label for="tncAgreement" class="form-check-label pr-md-5">
-                                        By ticking this box, I hereby acknowledge that I have read the <a class="underline" href="#">Product
-                                            Disclosure Sheet</a> and agree to the <a href="#" class="underline">Terms and
-                                            Conditions</a>.
+                                        By ticking this box, I hereby acknowledge that I have read the <a class="underline" href="#">Product Disclosure Sheet</a> and agree to the <a href="#" class="underline">Terms and Conditions</a>.
                                     </label>
                                     <svg class="icon icon-m tick-mark">
                                         <use xlink:href="spa-assets/icons/icons.svg#sprite-tick-mark"
                                             href="spa-assets/icons/icons.svg#sprite-tick-mark"></use>
                                     </svg>
                                 </div>
+
                                 <div class="pt-4 wizard-navigation d-none d-md-flex">
                                     <a @click.prevent="goToPrevStep()" href="#" role="button" class="btn btn-default btn-outline-primary mr-4">Back</a>
-                                    <a href="#" role="button" class="btn btn-default btn-primary">Checkout</a>
+                                    <a @click.prevent="onSubmit()" href="#" role="button" class="btn btn-default btn-primary">Checkout</a>
                                 </div>
                             </div>
                             <div class="col-12 col-md-4">
@@ -1289,9 +1292,324 @@
                             </div>
                         </div>
                     </div>
+                    <div class="container">
+                        <div class="form-check d-md-none mt-3">
+                            <input type="checkbox" 
+                                name="m_tncAgreement" 
+                                id="m_tncAgreement" 
+                                class="form-check-input"
+                                v-model="formData['4'].tncAgreement">
+                            <label for="m_tncAgreement" class="form-check-label pr-md-5">
+                                By ticking this box, I hereby acknowledge that I have read the <a class="underline" href="#">Product Disclosure Sheet</a> and agree to the <a href="#" class="underline">Terms and Conditions</a>.
+                            </label>
+                            <svg class="icon icon-m tick-mark">
+                                <use xlink:href="spa-assets/icons/icons.svg#sprite-tick-mark"
+                                    href="spa-assets/icons/icons.svg#sprite-tick-mark"></use>
+                            </svg>
+                        </div>
+                    </div>
                     <div class="container pt-4 wizard-navigation d-md-none">
-                        <a href="#" role="button" class="btn btn-default btn-primary mb-3 mb-md-0">Checkout</a>
-                        <a href="#" role="button" class="btn btn-default btn-outline-primary ">Back</a>
+                        <a @click.prevent="onSubmit()" href="#" role="button" class="btn btn-default btn-primary mb-3 mb-md-0">Checkout</a>
+                        <a @click.prevent="goToPrevStep()" role="button" class="btn btn-default btn-outline-primary ">Back</a>
+                    </div>
+                </fieldset>
+
+                <fieldset class="wizard-section-5" v-if="currStep && currStep.stepNum === '5'">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12 col-md-8">
+                                <div class="bg-w py-5 px-4 mb-3">
+                                    <h2 class="p2 mb-4">Payment</h2>
+
+                                    <p class="bt1 color-black font-weight-bold mb-0">Payment Method:</p>
+                                    <div class="vertical-scroller mb-5">
+                                        <div class="d-flex">
+                                            <!-- card one -->
+                                            <div class="selection-infobox mb-3 mb-lg-0 mr-3">
+                                                <label class="d-block">
+                                                    <strong
+                                                        class="flag-recommended text-primary text-center d-block mb-2 invisible">
+                                                        <svg class="icon">
+                                                            <use xlink:href="spa-assets/icons/icons.svg#sprite-star"
+                                                                href="spa-assets/icons/icons.svg#sprite-star"></use>
+                                                        </svg>
+                                                        <span></span>
+                                                    </strong>
+                                                    <input type="radio" 
+                                                        name="choosePayment" 
+                                                        value="onlineBanking"
+                                                        v-model="formData['5'].paymentMethod" />
+                                                    <div class="box overflow-hidden">
+                                                        <div class="header-match-height">
+                                                            <div class="box--header bg-p2 text-white p-3">
+                                                                <h3 class="m-0">Online Banking</h3>
+                                                            </div>
+                                                            <div class="mt-4 mb-3">
+                                                                <svg class="icon icon-4xl">
+                                                                    <use xlink:href="spa-assets/icons/icons.svg#sprite-fpx"
+                                                                        href="spa-assets/icons/icons.svg#sprite-fpx">
+                                                                    </use>
+                                                                </svg>
+                                                            </div>
+                                                        </div>
+                                                        <div class="box--body px-3 pt-0 pb-3">
+                                                            <div class="text-center py-2">
+                                                                <div class="custom-rounded-checked">
+                                                                    <svg class="icon icon-m tick-mark my-2">
+                                                                        <use xlink:href="spa-assets/icons/icons.svg#sprite-tick-mark"
+                                                                            href="spa-assets/icons/icons.svg#sprite-tick-mark">
+                                                                        </use>
+                                                                    </svg>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </label>
+                                            </div>
+
+                                            <!-- card two -->
+                                            <div class="selection-infobox mb-3 mb-lg-0 mr-3">
+                                                <label class="d-block">
+                                                    <strong
+                                                        class="flag-recommended text-primary text-center d-block mb-2 invisible">
+                                                        <svg class="icon">
+                                                            <use xlink:href="spa-assets/icons/icons.svg#sprite-star"
+                                                                href="spa-assets/icons/icons.svg#sprite-star"></use>
+                                                        </svg>
+                                                        <span></span>
+                                                    </strong>
+                                                    <input type="radio"
+                                                        name="choosePayment"
+                                                        value="creditDebit"
+                                                        v-model="formData['5'].paymentMethod" />
+                                                    <div class="box overflow-hidden">
+                                                        <div class="header-match-height">
+                                                            <div class="box--header bg-p2 text-white p-3">
+                                                                <h3 class="m-0">Credit/Debit Card</h3>
+                                                            </div>
+                                                            <div class="mt-4 mb-3">
+                                                                <svg class="icon icon-4xl">
+                                                                    <use xlink:href="spa-assets/icons/icons.svg#sprite-credit-card"
+                                                                        href="spa-assets/icons/icons.svg#sprite-credit-card">
+                                                                    </use>
+                                                                </svg>
+                                                            </div>
+                                                        </div>
+                                                        <div class="box--body px-3 pt-0 pb-3">
+                                                            <div class="text-center py-2">
+                                                                <div class="custom-rounded-checked">
+                                                                    <svg class="icon icon-m tick-mark my-2">
+                                                                        <use xlink:href="spa-assets/icons/icons.svg#sprite-tick-mark"
+                                                                            href="spa-assets/icons/icons.svg#sprite-tick-mark">
+                                                                        </use>
+                                                                    </svg>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </label>
+                                            </div>
+
+                                            <!-- card 3 -->
+                                            <div class="selection-infobox mb-3 mb-lg-0 mr-3">
+                                                <label class="d-block">
+                                                    <strong class="flag-recommended text-primary text-center d-block mb-2 invisible">
+                                                        <svg class="icon">
+                                                            <use xlink:href="spa-assets/icons/icons.svg#sprite-star"
+                                                                href="spa-assets/icons/icons.svg#sprite-star"></use>
+                                                        </svg>
+                                                        <span></span>
+                                                    </strong>
+                                                    <input type="radio"
+                                                        name="choosePayment"
+                                                        value="ewallet"
+                                                        v-model="formData['5'].paymentMethod" />
+                                                    <div class="box overflow-hidden">
+                                                        <div class="header-match-height">
+                                                            <div class="box--header bg-p2 text-white p-3">
+                                                                <h3 class="m-0">E-Wallet</h3>
+                                                            </div>
+                                                            <div class="mt-4 mb-3">
+                                                                <svg class="icon icon-4xl">
+                                                                    <use xlink:href="spa-assets/icons/icons.svg#sprite-ewallets"
+                                                                        href="spa-assets/icons/icons.svg#sprite-ewallets">
+                                                                    </use>
+                                                                </svg>
+                                                            </div>
+                                                        </div>
+                                                        <div class="box--body px-3 pt-0 pb-3">
+                                                            <div class="text-center py-2">
+                                                                <div class="custom-rounded-checked">
+                                                                    <svg class="icon icon-m tick-mark my-2">
+                                                                        <use xlink:href="spa-assets/icons/icons.svg#sprite-tick-mark"
+                                                                            href="spa-assets/icons/icons.svg#sprite-tick-mark">
+                                                                        </use>
+                                                                    </svg>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- FPX Banking -->
+                                    <div v-if="formData['5'].paymentMethod === 'onlineBanking'">
+                                        <p class="bt1 mb-2">Bank:</p>
+                                        <validation-provider rules="required" v-slot="{ errors, failedRules }">
+                                            <div class="form-group">
+                                                <select v-model="formData['5'].bankId"
+                                                    :class="{
+                                                        'form-control': true,
+                                                        'is-invalid': errors.length > 0
+                                                    }">
+                                                    <option disabled hidden selected value="">Select a Bank</option>
+                                                    <option v-for="(bank, index) in banks" v-bind:key="index"
+                                                        :value="bank.bankId">
+                                                        {{ bank.bankDisplayName }}
+                                                    </option>
+                                                </select>
+                                                <small class="error-message text-primary font-italic" v-if="failedRules.required">
+                                                    Please select a valid bank
+                                                </small>
+                                            </div>
+                                        </validation-provider>
+
+                                        <p><small>Note: You need to have an active internet banking account with any of the FPX performing banks to use FPX.</small></p>
+
+                                        <p class="bt1 mb-2">
+                                            Email Address: <small class="font-italic">(For transaction status)</small>
+                                        </p>
+
+                                        <div class="row">
+                                            <div class="col-12 col-md-6">
+                                                <validation-provider rules="required" v-slot="{ errors, failedRules }">
+                                                    <div class="form-group">
+                                                        <input type="text" 
+                                                            :class="{
+                                                                'form-control': true,
+                                                                'is-invalid': errors.length > 0
+                                                            }"
+                                                            placeholder="e.g. hteoro@gmail.com"
+                                                            v-model="formData['5'].fpxEmail">
+                                                        <small class="error-message text-primary font-italic" v-if="failedRules.required">
+                                                            * Complete the Email field.
+                                                        </small>
+                                                    </div>
+                                                </validation-provider>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- card/debit card -->
+                                    <div v-if="formData['5'].paymentMethod === 'creditDebit'">
+                                        <img src="spa-assets/img/visa-master-logo.jpg" alt="Visa and Mastercard logo"
+                                            class="img-fluid mb-4">
+                                        <div class="row">
+                                            <div class="col-12 col-md-7">
+                                                <div class="form-group">
+                                                    <label class="bt1">Card Number:</label>
+                                                    <input class="form-control" type="text"
+                                                        placeholder="xxxx-xxxx-xxxx-xxxx" name="cardNumber">
+                                                    <small class="error-message text-primary font-italic">* Complete the
+                                                        Name as
+                                                        per card field.</small>
+                                                </div>
+
+                                            </div>
+                                            <div class="col-12 col-md-7">
+                                                <div class="form-group">
+                                                    <label class="bt1">Name on Card:</label>
+                                                    <input class="form-control" type="text" placeholder="Name on Card"
+                                                        name="nameOnCard">
+                                                    <small class="error-message text-primary font-italic">* Please enter
+                                                        a valid
+                                                        Visa / MasterCard No.</small>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="col-12 col-md-10">
+
+                                                <div class="form-row">
+                                                    <div class="form-group col-3">
+                                                        <label class="bt1">Expiration Date:</label>
+                                                        <input class="form-control" type="text" placeholder="MM/YY"
+                                                            name="expirationDate">
+                                                        <small class="error-message text-primary font-italic">* Complete
+                                                            the
+                                                            Expiry (MM/YY) field.</small>
+                                                    </div>
+                                                    <div class="form-group col-1">
+                                                        <label class="bt1">CVV
+                                                            <span class="d-inline-flex">
+                                                                <div class="ml-2 btn-tooltip" data-toggle="tooltip"
+                                                                    data-placement="right"
+                                                                    title="Event date must be at least 6 months from today.">
+                                                                    ?
+                                                                </div>
+
+                                                            </span>
+                                                        </label>
+                                                        <input class="form-control" type="text" placeholder="xxx"
+                                                            maxlength="3" name="CVV" style="width:110px;">
+                                                        <small class="error-message text-primary font-italic">* Complete
+                                                            the CVV
+                                                            field.</small>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <!-- E-Wallet -->
+                                    <div v-if="formData['5'].paymentMethod === 'ewallet'">
+                                        <p class="bt1">Select Your Preferred E-Wallet:</p>
+                                        <div class="list variant-bank">
+
+                                            <div class="list-item">
+                                                <input type="radio" name="bank" id="bankRadio1">
+                                                <label for="bankRadio1">
+                                                    <div class="bank-logo">
+                                                        <img src="spa-assets/img/boost.png" alt="Boost logo">
+                                                    </div>
+                                                    <div class="bank-name">
+                                                        Boost
+                                                    </div>
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="d-none d-md-block" v-if="formData['5'].paymentMethod === 'onlineBanking'">
+                                    <p class="bt2">By clicking <strong>"Pay Now"</strong> button, you agree to FPX's
+                                        <a href="#" target="_blank" class="underline">Terms & Conditions</a>.
+                                    </p>
+                                </div>
+                                
+                                <div class="wizard-navigation d-none d-md-flex pt-4">
+                                    <a @click.prevent="goToPrevStep()" href="#" role="button" class="btn btn-default btn-outline-primary mr-4">Back</a>
+                                    <a href="/payment-completed.html" role="button" class="btn btn-default btn-primary">Pay Now</a>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-4">
+                                <motor-summary-pane 
+                                    :form-data="formData"
+                                    :curr-step-num="currStep.stepNum"
+                                />
+                            </div>
+
+                            <div class="container pt-4 wizard-navigation d-md-none">
+                                <a @click.prevent="goToPrevStep()" href="#" role="button" class="btn btn-default btn-outline-primary mb-3">Back</a>
+                                <a href="/payment-completed.html" role="button" class="btn btn-default btn-primary">Pay Now</a>
+                            </div>
+                        </div>
                     </div>
                 </fieldset>
             </form>
@@ -1306,15 +1624,41 @@
         </div>
     </div>
 
+    <!-- Error message section -->
     <div class="error-container py-5 bg-p2d" v-if="!canProceed">
         <div class="container">
-            <div class="bg-w py-5">
+            <div class="bg-w py-5 px-3 px-md-5">
                 <div class="text-center">
                     <img src="~@/spa-assets/img/prescreen-error-icon.png" alt="Error" class="img-responsive mb-3">
                     <h3>Sorry, we are unable to proceed with your request online.</h3>
                 </div>
                 <div class="bt2 text-center" v-html="errorMessage"></div>
                 <p class="bt2 text-center">For any further enquiries, please email us at <a href="mailto:msig_online@my.msig-asia.com">msig_online@my.msig-asia.com</a>.</p>
+            </div>
+        </div>
+    </div>
+    <!-- Error message section -->
+
+    <div class="py-5 bg-p2d">
+        <div class="container">
+            <div class="px-3">
+                <div class="form-check">
+                    <input type="checkbox"
+                        name="devMode"
+                        id="devMode"
+                        class="form-check-input"
+                        v-model="developmentMode">
+                    <label for="devMode" class="form-check-label">
+                        Development Mode
+                    </label>
+                    <svg class="icon icon-m tick-mark">
+                        <use xlink:href="spa-assets/icons/icons.svg#sprite-tick-mark"
+                            href="spa-assets/icons/icons.svg#sprite-tick-mark"></use>
+                    </svg>
+                    <div class="invalid-feedback font-italic d-block pl-2 ml-1">
+                        This disables checking NCD error codes.
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -1325,4 +1669,13 @@
     {% include "templates/components/motorcycle-summary-pane.twig" %}
 </script>
 
+{% embed "templates/components/modal.twig" with {
+    modalId: 'information-modal',
+    modalHeaderTitle: 'Information'
+} %}
+    {% block modalContent %}
+        <div class="px-3 py-5 content-container"></div>
+    {% endblock %}
+{% endembed %}
+    
 {% endblock %}

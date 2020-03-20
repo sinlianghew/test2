@@ -45,7 +45,8 @@ $(function() {
                 // Data pulled in from dotCMS on pageload
                 countries: null,
                 states: null,
-
+                banks: null,
+                
                 // Data used by the auto complete
                 postcodeSearch: '',
                 postcodeSuggestions: [],
@@ -56,30 +57,31 @@ $(function() {
                     1: {
                         policyHolderIdType: 'nric',
                         country: '',
-                        policyHolderNric: '870523-06-6009',
-                        motorRegistrationNo: 'VBQ7136',
-                        // policyHolderNric: '',
-                        // motorRegistrationNo: '',
+                        // policyHolderNric: '870523-06-6009',
+                        // motorRegistrationNo: 'VBQ7136',
+                        policyHolderNric: '',
+                        motorRegistrationNo: '',
                         agreement: false
                     },
                     2: {
-                        motorVehicleLocation: 'WP Kuala Lumpur', // a.k.a. state
+                        motorVehicleLocation: '', // a.k.a. state
                         curMktValue: 0,
                         motorLoanProvider: '',
-                        policyHolderName: 'Testing',
-                        policyHolderEmail: 'test@growthops.asia',
-                        policyHolderMobileNo: '0175963434',
-                        policyHolderAddressLine1: '123 Jalan Impian',
-                        policyHolderAddressLine2: 'Taman Impian',
+                        policyHolderName: '',
+                        policyHolderEmail: '',
+                        policyHolderMobileNo: '',
+                        policyHolderAddressLine1: '',
+                        policyHolderAddressLine2: '',
                         policyHolderGender: '', // remember to use computed property instead
-                        addressPostcode: '47810',
+                        addressPostcode: '',
                         addressState: '',
                         addressCity: '',
                         policyHolderMaritalStatus: 'Single',
                         policyHolderOccupation: ''
                     },
                     3: {
-                        motorPlusPlan: null,
+                        // motorPlusPlan: null,
+                        motorPlusPlan: 'Y',
                         motorAddRiderPA: '',
                         motorAddLegalLiabilityToPassengers: '',
                         motorAddLegalLiabilityOfPassengers: '',
@@ -94,6 +96,18 @@ $(function() {
                         roadtaxAddressLine2: '',
                         roadtaxPostcode: '',
                         roadtaxCity: ''
+                    },
+                    4: {
+                        tncAgreement: false
+                    },
+                    5: {
+                        paymentMethod: 'onlineBanking',
+                        bankId: '',
+                        fpxEmail: '',
+                        cardHolderName: '',
+                        ccNo: '',
+                        expiry: '',
+                        cvv: ''
                     }
                 },
                 
@@ -196,6 +210,19 @@ $(function() {
                         this.formData['3'] = {
                             ...this.formData['3'],
                             ...premium
+                        }
+                    } else if (this.currStep.stepNum == '3') {
+                        if (this.formData['3'].motorPlusPlan === null) {
+                            $('#information-modal .content-container').html(
+                                `<p>You have not selected a plan yet</p>`
+                            )
+                            this.loading = false;
+                            $('#information-modal').modal('show')
+                            $('#information-modal').one('hidden.bs.modal', () => {
+                                let position = $('.motorcycle-selection').offset().top - 10;
+                                this.scrollToPosition(position, 800)
+                            })
+                            return;
                         }
                     }
 
@@ -402,12 +429,21 @@ $(function() {
                         }, 500)
                     }
                 },
+                scrollToPosition: function (pos, speed) {
+                    let defer = $.Deferred()
+                    $("body, html").animate({
+                        scrollTop: pos
+                    }, speed, function() {
+                        defer.resolve()
+                    })
+                    return defer;
+                },
                 calculatePremiumAsync: async function () {
                     
                     const apiResp = await $.ajax({
                         method: 'POST',
                         // url: this.baseUrl + '/dotCMS/purchase/buynow',
-                        url: 'http://www.mocky.io/v2/5e7200e33300004f0044c5a1',
+                        url: 'https://www.mocky.io/v2/5e7200e33300004f0044c5a1',
                         dataType: 'json',
                         data: {
                             action: 'calculatePremium',
@@ -608,34 +644,33 @@ $(function() {
                     )
                 })
 
-                // $.ajax({
-                //     method: 'GET',
-                //     url: this.createDotCMSQueryURL('TieRefState', {}, true),
-                //     dataType: 'json'
-                // }).done((data) => {
-                //     this.states = _.orderBy(
-                //             data.contentlets.reduce((acc, content) => {
-                //                 acc.push(content.stateDescription)
-                //                 return acc;
-                //             }, []),
-                //             'asc'
-                //         )
-                // })
-
-                // $.ajax({
-                //     method: 'GET',
-                //     url: baseUrl + '/api/content/render/false/type/json/limit/0/query/+structureName:TieRefCity%20+(conhost:ceaa0d75-448c-4885-a628-7f0c35d374bd%20conhost:SYSTEM_HOST)%20+live:true/orderby/TieRefCity.postcode',
-                // }).done(function(data) {
-                //     console.log("this?", data)
-                // })
-
+                $.ajax({
+                    method: 'GET',
+                    url: this.createDotCMSQueryURL('TieFPXBank', {}, true),
+                    dataType: 'json'
+                }).done((data) => {
+                    this.banks = _.sortBy(
+                        data.contentlets.reduce((acc, content) => {
+                            const { bankId, bankName, bankDisplayName, bankImage } = content;
+                            acc.push({
+                                bankId,
+                                bankName,
+                                bankDisplayName,
+                                bankImage
+                            })
+                            return acc;
+                        }, []),
+                        'bankDisplayName'
+                    )
+                })
                 
             },
             mounted: function() {
                 this.currStep = this.steps[0]
                 // this.onSubmit()
                 //     .then(() => this.onSubmit())
-                //     .then(() => this.onSubmit())
+                    // .then(() => this.onSubmit())
+                    // .then(() => this.onSubmit())
                 // this.steps[0].showPrescreen = false;
 
                 $('.page-loader').fadeOut()
