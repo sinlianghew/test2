@@ -1,0 +1,18 @@
+<div id="{{ modalId }}" class="modal fade variant-msig">
+    <div class="modal-dialog partial-screen-modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-t2">
+                <h6 class="w text-center modal-title">{{ modalHeaderTitle }}</h6>
+                <button class="modal-header-btn button-icon btn-close" data-dismiss="modal">
+                    <svg class="icon icon-s">
+                        <use xlink:href="spa-assets/icons/icons.svg#sprite-close-popup"
+                            href="spa-assets/icons/icons.svg#sprite-close-popup"></use>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-container padding-top-3xl padding-bottom-l">
+                {% block modalContent %}{% endblock %}
+            </div>
+        </div>
+    </div>
+</div>

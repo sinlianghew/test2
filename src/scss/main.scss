@@ -147,14 +147,12 @@ body {
     @import "components/detail-page.scss";
     @import "components/popup.scss";
     @import "components/page-loader.scss";
-
+    @import "components/modal.scss";
     @import "components/navigation.scss";
     @import "components/footer.scss";
-
     @import "components/banner-header-title.scss";
     @import "components/buttons.scss";
     @import "components/rounded-corners.scss";
-
 
     /** Page Specific styling **/
     @import "pages/payment-completed.scss";
@@ -188,9 +186,7 @@ body {
     @import "node_modules/bootstrap/scss/media";
     @import "node_modules/bootstrap/scss/list-group";
     @import "node_modules/bootstrap/scss/close";
-    @import "node_modules/bootstrap/scss/toasts";
-    @import "node_modules/bootstrap/scss/modal";
-  
+    @import "node_modules/bootstrap/scss/toasts";  
     @import "node_modules/bootstrap/scss/popover";
     @import "node_modules/bootstrap/scss/carousel";
     @import "node_modules/bootstrap/scss/spinners";
@@ -199,7 +195,7 @@ body {
 }
 
 @import "components/tooltip.scss"; 
-
+@import "node_modules/bootstrap/scss/modal";
 
 // copy from client css
 .travelTNC {
