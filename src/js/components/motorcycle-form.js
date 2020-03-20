@@ -362,9 +362,13 @@ $(function() {
                     return apiResp.contentlets[0].errorMessage
                 },
                 checkBlacklist: async function () {
+                    let apiUrl = baseUrl + '/dotCMS/purchase/buynow';
+                    if (this.developmentMode) {
+                        apiUrl = 'https://www.mocky.io/v2/5e7492493000006800a5f49f'
+                    }
                     const apiResp = await $.ajax({
                         method: 'POST',
-                        url: baseUrl + '/dotCMS/purchase/buynow',
+                        url: apiUrl,
                         dataType: 'json',
                         data: {
                             action: "blackListedCheck",
@@ -585,8 +589,8 @@ $(function() {
                 }, 500),
                 "formData.3.motorPlusPlan": function (value) {
                     if (value === '') {
-                        this.formData['3'].motorAddLegalLiabilityOfPassengers = false
                         this.formData['3'].motorAddSRCC = false
+                        this.formData['3'].motorAddSpecialPerils = false
                     }
                 },
                 loading: function (value) {
@@ -603,9 +607,14 @@ $(function() {
                 // 1. get underwritten rules
                 // 2. get postcodes
                 // 3. get countries
+                let apiUrl = baseUrl + '/dotCMS/purchase/buynow';
+                if (this.developmentMode) {
+                    apiUrl = 'https://www.mocky.io/v2/5e7492c13000006800a5f4a3'
+                }
+
                 $.ajax({
                     method: 'POST',
-                    url: baseUrl + '/dotCMS/purchase/buynow',
+                    url: apiUrl,
                     dataType: 'json',
                     data: {
                         action: 'underWrittenRule',
