@@ -1,0 +1,31 @@
+.modal.variant-msig {
+    &.fade .modal-dialog {
+        transform: translateY(0)
+    }
+
+    .modal-content {
+        border-radius: 0;
+        border: 0;
+    }
+
+    .modal-header {
+        background-color: $p2;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        border-bottom: 0;
+
+        .modal-title {
+            margin-bottom: 0;
+        }
+
+        .btn-close {
+            appearance: none;
+            border: 0;
+            background-color: transparent;
+            
+            svg {
+                stroke: #fff;
+            }
+        }
+    }
+}

@@ -1,3 +1,5 @@
+const baseUrl = $('input[name=tieBaseUrl]').val() || 'https://takeiteasy.msig.com.my';
+
 /**
  * Given an NRIC, return a Date object representing
  * the date of birth.
@@ -43,4 +45,27 @@ export function extractDOB(nric) {
 
     console.log(year, month, date)
     return new Date(ageYearPrefix + year, month - 1, date);
+}
+
+/**
+ * Creates a dotCMS lucene query URL
+ * @param {*} baseUrl
+ * @param {*} structureName 
+ * @param {*} queryObj 
+ * @param {*} isLive
+ * @returns {String}
+ */
+export function createDotCMSQueryURL (structureName, queryObj, isLive) {
+    let endpoint = baseUrl + '/api/content/render/false/type/json/limit/0/query/+structureName:' + structureName;
+    endpoint += '%20+(conhost:ceaa0d75-448c-4885-a628-7f0c35d374bd%20conhost:SYSTEM_HOST)';
+
+    if (isLive) {
+        endpoint += '%20'
+    }
+    let queryString = ''
+    for (let key of Object.keys(queryObj)) {
+        queryString += `%20+${structureName}.${key}:${queryObj[key]}`
+    }
+
+    return endpoint + queryString;
 }

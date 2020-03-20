@@ -1,112 +1,135 @@
-<div class="summary-pane">
-	<div class="section-header bg-p2 py-3 px-4">
-		<h2 class="w">Summary</h2>
+{% verbatim %}
+
+<div class="summary-pane sticky-top">
+	<div class="section-header bg-p2 py-4 px-4">
+		<h2 class="w mb-0">Summary</h2>
 	</div>
-	<div class="bg-w py-3 px-4">
-		<p class="bt1">You’re qualified for 15% NCD!</p>
-		<p class="bt2 mb-1 font-weight-bold">Coverage</p>
-		<table>
-			<tr>
-				<td width="68px">Date <span class="float-right pr-1"> : </span></td>
-				<td>28/01/2021 (Tue)</td>
-			</tr>
-			<tr>
-				<td width="68px">Period <span class="float-right pr-1"> : </span></td>
-				<td>1 Year </td>
-			</tr>
+	<div class="bg-w py-3 px-2">
+		<div class="px-3 pt-2">
+			<p class="bt1" v-if="formData['2'].nxtNCDDiscount > 0">
+				You’re qualified for {{ formData['2'].nxtNCDDiscount }}% NCD!
+			</p>
+			<p class="bt2 mb-1 font-weight-bold">Coverage</p>
+			<table>
+				<tr>
+					<td width="68px">Date <span class="float-right pr-1"> : </span></td>
+					<td>{{ formData['2'].nxtNCDEffDt }} - {{ formData['2'].nxtNCDExpDt }}</td>
+				</tr>
+				<tr>
+					<td width="68px">Period <span class="float-right pr-1"> : </span></td>
+					<td>1 Year </td>
+				</tr>
+			</table>
+			<hr />
 
-		</table>
+			<p class="text-right bt1 mb-1">RM</p>
 
-		<hr />
-
-
-		<p class="text-right bt1  mb-1 pr-3">RM</p>
-
-		<div class=" d-flex justify-content-between mb-4 pr-3">
-			<p class="bt2 mb-0 font-weight-bold ">Your Sum Insured</p>
-			<p class="bt2 mb-0 font-weight-bold">30,000.00</p>
-		</div>
-
-		<div class=" d-flex justify-content-between mb-4 pr-3">
-			<p class="bt2 mb-0 font-weight-bold ">Excess</p>
-			<p class="bt2 mb-0 font-weight-bold">Nil</p>
-		</div>
-
-		<div class="bg-p2c px-3 py-4 mb-4 rounded">
-			<div class="d-flex justify-content-between">
-				<p class="bt2 mb-0">Basic Premium</p>
-				<p class="bt2 mb-0">58.00</p>
-			</div>
-			<div class="d-flex justify-content-between ">
-				<p class="bt2 mb-0">Loading (100%)</p>
-				<p class="bt2 mb-0">58.00</p>
-			</div>
-			<div class="d-flex justify-content-between mb-4">
-				<p class="bt2 mb-0">NCD (15%)</p>
-				<p class="bt2 mb-0">(14.50)</p>
+			<div class=" d-flex justify-content-between mb-4">
+				<p class="bt2 mb-0 font-weight-bold ">Your Sum Insured</p>
+				<p class="bt2 mb-0 font-weight-bold">{{ formatAsCurrency(formData['2'].marketValue) }}</p>
 			</div>
 
-			<div class="d-flex justify-content-between">
-				<p class="bt2 mb-0 font-weight-bold">Total Amount</p>
-				<p class="bt2 mb-0">(14.50)</p>
-			</div>
-
-		</div>
-
-		<div class=" d-flex justify-content-between mb-4 pr-3">
-			<p class="bt2 mb-0 font-weight-bold ">Add-Ons<p>
-					<p class="bt2 mb-0 font-weight-bold">Nil</p>
-		</div>
-
-		<div class="d-flex justify-content-between mb-2">
-			<p class="bt2 mb-0 pr-3">Strike, Riot and Civil Commotion</p>
-			<p class="bt2 mb-0">33.75</p>
-		</div>
-
-		<div class="d-flex justify-content-between mb-2">
-			<p class="bt2 mb-0 pr-3">Special Perils</p>
-			<p class="bt2 mb-0">33.75</p>
-		</div>
-
-		<div class="d-flex justify-content-between pt-3 pb-4">
-			<p class="bt2 mb-0 pr-3">Total Add-Ons</p>
-			<p class="bt2 mb-0">101.75</p>
-		</div>
-
-
-		<div class="bg-p2c px-3 py-4 mb-4 rounded">
-			<div class="d-flex justify-content-between">
-				<p class="bt2 mb-0">Gross Premium</p>
-				<p class="bt2 mb-0">58.00</p>
-			</div>
-			<div class="d-flex justify-content-between ">
-				<p class="bt2 mb-0">Rebate (100%)</p>
-				<p class="bt2 mb-0">58.00</p>
-			</div>
-
-			<div class="divider my-4"></div>
-			<div class="d-flex justify-content-between">
-				<p class="bt2 mb-0">
-					<strong>Subtotal</strong>
-				</p>
-				<p class="bt2 mb-0">
-					<strong>43.50</strong>
+			<div class=" d-flex justify-content-between mb-4">
+				<p class="bt2 mb-0 font-weight-bold ">Excess</p>
+				<p class="bt2 mb-0 font-weight-bold">
+					{{ 
+						formData['2'].excess > 0 ? 
+						formatAsCurrency(formData['2'].excess) :
+						'Nil'
+					}}
 				</p>
 			</div>
-			<div class="d-flex justify-content-between">
-				<p class="bt2 mb-0">Service Tax (6%)</p>
-				<p class="bt2 mb-0">0.00</p>
-			</div>
-			<div class="d-flex justify-content-between">
-				<p class="bt2 mb-0">Stamp Duty</p>
-				<p class="bt2 mb-0">10.00</p>
-			</div>
 		</div>
 
+		<template v-if="currStepNum > 2">
+			<div class="bg-p2c px-3 py-4 mb-4 rounded">
+				<div class="d-flex justify-content-between">
+					<p class="bt2 mb-0">Basic Premium</p>
+					<p class="bt2 mb-0">{{ formatAsCurrency(formData['3'].basePremium) }}</p>
+				</div>
+				
+				<!-- To clarify with client on loading -->
+				<!-- <div class="d-flex justify-content-between" v-if="formData['3'].basePremium">
+					<p class="bt2 mb-0">Loading (100%)</p>
+					<p class="bt2 mb-0"></p>
+				</div> -->
+				<div class="d-flex justify-content-between" v-if="formData['3'].allRiderPlan">
+					<p class="bt2 mb-0">All Riders</p>
+					<p class="bt2 mb-0">{{ formatAsCurrency(formData['3'].allRiderPlanPremium) }}</p>
+				</div>
+				<div class="d-flex justify-content-between">
+					<p class="bt2 mb-0">NCD ({{ formData['2'].nxtNCDDiscount }}%)</p>
+					<p class="bt2 mb-0">({{ formatAsCurrency(formData['3'].ncdAmount) }})</p>
+				</div>
+				<div class="d-flex justify-content-between">
+					<p class="bt2 mb-0 font-weight-bold">Total Amount</p>
+					<p class="bt2 mb-0">({{ formatAsCurrency(formData['3'].totalPremium) }})</p>
+				</div>
+			</div>
 
-		<div class="d-flex justify-content-between ">
-			<p class="bt1 p2">Total Amount Payable</p>
-			<p class="h2 p2 pr-3">0.00</p>
-		</div>
+			<div class="px-3" v-if="isAnySpecialAddOnSelected || formData['3'].motorPlusPlan === ''">
+				<div class=" d-flex justify-content-between mb-2">
+					<p class="bt2 mb-0 font-weight-bold">Add-Ons</p>
+				</div>
+				<div class="d-flex justify-content-between mb-2" v-if="formData['3'].motorPlusPlan === ''">
+					<div class="bt2 mb-0 pr-3">
+						<p>Motorcycle 3PA Insurance</p>
+						<p class="pl-3">Rider's Personal Accident (Non-Tariff)</p>
+					</div>
+					<p class="bt2 mb-0">{{ formatAsCurrency(formData['3'].addRiderPAPremium) }}</p>
+				</div>
+				<div class="d-flex justify-content-between mb-2" v-if="formData['3'].motorAddSRCC">
+					<p class="bt2 mb-0 pr-3">Strike, Riot and Civil Commotion</p>
+					<p class="bt2 mb-0">{{ formatAsCurrency(formData['3'].addSRCCPremium) }}</p>
+				</div>
+				<div class="d-flex justify-content-between mb-2" v-if="formData['3'].motorAddSpecialPerils">
+					<p class="bt2 mb-0 pr-3">Special Perils</p>
+					<p class="bt2 mb-0">{{ formatAsCurrency(formData['3'].addSpecialPerilsPremium) }}</p>
+				</div>
+				<div class="d-flex justify-content-between mb-2" v-if="formData['3'].motorAddLegalLiabilityOfPassengers">
+					<p class="bt2 mb-0 pr-3">Legal Liability To Pillion</p>
+					<p class="bt2 mb-0">{{ formatAsCurrency(formData['3'].addLegalLiabilityOfPassengersPremium) }}</p>
+				</div>
+				<div class="d-flex justify-content-between pt-3 pb-4">
+					<p class="bt2 mb-0 pr-3"><strong>Total Add-Ons</strong></p>
+					<p class="bt2 mb-0"><strong>{{ formatAsCurrency(formData['3'].totalAdditionalCoveragePremium) }}</strong></p>
+				</div>
+			</div>
+
+			<div class="bg-p2c px-3 py-4 mb-4 rounded">
+				<div class="d-flex justify-content-between">
+					<p class="bt2 mb-0">Gross Premium</p>
+					<p class="bt2 mb-0">{{ formatAsCurrency(formData['3'].totalPremium) }}</p>
+				</div>
+				<div class="d-flex justify-content-between ">
+					<p class="bt2 mb-0">Rebate ({{ formData['3'].discountAmount / formData['3'].totalPremium * 100 }}%)</p>
+					<p class="bt2 mb-0">{{ formatAsCurrency(formData['3'].discountAmount) }}</p>
+				</div>
+
+				<div class="divider my-4"></div>
+				<div class="d-flex justify-content-between">
+					<p class="bt2 mb-0">
+						<strong>Subtotal</strong>
+					</p>
+					<p class="bt2 mb-0">
+						<strong>{{ formatAsCurrency(formData['3'].totalPremium) }}</strong>
+					</p>
+				</div>
+				<div class="d-flex justify-content-between">
+					<p class="bt2 mb-0">Service Tax ({{ formData['3'].sst }}%)</p>
+					<p class="bt2 mb-0">{{ formatAsCurrency(formData['3'].sstAmount) }}</p>
+				</div>
+				<div class="d-flex justify-content-between">
+					<p class="bt2 mb-0">Stamp Duty</p>
+					<p class="bt2 mb-0">{{ formatAsCurrency(formData['3'].stampDuty) }}</p>
+				</div>
+			</div>
+
+			<div class="px-3 d-flex justify-content-between">
+				<p class="bt1 p2">Total Amount Payable</p>
+				<p class="h2 p2">{{ formatAsCurrency(formData['3'].totalPayable) }}</p>
+			</div>
+		</template>
 	</div>
 </div>
+{% endverbatim %}

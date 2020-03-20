@@ -1,7 +1,6 @@
 import { extend } from "vee-validate";
-import { required, min, max } from "vee-validate/dist/rules";
+import { required, min, max, integer } from "vee-validate/dist/rules";
 import moment from 'moment';
-
 import { extractDOB } from '../helpers/utilities';
 
 extend('required', {
@@ -13,6 +12,7 @@ extend('required', {
 
 extend('min', min)
 extend('max', max)
+extend('integer', integer)
 
 extend('mustBeTrue', {
     validate: function (value) {
@@ -56,5 +56,11 @@ extend('nricAge18AndAbove', {
         const today = new Date();
         const dob = extractDOB(value);
         return today.getFullYear() - dob.getFullYear() >= 18;
+    }
+})
+
+extend('isPostcodeExist', {
+    validate: async function (value) {
+
     }
 })
