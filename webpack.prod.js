@@ -3,6 +3,7 @@ const common =                      require("./webpack.common")
 const merge =                       require("webpack-merge")
 const MiniCssExtractPlugin =        require("mini-css-extract-plugin")
 const { CleanWebpackPlugin } =      require("clean-webpack-plugin") // only need in prod cuz dev is using in-memory server
+const SVGSpritemapPlugin =          require("svg-spritemap-webpack-plugin");
 
 module.exports = merge(common, {
     mode: "production",
@@ -36,7 +37,7 @@ module.exports = merge(common, {
                     loader: "file-loader",
                     options: {
                         name: "[name].[ext]",
-                        outputPath: "spa-assets/img"
+                        outputPath: "/spa-assets/img"
                     }
                 }
             },
@@ -47,7 +48,7 @@ module.exports = merge(common, {
                     loader: "file-loader",
                     options: {
                         name: "[name].[ext]",
-                        outputPath: "spa-assets/fonts"
+                        outputPath: "/spa-assets/fonts"
                     }
                 }
             },
@@ -102,5 +103,12 @@ module.exports = merge(common, {
             }
         ]
     },
-    plugins: [new CleanWebpackPlugin()]
+    plugins: [
+        new SVGSpritemapPlugin("src/spa-assets/icons/**/*.svg", {
+            output: {
+                filename: "/spa-assets/icons/icons.svg",
+            }
+        }),
+        new CleanWebpackPlugin()
+    ]
 })
