@@ -66,11 +66,7 @@ $(function() {
                         agreement: false
                     },
                     2: {
-                        motorVehicleLocation: {
-                            code:"B",
-                            name:"Selangor",
-                            vpmsStateCode:"SEL",
-                        }, // a.k.a. vpmsStateCode
+                        motorVehicleLocation: '', // a.k.a. vpmsStateCode, it's inside an object
                         curMktValue: 0,
                         motorLoanProvider: '',
                         policyHolderName: '',
@@ -87,7 +83,7 @@ $(function() {
                         policyHolderOccupation: ''
                     },
                     3: {
-                        motorPlanType: 'comprehensive',
+                        motorPlanType: '',
                         motorPlusPlan: 'Y', // consider removing
                         motorAddRiderPA: '',
                         motorAddLegalLiabilityToPassengers: '',
@@ -364,7 +360,7 @@ $(function() {
                             productName: this.productName,
                             motorNxtNcdLevel: this.formData['2'].nxtNCDLevel,
                             motorNvic: this.formData['2'].nvic,
-                            motorVehicleLocation: this.formData['2'].motorVehicleLocation.vpmsStateCode,
+                            motorVehicleLocation: this.formData['2'].motorVehicleLocation ? this.formData['2'].motorVehicleLocation.vpmsStateCode : '',
                             coverageStartDate: this.formData['2'].nxtNCDEffDt,
                             motorCc: this.formData['2'].motorCc,
                             motorMakeCode: this.formData['2'].motorMakeCode,
