@@ -59,10 +59,10 @@ $(function() {
                     1: {
                         policyHolderIdType: 'nric',
                         country: '',
-                        policyHolderNric: '870523-06-6009',
-                        motorRegistrationNo: 'VBQ7136',
-                        // policyHolderNric: '',
-                        // motorRegistrationNo: '',
+                        // policyHolderNric: '870523-06-6009',
+                        // motorRegistrationNo: 'VBQ7136',
+                        policyHolderNric: '',
+                        motorRegistrationNo: '',
                         agreement: false
                     },
                     2: {
@@ -73,23 +73,22 @@ $(function() {
                         }, // a.k.a. vpmsStateCode
                         curMktValue: 0,
                         motorLoanProvider: '',
-                        policyHolderName: 'Testing',
-                        policyHolderEmail: 'test@test.asia',
-                        policyHolderMobileNo: '0171234567',
-                        policyHolderAddressLine1: '123 jalan impian',
-                        policyHolderAddressLine2: 'jalan impian saujana',
+                        policyHolderName: '',
+                        policyHolderEmail: '',
+                        policyHolderMobileNo: '',
+                        policyHolderAddressLine1: '',
+                        policyHolderAddressLine2: '',
                         policyHolderGender: '', // remember to use computed property instead
-                        addressPostcode: '47810',
-                        addressState: 'Selangor',
-                        addressStateCode: 'B',
-                        addressCity: 'SUNWAY DAMANSARA, PJ',
-                        policyHolderMaritalStatus: 'Single',
-                        policyHolderOccupation: 'Developer'
+                        addressPostcode: '',
+                        addressState: '',
+                        addressStateCode: '',
+                        addressCity: '',
+                        policyHolderMaritalStatus: '',
+                        policyHolderOccupation: ''
                     },
                     3: {
-                        // motorPlusPlan: null,
                         motorPlanType: 'comprehensive',
-                        motorPlusPlan: 'Y',
+                        motorPlusPlan: 'Y', // consider removing
                         motorAddRiderPA: '',
                         motorAddLegalLiabilityToPassengers: '',
                         motorAddLegalLiabilityOfPassengers: '',
@@ -548,7 +547,6 @@ $(function() {
                 },
                 initializeTooltips: function () {
                     this.$nextTick().then(() => {
-                        console.log(currStepNum)
                         const currStepNum = this.currStep.stepNum;
                         const $tooltips = $(this.$el).find(`.wizard-section-${currStepNum} [data-toggle=tooltip]`);
                         $tooltips.each(function() {
@@ -775,10 +773,10 @@ $(function() {
             },
             mounted: function() {
                 this.currStep = this.steps[0]
-                this.onSubmit()
-                    .then(() => this.onSubmit())
-                    .then(() => this.onSubmit())
-                    .then(() => this.onSubmit())
+                // this.onSubmit()
+                //     .then(() => this.onSubmit())
+                //     .then(() => this.onSubmit())
+                //     .then(() => this.onSubmit())
                 // this.steps[0].showPrescreen = false;
         
                 $('.page-loader').fadeOut()
