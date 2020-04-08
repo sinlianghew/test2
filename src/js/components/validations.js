@@ -1,7 +1,7 @@
 import { extend } from "vee-validate";
-import { required, min, max, integer, email } from "vee-validate/dist/rules";
+import { required, min, max, integer, email, length } from "vee-validate/dist/rules";
 import moment from 'moment';
-import { extractDOB } from '../helpers/utilities';
+import { extractDOB, getCardType, checkLuhn } from '../helpers/utilities';
 
 extend('required', {
     ...required,
@@ -14,6 +14,7 @@ extend('min', min)
 extend('max', max)
 extend('integer', integer)
 extend('email', email)
+extend('length', length)
 
 extend('mustBeTrue', {
     validate: function (value) {
@@ -59,5 +60,36 @@ extend('nricAge18AndAbove', {
 extend('isPostcodeExist', {
     validate: async function (value) {
 
+    }
+})
+
+extend('isCreditCardValid', {
+    validate: function (value) {
+        if (value.length === 0) return true;
+
+        let cardNumber = value.replace(/\D/g, '');
+        if (cardNumber.length < 16) return false;
+
+        if (getCardType(cardNumber) === null) return false;
+
+        if (!checkLuhn(cardNumber)) return false;
+
+        return true;
+    }
+})
+
+extend('isCreditCardExpiryValid', {
+    validate: function (value) {
+        if (value.length === 0) return true;
+
+        const pattern = /[0-9]{2}\/[0-9]{2}/g;
+        if (!pattern.test(value)) return false;
+
+        const expiryDate = moment(value, 'MM/YY');
+        if (!expiryDate.isValid()) return false;
+
+        if (!expiryDate.isAfter(moment(), 'month')) return false;
+
+        return true;
     }
 })

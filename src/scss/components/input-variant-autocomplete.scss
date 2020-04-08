@@ -1,4 +1,8 @@
 .form-group.variant-autocomplete {
+    input[type=search].form-control {
+        box-sizing: border-box;
+    }
+
     .vbt-autcomplete-list {
         position: absolute;
         z-index: 1;
