@@ -5,7 +5,7 @@ import { mask, masked } from 'vue-the-mask';
 import moment from 'moment';
 import VueBootstrapTypeahead from 'vue-typeahead-bootstrap/dist/VueBootstrapTypeahead.umd';
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
-import { extractDOB, createDotCMSQueryURL } from '../helpers/utilities';
+import { extractDOB, createDotCMSQueryURL, getCardType, scrollTo } from '../helpers/utilities';
 // import Datepicker from 'vuejs-datepicker';
 import MotorcycleSummaryPane from '../components/motorcycle-summary-pane';
 Vue.component('motor-summary-pane', MotorcycleSummaryPane)
@@ -13,14 +13,15 @@ Vue.component('motor-summary-pane', MotorcycleSummaryPane)
 /**
  * Staff Relation: ['Direct Relationship']
  */
-$(function() {
-    if ($('#motorcycle-form').length > 0) {
-        const baseUrl = document.querySelector('input[name=tieBaseUrl]').value;
 
+$(function() {
+    const baseUrl = document.querySelector('input[name=tieBaseUrl]').value;
+
+    if ($('#motorcycle-form').length > 0) {
         const motorcycleForm = new Vue({
             el: '#motorcycle-form',
             data: {
-                developmentMode: true,
+                developmentMode: false,
                 baseUrl,
                 productCode: 'MCY',
                 partnerCode: $('input[name="partnerCode"]').val(),
@@ -28,6 +29,7 @@ $(function() {
                 staffId: $('input[name="staffId"]').val(),
                 staffRelationship: $('input[name="staffRelationship"]').val(),
                 supportTel: $('input[name="supportTel"]').val(),
+                thankYouPageUrl: $('input[name="thankYouPageUrl"]').val(),
 
                 steps: [
                     { stepNum: '1', title: 'Get Started', completed: false, showPrescreen: true },
@@ -37,11 +39,11 @@ $(function() {
                     { stepNum: '5', title: 'PAY', completed: false }
                 ],
                 currStep: null,
-
+        
                 loading: false, // this controls the spinner
                 canProceed: true,
                 errorMessage: null,
-
+        
                 // Data pulled in from dotCMS on pageload
                 countries: null,
                 states: null,
@@ -52,7 +54,7 @@ $(function() {
                 postcodeSuggestions: [],
                 currSelectedPostcode: '',
                 loanProviderSuggestions: [],
-
+        
                 formData: {
                     1: {
                         policyHolderIdType: 'nric',
@@ -64,7 +66,7 @@ $(function() {
                         agreement: false
                     },
                     2: {
-                        motorVehicleLocation: '', // a.k.a. state
+                        motorVehicleLocation: '', // a.k.a. vpmsStateCode, it's inside an object
                         curMktValue: 0,
                         motorLoanProvider: '',
                         policyHolderName: '',
@@ -75,19 +77,21 @@ $(function() {
                         policyHolderGender: '', // remember to use computed property instead
                         addressPostcode: '',
                         addressState: '',
+                        addressStateCode: '',
                         addressCity: '',
-                        policyHolderMaritalStatus: 'Single',
+                        policyHolderMaritalStatus: '',
                         policyHolderOccupation: ''
                     },
                     3: {
-                        // motorPlusPlan: null,
-                        motorPlusPlan: 'Y',
+                        motorPlanType: '',
+                        motorPlusPlan: 'Y', // consider removing
                         motorAddRiderPA: '',
                         motorAddLegalLiabilityToPassengers: '',
                         motorAddLegalLiabilityOfPassengers: '',
                         motorAddSpecialPerils: '',
                         motorAddSRCC: '',
-                        allRiderPlan: '',
+                        allRiderPlan: false,
+                        
                         isRenewRoadtax: null,
                         roadtaxCollectionMethod: 'homeOfficeDelivery',
                         roadtaxDelAddrSameAsMotor: false,
@@ -98,7 +102,26 @@ $(function() {
                         roadtaxCity: ''
                     },
                     4: {
-                        tncAgreement: false
+                        tncAgreement: false,
+                        isMotorDetailsEditMode: false,
+                        isRiderDetailsEditMode: false,
+
+                        // Motorcycle Details Edit
+                        motorVehicleLocation: '',
+
+                        // Rider Details Edit
+                        policyHolderName: '',
+                        policyHolderEmail: '',
+                        policyHolderMobileNo: '',
+                        policyHolderAddressLine1: '',
+                        policyHolderAddressLine2: '',
+                        addressPostcode: '',
+                        addressState: '',
+                        addressStateCode: '',
+                        addressCity: '',
+                        policyHolderMaritalStatus: '',
+                        policyHolderOccupation: '',
+
                     },
                     5: {
                         paymentMethod: 'onlineBanking',
@@ -107,7 +130,8 @@ $(function() {
                         cardHolderName: '',
                         ccNo: '',
                         expiry: '',
-                        cvv: ''
+                        cvv: '',
+                        ewalletVendor: null
                     }
                 },
                 
@@ -118,9 +142,9 @@ $(function() {
                         transform: v => v.toLocaleUpperCase()
                     }
                 },
-
+        
                 motorDetails: null, // assigned from Motor NCD Check
-
+        
                 currMotorMakeInfo: null, // assigned after looking up the makeCode
                 foundMotorModels: [], // assigned after looking up the modelCode
                 currMotorNCDInfo: null, // assigned after looking up the ncdLevel
@@ -145,11 +169,7 @@ $(function() {
                     if (window.scrollY < 100) {
                         return defer.resolve()
                     }
-                    $("body, html").animate({
-                        scrollTop: offset
-                    }, 800, function() {
-                        defer.resolve()
-                    })
+                    scrollTo(offset).then(() => defer.resolve())
                     return defer;
                 },
                 onSubmit: async function () {
@@ -160,14 +180,14 @@ $(function() {
                         if (isBlacklisted) {
                             return;
                         }
-
+        
                         // Check the vehicle's NCD
                         const motorDetails = await this.checkNCD()
                         this.formData['2'] = {
                             ...this.formData['2'],
                             ...motorDetails
                         }
-
+        
                         if (!motorDetails.canProceed) {
                             if (motorDetails.errorCode) {
                                 let errorMessage = await this.findErrorByErrorCodeAsync(motorDetails.errorCode)
@@ -176,23 +196,23 @@ $(function() {
                                 this.errorMessage = $errorMessage.html();
                             }
                             
-                            if (!this.developmentMode) {
-                                return this.canProceed = false;
-                            }
+                            // if (!this.developmentMode) {
+                            //     return this.canProceed = false;
+                            // }
                         }
                         // // Find the make information e.g. Toyota, Honda etc
                         // const motorMakesFound = await this.findVehicleMakeByCode(motorDetails.motorMakeCode)
                         // this.currMotorMakeInfo = motorMakesFound[0]
-
+        
                         // // Find the model information e.g. LC, RC, Wave etc
                         // const motorModelsFound = await this.findVehicleModelByCode(motorDetails.motorModelCode)
                         // this.foundMotorModels = motorModelsFound;
-
+        
                         // // Might not be needed 
                         // const motorNCD = await this.findVehicleNCD(motorDetails.nxtNCDLevel, motorDetails.nxtNCDDiscount)
                         // console.log(motorNCD)
                         // // Might not be needed
-
+        
                         const motorSumInsured = await this.findVehicleSumInsured()
                         this.formData['2'] = {
                             ...this.formData['2'],
@@ -208,11 +228,7 @@ $(function() {
                             
                         }
                     } else if (this.currStep.stepNum == '2') {
-                        const premium = await this.calculatePremiumAsync()
-                        this.formData['3'] = {
-                            ...this.formData['3'],
-                            ...premium
-                        }
+                        await this.calculatePremiumAsync()
                     } else if (this.currStep.stepNum == '3') {
                         if (this.formData['3'].motorPlusPlan === null) {
                             $('#information-modal .content-container').html(
@@ -226,8 +242,25 @@ $(function() {
                             })
                             return;
                         }
-                    }
 
+                        // Copy the values over. This is needed for the cancel functionality
+                        this.formData['4'].motorVehicleLocation = this.formData['2'].motorVehicleLocation;
+
+                        this.formData['4'].policyHolderName = this.formData['2'].policyHolderName;
+                        this.formData['4'].policyHolderEmail = this.formData['2'].policyHolderEmail;
+                        this.formData['4'].policyHolderMobileNo = this.formData['2'].policyHolderMobileNo;
+                        this.formData['4'].policyHolderAddressLine1 = this.formData['2'].policyHolderAddressLine1;
+                        this.formData['4'].policyHolderAddressLine2 = this.formData['2'].policyHolderAddressLine2;
+                        this.formData['4'].addressPostcode = this.formData['2'].addressPostcode;
+                        this.formData['4'].addressState = this.formData['2'].addressState;
+                        this.formData['4'].addressStateCode = this.formData['2'].addressStateCode;
+                        this.formData['4'].addressCity = this.formData['2'].addressCity;
+                        this.formData['4'].policyHolderMaritalStatus = this.formData['2'].policyHolderMaritalStatus;
+                        this.formData['4'].policyHolderOccupation = this.formData['2'].policyHolderOccupation;
+                    } else if (this.currStep.stepNum == '5') {
+                        return window.location.href = this.thankYouPageUrl;
+                    }
+        
                     await this.scrollTop();
                     this.currStep.completed = true;
                     this.currStep = this.steps[this.steps.indexOf(this.currStep) + 1];
@@ -245,7 +278,7 @@ $(function() {
                     if (this.developmentMode) {
                         apiUrl = 'https://www.mocky.io/v2/5e748d7b300000d431a5f463'
                     }
-
+        
                     const apiResponse = await $.ajax({
                         method: 'POST',
                         url: apiUrl,
@@ -260,7 +293,7 @@ $(function() {
                         },
                         dataType: 'json'
                     }).promise()
-
+        
                     return apiResponse;
                 },
                 findVehicleModelByCode: async function (modelCode) {
@@ -269,13 +302,13 @@ $(function() {
                         productCode: this.productCode
                     }
                     const dotCMSQueryURL = this.createDotCMSQueryURL('TieRefBancaMotorModel', query)
-
+        
                     const apiResponse = await $.ajax({
                         method: 'GET',
                         url: dotCMSQueryURL,
                         dataType: 'json'
                     }).promise()
-
+        
                     return apiResponse.contentlets;
                 },
                 findVehicleMakeByCode: async function (makeCode) {
@@ -285,13 +318,13 @@ $(function() {
                         productCode: this.productCode
                     }
                     const dotCMSQueryURL = this.createDotCMSQueryURL('TieRefBancaMotorMake', query)
-
+        
                     const apiResponse = await $.ajax({
                         method: 'GET',
                         url: dotCMSQueryURL,
                         dataType: 'json'
                     }).promise()
-
+        
                     return apiResponse.contentlets;
                 },
                 findVehicleNCD: async function (ncdLevel, ncdDiscount) {
@@ -301,22 +334,22 @@ $(function() {
                         product: this.productName
                     }
                     const dotCMSQueryURL = this.createDotCMSQueryURL('TieRefBancaMotorNCD', query)
-
+        
                     const apiResponse = await $.ajax({
                         method: 'GET',
                         url: dotCMSQueryURL,
                         dataType: 'json'
                     }).promise()
-
+        
                     return apiResponse.contentlets;
                 },
                 findVehicleSumInsured: async function () {
-
+        
                     let apiUrl = baseUrl + '/dotCMS/purchase/buynow';
                     if (this.developmentMode) {
                         apiUrl = 'https://www.mocky.io/v2/5e748c373000007e00a5f455'
                     }
-
+        
                     const apiResponse = await $.ajax({
                         type: "POST",
                         url: apiUrl,
@@ -328,24 +361,26 @@ $(function() {
                             productName: this.productName,
                             motorNxtNcdLevel: this.formData['2'].nxtNCDLevel,
                             motorNvic: this.formData['2'].nvic,
-                            motorVehicleLocation: this.formData['2'].motorVehicleLocation,
-                            coverageStartDate: this.formData['2'].nxtNCDEffDt, // TODO: CHECK THIS!
+                            motorVehicleLocation: this.formData['2'].motorVehicleLocation ? this.formData['2'].motorVehicleLocation.vpmsStateCode : '',
+                            coverageStartDate: this.formData['2'].nxtNCDEffDt,
                             motorCc: this.formData['2'].motorCc,
                             motorMakeCode: this.formData['2'].motorMakeCode,
                             motorYearOfMake: this.formData['2'].motorYearOfMake,
                             motorModelCode: this.formData['2'].motorModelCode,
                             motorChassisNo: this.formData['2'].motorRiskDataChassisNo,
                             motorRegistrationNo: this.formData['1'].motorRegistrationNo,
-                            motorVehiclePremiumValue: '', // TODO: CHECK THIS!
-                            certificateNo: '', // TODO: CHECK THIS --> seems to be returned from underwritten rule
+                            motorVehiclePremiumValue: '',
+                            certificateNo: '', // According to Inventech, this is applicable when it is a renewal with MSIG
                             policyHolderMalaysian: this.formData['1'].policyHolderIdType === 'nric' ? 'Y' : 'N',
                             policyHolderNRIC: this.formData['1'].policyHolderNric,
-                            staffId: $('input[name=staffID]').val(),
+                            staffId: this.staffId,
                             branchAbbr: $('input[name=branchCode]').val(),
-                            staffRelationship: $('select[name=staffRelationship]').val()
+                            staffRelationship: this.staffRelationship
                         }
                     }).promise()
-
+        
+                    
+        
                     return apiResponse;
                 },
                 findErrorByErrorCodeAsync: async function (errorCode) {
@@ -358,7 +393,7 @@ $(function() {
                         dataType: 'json',
                         url: dotCMSQueryURL
                     })
-
+        
                     return apiResp.contentlets[0].errorMessage
                 },
                 checkBlacklist: async function () {
@@ -377,7 +412,7 @@ $(function() {
                             motorRegistrationNo: this.formData['1'].motorRegistrationNo
                         }
                     }).promise()
-
+        
                     return apiResp.isBlacklisted;
                 },
                 getPostcodesAsync: async function (postcode) {
@@ -387,13 +422,13 @@ $(function() {
                         '+(conhost:ceaa0d75-448c-4885-a628-7f0c35d374bd%20conhost:SYSTEM_HOST)%20' +
                         '+TieRefCity.postcode:' + postcode + '*' +
                         '/orderby/TieRefCity.postcode'
-
+        
                     const apiResp = await $.ajax({
                         method: 'GET',
                         url: dotCMSQueryURL,
                         dataType: 'json'
                     }).promise()
-
+        
                     this.postcodeSuggestions = apiResp.contentlets;
                 },
                 getLoanProvidersAsync: async function (name) {
@@ -404,13 +439,13 @@ $(function() {
                         '+live:true%20' +
                         '+TieRefBancaLoanProvider.financeName:' + name + '*' +
                         '/orderby/TieRefBancaLoanProvider.financeName'
-
+        
                     const apiResp = await $.ajax({
                         method: 'GET',
                         url: dotCMSQueryURL,
                         dataType: 'json'
                     }).promise()
-
+        
                     this.loanProviderSuggestions = apiResp.contentlets;
                 },
                 handlePostcodeHit: async function (cityObj) {
@@ -426,7 +461,7 @@ $(function() {
                         dataType: 'json',
                         url: dotCMSQueryURL
                     }).promise()
-
+        
                     this.formData['2'].addressState = stateApiResp.contentlets[0].stateDescription;
                     this.currSelectedPostcode = cityObj;
                 },
@@ -436,9 +471,8 @@ $(function() {
                 scrollToError: function () {
                     let $errors = $('.wizard-section-' + this.currStep.stepNum).find('.is-invalid, .error-input');
                     if ($errors.length && $errors.first()) {
-                        $("body, html").animate({
-                            scrollTop: $errors.first().offset().top - 10
-                        }, 500)
+                        let offset = $errors.first().offset().top - 10
+                        scrollTo(offset)
                     }
                 },
                 scrollToPosition: function (pos, speed) {
@@ -454,25 +488,26 @@ $(function() {
                     
                     const apiResp = await $.ajax({
                         method: 'POST',
-                        // url: this.baseUrl + '/dotCMS/purchase/buynow',
-                        url: 'https://www.mocky.io/v2/5e7200e33300004f0044c5a1',
+                        url: this.baseUrl + '/dotCMS/purchase/buynow',
+                        // url: 'https://www.mocky.io/v2/5e7200e33300004f0044c5a1',
                         dataType: 'json',
                         data: {
                             action: 'calculatePremium',
-                            memberRelationship: 'Driver', // TODO: CHECK THIS! , seems like motorPlus only will have smtg else
+                            memberRelationship: 'Driver',
                             motorNvic: this.formData['2'].nvic,
-                            motorVehicleLocation: this.formData['1'].motorRegistrationNo,
+                            motorVehicleLocation: this.formData['2'].motorVehicleLocation.vpmsStateCode,
                             motorNxtNcdLevel: this.formData['2'].nxtNCDDiscount,
                             motorAddLegalLiabilityToPassengers: '', // TODO: CHECK THIS!
-                            motorAddLegalLiabilityOfPassengers: '', // TODO: CHECK THIS!
-                            motorAddSpecialPerils: '', // TODO: CHECK THIS
-                            motorAddSRCC: '', // TODO: CHECK THIS
-                            motorAddRiderPA: '', // TODO: CHECK THIS
+                            motorAddLegalLiabilityOfPassengers: this.formData['3'].motorAddLegalLiabilityOfPassengers ? 'Y' : 'N',
+                            motorAddSpecialPerils: this.formData['3'].motorAddSpecialPerils ? 'Y': 'N',
+                            motorAddSRCC: this.formData['3'].motorAddSRCC ? 'Y': 'N',
+                            motorAddRiderPA: this.formData['3'].motorAddRiderPA ? 'Y' : 'N',
+                            allRiderPlan: this.formData['3'].allRiderPlan ? 'Y' : 'N',
                             productCode: this.productCode,
                             partnerCode: this.partnerCode,
                             coverageStartDate: this.formData['2'].nxtNCDEffDt,
                             coverageExpiryDate: this.formData['2'].nxtNCDExpDt,
-                            policyHolderNRIC: this.formData['1'].policyHolderNric, // TODO: CHECK THIS, could be passport
+                            policyHolderNRIC: this.formData['1'].policyHolderNric,
                             policyHolderGender: this.policyHolderGender,
                             policyHolderMalaysian: this.isIdNric ? 'Y' : 'N',
                             policyHolderDateOfBirth: moment(this.policyHolderDob).format('DD/MM/YYYY'),
@@ -492,11 +527,17 @@ $(function() {
                             dpfstatus: this.formData['2'].dpfStatus, // this passed back during NCD checking
                             staffId: this.staffId,
                             staffRelationship: this.staffRelationship,
-                            productName: this.productName
+                            productName: this.productName,
+                            addressState: this.formData['2'].addressStateCode
                         }
-                    }).promise()
-
-                    return apiResp;
+                    })
+        
+                    this.formData['3'] = {
+                        ...this.formData['3'],
+                        ...apiResp
+                    }
+        
+                    return;
                 },
                 formatAsCurrency: function (number) {
                     return number.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
@@ -523,7 +564,7 @@ $(function() {
                         if (['sabah', 'sarawak'].includes(applicantCity)) {
                             region = 'East';
                         }
-
+        
                         this.formData['3'].roadtaxDelRegion = region;
                         this.formData['3'].roadtaxAddressLine1 = this.formData['2'].policyHolderAddressLine1;
                         this.formData['3'].roadtaxAddressLine2 = this.formData['2'].policyHolderAddressLine2;
@@ -536,6 +577,40 @@ $(function() {
                         this.formData['3'].roadtaxPostcode = '';
                         this.formData['3'].roadtaxCity = '';
                     }
+                },
+                cancelEditMotorDetails: function () {
+                    this.formData['4'].motorVehicleLocation = this.formData['2'].motorVehicleLocation;
+                    this.formData['4'].isMotorDetailsEditMode = false;
+                },
+                saveEditMotorDetails: function () {
+                    this.formData['2'].motorVehicleLocation = this.formData['4'].motorVehicleLocation;
+                    this.formData['4'].isMotorDetailsEditMode = false;
+                    this.calculatePremiumAsync()
+                },
+                cancelEditRiderDetails: function () {
+                    this.formData['4'].policyHolderName = this.formData['2'].policyHolderName;
+                    this.formData['4'].policyHolderEmail = this.formData['2'].policyHolderEmail;
+                    this.formData['4'].policyHolderMobileNo = this.formData['2'].policyHolderMobileNo;
+                    this.formData['4'].policyHolderAddressLine1 = this.formData['2'].policyHolderAddressLine1;
+                    this.formData['4'].policyHolderAddressLine2 = this.formData['2'].policyHolderAddressLine2;
+                    this.formData['4'].addressPostcode = this.formData['2'].addressPostcode;
+                    this.formData['4'].addressState = this.formData['2'].addressState;
+                    this.formData['4'].addressStateCode = this.formData['2'].addressStateCode;
+                    this.formData['4'].addressCity = this.formData['2'].addressCity;
+                    this.formData['4'].policyHolderMaritalStatus = this.formData['2'].policyHolderMaritalStatus;
+                    this.formData['4'].policyHolderOccupation = this.formData['2'].policyHolderOccupation;
+                    this.formData['4'].isRiderDetailsEditMode = false;
+                },
+                saveEditRiderDetails: function () {
+                    this.formData['2'].policyHolderName = this.formData['4'].policyHolderName;
+                    this.formData['2'].policyHolderEmail = this.formData['4'].policyHolderEmail;
+                    this.formData['2'].policyHolderMobileNo = this.formData['4'].policyHolderMobileNo;
+                    this.formData['2'].policyHolderAddressLine1 = this.formData['4'].policyHolderAddressLine1;
+                    this.formData['2'].policyHolderAddressLine2 = this.formData['4'].policyHolderAddressLine2;
+                    this.formData['2'].policyHolderMaritalStatus = this.formData['4'].policyHolderMaritalStatus;
+                    this.formData['2'].policyHolderOccupation = this.formData['4'].policyHolderOccupation;
+                    this.formData['4'].isRiderDetailsEditMode = false;
+                    this.calculatePremiumAsync()
                 }
             },
             computed: {
@@ -556,17 +631,23 @@ $(function() {
                 policyHolderDob: function () {
                     const nric = this.formData['1'].policyHolderNric;
                     return extractDOB(nric);
+                },
+                fullAddress: function () {
+                    return `${this.formData['2'].policyHolderAddressLine1}, ${this.formData['2'].policyHolderAddressLine2}, ${this.formData['2'].addressPostcode} ${this.formData['2'].addressCity}, ${this.formData['2'].addressState}`
+                },
+                cardType: function () {
+                    return getCardType(this.formData['5'].ccNo)
                 }
             },
             watch: {
                 "formData.2.addressPostcode": _.debounce(async function (postcode) {
                     console.log(postcode)
                     await this.getPostcodesAsync(postcode)
-
+        
                     if (postcode.length === 5 && this.currSelectedPostcode && this.currSelectedPostcode.postcode != postcode) {
                         this.currSelectedPostcode = null;
                     }
-
+        
                     if (postcode.length === 5 && !this.currSelectedPostcode) {
                         let suggestion = this.postcodeSuggestions.find(s => s.postcode == postcode);
                         if (!suggestion) {
@@ -587,11 +668,15 @@ $(function() {
                 "formData.2.motorLoanProvider": _.debounce(function (name) {
                     this.getLoanProvidersAsync(name)
                 }, 500),
-                "formData.3.motorPlusPlan": function (value) {
-                    if (value === '') {
+                "formData.3.motorPlanType": function (value) {
+                    if (value === 'm3pa') {
+                        this.formData['3'].motorAddRiderPA = true;
                         this.formData['3'].motorAddSRCC = false
                         this.formData['3'].motorAddSpecialPerils = false
+                    } else {
+                        this.formData['3'].motorAddRiderPA = false;
                     }
+                    this.calculatePremiumAsync()
                 },
                 loading: function (value) {
                     if (value) {
@@ -602,7 +687,7 @@ $(function() {
             },
             created: function() {
                 const self = this;
-
+        
                 // Initialization behavior
                 // 1. get underwritten rules
                 // 2. get postcodes
@@ -611,7 +696,7 @@ $(function() {
                 if (this.developmentMode) {
                     apiUrl = 'https://www.mocky.io/v2/5e7492c13000006800a5f4a3'
                 }
-
+        
                 $.ajax({
                     method: 'POST',
                     url: apiUrl,
@@ -626,7 +711,7 @@ $(function() {
                 }).done(function(data) {
                     self.underwrittenRules = data;
                 })
-
+        
                 $.ajax({
                     method: 'GET',
                     url: this.createDotCMSQueryURL('TieRefCountry', {}, true),
@@ -643,7 +728,7 @@ $(function() {
                             'name'
                         )
                 })
-
+        
                 $.ajax({
                     method: 'GET',
                     url: this.createDotCMSQueryURL('TieRefState', {}, true),
@@ -653,14 +738,15 @@ $(function() {
                         data.contentlets.reduce((acc, content) => {
                             acc.push({
                                 name: content.stateDescription,
-                                code: content.stateCode
+                                code: content.stateCode,
+                                vpmsStateCode: content.vpmsStateCode
                             })
                             return acc;
                         }, []),
                         'name'
                     )
                 })
-
+        
                 $.ajax({
                     method: 'GET',
                     url: this.createDotCMSQueryURL('TieFPXBank', {}, true),
@@ -686,10 +772,10 @@ $(function() {
                 this.currStep = this.steps[0]
                 // this.onSubmit()
                 //     .then(() => this.onSubmit())
-                    // .then(() => this.onSubmit())
-                    // .then(() => this.onSubmit())
+                //     .then(() => this.onSubmit())
+                //     .then(() => this.onSubmit())
                 // this.steps[0].showPrescreen = false;
-
+        
                 $('.page-loader').fadeOut()
             }
         })

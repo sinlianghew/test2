@@ -47,23 +47,21 @@
 					<p class="bt2 mb-0">Basic Premium</p>
 					<p class="bt2 mb-0">{{ formatAsCurrency(formData['3'].basePremium) }}</p>
 				</div>
-				
-				<!-- To clarify with client on loading -->
-				<!-- <div class="d-flex justify-content-between" v-if="formData['3'].basePremium">
-					<p class="bt2 mb-0">Loading (100%)</p>
-					<p class="bt2 mb-0"></p>
-				</div> -->
-				<div class="d-flex justify-content-between" v-if="formData['3'].allRiderPlan">
+				<div class="d-flex justify-content-between" v-if="formData['3'].loading && formData['3'].loading > 0">
+					<p class="bt2 mb-0">Loading ({{ formData['3'].loadingPct }}%)</p>
+					<p class="bt2 mb-0">{{ formatAsCurrency(formData['3'].loading) }}</p>
+				</div>
+				<div class="d-flex justify-content-between" v-if="formData['3'].allRiderPlanPremium">
 					<p class="bt2 mb-0">All Riders</p>
 					<p class="bt2 mb-0">{{ formatAsCurrency(formData['3'].allRiderPlanPremium) }}</p>
 				</div>
 				<div class="d-flex justify-content-between">
-					<p class="bt2 mb-0">NCD ({{ formData['2'].nxtNCDDiscount }}%)</p>
+					<p class="bt2 mb-0">NCD ({{ formData['3'].ncdRate }}%)</p>
 					<p class="bt2 mb-0">({{ formatAsCurrency(formData['3'].ncdAmount) }})</p>
 				</div>
 				<div class="d-flex justify-content-between">
 					<p class="bt2 mb-0 font-weight-bold">Total Amount</p>
-					<p class="bt2 mb-0">({{ formatAsCurrency(formData['3'].totalPremium) }})</p>
+					<p class="bt2 mb-0 font-weight-bold">{{ formatAsCurrency(netNCDAmount) }}</p>
 				</div>
 			</div>
 
@@ -71,18 +69,18 @@
 				<div class=" d-flex justify-content-between mb-2">
 					<p class="bt2 mb-0 font-weight-bold">Add-Ons</p>
 				</div>
-				<div class="d-flex justify-content-between mb-2" v-if="formData['3'].motorPlusPlan === ''">
+				<div class="d-flex justify-content-between mb-2" v-if="formData['3'].addRiderPAPremium">
 					<div class="bt2 mb-0 pr-3">
 						<p>Motorcycle 3PA Insurance</p>
 						<p class="pl-3">Rider's Personal Accident (Non-Tariff)</p>
 					</div>
 					<p class="bt2 mb-0">{{ formatAsCurrency(formData['3'].addRiderPAPremium) }}</p>
 				</div>
-				<div class="d-flex justify-content-between mb-2" v-if="formData['3'].motorAddSRCC">
+				<div class="d-flex justify-content-between mb-2" v-if="formData['3'].addSRCCPremium">
 					<p class="bt2 mb-0 pr-3">Strike, Riot and Civil Commotion</p>
 					<p class="bt2 mb-0">{{ formatAsCurrency(formData['3'].addSRCCPremium) }}</p>
 				</div>
-				<div class="d-flex justify-content-between mb-2" v-if="formData['3'].motorAddSpecialPerils">
+				<div class="d-flex justify-content-between mb-2" v-if="formData['3'].addSpecialPerilsPremium">
 					<p class="bt2 mb-0 pr-3">Special Perils</p>
 					<p class="bt2 mb-0">{{ formatAsCurrency(formData['3'].addSpecialPerilsPremium) }}</p>
 				</div>
@@ -99,10 +97,10 @@
 			<div class="bg-p2c px-3 py-4 mb-4 rounded">
 				<div class="d-flex justify-content-between">
 					<p class="bt2 mb-0">Gross Premium</p>
-					<p class="bt2 mb-0">{{ formatAsCurrency(formData['3'].totalPremium) }}</p>
+					<p class="bt2 mb-0">{{ formatAsCurrency(grossPremium) }}</p>
 				</div>
 				<div class="d-flex justify-content-between ">
-					<p class="bt2 mb-0">Rebate ({{ formData['3'].discountAmount / formData['3'].totalPremium * 100 }}%)</p>
+					<p class="bt2 mb-0">Rebate ({{ formData['3'].discountRate }}%)</p>
 					<p class="bt2 mb-0">{{ formatAsCurrency(formData['3'].discountAmount) }}</p>
 				</div>
 

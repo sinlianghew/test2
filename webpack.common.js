@@ -4,7 +4,6 @@ const HtmlWebpackPlugin =               require("html-webpack-plugin")
 const MiniCssExtractPlugin =            require("mini-css-extract-plugin")
 const CssUrlRelativePlugin =            require("css-url-relative-plugin")
 const webpack =                         require("webpack");
-const SVGSpritemapPlugin =              require("svg-spritemap-webpack-plugin");
 const CopyPlugin =                      require("copy-webpack-plugin");
 const MomentLocalesPlugin =             require('moment-locales-webpack-plugin');
 
@@ -27,13 +26,8 @@ module.exports = {
             filename: page.replace(".twig", ".html"),
             inject: true
         })),
-        new SVGSpritemapPlugin("src/spa-assets/icons/**/*.svg", {
-            output: {
-                filename: "spa-assets/icons/icons.svg",
-            }
-        }),
         new MiniCssExtractPlugin({
-            filename: "css/[name].css"
+            filename: "/css/[name].css"
         }),
         new CssUrlRelativePlugin(),
         new webpack.ProvidePlugin({

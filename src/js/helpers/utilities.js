@@ -1,3 +1,4 @@
+import $ from 'jquery'
 const baseUrl = $('input[name=tieBaseUrl]').val() || 'https://takeiteasy.msig.com.my';
 
 /**
@@ -55,7 +56,7 @@ export function extractDOB(nric) {
  * @param {*} isLive
  * @returns {String}
  */
-export function createDotCMSQueryURL (structureName, queryObj, isLive) {
+export function createDotCMSQueryURL(structureName, queryObj, isLive) {
     let endpoint = baseUrl + '/api/content/render/false/type/json/limit/0/query/+structureName:' + structureName;
     endpoint += '%20+(conhost:ceaa0d75-448c-4885-a628-7f0c35d374bd%20conhost:SYSTEM_HOST)';
 
@@ -68,4 +69,75 @@ export function createDotCMSQueryURL (structureName, queryObj, isLive) {
     }
 
     return endpoint + queryString;
+}
+
+/**
+ * Given a credit card number, detect the type of card.
+ * Sample format: 'XXXX XXXX XXXX XXXX'
+ * Returns 'MASTER' or 'VISA' or null
+ * @param {String} creditCardNumber 
+ * @returns {String}
+ */
+export function getCardType(creditCardNumber) {
+    let cardNum = creditCardNumber.trim().replace(/\s/g, '')
+
+    const patterns = {
+        'MASTER': /^5[1-5][0-9]{14}$|^2(?:2(?:2[1-9]|[3-9][0-9])|[3-6][0-9][0-9]|7(?:[01][0-9]|20))[0-9]{12}$/,
+        'VISA': /^4[0-9]{12}(?:[0-9]{3})?$/
+    }
+
+    let cardType = null;
+    Object
+        .keys(patterns)
+        .forEach(key => {
+            if (patterns[key].test(cardNum)) {
+                cardType = key
+            }
+        })
+
+    return cardType;
+}
+
+/**
+ * Validates a credit card number according to the Luhn's algorithm
+ * @param {String} value the credit card number
+ */
+export function checkLuhn(value) {
+    // remove all non digit characters
+    var value = value.replace(/\D/g, '');
+    var sum = 0;
+    var shouldDouble = false;
+    // loop through values starting at the rightmost side
+    for (var i = value.length - 1; i >= 0; i--) {
+        var digit = parseInt(value.charAt(i));
+
+        if (shouldDouble) {
+            if ((digit *= 2) > 9) digit -= 9;
+        }
+
+        sum += digit;
+        shouldDouble = !shouldDouble;
+    }
+    return (sum % 10) == 0;
+}
+
+/**
+ * Native scrollTo with callback
+ * @param offset - offset to scroll to
+ */
+export function scrollTo(offset) {
+    let deferred = $.Deferred()
+    const onScroll = function () {
+        if (window.pageYOffset === offset) {
+            window.removeEventListener('scroll', onScroll)
+            deferred.resolve()
+        }
+    }
+    window.addEventListener('scroll', onScroll)
+    onScroll()
+    window.scrollTo({
+        top: offset,
+        behavior: 'smooth'
+    })
+    return deferred.promise()
 }

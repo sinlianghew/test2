@@ -2,6 +2,7 @@ const path =                        require("path")
 const common =                      require("./webpack.common")
 const merge =                       require("webpack-merge")
 const MiniCssExtractPlugin =        require("mini-css-extract-plugin")
+const SVGSpritemapPlugin =          require("svg-spritemap-webpack-plugin");
 
 
 module.exports = merge(common, {
@@ -93,7 +94,17 @@ module.exports = merge(common, {
                     }
                 ]
             }
-        ]
+        ],   
     },
-    devtool: "source-map"
+    plugins: [
+        new SVGSpritemapPlugin("src/spa-assets/icons/**/*.svg", {
+            output: {
+                filename: "spa-assets/icons/icons.svg",
+            }
+        }),
+    ],
+    devtool: "source-map",
+    devServer: {
+        disableHostCheck: true
+    }
 })

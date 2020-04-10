@@ -1,0 +1,12 @@
+.credit-card-indicator {
+    &.has-card {
+        .icon {
+            filter: saturate(0) brightness(1.2);
+            transition: 0.3s ease;
+
+            &.active {
+                filter: saturate(1) brightness(1);
+            }
+        }
+    }
+}
