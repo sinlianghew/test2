@@ -91,6 +91,7 @@ $(function() {
                         motorAddSpecialPerils: '',
                         motorAddSRCC: '',
                         allRiderPlan: false,
+                        
                         isRenewRoadtax: null,
                         roadtaxCollectionMethod: 'homeOfficeDelivery',
                         roadtaxDelAddrSameAsMotor: false,

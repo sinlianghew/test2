@@ -1041,9 +1041,12 @@
                                             <p class="bt1 mb-2">Mailing Address for your road tax:</p>
                                             <div class="form-group mb-0">
                                                 <validation-provider :rules="{
-                                                    'required': formData['3'].isRenewRoadtax
+                                                    'required': formData['3'].isRenewRoadtax === 'Y'
                                                 }" v-slot="{ errors, failedRules }">
-                                                    <select class="form-control"
+                                                    <select :class="{
+                                                            'form-control': true,
+                                                            'is-invalid': errors.length > 0
+                                                        }"
                                                         :disabled="formData['3'].roadtaxDelAddrSameAsMotor === true"
                                                         v-model="formData['3'].roadtaxDelRegion">
                                                         <option disabled="disabled"
@@ -1055,6 +1058,9 @@
                                                         <option value="East">East Malaysia</option>
                                                         <option value="West"> West Malaysia</option>
                                                     </select>
+                                                    <small class="error-message text-primary font-italic" v-if="errors.length > 0">
+                                                        <span v-if="failedRules.required">* Please select your location</span>
+                                                    </small>
                                                 </validation-provider>
                                             </div>
                                         </div>
@@ -1062,13 +1068,24 @@
                                         <div class="col-md-6"></div>
 
                                         <div class="col-12 col-md-6">
-                                            <div class="form-group mt-2 mb-0">
-                                                <input type="text"
-                                                    class="form-control"
-                                                    placeholder="First Line"
-                                                    v-model="formData['3'].roadtaxAddressLine1"
-                                                    :disabled="formData['3'].roadtaxDelAddrSameAsMotor === true">
-                                            </div>
+                                            <validation-provider v-slot="validator"
+                                                :rules="{
+                                                    'required': formData['3'].isRenewRoadtax === 'Y'
+                                                }">
+                                                <div class="form-group mt-2 mb-0">
+                                                    <input type="text"
+                                                        :class="{
+                                                            'form-control': true,
+                                                            'is-invalid': validator.errors.length > 0
+                                                        }"
+                                                        placeholder="First Line"
+                                                        v-model="formData['3'].roadtaxAddressLine1"
+                                                        :disabled="formData['3'].roadtaxDelAddrSameAsMotor === true">
+                                                    <small class="error-message text-primary font-italic" v-if="validator.errors.length > 0">
+                                                        <span v-if="validator.failedRules.required">* Complete the Address Line 1 field</span>
+                                                    </small>
+                                                </div>
+                                            </validation-provider>
                                         </div>
 
                                         <div class="col-md-6"></div>
@@ -1087,20 +1104,28 @@
 
                                         <!-- TODO: convert this to autocomplete -->
                                         <div class="col-12 col-md-6">
-                                            <div class="form-group variant-icon mt-2 mb-0">
-                                                <div class="input-wrapper">
-                                                    <input id="load"
-                                                        type="text"
-                                                        placeholder="Find Postcode"
-                                                        class="form-control"
-                                                        v-model="formData['3'].roadtaxPostcode"
-                                                        :disabled="formData['3'].roadtaxDelAddrSameAsMotor === true"> 
-                                                    <svg class="icon icon-s mr-2">
-                                                        <use xlink:href="/spa-assets/icons/icons.svg#sprite-search"
-                                                            href="/spa-assets/icons/icons.svg#sprite-search"></use>
-                                                    </svg>
+                                            <validation-provider v-slot="validator"
+                                                :rules="{ 'required': formData['3'].isRenewRoadtax === 'Y' }">
+                                                <div class="form-group variant-icon mt-2 mb-0">
+                                                    <div class="input-wrapper">
+                                                        <input type="text"
+                                                            placeholder="Find Postcode"
+                                                            :class="{
+                                                                'form-control': true,
+                                                                'is-invalid': validator.errors.length > 0
+                                                            }"
+                                                            v-model="formData['3'].roadtaxPostcode"
+                                                            :disabled="formData['3'].roadtaxDelAddrSameAsMotor === true"> 
+                                                        <svg class="icon icon-s mr-2">
+                                                            <use xlink:href="/spa-assets/icons/icons.svg#sprite-search"
+                                                                href="/spa-assets/icons/icons.svg#sprite-search"></use>
+                                                        </svg>
+                                                    </div>
+                                                    <small class="error-message text-primary font-italic" v-if="validator.errors.length > 0">
+                                                        <span v-if="validator.failedRules.required">* Complete the Postcode field.</span>
+                                                    </small>
                                                 </div>
-                                            </div>
+                                            </validation-provider>
                                         </div>
 
                                         <div class="col-md-6"></div>
@@ -1130,7 +1155,7 @@
 
                                 <div class="pt-4 wizard-navigation d-none d-md-flex">
                                     <a @click.prevent="goToPrevStep()" href="#" role="button" class="btn btn-default btn-outline-primary mr-4">Back</a>
-                                    <a @click.prevent="onSubmit()" href="#" role="button" class="btn btn-default btn-primary">Continue</a>
+                                    <a @click.prevent="handleSubmit(onSubmit).then(function() { scrollToError() })" href="#" role="button" class="btn btn-default btn-primary">Continue</a>
                                 </div>
                             </div>
 
@@ -1143,7 +1168,7 @@
                         </div>
                     </div>
                     <div class="container pt-4 wizard-navigation d-md-none">
-                        <a @click.prevent="onSubmit()" href="#" role="button" class="btn btn-default btn-primary mb-3 mb-md-0">Continue</a>
+                        <a @click.prevent="handleSubmit(onSubmit).then(function() { scrollToError() })" href="#" role="button" class="btn btn-default btn-primary mb-3 mb-md-0">Continue</a>
                         <a @click.prevent="goToPrevStep()" href="#" role="button" class="btn btn-default btn-outline-primary ">Back</a>
                     </div>
                 </fieldset>
