@@ -32,8 +32,5 @@ export default {
             }
             return number.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
         }
-    },
-    mounted: function () {
-        console.log(this)
     }
 }

@@ -8,7 +8,10 @@
     <input type="hidden" name="tieBaseUrl" value="https://takeiteasy.msig.com.my">
 
     <!-- Values from Server Side -->
+    <input type="hidden" name="formula" value="motor">
     <input type="hidden" name="partnerCode" value="msigonline">
+    <input type="hidden" name="productCode" value="MCY">
+    <input type="hidden" name="productName" value="Motorcycle">
     <input type="hidden" name="staffId" value="">
     <input type="hidden" name="staffRelationship" value="">
     <input type="hidden" name="branchCode" value="">
@@ -228,10 +231,9 @@
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label class="bt1">Motorcycle Model:</label>
-                                                <input type="text" disabled v-model="formData['2'].family" class="form-control">
+                                                <input type="text" disabled :value="formData['2'].family" class="form-control">
                                             </div>
                                         </div>
-
 
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
@@ -241,10 +243,19 @@
                                         </div>
 
                                         <div class="col-12 col-md-6">
-                                            <div class="form-group">
-                                                <label class="bt1">Variant:</label>
-                                                <input type="text" disabled v-model="formData['2'].variant" class="form-control">
-                                            </div>
+                                            <validation-provider v-slot="validator">
+                                                <div class="form-group">
+                                                    <label class="bt1">Variant:</label>
+                                                    <select :class="{ 'form-control': true, 'is-invalid': validator.errors.length > 0 }" v-model="formData['2'].motorModel" @change="handleMotorModelChanged">
+                                                        <option v-for="model in allModelVariants" :value="model">
+                                                            {{ model.variant }} {{ model.style }} {{ model.engine }} {{ model.seat }} SEAT {{ model.transmission }}
+                                                        </option>
+                                                    </select>
+                                                    <small class="error-message text-primary font-italic" v-if="validator.failedRules.required">
+                                                        * Complete the Motorcycle Location field.
+                                                    </small>
+                                                </div>
+                                            </validation-provider>
                                         </div>
 
                                         <div class="col-12 col-md-6">
@@ -279,7 +290,15 @@
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label class="bt1">Cubic Capacity:</label>
-                                                <input type="text" disabled v-model="formData['2'].motorCc" class="form-control">
+                                                <select class="form-control" 
+                                                    v-model="formData['2'].motorCc"
+                                                    @change="handleCcChanged">
+                                                    <option v-for="ccVariant in allCcVariants" 
+                                                        v-bind:key="allCcVariants.indexOf(ccVariant)" 
+                                                        :value="ccVariant">
+                                                        {{ ccVariant }}
+                                                    </option>
+                                                </select>
                                             </div>
                                         </div>
 
@@ -358,7 +377,17 @@
                                         <div class="col-12 col-md-6">
                                             <validation-provider rules="required|email" v-slot="{ errors, failedRules }">
                                                 <div class="form-group">
-                                                    <label class="bt1">Email:</label>
+                                                    <label class="bt1 d-flex">
+                                                        Email: 
+                                                        <span>
+                                                            <div class="ml-2 btn-tooltip"
+                                                                data-toggle="tooltip"
+                                                                data-placement="right"
+                                                                title="Email address provided should be the insured's email address. Future email communications regarding this policy will be sent to the email submitted. For policy renewal, kindly use the email address that is tied to your existing policy.">
+                                                                ?
+                                                            </div>
+                                                        </span>
+                                                    </label>
                                                     <input type="text" 
                                                         :class="{
                                                             'form-control': true,
@@ -575,16 +604,20 @@
                                     <div class="selection-infobox-group row motorcycle-selection">
                                         <div class="col-12 ">
                                             <div class="d-lg-flex">
-                                                <div class="selection-infobox mb-4 mt-md-0 mb-lg-0 mr-lg-3">
+
+                                                <div class="selection-infobox mb-4 mt-md-0 mb-lg-0 mr-lg-3 has-recommended">
                                                     <label class="d-block">
-                                                        <strong class="flag-recommended text-primary text-center d-block mb-2 invisible">
+                                                        <strong class="flag-recommended text-center d-block py-2">
                                                             <svg class="icon">
                                                                 <use xlink:href="/spa-assets/icons/icons.svg#sprite-star"
                                                                     href="/spa-assets/icons/icons.svg#sprite-star"></use>
                                                             </svg>
-                                                            <span></span>
+                                                            <span>Recommended</span>
                                                         </strong>
-                                                        <input @change="initializeTooltips" type="radio" v-model="formData['3'].motorPlanType" value="comprehensive" />
+                                                        <input @change="initializeTooltips"
+                                                            type="radio" 
+                                                            v-model="formData['3'].motorPlanType" 
+                                                            value="comprehensive" />
                                                         <div class="box overflow-hidden">
                                                             <div class="header-match-height">
                                                                 <div class="box--header bg-p2 text-white p-3">
@@ -599,72 +632,47 @@
                                                                 </div>
                                                             </div>
                                                             <div class="box--body px-3 pt-0 pb-3">
-
-
                                                                 <ul class="list variant-icon mb-0 ">
 
-                                                                    <li
-                                                                        class="mb-2 row-match-height pl-lg-0 text-lg-center">
-
+                                                                    <li class="mb-2 row-match-height pl-lg-0 text-lg-center">
                                                                         <div class="list-icon">
                                                                             <svg class="icon icon-s">
                                                                                 <use xlink:href="/spa-assets/icons/icons.svg#sprite-tick-mark"
                                                                                     href="/spa-assets/icons/icons.svg#sprite-tick-mark">
                                                                                 </use>
                                                                             </svg>
-
-
                                                                         </div>
-                                                                        <div
-                                                                            class="list-content d-flex justify-content-between d-lg-block w-100 text-left ml-md-4">
-                                                                            <span class="bold ">Comprehensive Motorcycle
-                                                                                Insurance</span>
+                                                                        <div class="list-content d-flex justify-content-between d-lg-block w-100 text-left ml-md-4">
+                                                                            <span class="bold ">Third party cover</span>
                                                                         </div>
-
                                                                     </li>
 
-                                                                    <li
-                                                                        class="mb-2 row-match-height pl-lg-0 text-lg-center">
-
+                                                                    <li class="mb-2 row-match-height pl-lg-0 text-lg-center">
                                                                         <div class="list-icon">
                                                                             <svg class="icon icon-s">
                                                                                 <use xlink:href="/spa-assets/icons/icons.svg#sprite-tick-mark"
                                                                                     href="/spa-assets/icons/icons.svg#sprite-tick-mark">
                                                                                 </use>
                                                                             </svg>
-
-
                                                                         </div>
-                                                                        <div
-                                                                            class="list-content d-flex justify-content-between d-lg-block w-100 text-left ml-md-4">
-                                                                            <span class="bold ">Loss/damage to your
-                                                                                motorcycle</span>
+                                                                        <div class="list-content d-flex justify-content-between d-lg-block w-100 text-left ml-md-4">
+                                                                            <span class="bold">Accidental Fire &amp; Theft</span>
                                                                         </div>
-
                                                                     </li>
 
-                                                                    <li
-                                                                        class="mb-2 row-match-height pl-lg-0 text-lg-center">
-
+                                                                    <li class="mb-2 row-match-height pl-lg-0 text-lg-center">
                                                                         <div class="list-icon">
                                                                             <svg class="icon icon-s">
                                                                                 <use xlink:href="/spa-assets/icons/icons.svg#sprite-tick-mark"
                                                                                     href="/spa-assets/icons/icons.svg#sprite-tick-mark">
                                                                                 </use>
                                                                             </svg>
-
-
                                                                         </div>
-                                                                        <div
-                                                                            class="list-content d-flex justify-content-between d-lg-block w-100 text-left ml-md-4">
-                                                                            <span class="bold ">Choose your own
-                                                                                add-on</span>
+                                                                        <div class="list-content d-flex justify-content-between d-lg-block w-100 text-left ml-md-4">
+                                                                            <span class="bold ">Loss or damage to your motorcycle</span>
                                                                         </div>
-
                                                                     </li>
-
                                                                 </ul>
-
 
                                                                 <div class="text-center py-2">
                                                                     <div class="custom-rounded-checked">
@@ -679,9 +687,10 @@
                                                         </div>
                                                     </label>
                                                 </div>
+
                                                 <div class="selection-infobox mb-lg-0 mr-lg-3">
                                                     <label class="d-block">
-                                                        <strong class="flag-recommended text-primary text-center d-block mb-2 invisible">
+                                                        <strong class="flag-recommended text-primary text-center d-block py-2 invisible">
                                                             <svg class="icon">
                                                                 <use xlink:href="/spa-assets/icons/icons.svg#sprite-star"
                                                                     href="/spa-assets/icons/icons.svg#sprite-star"></use>
@@ -692,21 +701,14 @@
                                                         <div class="box overflow-hidden">
                                                             <div class="header-match-height">
                                                                 <div class="box--header bg-p2 text-white p-3">
-
-                                                                    <h3 class="m-0 py-2 mt-1">Motorcycle 3PA Insurance
-                                                                    </h3>
-
+                                                                    <h3 class="m-0 py-2 mt-1">Motorcycle 3PA Insurance</h3>
                                                                 </div>
                                                                 <div class="mt-4 mb-3">
-
                                                                     <svg class="icon icon-7xl ">
                                                                         <use xlink:href="/spa-assets/icons/icons.svg#sprite-motorcycle-bang"
                                                                             href="/spa-assets/icons/icons.svg#sprite-motorcycle-bang">
                                                                         </use>
                                                                     </svg>
-
-
-
                                                                 </div>
                                                             </div>
                                                             <div class="box--body px-3 pt-0 pb-3">
@@ -714,8 +716,7 @@
 
                                                                 <ul class="list variant-icon mb-0 ">
 
-                                                                    <li
-                                                                        class="mb-2 row-match-height pl-lg-0 text-lg-center">
+                                                                    <li class="mb-2 row-match-height pl-lg-0 text-lg-center">
 
                                                                         <div class="list-icon">
                                                                             <svg class="icon icon-s">
@@ -723,59 +724,39 @@
                                                                                     href="/spa-assets/icons/icons.svg#sprite-tick-mark">
                                                                                 </use>
                                                                             </svg>
-
-
                                                                         </div>
-                                                                        <div
-                                                                            class="list-content d-flex justify-content-between d-lg-block w-100 text-left ml-md-4">
-                                                                            <span class="bold ">Third party bodily
-                                                                                injury </span>
+                                                                        <div class="list-content d-flex justify-content-between d-lg-block w-100 text-left ml-md-4">
+                                                                            <span class="bold ">Third party cover</span>
                                                                         </div>
 
                                                                     </li>
 
-                                                                    <li
-                                                                        class="mb-2 row-match-height pl-lg-0 text-lg-center">
-
+                                                                    <li class="mb-2 row-match-height pl-lg-0 text-lg-center">
                                                                         <div class="list-icon">
                                                                             <svg class="icon icon-s">
                                                                                 <use xlink:href="/spa-assets/icons/icons.svg#sprite-tick-mark"
                                                                                     href="/spa-assets/icons/icons.svg#sprite-tick-mark">
                                                                                 </use>
                                                                             </svg>
-
-
                                                                         </div>
-                                                                        <div
-                                                                            class="list-content d-flex justify-content-between d-lg-block w-100 text-left ml-md-4">
-                                                                            <span class="bold ">Third party property
-                                                                                loss or damage</span>
+                                                                        <div class="list-content d-flex justify-content-between d-lg-block w-100 text-left ml-md-4">
+                                                                            <span class="bold">Personal accident cover for policyholder </span>
                                                                         </div>
-
                                                                     </li>
 
-                                                                    <li
-                                                                        class="mb-2 row-match-height pl-lg-0 text-lg-center">
-
+                                                                    <li class="mb-2 row-match-height pl-lg-0 text-lg-center">
                                                                         <div class="list-icon">
                                                                             <svg class="icon icon-s">
                                                                                 <use xlink:href="/spa-assets/icons/icons.svg#sprite-tick-mark"
                                                                                     href="/spa-assets/icons/icons.svg#sprite-tick-mark">
                                                                                 </use>
                                                                             </svg>
-
-
                                                                         </div>
-                                                                        <div
-                                                                            class="list-content d-flex justify-content-between d-lg-block w-100 text-left ml-md-4">
-                                                                            <span class='bold'>Rider's Personal Accident
-                                                                                (Non-Tariff)</span>
+                                                                        <div class="list-content d-flex justify-content-between d-lg-block w-100 text-left ml-md-4">
+                                                                            <span class='bold'>Personal accident cover for authorised riders if All Riders cover is purchased</span>
                                                                         </div>
-
                                                                     </li>
-
                                                                 </ul>
-
 
                                                                 <div class="text-center py-2">
                                                                     <div class="custom-rounded-checked">
@@ -790,6 +771,7 @@
                                                         </div>
                                                     </label>
                                                 </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -800,20 +782,20 @@
                                         <div class="d-flex mt-5">
                                             <h2 class="p2 mb-0">Pre-Bundled Add-On</h2>
                                         </div>
-                                        <div class="checkbox-list  mb-5 mt-4 ">
-                                            <div class="d-flex align-items-baseline">
+                                        <div class="checkbox-list mb-5 mt-4">
+                                            <div class="d-flex align-items-center">
                                                 <span>
                                                     <svg class="icon icon-s tick-mark">
                                                         <use xlink:href="/spa-assets/icons/icons.svg#sprite-tick-mark"
                                                             href="/spa-assets/icons/icons.svg#sprite-tick-mark"></use>
                                                     </svg>
                                                 </span>
-                                                <p class="bt2 ml-3 bold">Rider’s Personal Accident (Non-Tariff)</p>
+                                                <p class="bt2 ml-3 mb-0 bold">Rider’s Personal Accident (Non-Tariff)</p>
                                                 <span>
                                                     <div class="ml-2 btn-tooltip"
                                                         data-toggle="tooltip"
                                                         data-placement="right"
-                                                        title="Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa, necessitatibus.">
+                                                        title="Get covered against death or permanent disablement resulting from a road accident whilst using the insured motorcycle. In the event of death of the policyholder or authorised rider from an accident, we will pay a bereavement allowance.">
                                                         ?
                                                     </div>
                                                 </span>
@@ -824,7 +806,7 @@
                                     <div class="check-list-container">
                                         <div class="d-flex mt-5 mb-4">
                                             <h2 class="p2">Choose More Optional Add-On</h2>
-                                        </div>
+                                        </div> 
 
                                         <div class="checkbox-list" v-if="formData['3'].motorPlanType === 'comprehensive'">
                                             <div class="d-flex align-items-md-center">
@@ -834,7 +816,7 @@
                                                         v-model="formData['3'].motorAddRiderPA"
                                                         class="form-check-input"
                                                         @change="calculatePremiumAsync">
-                                                    <label for="motorAddRiderPA" class="form-check-label bt2">
+                                                    <label for="motorAddRiderPA" class="form-check-label bt2 pr-0">
                                                         Rider's Personal Accident (Non-Tariff)
                                                     </label>
                                                     <svg class="icon icon-m tick-mark">
@@ -845,7 +827,7 @@
                                                 <span>
                                                     <div class="ml-2 btn-tooltip" data-toggle="tooltip"
                                                         data-placement="right"
-                                                        title="Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa, necessitatibus.">
+                                                        title="Get covered against death or permanent disablement resulting from a road accident whilst using the insured motorcycle. In the event of death of the policyholder or authorised rider from an accident, we will pay a bereavement allowance.">
                                                         ?
                                                     </div>
                                                 </span>
@@ -860,7 +842,7 @@
                                                         v-model="formData['3'].allRiderPlan"
                                                         class="form-check-input"
                                                         @change="calculatePremiumAsync">
-                                                    <label for="allRiderPlan" class="form-check-label bt2">
+                                                    <label for="allRiderPlan" class="form-check-label bt2 pr-0">
                                                         All Riders
                                                     </label>
                                                     <svg class="icon icon-m tick-mark">
@@ -871,7 +853,7 @@
                                                 <span>
                                                     <div class="ml-2 btn-tooltip" data-toggle="tooltip"
                                                         data-placement="right"
-                                                        title="Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa, necessitatibus.">
+                                                        title="Get covered against accidents that happen when your motorcycle is being used by a licensed rider who has your permission to use your motorcycle.">
                                                         ?
                                                     </div>
                                                 </span>
@@ -886,7 +868,7 @@
 
                                         <div class="checkbox-list my-4">
                                             <div :class="{
-                                                'd-flex align-items-md-baseline': true,
+                                                'd-flex align-items-md-center': true,
                                                 'disabled-check': formData['3'].motorPlanType === 'm3pa'
                                             }">
                                                 <div class="form-check">
@@ -897,7 +879,7 @@
                                                         :disabled="formData['3'].motorPlanType === 'm3pa'"
                                                          @change="calculatePremiumAsync"
                                                         class="form-check-input">
-                                                    <label for="riot" class="form-check-label bt2">
+                                                    <label for="riot" class="form-check-label bt2 pr-0">
                                                         Strike, Riot and Civil Commotion
                                                     </label>
                                                     <svg class="icon icon-m tick-mark">
@@ -908,7 +890,7 @@
                                                 <span>
                                                     <div class="ml-2 btn-tooltip" data-toggle="tooltip"
                                                         data-placement="right"
-                                                        title="Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa, necessitatibus.">
+                                                        title="Covers your motorcycle against damage caused by strike, riot and civil commotion.">
                                                         ?
                                                     </div>
                                                 </span>
@@ -917,7 +899,7 @@
 
                                         <div class="checkbox-list my-4">
                                             <div :class="{
-                                                'd-flex align-items-md-baseline': true,
+                                                'd-flex align-items-md-center': true,
                                                 'disabled-check': formData['3'].motorPlanType === 'm3pa'
                                             }">
                                                 <div class="form-check">
@@ -928,7 +910,7 @@
                                                         :disabled="formData['3'].motorPlanType === 'm3pa'"
                                                         class="form-check-input"
                                                         @change="calculatePremiumAsync">
-                                                    <label for="motorAddSpecialPerils" class="form-check-label bt2">
+                                                    <label for="motorAddSpecialPerils" class="form-check-label bt2 pr-0">
                                                         Special Perils
                                                     </label>
                                                     <svg class="icon icon-m tick-mark">
@@ -939,7 +921,7 @@
                                                 <span>
                                                     <div class="ml-2 btn-tooltip" data-toggle="tooltip"
                                                         data-placement="right"
-                                                        title="Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa, necessitatibus.">
+                                                        title="We cover the cost to repair your motorcycle if it gets damaged by flood, storm, landslide, landslip or other covulsion of nature.">
                                                         ?
                                                     </div>
                                                 </span>
@@ -947,7 +929,7 @@
                                         </div>
 
                                         <div class="checkbox-list my-4">
-                                            <div class="d-flex align-items-md-baseline">
+                                            <div class="d-flex align-items-md-center">
                                                 <div class="form-check">
                                                     <input type="checkbox"
                                                         name="motorAddLegalLiabilityOfPassengers"
@@ -955,7 +937,7 @@
                                                         v-model="formData['3'].motorAddLegalLiabilityOfPassengers"
                                                         class="form-check-input"
                                                         @change="calculatePremiumAsync">
-                                                    <label for="motorAddLegalLiabilityOfPassengers" class="form-check-label bt2">
+                                                    <label for="motorAddLegalLiabilityOfPassengers" class="form-check-label bt2 pr-0">
                                                         Legal Liability to Pillion
                                                     </label>
                                                     <svg class="icon icon-m tick-mark">
@@ -966,7 +948,7 @@
                                                 <span>
                                                     <div class="ml-2 btn-tooltip" data-toggle="tooltip"
                                                         data-placement="right"
-                                                        title="Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa, necessitatibus.">
+                                                        title="Get covered against legal liability that your pillion might seek against you if you get into an accident.">
                                                         ?
                                                     </div>
                                                 </span>
@@ -977,7 +959,7 @@
                                 </div>
 
                                 <!-- Roadtax Form -->
-                                <div class="bg-w py-5 px-4 mb-4">
+                                <div class="bg-w py-5 px-4 mb-4" v-if="false">
                                     <div class="d-flex">
                                         <h2 class="p2 mb-0">Renew Road Tax?</h2>
                                     </div>
@@ -1617,7 +1599,7 @@
                                 class="form-check-input"
                                 v-model="formData['4'].tncAgreement">
                             <label for="m_tncAgreement" class="form-check-label pr-md-5">
-                                By ticking this box, I hereby acknowledge that I have read the <a class="underline" href="#">Product Disclosure Sheet</a> and agree to the <a href="#" class="underline">Terms and Conditions</a>.
+                                By ticking this box, I hereby acknowledge that I have read the <a class="underline" href="/msigonline/resource/MSIG%20Motorcycle%20Insurance%20PDS%20(Rebate).pdf">Product Disclosure Sheet</a> and agree to the <a href="#" class="underline">Terms and Conditions</a>.
                             </label>
                             <svg class="icon icon-m tick-mark">
                                 <use xlink:href="/spa-assets/icons/icons.svg#sprite-tick-mark"
@@ -1654,7 +1636,7 @@
                                                     </strong>
                                                     <input type="radio" 
                                                         name="choosePayment" 
-                                                        value="onlineBanking"
+                                                        value="fpxPaymentGateway"
                                                         v-model="formData['5'].paymentMethod" />
                                                     <div class="box overflow-hidden">
                                                         <div class="header-match-height">
@@ -1697,7 +1679,7 @@
                                                     </strong>
                                                     <input type="radio"
                                                         name="choosePayment"
-                                                        value="creditDebit"
+                                                        value="abmbGateway"
                                                         @change="initializeTooltips"
                                                         v-model="formData['5'].paymentMethod" />
                                                     <div class="box overflow-hidden">
@@ -1740,7 +1722,7 @@
                                                     </strong>
                                                     <input type="radio"
                                                         name="choosePayment"
-                                                        value="ewallet"
+                                                        value="ewalletPaymentMethod"
                                                         v-model="formData['5'].paymentMethod" />
                                                     <div class="box overflow-hidden">
                                                         <div class="header-match-height">
@@ -1773,9 +1755,9 @@
                                     </div>
 
                                     <!-- FPX Banking -->
-                                    <div v-show="formData['5'].paymentMethod === 'onlineBanking'">
+                                    <div v-show="formData['5'].paymentMethod === 'fpxPaymentGateway'">
                                         <p class="bt1 mb-2">Bank:</p>
-                                        <validation-provider :rules="formData['5'].paymentMethod === 'onlineBanking' ? 'required' : ''"
+                                        <validation-provider :rules="formData['5'].paymentMethod === 'fpxPaymentGateway' ? 'required' : ''"
                                             v-slot="{ errors, failedRules }">
                                             <div class="form-group">
                                                 <select v-model="formData['5'].bankId"
@@ -1786,7 +1768,7 @@
                                                     <option disabled hidden selected value="">Select a Bank</option>
                                                     <option v-for="(bank, index) in banks" v-bind:key="index"
                                                         :value="bank.bankId">
-                                                        {{ bank.bankDisplayName }}
+                                                        {{ bank.bankName }}
                                                     </option>
                                                 </select>
                                                 <small class="error-message text-primary font-italic" v-if="failedRules.required">
@@ -1803,7 +1785,7 @@
 
                                         <div class="row">
                                             <div class="col-12 col-md-6">
-                                                <validation-provider :rules="formData['5'].paymentMethod === 'onlineBanking' ? 'required|email' : ''"
+                                                <validation-provider :rules="formData['5'].paymentMethod === 'fpxPaymentGateway' ? 'required|email' : ''"
                                                     v-slot="{ errors, failedRules }">
                                                     <div class="form-group">
                                                         <input type="email" 
@@ -1824,7 +1806,7 @@
                                     </div>
 
                                     <!-- card/debit card -->
-                                    <div v-show="formData['5'].paymentMethod === 'creditDebit'">
+                                    <div v-show="formData['5'].paymentMethod === 'abmbGateway'">
                                         <div class="credit-card-indicator d-flex align-items-center mb-3"
                                             :class="{
                                                 'has-card': cardType
@@ -1846,7 +1828,7 @@
                                         <div class="row">
                                             <div class="col-12 col-md-7">
                                                 <validation-provider 
-                                                    :rules="formData['5'].paymentMethod === 'creditDebit' ? 'required|isCreditCardValid' : ''" 
+                                                    :rules="formData['5'].paymentMethod === 'abmbGateway' ? 'required|isCreditCardValid' : ''" 
                                                     v-slot="{ errors, failedRules }">
                                                     <div class="form-group">
                                                         <label class="bt1">Card Number:</label>
@@ -1868,7 +1850,7 @@
                                                 </validation-provider>
                                             </div>
                                             <div class="col-12 col-md-7">
-                                                <validation-provider :rules="formData['5'].paymentMethod === 'creditDebit' ? 'required' : ''" v-slot="{ errors, failedRules }">
+                                                <validation-provider :rules="formData['5'].paymentMethod === 'abmbGateway' ? 'required' : ''" v-slot="{ errors, failedRules }">
                                                     <div class="form-group">
                                                         <label class="bt1">Name on Card:</label>
                                                         <input type="text"
@@ -1890,7 +1872,7 @@
                                             <div class="col-12 col-md-10">
                                                 <div class="form-row">
                                                     <validation-provider 
-                                                        :rules="formData['5'].paymentMethod === 'creditDebit' ? 'required|isCreditCardExpiryValid' : ''"
+                                                        :rules="formData['5'].paymentMethod === 'abmbGateway' ? 'required|isCreditCardExpiryValid' : ''"
                                                         v-slot="{ errors, failedRules }" slim>
                                                         <div class="col-3 form-group">
                                                             <label class="bt1">Expiration Date:</label>
@@ -1912,7 +1894,7 @@
                                                         </div>
                                                     </validation-provider>
                                                     <validation-provider
-                                                        :rules="formData['5'].paymentMethod === 'creditDebit' ? 'required|integer|length:3' : ''"
+                                                        :rules="formData['5'].paymentMethod === 'abmbGateway' ? 'required|integer|length:3' : ''"
                                                         v-slot="{ errors, failedRules }" slim>
                                                         <div class="form-group col-1">
                                                             <label class="bt1">CVV
@@ -1949,10 +1931,10 @@
                                     </div>
 
                                     <!-- E-Wallet -->
-                                    <div v-show="formData['5'].paymentMethod === 'ewallet'">
+                                    <div v-show="formData['5'].paymentMethod === 'ewalletPaymentMethod'">
                                         <p class="bt1">Select Your Preferred E-Wallet:</p>
                                         <validation-provider
-                                            :rules="formData['5'].paymentMethod === 'ewallet' ? 'required' : ''"
+                                            :rules="formData['5'].paymentMethod === 'ewalletPaymentMethod' ? 'required' : ''"
                                             v-slot="validator"
                                             slim>
                                             <div>
@@ -1960,9 +1942,9 @@
                                                     <div class="list-item">
                                                         <input 
                                                             type="radio"
-                                                            name="bank" 
+                                                            name="ewalletVendor" 
                                                             id="radEWallet1"
-                                                            value="boost"
+                                                            value="boostPaymentGateway"
                                                             v-model="formData['5'].ewalletVendor"
                                                             :class="validator.errors.length > 0 ? 'is-invalid' : ''">
                                                         <label for="radEWallet1">
@@ -1983,7 +1965,7 @@
                                     </div>
                                 </div>
 
-                                <div class="d-none d-md-block" v-if="formData['5'].paymentMethod === 'onlineBanking'">
+                                <div class="d-none d-md-block" v-if="formData['5'].paymentMethod === 'fpxPaymentGateway'">
                                     <p class="bt2">By clicking <strong>"Pay Now"</strong> button, you agree to FPX's
                                         <a href="#" target="_blank" class="underline">Terms & Conditions</a>.
                                     </p>
@@ -1991,7 +1973,7 @@
                                 
                                 <div class="wizard-navigation d-none d-md-flex pt-4">
                                     <a @click.prevent="goToPrevStep()" href="#" role="button" class="btn btn-default btn-outline-primary mr-4">Back</a>
-                                    <a @click.prevent="handleSubmit(onSubmit).then(function() { scrollToError() })" href="/payment-completed.html" role="button" class="btn btn-default btn-primary">Pay Now</a>
+                                    <button @click.prevent="handleSubmit(onSubmit).then(function() { scrollToError() })" role="button" class="btn btn-default btn-primary">Pay Now</button>
                                 </div>
                             </div>
 
@@ -2004,7 +1986,7 @@
 
                             <div class="container pt-4 wizard-navigation d-md-none">
                                 <a @click.prevent="goToPrevStep()" href="#" role="button" class="btn btn-default btn-outline-primary mb-3">Back</a>
-                                <a href="#" role="button" class="btn btn-default btn-primary">Pay Now</a>
+                                <button @click.prevent="handleSubmit(onSubmit).then(function() { scrollToError() })" role="button" class="btn btn-default btn-primary">Pay Now</button>
                             </div>
                         </div>
                     </div>
@@ -2036,31 +2018,46 @@
     </div>
     <!-- Error message section -->
 
-    <!--
-    <div class="py-5 bg-p2d">
-        <div class="container">
-            <div class="px-3">
-                <div class="form-check">
-                    <input type="checkbox"
-                        name="devMode"
-                        id="devMode"
-                        class="form-check-input"
-                        v-model="developmentMode">
-                    <label for="devMode" class="form-check-label">
-                        Development Mode
-                    </label>
-                    <svg class="icon icon-m tick-mark">
-                        <use xlink:href="/spa-assets/icons/icons.svg#sprite-tick-mark"
-                            href="/spa-assets/icons/icons.svg#sprite-tick-mark"></use>
-                    </svg>
-                    <div class="invalid-feedback font-italic d-block pl-2 ml-1">
-                        This disables checking NCD error codes and uses mock APIs.
+    <form action="/dotCMS/purchase/paynow" id="thePaymentForm" name="paymentForm" method="post" novalidate class="d-none">
+        <input name="partnerCode" type="hidden" v-model="partnerCode">
+        <input name="productCode" type="hidden" v-model="productCode">
+        <input name="productName" type="hidden" v-model="productName">
+        <input name="purchaseId" type="hidden">
+        <input name="formula" type="hidden" v-model="formula">
+        <input name="paymentMethod" type="hidden" v-model="formData['5'].paymentMethod">
+        <input name="ccNo" type="hidden" v-model="formData['5'].ccNo">
+        <input name="cardHolderName" type="hidden" v-model="formData['5'].cardHolderName">
+        <input name="expiry" type="hidden" v-model="formData['5'].expiry">
+        <input name="cvv" type="hidden" v-model="formData['5'].cvv">
+        <input name="wallet" type="hidden" v-model="formData['5'].ewalletVendor">
+        <input name="bankId" type="hidden" v-model="formData['5'].bankId">
+        <input name="fpxEmail" type="hidden" v-model="formData['5'].fpxEmail">
+    </form>
+
+    <div id="session-modal" class="modal fade variant-msig" aria-hidden="true">
+        <div class="modal-dialog partial-screen-modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-t2">
+                    <h6 class="w text-center modal-title">Information</h6>
+                    <button class="modal-header-btn button-icon btn-close" data-dismiss="modal" @click="wishToRestoreSession = false">
+                        <svg class="icon icon-s">
+                            <use xlink:href="spa-assets/icons/icons.svg#sprite-close-popup" href="spa-assets/icons/icons.svg#sprite-close-popup"></use>
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal-container padding-top-3xl padding-bottom-l">
+                    <div class="px-3 py-5 content-container">
+                        <p class="bt1 text-center">Would you like to restore your previous session?</p>
+                        <div class="d-flex flex-column flex-md-row align-items-center justify-content-md-center">
+                            <button class="btn btn-primary mr-3" data-dismiss="modal" @click="wishToRestoreSession = true">Yes</button>
+                            <button class="btn btn-secondary" data-dismiss="modal" @click="wishToRestoreSession = false">No</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    -->
+
 </div>
 {% endverbatim %}
 
@@ -2076,5 +2073,5 @@
         <div class="px-3 py-5 content-container"></div>
     {% endblock %}
 {% endembed %}
-    
+
 {% endblock %}

@@ -32,11 +32,7 @@
                 .custom-rounded-checked .icon {
                     opacity: 1;
                 }
-
-
             }
-
-
         }
     }
 
@@ -55,8 +51,13 @@
         display: inline-block;
         text-align: center;
         cursor: pointer;
-        position: relative;
+        position: relative;   
+    }
 
+    label{ 
+        transition: 250ms ease;
+        will-change: transform;
+        
         &:active {
             transform: translateY(10px);
         }
@@ -96,8 +97,17 @@
 .motorcycle-selection {
 
     .flag-recommended {
-        display: none!important;
-        
+        color: #fff;
+        background-color: $p1;
+        border-top-left-radius: .625rem;
+        border-top-right-radius: .625rem;
+    }
+
+    .has-recommended {
+        .box {
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
     }
 
 

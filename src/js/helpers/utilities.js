@@ -44,7 +44,6 @@ export function extractDOB(nric) {
         }
     }
 
-    console.log(year, month, date)
     return new Date(ageYearPrefix + year, month - 1, date);
 }
 
@@ -126,18 +125,18 @@ export function checkLuhn(value) {
  * @param offset - offset to scroll to
  */
 export function scrollTo(offset) {
-    let deferred = $.Deferred()
-    const onScroll = function () {
-        if (window.pageYOffset === offset) {
-            window.removeEventListener('scroll', onScroll)
-            deferred.resolve()
+    return new Promise((resolve, reject) => {
+        const onScroll = function () {
+            if (window.pageYOffset <= offset + 1) {
+                resolve()
+                window.removeEventListener('scroll', onScroll)
+            }
         }
-    }
-    window.addEventListener('scroll', onScroll)
-    onScroll()
-    window.scrollTo({
-        top: offset,
-        behavior: 'smooth'
+        window.addEventListener('scroll', onScroll)
+        onScroll()
+        window.scrollTo({
+            top: offset,
+            behavior: 'smooth'
+        })
     })
-    return deferred.promise()
 }
