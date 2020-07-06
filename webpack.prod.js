@@ -6,9 +6,9 @@ const { CleanWebpackPlugin } =      require("clean-webpack-plugin") // only need
 const SVGSpritemapPlugin =          require("svg-spritemap-webpack-plugin");
 
 module.exports = merge(common, {
-    mode: "production",
+    mode: "development",
     optimization: {
-		// minimize: false
+		minimize: false
 	},
     entry: "./src/js/index.js",
     output: {
@@ -74,10 +74,7 @@ module.exports = merge(common, {
                     // Transform css and extract into separate single bundle
                     // Required to generate the file
                     { 
-                        loader: MiniCssExtractPlugin.loader,
-                        options: {
-                            publicPath: './',
-                        },
+                        loader: MiniCssExtractPlugin.loader
                     },
 
                     // Handles url() and @imports
