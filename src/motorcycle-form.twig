@@ -17,6 +17,7 @@
     <input type="hidden" name="branchCode" value="">
     <input type="hidden" name="supportTel" value="1-800-88-6744">
     <input type="hidden" name="thankYouPageUrl" value="/payment-completed.html">
+    <input type="hidden" name="paymentUrl" value="/msigonline/products/motorcycle/payment.html">
 
     <div class="container py-5" v-if="canProceed">
         <h1>Motorcycle Insurance</h1>
@@ -139,7 +140,8 @@
                                 </div>
 
                                 <div class="col-md-6 col-12">
-                                    <p class="bt1 mb-2 mt-1">Motorcycle Registration No.:</p>
+                                    <!-- Don't change this value as this is for their CMS -->
+                                    <p class="bt1 mt-1" style="margin-bottom: .825rem">Motorcycle Registration No.:</p>
                                     <div class="row">
                                         <div class="col-12 col-md-6">
                                             <validation-provider v-slot="{ errors }" rules="required">
@@ -2018,11 +2020,14 @@
     </div>
     <!-- Error message section -->
 
+    <!-- The error form returned from processPurchase will be placed here -->
+    <div id="error-form-placeholder"></div>
+
     <form action="/dotCMS/purchase/paynow" id="thePaymentForm" name="paymentForm" method="post" novalidate class="d-none">
         <input name="partnerCode" type="hidden" v-model="partnerCode">
         <input name="productCode" type="hidden" v-model="productCode">
         <input name="productName" type="hidden" v-model="productName">
-        <input name="purchaseId" type="hidden">
+        <input name="purchaseId" type="hidden" v-model="formData['4'].purchaseTempId">
         <input name="formula" type="hidden" v-model="formula">
         <input name="paymentMethod" type="hidden" v-model="formData['5'].paymentMethod">
         <input name="ccNo" type="hidden" v-model="formData['5'].ccNo">

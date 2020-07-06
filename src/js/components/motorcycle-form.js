@@ -26,6 +26,7 @@ new Vue({
         supportTel: document.querySelector('input[name="supportTel"]').value,
         thankYouPageUrl: document.querySelector('input[name="thankYouPageUrl"]').value,
         formula: document.querySelector('input[name=formula]').value,
+        paymentUrl: document.querySelector('input[name="paymentUrl"]').value,
         wishToRestoreSession: false,
 
         steps: [
@@ -106,6 +107,7 @@ new Vue({
                 tncAgreement: false,
                 isMotorDetailsEditMode: false,
                 isRiderDetailsEditMode: false,
+                purchaseTempId: '',
 
                 // Motorcycle Details Edit
                 motorVehicleLocation: '',
@@ -174,7 +176,7 @@ new Vue({
         async maybeRestoreSession () {
             const state = JSON.parse(window.sessionStorage.getItem('m3pa_data'))
             if (state) {
-                if (state.canProceed) {
+                if (state.canProceed && state.steps.filter(s => s.stepNum !== '1').some(s => s.completed === true)) {
                     const shouldRestore = await this.promptRestoreSession()
                     if (shouldRestore) {
                         this.allModelsByMake = state.allModelsByMake;
@@ -233,6 +235,7 @@ new Vue({
                         this.errorMessage = $errorMessage.html();
                     }
                     this.canProceed = false;
+                    window.killUnloadM3PA && window.killUnloadM3PA()
                     return;
                 }
 
@@ -293,13 +296,22 @@ new Vue({
                 this.formData['4'].policyHolderMaritalStatus = this.formData['2'].policyHolderMaritalStatus;
                 this.formData['4'].policyHolderOccupation = this.formData['2'].policyHolderOccupation;
             } else if (this.currStep.stepNum == '4') {
-                this.initiatePayment()
+                const response = await this.initiatePayment()
+                const $errorFormWrapper = $(`<div id="error-form-wrapper">${response}</div>`)
+                $errorFormWrapper.find('form').attr('action', this.paymentUrl)
+                $(this.$el).find('#error-form-placeholder').html($errorFormWrapper.html())
+
+                this.formData['4'].purchaseTempId = $errorFormWrapper.find('input[name="purchaseTempId"]').val()
+                this.saveSession()
+                // console.log(window)
+                // window.killUnloadM3PA && window.killUnloadM3PA()
+                // setTimeout(() => $(this.$el).find('#error-form-placeholder form').trigger('submit'), 200)
             } else if (this.currStep.stepNum == '5') {
+                window.killUnloadM3PA && window.killUnloadM3PA()
                 $('form#thePaymentForm').trigger('submit');
                 return
             }
 
-        
             await this.scrollTop();
             
             this.currStep.completed = true;
@@ -685,10 +697,10 @@ new Vue({
                         certificateNo: '', // to check if needed
                         motorRegistrationNo: this.formData['1'].motorRegistrationNo,
                         motorChassisNo: this.formData['2'].motorRiskDataChassisNo,
-                        dpfStatus: false,
-                        motorMakeCode: this.formData['2'].makeCode,
+                        dpfStatus: 'false',
+                        motorMakeCode: this.formData['2'].motorMakeCode,
                         motorModelCode: this.formData['2'].motorModelCode,
-                        enableCcDropDown: '',
+                        enableCcDropDown: this.formData['2'].enableCcDropDown,
                         motorCc: this.formData['2'].motorCc,
                         motorYearOfMake: this.formData['2'].motorYearOfMake,
                         motorStyle: this.formData['2'].style,
@@ -702,11 +714,11 @@ new Vue({
                         motorCurNcdLevel: this.formData['2'].curNCDLevel,
                         motorCurNcdEffDate: this.formData['2'].curNCDEffDt,
                         motorCurNcdExpDate: this.formData['2'].curNCDExpDate,
-                        motorNvic: this.formData['2'].nvic,
+                        motorNvic: this.formData['2'].motorModel.nvic,
                         motorVehicleLocation: this.formData['2'].motorVehicleLocation.vpmsStateCode,
                         motorVehicleLocationStateCode: this.formData['2'].motorVehicleLocation.code,
                         motorVehiclePremiumValue: '',
-                        motorDisplayNxtNcd: this.formData['2'].nxtNCDDiscount,
+                        motorDisplayNxtNcd: this.formData['2'].nxtNCDDiscount + '%',
                         motorSumInsured: this.formData['2'].marketValue,
                         ISMEngineNo: this.formData['2'].ISMEngine,
                         motorEngineNo: this.formData['2'].motorEngineNo,
@@ -730,7 +742,7 @@ new Vue({
                         motorAddDriverPersonalAccident: '',
                         motorAddDriverPersonalAccidentSumInsured: 0,
                         motorAdditonalDriver: 0,
-                        motorAdditonalDriverPremium: 0.0,
+                        motorAdditonalDriverPremium: 0,
                         motorAddLimitedSpecialPerils: '',
                         motorAddNcdRelief: '',
                         motorPlusPlan: '',
@@ -740,7 +752,7 @@ new Vue({
                         additionalPlanB: '',
                         additionalPlanC: '',
                         motorAddCART: '',
-                        motorAddCARTSumInsured: '',
+                        motorAddCARTSumInsured: 0,
                         additionalPlan07: '',
                         additionalPlan14: '',
                         additionalPlan21: '',
@@ -789,31 +801,31 @@ new Vue({
                         travelBenefitPlan: '',
                         coveragePremiumDiscount: this.formData['3'].discountAmount,
                         coverageStampDuty: this.formData['3'].stampDuty,
-                        noDaysCovered: this.formData['3'].stampDuty,
-                        totalPremium: this.formData['3'].totalPremium,
+                        noDaysCovered: this.formData['3'].daysOfCoverage,
+                        totalPremium: this.formData['3'].totalPayable,
                         memberName: this.formData['2'].policyHolderName,
                         memberIdNo: this.formData['1'].policyHolderNric,
                         memberIsMalaysian: this.isIdNric ? 'Y' : 'N',
                         memberGender: this.policyHolderGender,
                         memberRelationship: 'Driver',
-                        driverRelationship: null,
+                        driverRelationship: '00',
                         memberDOB: moment(this.policyHolderDob).format('DD/MM/YYYY'),
                         memberMotorDrivingExperience: '',
                         memberOccupation: this.formData['2'].policyHolderOccupation,
                         memberPetBreed: '',
                         memberPetMicrochipId: '',
                         memberPhoto: '',
-                        basicPremium: '',
-                        ncdAmount: '',
-                        netNcdAmount: '',
-                        annualPremium: '',
-                        excess: '',
-                        discount: '',
-                        sst: '',
-                        sstVal: '',
-                        stampDuty: '',
-                        grandTotal: '',
-                        additionalPremium: '',
+                        basicPremium: this.formData['3'].basePremium,
+                        ncdAmount: this.formData['3'].ncdAmount,
+                        netNcdAmount: this.netNCDAmount,
+                        annualPremium: this.grossPremium,
+                        excess: this.formData['3'].motorPlanType === 'comprehensive' ? this.formData['3'].excess : '',
+                        discount: this.formData['3'].discountAmount,
+                        sst: this.formData['3'].sst,
+                        sstVal: this.formData['3'].sstAmount,
+                        stampDuty: this.formData['3'].stampDuty,
+                        grandTotal: this.formData['3'].totalPayable,
+                        additionalPremium: this.formData['3'].totalAdditionalCoveragePremium,
                         driverQuantity: '',
                         driverPremium: '',
                         motorPlusPlanPremium: '',
@@ -934,6 +946,16 @@ new Vue({
         },
         cardType: function () {
             return getCardType(this.formData['5'].ccNo)
+        },
+        netNCDAmount: function () {
+            let additionalAddOns = 0;
+            if (this.formData['3'].allRiderPlanPremium) {
+                additionalAddOns += this.formData['3'].allRiderPlanPremium;
+            }
+            return this.formData['3'].basePremium + additionalAddOns - this.formData['3'].ncdAmount
+        },
+        grossPremium: function () {
+            return this.netNCDAmount + this.formData['3'].totalAdditionalCoveragePremium;
         }
     },
     watch: {
