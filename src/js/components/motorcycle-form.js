@@ -16,25 +16,26 @@ Vue.component('motor-summary-pane', MotorcycleSummaryPane)
 new Vue({
     el: '#motorcycle-form',
     data: {
-        baseUrl: document.querySelector('input[name=tieBaseUrl]').value,
-        productCode: document.querySelector('input[name="productCode"]').value,
-        partnerCode: document.querySelector('input[name="partnerCode"]').value,
-        productName: document.querySelector('input[name="productName"]').value,
-        branchCode: document.querySelector('input[name="branchCode"]').value,
-        staffId: document.querySelector('input[name="staffId"]').value,
-        staffRelationship: document.querySelector('input[name="staffRelationship"]').value,
-        supportTel: document.querySelector('input[name="supportTel"]').value,
-        thankYouPageUrl: document.querySelector('input[name="thankYouPageUrl"]').value,
-        formula: document.querySelector('input[name=formula]').value,
-        paymentUrl: document.querySelector('input[name="paymentUrl"]').value,
+        stage: document.querySelector('#motorcycle-form input[name=stage]').value,
+        baseUrl: document.querySelector('#motorcycle-form input[name=tieBaseUrl]').value,
+        productCode: document.querySelector('#motorcycle-form input[name="productCode"]').value,
+        partnerCode: document.querySelector('#motorcycle-form input[name="partnerCode"]').value,
+        productName: document.querySelector('#motorcycle-form input[name="productName"]').value,
+        branchCode: document.querySelector('#motorcycle-form input[name="branchCode"]').value,
+        staffId: document.querySelector('#motorcycle-form input[name="staffId"]').value,
+        staffRelationship: document.querySelector('#motorcycle-form input[name="staffRelationship"]').value,
+        supportTel: document.querySelector('#motorcycle-form input[name="supportTel"]').value,
+        thankYouPageUrl: document.querySelector('#motorcycle-form input[name="thankYouPageUrl"]').value,
+        formula: document.querySelector('#motorcycle-form input[name=formula]').value,
+        paymentUrl: document.querySelector('#motorcycle-form input[name="paymentUrl"]').value,
         wishToRestoreSession: false,
 
         steps: [
-            { stepNum: '1', title: 'Get Started', completed: false, showPrescreen: true },
-            { stepNum: '2', title: 'Fill In Details', completed: false },
-            { stepNum: '3', title: 'Choose Add-Ons', completed: false },
-            { stepNum: '4', title: 'REVIEW', completed: false },
-            { stepNum: '5', title: 'PAY', completed: false }
+            { stepNum: '1', title: 'Get Started', completed: false, showPrescreen: true, hash: 'prescreen' },
+            { stepNum: '2', title: 'Fill In Details', completed: false, hash: 'fillindetails' },
+            { stepNum: '3', title: 'Choose Add-Ons', completed: false, hash: 'planselection' },
+            { stepNum: '4', title: 'REVIEW', completed: false, hash: '' },
+            { stepNum: '5', title: 'PAY', completed: false, hash: '' }
         ],
         currStep: null,
 
@@ -63,8 +64,8 @@ new Vue({
             1: {
                 policyHolderIdType: 'nric',
                 country: '',
-                policyHolderNric: '',
-                motorRegistrationNo: '',
+                policyHolderNric: '750820-14-5815',
+                motorRegistrationNo: 'WQN5666',
                 agreement: true
             },
             2: {
@@ -176,7 +177,7 @@ new Vue({
         async maybeRestoreSession () {
             const state = JSON.parse(window.sessionStorage.getItem('m3pa_data'))
             if (state) {
-                if (state.canProceed && state.steps.filter(s => s.stepNum !== '1').some(s => s.completed === true)) {
+                if (state.canProceed /*&& state.steps.filter(s => s.stepNum !== '1').some(s => s.completed === true)*/) {
                     const shouldRestore = await this.promptRestoreSession()
                     if (shouldRestore) {
                         this.allModelsByMake = state.allModelsByMake;
@@ -195,6 +196,7 @@ new Vue({
                 }
             }
             this.currStep = this.steps[0]
+            window.location.hash = this.currStep.hash;
             sessionStorage.removeItem('m3pa_data')
         },
         setPrescreen: function (value) {
@@ -295,6 +297,12 @@ new Vue({
                 this.formData['4'].addressCity = this.formData['2'].addressCity;
                 this.formData['4'].policyHolderMaritalStatus = this.formData['2'].policyHolderMaritalStatus;
                 this.formData['4'].policyHolderOccupation = this.formData['2'].policyHolderOccupation;
+                
+                this.saveSession();
+                window.killUnloadM3PA && window.killUnloadM3PA()
+                await this.scrollTop();
+                window.location.href = "/msigonline/products/motorcycle/summary.html"
+                return;
             } else if (this.currStep.stepNum == '4') {
                 const response = await this.initiatePayment()
                 const $errorFormWrapper = $(`<div id="error-form-wrapper">${response}</div>`)
@@ -316,9 +324,11 @@ new Vue({
             
             this.currStep.completed = true;
             this.currStep = this.steps[this.steps.indexOf(this.currStep) + 1];
+            window.location.hash = this.currStep.hash;
             
             this.loading = false;
             this.initializeTooltips()
+            this.$nextTick(() => this.rowMatchHeight())
         },
         goToPrevStep: async function () {
             if (this.steps.indexOf(this.currStep) == 0) {
@@ -326,7 +336,9 @@ new Vue({
             }
             await this.scrollTop();
             this.currStep = this.steps[this.steps.indexOf(this.currStep) - 1];
+            window.location.hash = this.currStep.hash;
             this.initializeTooltips()
+            this.$nextTick(() => this.rowMatchHeight())
         },
         checkNCD: async function () {
             let apiUrl = this.baseUrl + '/dotCMS/purchase/buynow';
@@ -543,7 +555,11 @@ new Vue({
             return moment(dateString, 'DD/MM/YYYY').format('ddd')
         },
         scrollToError: function () {
+            const isMobile = window.innerWidth < 768;
             let $errors = $('.wizard-section-' + this.currStep.stepNum).find('.is-invalid, .error-input');
+            if (isMobile) {
+                $errors = $errors.filter(function() { return $(this).parents('.d-none').length === 0 })
+            }
             if ($errors.length && $errors.first()) {
                 let offset = $errors.first().offset().top - 10
                 scrollTo(offset)
@@ -745,7 +761,8 @@ new Vue({
                         motorAdditonalDriverPremium: 0,
                         motorAddLimitedSpecialPerils: '',
                         motorAddNcdRelief: '',
-                        motorPlusPlan: '',
+                        motorPlusPlan: this.formData['3'].motorPlanType === 'comprehensive' ? '' : 'Y',
+                        motorPlusPlanPremium: this.formData['3'].motorPlanType === 'comprehensive' ? '' : '0',
                         allRiderPlan: this.formData['3'].allRiderPlan ? 'Y' : '',
                         flexiPlan: '',
                         additionalPlanA: '',
@@ -828,7 +845,6 @@ new Vue({
                         additionalPremium: this.formData['3'].totalAdditionalCoveragePremium,
                         driverQuantity: '',
                         driverPremium: '',
-                        motorPlusPlanPremium: '',
                         allRiderPlanPremium: this.formData['3'].allRiderPlanPremium || '',
                         ncdReliefPremium: this.formData['3'].addNcdReliefPremium || '',
                         legalLiabilityToPassengersPremium: this.formData['3'].addLegalLiabilityToPassengersPremium || '',
@@ -920,6 +936,33 @@ new Vue({
                 })
                 $modal.modal('show')
             })
+        },
+        rowMatchHeight () {
+            let $group = $(this.$el).find('.selection-infobox-group');
+            let $rows = $group.find('.row-match-height');
+
+            let rowsByRowNum = {}
+            $rows.each(function () {
+                const rowNum = $(this).data('row-num')
+                if (!rowsByRowNum[rowNum]) {
+                    rowsByRowNum[rowNum] = [this]
+                } else {
+                    rowsByRowNum[rowNum].push(this)
+                }
+            })
+
+            Object
+                .values(rowsByRowNum)
+                .forEach(rows => {
+                    const tallest = Math.max(...rows.map(r => r.clientHeight))
+                    rows.forEach(r => r.style.height = tallest + 'px')
+                })
+        },
+        checkAndSetHash() {
+            let currHash = window.location.hash;
+            if (currHash === '') {
+
+            }
         }
     },
     computed: {

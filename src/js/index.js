@@ -17,14 +17,11 @@ import "bootstrap"
 import Vue from 'vue';
 import VueTheMask from 'vue-the-mask';
 Vue.use(VueTheMask);
+import "./directives/uppercase";
 
 // Import the JS components
 import "./components/validations"
-// import "./components/travel-form"
 import "./components/motorcycle-form"
 
-
-//stick side bar plugin start
 import "./components/sticky-sidebar.min"
-//sitck side bar plugin end
  

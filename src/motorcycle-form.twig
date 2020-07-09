@@ -7,7 +7,10 @@
     <!-- The base URL for all the API calls -->
     <input type="hidden" name="tieBaseUrl" value="https://takeiteasy.msig.com.my">
 
-    <!-- Values from Server Side -->
+    <!-- Depending on the stage of the subscription journey, the form will behave differently. -->
+    <input type="hidden" name="stage" value="registration">
+
+    <!-- Default Values -->
     <input type="hidden" name="formula" value="motor">
     <input type="hidden" name="partnerCode" value="msigonline">
     <input type="hidden" name="productCode" value="MCY">
@@ -43,8 +46,8 @@
     </div>
 
     <div class="bg-p2d py-5 wizard-sections position-relative" v-if="canProceed">
-        <validation-observer v-slot="{ handleSubmit }" ref="form">
-            <form @submit.prevent="handleSubmit(onSubmit)">
+        <validation-observer v-slot="observer" ref="form">
+            <form @submit.prevent="observer.handleSubmit(onSubmit)">
                 <fieldset class="wizard-section-1" v-if="currStep && currStep.stepNum === '1'">
                     <div class="container">
                         <div class="bg-w py-5 px-md-5 px-3 mx-md-2">
@@ -58,8 +61,7 @@
                                     <li>You are between 16 and 75 years old.</li>
                                     <li>Your Motorcycle is 250 c.c and below.</li>
                                     <li>Your Motorcycle sum insured does not exceed RM30,000.</li>
-                                    <li>Your Motorcycle is not older than 15 years old (comprehensive) or 40 years old (3PA).
-                                    </li>
+                                    <li>Your Motorcycle is not older than 15 years old (Comprehensive Cover) or 40 years old (Third Party Cover).</li>
                                     <li>Your next policy renewal date is within 60 days.</li>
                                 </ol>
                             </div>
@@ -88,11 +90,11 @@
                                     </div>
 
                                     <div class="d-flex flex-column">
-                                        <validation-provider v-slot="{ errors }" :rules="{ required: !isIdNric }">
+                                        <validation-provider v-slot="validator" :rules="{ required: !isIdNric }">
                                             <div class="form-group" v-if="!isIdNric">
                                                 <select :class="{
                                                     'form-control': true,
-                                                    'is-invalid': errors.length > 0
+                                                    'is-invalid': validator.errors.length > 0
                                                 }" v-model="formData['1'].country">
                                                     <option disabled hidden selected value="">Select a country</option>
                                                     <option v-for="country in countries"
@@ -108,7 +110,7 @@
                                                 </div>
                                             </div>
                                         </validation-provider>
-                                        <validation-provider v-slot="{ errors, failedRules }"
+                                        <validation-provider v-slot="validator"
                                             :rules="{
                                                 'required': true,
                                                 'nricValidDob': isIdNric,
@@ -121,17 +123,17 @@
                                                 <input type="text"
                                                     :class="{
                                                         'form-control': true,
-                                                        'is-invalid': errors.length > 0
+                                                        'is-invalid': validator.errors.length > 0
                                                     }"
                                                     :name="isIdNric ? 'NRIC' : 'Passport'"
-                                                    :placeholder="isIdNric ? 'XXXXXX-XX-XXXX' : 'Passport No.'"
+                                                    :placeholder="isIdNric ? 'E.g. 900808-10-8888' : 'E.g. A98765432'"
                                                     v-mask="isIdNric ? '######-##-####' : 'XXXXXXXXXXXXXX'"
                                                     v-model="formData['1'].policyHolderNric"
                                                     autocomplete="off">
                                                 <div class="invalid-feedback font-italic">
-                                                    <span v-if="failedRules.required">* Complete the {{ isIdNric ? 'NRIC' : 'Passport' }} field.</span>
-                                                    <span v-else-if="failedRules.nricValidDob || failedRules.min">Please check NRIC number</span>
-                                                    <span v-else-if="failedRules.nricAge18AndAbove">Min age for main policyholder is 18.</span>
+                                                    <span v-if="validator.failedRules.required">* Complete the {{ isIdNric ? 'NRIC' : 'Passport' }} field.</span>
+                                                    <span v-else-if="validator.failedRules.nricValidDob || validator.failedRules.min">Please check NRIC number</span>
+                                                    <span v-else-if="validator.failedRules.nricAge18AndAbove">Min age for main policyholder is 18.</span>
                                                 </div>
                                             </div>
                                         </validation-provider>
@@ -144,18 +146,19 @@
                                     <p class="bt1 mt-1" style="margin-bottom: .825rem">Motorcycle Registration No.:</p>
                                     <div class="row">
                                         <div class="col-12 col-md-6">
-                                            <validation-provider v-slot="{ errors }" rules="required">
+                                            <validation-provider v-slot="validator" rules="required">
                                                 <div class="form-group">
                                                     <input type="text"
                                                         :class="{
                                                             'form-control': true,
-                                                            'is-invalid': errors.length > 0
+                                                            'is-invalid': validator.errors.length > 0
                                                         }"
-                                                        placeholder="eg: WWW 3333 W"
+                                                        placeholder="E.g. WA888A"
                                                         name='Vehicle Registration No.'
+                                                        v-uppercase
                                                         v-model="formData['1'].motorRegistrationNo">
                                                     <div class="invalid-feedback">
-                                                        {{ errors[0] }}
+                                                        {{ validator.errors[0] }}
                                                     </div>
                                                 </div>
                                             </validation-provider>
@@ -165,18 +168,18 @@
                             </div>
 
                             <div class="bt2 mt-4 pt-2" v-if="!steps[0].showPrescreen">
-                                <validation-provider v-slot="{ errors }" rules="mustBeTrue">
+                                <validation-provider v-slot="validator" rules="mustBeTrue">
                                     <div class="form-check">
                                         <input type="checkbox"
                                             name="agreement"
                                             id="agreement"
                                             :class="{
                                                 'form-check-input': true,
-                                                'is-invalid': errors.length > 0
+                                                'is-invalid': validator.errors.length > 0
                                             }"
                                             v-model="formData['1'].agreement">
                                         <label for="agreement" class="form-check-label">
-                                            I have read and understood MSIG's <a href="#" class="underline">Privacy Notice</a> and
+                                            I have read and understood MSIG's <a href="#" class="underline">Privacy Notice</a>, and
                                             agree to MSIG
                                             processing my personal data for the purposes and in the manners set out in the Privacy
                                             Notice.
@@ -185,7 +188,7 @@
                                             <use xlink:href="/spa-assets/icons/icons.svg#sprite-tick-mark"
                                                 href="/spa-assets/icons/icons.svg#sprite-tick-mark"></use>
                                         </svg>
-                                        <div class="invalid-feedback font-italic" v-if="errors.length > 0">
+                                        <div class="invalid-feedback font-italic" v-if="validator.errors.length > 0">
                                             * Oops, looks like you haven't ticked the box yet. Please do so to proceed
                                         </div>
                                     </div>
@@ -206,7 +209,7 @@
                             @click.prevent="setPrescreen(true)"
                             v-if="!steps[0].showPrescreen">Back</a>
                         <a href="#"
-                            @click.prevent="handleSubmit(onSubmit).then(function() { scrollToError() })"
+                            @click.prevent="observer.handleSubmit(onSubmit).then(function() { scrollToError() })"
                             class="btn btn-default btn-primary mb-3 mb-md-0" 
                             v-if="!steps[0].showPrescreen">
                             Continue
@@ -262,15 +265,15 @@
 
                                         <div class="col-12 col-md-6">
                                             <p class="bt1 mb-2">Motorcycle Location:</p>
-                                            <validation-provider rules="required" v-slot="{ errors, failedRules }">
+                                            <validation-provider rules="required" v-slot="validator">
                                                 <div class="form-group">
-                                                    <select :class="{ 'form-control': true, 'is-invalid': errors.length > 0 }" 
+                                                    <select :class="{ 'form-control': true, 'is-invalid': validator.errors.length > 0 }" 
                                                         @change="findVehicleSumInsured"
                                                         v-model="formData['2'].motorVehicleLocation">
                                                         <option disabled hidden selected value="">Select a state</option>
                                                         <option v-for="state in states" :key="state.code" :value="state">{{ state.name }}</option>
                                                     </select>
-                                                    <small class="error-message text-primary font-italic" v-if="failedRules.required">
+                                                    <small class="error-message text-primary font-italic" v-if="validator.failedRules.required">
                                                         * Complete the Motorcycle Location field.
                                                     </small>
                                                 </div>
@@ -313,7 +316,7 @@
                                                 <vue-bootstrap-typeahead
                                                     :data="loanProviderSuggestions"
                                                     v-model="formData['2'].motorLoanProvider"
-                                                    :serializer="s => s.financeName"
+                                                    :serializer="function(s) { return s.financeName }"
                                                     placeholder="Find Loan Provider"
                                                     :max-matches="5"
                                                     @hit="formData['2'].motorLoanProvider = $event.financeName"
@@ -337,39 +340,38 @@
 
                                     <div class="row">
                                         <div class="col-12 col-md-6">
-                                            <validation-provider rules="required|validName" v-slot="{ failedRules, errors }">
+                                            <validation-provider rules="required|validName" v-slot="validator">
                                                 <div class="form-group">
                                                     <label class="bt1">Name (as per NRIC):</label>
                                                     <input type="text"
                                                         :class="{
                                                             'form-control': true,
-                                                            'is-invalid': errors.length > 0
+                                                            'is-invalid': validator.errors.length > 0
                                                         }"
                                                         v-model="formData['2'].policyHolderName"
-                                                        placeholder="e.g. Lisa Teo">
-                                                    <small class="error-message text-primary font-italic" v-if="errors.length > 0">
-                                                        <span v-if="failedRules.required">* Complete the Name as per NRIC field.</span>
-                                                        <span v-else-if="failedRules.validName">Please enter only alphabet, "-", "@", "/" and " ' " for Name</span>
+                                                        placeholder="E.g. Lee Siew Suan">
+                                                    <small class="error-message text-primary font-italic" v-if="validator.errors.length > 0">
+                                                        <span v-if="validator.failedRules.required">* Complete the Name as per NRIC field.</span>
+                                                        <span v-else-if="validator.failedRules.validName">Please enter only alphabet, "-", "@", "/" and " ' " for Name</span>
                                                     </small>
                                                 </div>
                                             </validation-provider>
                                         </div>
 
                                         <div class="col-12 col-md-6">
-                                            <validation-provider rules="required" v-slot="{ errors, failedRules }">
+                                            <validation-provider rules="required" v-slot="validator">
                                                 <div class="form-group">
                                                     <label class="bt1">NRIC No.:</label>
                                                     <input type="text" 
                                                         :class="{
                                                             'form-control': true,
-                                                            'is-invalid': errors.length > 0
+                                                            'is-invalid': validator.errors.length > 0
                                                         }"
                                                         v-model="formData['1'].policyHolderNric"
-                                                        placeholder="e.g. 888888-88-8888"
+                                                        placeholder="E.g. 900808-10-8888"
                                                         disabled
                                                         v-mask="'######-##-####'">
-                                                    <small class="error-message text-primary font-italic"
-                                                        v-if="failedRules.required">
+                                                    <small class="error-message text-primary font-italic" v-if="validator.failedRules.required">
                                                         * Complete the NRIC field.
                                                     </small>
                                                 </div>
@@ -377,7 +379,7 @@
                                         </div>
 
                                         <div class="col-12 col-md-6">
-                                            <validation-provider rules="required|email" v-slot="{ errors, failedRules }">
+                                            <validation-provider rules="required|email" v-slot="validator">
                                                 <div class="form-group">
                                                     <label class="bt1 d-flex">
                                                         Email: 
@@ -393,39 +395,39 @@
                                                     <input type="text" 
                                                         :class="{
                                                             'form-control': true,
-                                                            'is-invalid': errors.length > 0
+                                                            'is-invalid': validator.errors.length > 0
                                                         }"
                                                         v-model="formData['2'].policyHolderEmail"
-                                                        placeholder="e.g. hteoro@gmail.com">
-                                                    <small class="error-message text-primary font-italic" v-if="errors.length > 0">
-                                                        <span v-if="failedRules.required">* Complete the Email field.</span>
-                                                        <span v-else-if="failedRules.email">Please check email address</span>
+                                                        placeholder="E.g. you@gmail.com">
+                                                    <small class="error-message text-primary font-italic" v-if="validator.errors.length > 0">
+                                                        <span v-if="validator.failedRules.required">* Complete the Email field.</span>
+                                                        <span v-else-if="validator.failedRules.email">Please check email address</span>
                                                     </small>
                                                 </div>
                                             </validation-provider>
                                         </div>
 
                                         <div class="col-12 col-md-6">
-                                            <validation-provider rules="required|integer|max:11" v-slot="{ errors, failedRules }">
+                                            <validation-provider rules="required|integer|max:11" v-slot="validator">
                                                 <div class="form-group">
                                                     <label class="bt1">Mobile No.:</label>
                                                     <input type="tel"
                                                         :class="{
                                                             'form-control': true,
-                                                            'is-invalid': errors.length > 0
+                                                            'is-invalid': validator.errors.length > 0
                                                         }"
                                                         v-model="formData['2'].policyHolderMobileNo"
-                                                        placeholder="e.g. 01x-xxxxxxx">
-                                                    <small class="error-message text-primary font-italic" v-if="errors.length > 0">
-                                                        <span v-if="failedRules.required">* Complete the Mobile field.</span>
-                                                        <span v-else-if="failedRules.integer || failedRules.max">Please check mobile number.</span>
+                                                        placeholder="E.g. 018-123 4567">
+                                                    <small class="error-message text-primary font-italic" v-if="validator.errors.length > 0">
+                                                        <span v-if="validator.failedRules.required">* Complete the Mobile field.</span>
+                                                        <span v-else-if="validator.failedRules.integer || validator.failedRules.max">Please check mobile number.</span>
                                                     </small>
                                                 </div>
                                             </validation-provider>
                                         </div>
 
                                         <div class="col-12 col-md-6">
-                                            <validation-provider rules="required" v-slot="{ errors, failedRules }">
+                                            <validation-provider rules="required" v-slot="validator">
                                                 <div class="form-group">
                                                     <label class="bt1">Address:</label>
                                                     <input type="text"
@@ -433,9 +435,9 @@
                                                         v-model="formData['2'].policyHolderAddressLine1"
                                                         :class="{
                                                             'form-control': true,
-                                                            'is-invalid': errors.length > 0
+                                                            'is-invalid': validator.errors.length > 0
                                                         }">
-                                                    <small class="error-message text-primary font-italic" v-if="failedRules.required">
+                                                    <small class="error-message text-primary font-italic" v-if="validator.failedRules.required">
                                                         * Complete the Address field.
                                                     </small>
                                                 </div>
@@ -448,16 +450,16 @@
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-6">
-                                            <validation-provider rules="required|min:5|max:5|integer" v-slot="{ errors, failedRules, valid }">
+                                            <validation-provider rules="required|min:5|max:5|integer" v-slot="validator">
                                                 <div class="form-group variant-icon variant-autocomplete">
                                                     <label class="bt1">Postcode:</label>
                                                     <vue-bootstrap-typeahead
                                                         :data="postcodeSuggestions"
                                                         v-model="formData['2'].addressPostcode"
-                                                        :serializer="s => s.postcode"
+                                                        :serializer="function (s) { return s.postcode }"
                                                         placeholder="Find postcode"
                                                         :max-matches="5"
-                                                        :input-class="errors.length > 0 ? 'is-invalid' : ''"
+                                                        :input-class="validator.errors.length > 0 ? 'is-invalid' : ''"
                                                         @hit="handlePostcodeHit($event)"
                                                         maxlength="5"
                                                     >
@@ -468,11 +470,11 @@
                                                             </svg>
                                                         </template>
                                                     </vue-bootstrap-typeahead>
-                                                    <div class="small error-message text-primary font-italic" v-if="errors.length > 0">
-                                                        <span v-if="failedRules.required">
+                                                    <div class="small error-message text-primary font-italic" v-if="validator.errors.length > 0">
+                                                        <span v-if="validator.failedRules.required">
                                                             * Complete the Postal Code field.
                                                         </span>
-                                                        <span v-else-if="failedRules.min || failedRules.max || failedRules.integer">
+                                                        <span v-else-if="validator.failedRules.min || validator.failedRules.max || validator.failedRules.integer">
                                                             Please enter a valid Postal Code.
                                                         </span>
                                                     </div>
@@ -506,21 +508,21 @@
                                         </div>
 
                                         <div class="col-12 col-md-6">
-                                            <validation-provider rules="required" v-slot="{ errors, failedRules }">
+                                            <validation-provider rules="required" v-slot="validator">
                                                 <div class="form-group">
                                                     <label class="bt1">Gender:</label>
                                                     <select v-model="policyHolderGender" 
                                                         :disabled="isIdNric"
                                                         :class="{
                                                             'form-control': true,
-                                                            'is-invalid': errors.length > 0
+                                                            'is-invalid': validator.errors.length > 0
                                                         }">
                                                         <option value="" disabled selected hidden>Select Option</option>
                                                         <option value="M">Male</option>
                                                         <option value="F">Female</option>
                                                     </select>
-                                                    <div class="small error-message text-primary font-itatic" v-if="errors.length > 0">
-                                                        <span v-if="failedRules.required">
+                                                    <div class="small error-message text-primary font-itatic" v-if="validator.errors.length > 0">
+                                                        <span v-if="validator.failedRules.required">
                                                             * Complete the Gender field.
                                                         </span>
                                                     </div>
@@ -531,12 +533,12 @@
 
                                         <div class="col-12 col-md-6">
                                             <p class="bt1 mb-2">Marital Status:</p>
-                                            <validation-provider rules="required" v-slot="{ errors, failedRules }">
+                                            <validation-provider rules="required" v-slot="validator">
                                                 <div class="form-group">
                                                     <select v-model="formData['2'].policyHolderMaritalStatus"
                                                         :class="{
                                                             'form-control': true,
-                                                            'is-invalid': errors.length > 0
+                                                            'is-invalid': validator.errors.length > 0
                                                         }">
                                                         <option disabled="disabled" hidden="hidden" selected="selected" value="">
                                                             Select Option
@@ -544,8 +546,8 @@
                                                         <option value="Single">Single</option>
                                                         <option value="Married">Married</option>
                                                     </select>
-                                                    <div class="small error-message text-primary font-itatic" v-if="errors.length > 0">
-                                                        <span v-if="failedRules.required">
+                                                    <div class="small error-message text-primary font-itatic" v-if="validator.errors.length > 0">
+                                                        <span v-if="validator.failedRules.required">
                                                             * Complete the Marital Status field.
                                                         </span>
                                                     </div>
@@ -554,19 +556,19 @@
                                         </div>
 
                                         <div class="col-12 col-md-6">
-                                            <validation-provider rules="required" v-slot="{ errors, failedRules }">
+                                            <validation-provider rules="required" v-slot="validator">
                                                 <div class="form-group">
                                                     <label for="occupation" class="bt1">Occupation:</label>
                                                     <input id="occupation"
                                                         type="text"
-                                                        placeholder="eg: Architect"
+                                                        placeholder="E.g. Architect"
                                                         :class="{
                                                             'form-control': true,
-                                                            'is-invalid': errors.length > 0
+                                                            'is-invalid': validator.errors.length > 0
                                                         }"
                                                         v-model="formData['2'].policyHolderOccupation">
-                                                    <div class="small error-message text-primary font-italic" v-if="errors.length > 0">
-                                                        <span v-if="failedRules.required">
+                                                    <div class="small error-message text-primary font-italic" v-if="validator.errors.length > 0">
+                                                        <span v-if="validator.failedRules.required">
                                                             * Complete the Occupation field.
                                                         </span>
                                                     </div>
@@ -578,7 +580,7 @@
 
                                 <div class="pt-4 wizard-navigation d-none d-md-flex">
                                     <a @click.prevent="goToPrevStep()" href="#" role="button" class="btn btn-default btn-outline-primary mr-4">Back</a>
-                                    <a @click.prevent="handleSubmit(onSubmit).then(function() { scrollToError() })" href="#" role="button" class="btn btn-default btn-primary">Continue</a>
+                                    <a @click.prevent="observer.handleSubmit(onSubmit).then(function() { scrollToError() })" href="#" role="button" class="btn btn-default btn-primary">Continue</a>
                                 </div>
                             </div>
 
@@ -591,7 +593,7 @@
                         </div>
                     </div>
                     <div class="container pt-4 wizard-navigation d-md-none">
-                        <a @click.prevent="onSubmit()" href="#" role="button" class="btn btn-default btn-primary mb-3 mb-md-0">Continue</a>
+                        <a @click.prevent="observer.handleSubmit(onSubmit).then(function() { scrollToError() })" href="#" role="button" class="btn btn-default btn-primary mb-3 mb-md-0">Continue</a>
                         <a @click.prevent="goToPrevStep()" href="#" role="button" class="btn btn-default btn-outline-primary ">Back</a>
                     </div>
                 </fieldset>
@@ -636,7 +638,7 @@
                                                             <div class="box--body px-3 pt-0 pb-3">
                                                                 <ul class="list variant-icon mb-0 ">
 
-                                                                    <li class="mb-2 row-match-height pl-lg-0 text-lg-center">
+                                                                    <li class="mb-2 row-match-height pl-lg-0 text-lg-center" data-row-num="1">
                                                                         <div class="list-icon">
                                                                             <svg class="icon icon-s">
                                                                                 <use xlink:href="/spa-assets/icons/icons.svg#sprite-tick-mark"
@@ -649,7 +651,7 @@
                                                                         </div>
                                                                     </li>
 
-                                                                    <li class="mb-2 row-match-height pl-lg-0 text-lg-center">
+                                                                    <li class="mb-2 row-match-height pl-lg-0 text-lg-center" data-row-num="2">
                                                                         <div class="list-icon">
                                                                             <svg class="icon icon-s">
                                                                                 <use xlink:href="/spa-assets/icons/icons.svg#sprite-tick-mark"
@@ -662,7 +664,7 @@
                                                                         </div>
                                                                     </li>
 
-                                                                    <li class="mb-2 row-match-height pl-lg-0 text-lg-center">
+                                                                    <li class="mb-2 row-match-height pl-lg-0 text-lg-center" data-row-num="3">
                                                                         <div class="list-icon">
                                                                             <svg class="icon icon-s">
                                                                                 <use xlink:href="/spa-assets/icons/icons.svg#sprite-tick-mark"
@@ -717,8 +719,7 @@
 
 
                                                                 <ul class="list variant-icon mb-0 ">
-
-                                                                    <li class="mb-2 row-match-height pl-lg-0 text-lg-center">
+                                                                    <li class="mb-2 row-match-height pl-lg-0 text-lg-center" data-row-num="1">
 
                                                                         <div class="list-icon">
                                                                             <svg class="icon icon-s">
@@ -733,7 +734,7 @@
 
                                                                     </li>
 
-                                                                    <li class="mb-2 row-match-height pl-lg-0 text-lg-center">
+                                                                    <li class="mb-2 row-match-height pl-lg-0 text-lg-center" data-row-num="2">
                                                                         <div class="list-icon">
                                                                             <svg class="icon icon-s">
                                                                                 <use xlink:href="/spa-assets/icons/icons.svg#sprite-tick-mark"
@@ -746,7 +747,7 @@
                                                                         </div>
                                                                     </li>
 
-                                                                    <li class="mb-2 row-match-height pl-lg-0 text-lg-center">
+                                                                    <li class="mb-2 row-match-height pl-lg-0 text-lg-center" data-row-num="3">
                                                                         <div class="list-icon">
                                                                             <svg class="icon icon-s">
                                                                                 <use xlink:href="/spa-assets/icons/icons.svg#sprite-tick-mark"
@@ -960,186 +961,9 @@
                                     <!-- Checkboxes for add-ons -->
                                 </div>
 
-                                <!-- Roadtax Form -->
-                                <div class="bg-w py-5 px-4 mb-4" v-if="false">
-                                    <div class="d-flex">
-                                        <h2 class="p2 mb-0">Renew Road Tax?</h2>
-                                    </div>
-
-                                    <div class="row mt-md-3 mt-4">
-                                        <div class="col-md-12 col-12">
-                                            <div class="d-flex mb-4">
-                                                <div class="form-check">
-                                                    <input class="form-check-input"
-                                                        type="radio"
-                                                        name="isRenewRoadtax1"
-                                                        value="Y"
-                                                        id="isRenewRoadtax1"
-                                                        v-model="formData['3'].isRenewRoadtax">
-                                                    <label class="form-check-label" for="isRenewRoadtax1">Yes</label>
-                                                </div>
-                                                <div class="form-check ml-5">
-                                                    <input class="form-check-input"
-                                                        type="radio"
-                                                        name="isRenewRoadtax2"
-                                                        value=""
-                                                        id="isRenewRoadtax2"
-                                                        v-model="formData['3'].isRenewRoadtax">
-                                                    <label class="form-check-label" for="isRenewRoadtax2">No</label>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-12 col-md-6">
-                                            <p class="bt1 mb-2">Collection Method:</p>
-                                            <div class="form-group mb-0">
-                                                <select class="form-control" v-model="formData['3'].roadtaxCollectionMethod">
-                                                    <option value="homeOfficeDelivery">Home/Office Delivery</option>
-                                                    <option value="selfCollection">Self Collection</option>
-                                                </select>
-                                                <small>
-                                                    For all deliveries, you are required to provide your MyKAD for biometric verification. If the MyKAD is faulty, the Logistics Officer will take a snapchat of your MyKAD.
-                                                </small>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-12 bt2 py-4">
-                                            <div class="form-check">
-                                                <input type="checkbox" 
-                                                    name="roadtaxDelAddrSameAsMotor" 
-                                                    id="roadtaxDelAddrSameAsMotor"
-                                                    class="form-check-input"
-                                                    v-model="formData['3'].roadtaxDelAddrSameAsMotor"
-                                                    @change="handleRoadtaxAddrSameChange">
-                                                <label for="roadtaxDelAddrSameAsMotor" class="form-check-label">
-                                                    Use the same address as my Motorcycle insurance
-                                                </label>
-                                                <svg class="icon icon-m tick-mark">
-                                                    <use xlink:href="/spa-assets/icons/icons.svg#sprite-tick-mark"
-                                                        href="/spa-assets/icons/icons.svg#sprite-tick-mark"></use>
-                                                </svg>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-12 col-md-6">
-                                            <p class="bt1 mb-2">Mailing Address for your road tax:</p>
-                                            <div class="form-group mb-0">
-                                                <validation-provider :rules="{
-                                                    'required': formData['3'].isRenewRoadtax === 'Y'
-                                                }" v-slot="{ errors, failedRules }">
-                                                    <select :class="{
-                                                            'form-control': true,
-                                                            'is-invalid': errors.length > 0
-                                                        }"
-                                                        :disabled="formData['3'].roadtaxDelAddrSameAsMotor === true"
-                                                        v-model="formData['3'].roadtaxDelRegion">
-                                                        <option disabled="disabled"
-                                                            hidden="hidden"
-                                                            selected="selected"
-                                                            value="">
-                                                            East or West Malaysia
-                                                        </option>
-                                                        <option value="East">East Malaysia</option>
-                                                        <option value="West"> West Malaysia</option>
-                                                    </select>
-                                                    <small class="error-message text-primary font-italic" v-if="errors.length > 0">
-                                                        <span v-if="failedRules.required">* Please select your location</span>
-                                                    </small>
-                                                </validation-provider>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6"></div>
-
-                                        <div class="col-12 col-md-6">
-                                            <validation-provider v-slot="validator"
-                                                :rules="{
-                                                    'required': formData['3'].isRenewRoadtax === 'Y'
-                                                }">
-                                                <div class="form-group mt-2 mb-0">
-                                                    <input type="text"
-                                                        :class="{
-                                                            'form-control': true,
-                                                            'is-invalid': validator.errors.length > 0
-                                                        }"
-                                                        placeholder="First Line"
-                                                        v-model="formData['3'].roadtaxAddressLine1"
-                                                        :disabled="formData['3'].roadtaxDelAddrSameAsMotor === true">
-                                                    <small class="error-message text-primary font-italic" v-if="validator.errors.length > 0">
-                                                        <span v-if="validator.failedRules.required">* Complete the Address Line 1 field</span>
-                                                    </small>
-                                                </div>
-                                            </validation-provider>
-                                        </div>
-
-                                        <div class="col-md-6"></div>
-
-                                        <div class="col-12 col-md-6">
-                                            <div class="form-group mt-2 mb-0 ">
-                                                <input type="text"
-                                                    class="form-control"
-                                                    placeholder="Second Line"
-                                                    v-model="formData['3'].roadtaxAddressLine2"
-                                                    :disabled="formData['3'].roadtaxDelAddrSameAsMotor === true">
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6"></div>
-
-                                        <!-- TODO: convert this to autocomplete -->
-                                        <div class="col-12 col-md-6">
-                                            <validation-provider v-slot="validator"
-                                                :rules="{ 'required': formData['3'].isRenewRoadtax === 'Y' }">
-                                                <div class="form-group variant-icon mt-2 mb-0">
-                                                    <div class="input-wrapper">
-                                                        <input type="text"
-                                                            placeholder="Find Postcode"
-                                                            :class="{
-                                                                'form-control': true,
-                                                                'is-invalid': validator.errors.length > 0
-                                                            }"
-                                                            v-model="formData['3'].roadtaxPostcode"
-                                                            :disabled="formData['3'].roadtaxDelAddrSameAsMotor === true"> 
-                                                        <svg class="icon icon-s mr-2">
-                                                            <use xlink:href="/spa-assets/icons/icons.svg#sprite-search"
-                                                                href="/spa-assets/icons/icons.svg#sprite-search"></use>
-                                                        </svg>
-                                                    </div>
-                                                    <small class="error-message text-primary font-italic" v-if="validator.errors.length > 0">
-                                                        <span v-if="validator.failedRules.required">* Complete the Postcode field.</span>
-                                                    </small>
-                                                </div>
-                                            </validation-provider>
-                                        </div>
-
-                                        <div class="col-md-6"></div>
-
-                                        <div class="col-12 col-md-6">
-                                            <div class="form-group mt-2 mb-0 ">
-                                                <input type="text"
-                                                    class="form-control"
-                                                    disabled
-                                                    placeholder="City"
-                                                    v-model="formData['3'].roadtaxCity">
-                                            </div>
-                                        </div>
-
-                                        <div class="col-12 mt-3">
-                                            <small>
-                                                <em>
-                                                    *Note: Delivery charges are based on MyEG's rate. Click
-                                                    <a class="underline italic" href="">here</a> to view rates for your
-                                                    area.
-                                                </em>
-                                            </small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Roadtax Form -->
-
                                 <div class="pt-4 wizard-navigation d-none d-md-flex">
                                     <a @click.prevent="goToPrevStep()" href="#" role="button" class="btn btn-default btn-outline-primary mr-4">Back</a>
-                                    <a @click.prevent="handleSubmit(onSubmit).then(function() { scrollToError() })" href="#" role="button" class="btn btn-default btn-primary">Continue</a>
+                                    <a @click.prevent="observer.handleSubmit(onSubmit).then(function() { scrollToError() })" href="#" role="button" class="btn btn-default btn-primary">Continue</a>
                                 </div>
                             </div>
 
@@ -1152,7 +976,7 @@
                         </div>
                     </div>
                     <div class="container pt-4 wizard-navigation d-md-none">
-                        <a @click.prevent="handleSubmit(onSubmit).then(function() { scrollToError() })" href="#" role="button" class="btn btn-default btn-primary mb-3 mb-md-0">Continue</a>
+                        <a @click.prevent="observer.handleSubmit(onSubmit).then(function() { scrollToError() })" href="#" role="button" class="btn btn-default btn-primary mb-3 mb-md-0">Continue</a>
                         <a @click.prevent="goToPrevStep()" href="#" role="button" class="btn btn-default btn-outline-primary ">Back</a>
                     </div>
                 </fieldset>
@@ -1277,18 +1101,18 @@
                                             <p class="bt1 mb-0">Name (as per NRIC):</p>
                                             <p class="bt2" v-if="!formData['4'].isRiderDetailsEditMode">{{ formData['2'].policyHolderName }}</p>
                                             <template v-if="formData['4'].isRiderDetailsEditMode">
-                                                <validation-provider rules="required|validName" v-slot="{ failedRules, errors }">
+                                                <validation-provider rules="required|validName" v-slot="validator">
                                                     <div class="form-group">
                                                         <input type="text"
                                                             :class="{
                                                                 'form-control': true,
-                                                                'is-invalid': errors.length > 0
+                                                                'is-invalid': validator.errors.length > 0
                                                             }"
                                                             v-model="formData['4'].policyHolderName"
-                                                            placeholder="e.g. Lisa Teo">
-                                                        <small class="error-message text-primary font-italic" v-if="errors.length > 0">
-                                                            <span v-if="failedRules.required">* Complete the Name as per NRIC field.</span>
-                                                            <span v-else-if="failedRules.validName">Please enter only alphabet, "-", "@", "/" and " ' " for Name</span>
+                                                            placeholder="E.g. Lee Siew Suan">
+                                                        <small class="error-message text-primary font-italic" v-if="validator.errors.length > 0">
+                                                            <span v-if="validator.failedRules.required">* Complete the Name as per NRIC field.</span>
+                                                            <span v-else-if="validator.failedRules.validName">Please enter only alphabet, "-", "@", "/" and " ' " for Name</span>
                                                         </small>
                                                     </div>
                                                 </validation-provider>
@@ -1305,18 +1129,18 @@
                                             <p class="bt1 mb-0">Email:</p>
                                             <p class="bt2" v-if="!formData['4'].isRiderDetailsEditMode">{{ formData['2'].policyHolderEmail }}</p>
                                             <template v-if="formData['4'].isRiderDetailsEditMode">
-                                                <validation-provider rules="required|email" v-slot="{ errors, failedRules }">
+                                                <validation-provider rules="required|email" v-slot="validator">
                                                     <div class="form-group">
                                                         <input type="text" 
                                                             :class="{
                                                                 'form-control': true,
-                                                                'is-invalid': errors.length > 0
+                                                                'is-invalid': validator.errors.length > 0
                                                             }"
                                                             v-model="formData['4'].policyHolderEmail"
-                                                            placeholder="e.g. hteoro@gmail.com">
-                                                        <small class="error-message text-primary font-italic" v-if="errors.length > 0">
-                                                            <span v-if="failedRules.required">* Complete the Email field.</span>
-                                                            <span v-else-if="failedRules.email">Please check email address</span>
+                                                            placeholder="E.g. 900808-10-8888">
+                                                        <small class="error-message text-primary font-italic" v-if="validator.errors.length > 0">
+                                                            <span v-if="validator.failedRules.required">* Complete the Email field.</span>
+                                                            <span v-else-if="validator.failedRules.email">Please check email address</span>
                                                         </small>
                                                     </div>
                                                 </validation-provider>
@@ -1326,18 +1150,18 @@
                                             <p class="bt1 mb-0">Mobile No.:</p>
                                             <p class="bt2" v-if="!formData['4'].isRiderDetailsEditMode">{{ formData['4'].policyHolderMobileNo }}</p>
                                             <template v-if="formData['4'].isRiderDetailsEditMode">
-                                                <validation-provider rules="required|integer|max:11" v-slot="{ errors, failedRules }">
+                                                <validation-provider rules="required|integer|max:11" v-slot="validator">
                                                     <div class="form-group">
                                                         <input type="tel"
                                                             :class="{
                                                                 'form-control': true,
-                                                                'is-invalid': errors.length > 0
+                                                                'is-invalid': validator.errors.length > 0
                                                             }"
                                                             v-model="formData['4'].policyHolderMobileNo"
-                                                            placeholder="e.g. 01x-xxxxxxx">
-                                                        <small class="error-message text-primary font-italic" v-if="errors.length > 0">
-                                                            <span v-if="failedRules.required">* Complete the Mobile field.</span>
-                                                            <span v-else-if="failedRules.integer || failedRules.max">Please check mobile number.</span>
+                                                            placeholder="E.g. 018-123 4567">
+                                                        <small class="error-message text-primary font-italic" v-if="validator.errors.length > 0">
+                                                            <span v-if="validator.failedRules.required">* Complete the Mobile field.</span>
+                                                            <span v-else-if="validator.failedRules.integer || validator.failedRules.max">Please check mobile number.</span>
                                                         </small>
                                                     </div>
                                                 </validation-provider>
@@ -1348,16 +1172,16 @@
                                             <p class="bt2" v-if="!formData['4'].isRiderDetailsEditMode">{{ fullAddress }}</p>
                                             <template v-if="formData['4'].isRiderDetailsEditMode">
                                                 <!-- Address Line 1 -->
-                                                <validation-provider rules="required" v-slot="{ errors, failedRules }">
+                                                <validation-provider rules="required" v-slot="validator">
                                                     <div class="form-group">
                                                         <input type="text"
                                                             placeholder="First Line"
                                                             v-model="formData['4'].policyHolderAddressLine1"
                                                             :class="{
                                                                 'form-control': true,
-                                                                'is-invalid': errors.length > 0
+                                                                'is-invalid': validator.errors.length > 0
                                                             }">
-                                                        <small class="error-message text-primary font-italic" v-if="failedRules.required">
+                                                        <small class="error-message text-primary font-italic" v-if="validator.failedRules.required">
                                                             * Complete the Address field.
                                                         </small>
                                                     </div>
@@ -1372,16 +1196,16 @@
                                                 </div>
 
                                                 <!-- Postcode -->
-                                                <validation-provider rules="required|min:5|max:5|integer" v-slot="{ errors, failedRules, valid }">
+                                                <validation-provider rules="required|min:5|max:5|integer" v-slot="validator">
                                                     <div class="form-group variant-icon variant-autocomplete">
                                                         <label class="bt1">Postcode:</label>
                                                         <vue-bootstrap-typeahead
                                                             :data="postcodeSuggestions"
                                                             v-model="formData['2'].addressPostcode"
-                                                            :serializer="s => s.postcode"
+                                                            :serializer="function(s) { return s.postcode }"
                                                             placeholder="Find postcode"
                                                             :max-matches="5"
-                                                            :input-class="errors.length > 0 ? 'is-invalid' : ''"
+                                                            :input-class="validator.errors.length > 0 ? 'is-invalid' : ''"
                                                             @hit="handlePostcodeHit($event)"
                                                             maxlength="5"
                                                         >
@@ -1392,11 +1216,11 @@
                                                                 </svg>
                                                             </template>
                                                         </vue-bootstrap-typeahead>
-                                                        <div class="small error-message text-primary font-italic" v-if="errors.length > 0">
-                                                            <span v-if="failedRules.required">
+                                                        <div class="small error-message text-primary font-italic" v-if="validator.errors.length > 0">
+                                                            <span v-if="validator.failedRules.required">
                                                                 * Complete the Postal Code field.
                                                             </span>
-                                                            <span v-else-if="failedRules.min || failedRules.max || failedRules.integer">
+                                                            <span v-else-if="validator.failedRules.min || validator.failedRules.max || validator.failedRules.integer">
                                                                 Please enter a valid Postal Code.
                                                             </span>
                                                         </div>
@@ -1424,20 +1248,20 @@
                                             <p class="bt1 mb-0">Gender:</p>
                                             <p class="bt2" v-if="!formData['4'].isRiderDetailsEditMode">{{ policyHolderGender === 'M' ? 'Male' : 'Female' }}</p>
                                             <template v-if="formData['4'].isRiderDetailsEditMode">
-                                                <validation-provider rules="required" v-slot="{ errors, failedRules }">
+                                                <validation-provider rules="required" v-slot="validator">
                                                     <div class="form-group">
                                                         <select v-model="policyHolderGender" 
                                                             :disabled="isIdNric"
                                                             :class="{
                                                                 'form-control': true,
-                                                                'is-invalid': errors.length > 0
+                                                                'is-invalid': validator.errors.length > 0
                                                             }">
                                                             <option value="" disabled selected hidden>Select Option</option>
                                                             <option value="M">Male</option>
                                                             <option value="F">Female</option>
                                                         </select>
-                                                        <div class="small error-message text-primary font-itatic" v-if="errors.length > 0">
-                                                            <span v-if="failedRules.required">
+                                                        <div class="small error-message text-primary font-itatic" v-if="validator.errors.length > 0">
+                                                            <span v-if="validator.failedRules.required">
                                                                 * Complete the Gender field.
                                                             </span>
                                                         </div>
@@ -1450,12 +1274,12 @@
                                             <p class="bt1 mb-0">Marital Status:</p>
                                             <p class="bt2" v-if="!formData['4'].isRiderDetailsEditMode">{{ formData['4'].policyHolderMaritalStatus }}</p>
                                             <template v-if="formData['4'].isRiderDetailsEditMode">
-                                                <validation-provider rules="required" v-slot="{ errors, failedRules }">
+                                                <validation-provider rules="required" v-slot="validator">
                                                     <div class="form-group">
                                                         <select v-model="formData['4'].policyHolderMaritalStatus"
                                                             :class="{
                                                                 'form-control': true,
-                                                                'is-invalid': errors.length > 0
+                                                                'is-invalid': validator.errors.length > 0
                                                             }">
                                                             <option disabled="disabled" hidden="hidden" selected="selected" value="">
                                                                 Select Option
@@ -1463,8 +1287,8 @@
                                                             <option value="Single">Single</option>
                                                             <option value="Married">Married</option>
                                                         </select>
-                                                        <div class="small error-message text-primary font-itatic" v-if="errors.length > 0">
-                                                            <span v-if="failedRules.required">
+                                                        <div class="small error-message text-primary font-itatic" v-if="validator.errors.length > 0">
+                                                            <span v-if="validator.failedRules.required">
                                                                 * Complete the Marital Status field.
                                                             </span>
                                                         </div>
@@ -1476,18 +1300,18 @@
                                             <p class="bt1 mb-0">Occupation:</p>
                                             <p class="bt2" v-if="!formData['4'].isRiderDetailsEditMode">{{ formData['4'].policyHolderOccupation }}</p>
                                             <template v-if="formData['4'].isRiderDetailsEditMode">
-                                                <validation-provider rules="required" v-slot="{ errors, failedRules }">
+                                                <validation-provider rules="required" v-slot="validator">
                                                     <div class="form-group">
                                                         <input id="occupation"
                                                             type="text"
-                                                            placeholder="eg: Architect"
+                                                            placeholder="E.g. Architect"
                                                             :class="{
                                                                 'form-control': true,
-                                                                'is-invalid': errors.length > 0
+                                                                'is-invalid': validator.errors.length > 0
                                                             }"
                                                             v-model="formData['4'].policyHolderOccupation">
-                                                        <div class="small error-message text-primary font-italic" v-if="errors.length > 0">
-                                                            <span v-if="failedRules.required">
+                                                        <div class="small error-message text-primary font-italic" v-if="validator.errors.length > 0">
+                                                            <span v-if="validator.failedRules.required">
                                                                 * Complete the Occupation field.
                                                             </span>
                                                         </div>
@@ -1529,34 +1353,7 @@
                                 </div>
                                 <!-- #endregion Rider Details -->
 
-                                <div class="bg-w py-5 pb-3 px-4 mb-4" v-if="formData['3'].isRenewRoadtax">
-                                    <h2 class="p2 mb-4">Road Tax Renewal</h2>
-                                    <div class="row">
-                                        <div class="col-12 col-md-6">
-                                            <p class="bt1 mb-0">Collection Method:</p>
-                                            <p class="bt2">{{ formData['3'].roadtaxCollectionMethod === 'homeOfficeDelivery' ? 'Home Delivery' : 'Self Collection' }}</p>
-                                        </div>
-
-                                        <div class="col-12 col-md-6">
-                                            <p class="bt1 mb-0">Mailing Address:</p>
-                                            <p class="bt2">{{ formData['3'].roadtaxAddressLine1 + ', ' + formData.roadtaxAddressLine2 }}</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="d-flex justify-content-end">
-                                        <a href="#" class="btn btn-secondary btn-icon">
-                                            <div class="button-icon">
-                                                <svg class="icon icon-s">
-                                                    <use xlink:href="/spa-assets/icons/icons.svg#sprite-pencil-1"
-                                                        href="/spa-assets/icons/icons.svg#sprite-pencil-1"></use>
-                                                </svg>
-                                            </div>
-                                            <span class="button-text">Edit</span>
-                                        </a>
-                                    </div>
-                                </div>
-
-                                <validation-provider v-slot="{ errors }" rules="mustBeTrue">
+                                <validation-provider v-slot="validator" rules="mustBeTrue">
                                     <div class="form-check d-none d-md-block">
                                         <input type="checkbox"
                                             name="tncAgreement"
@@ -1564,17 +1361,17 @@
                                             required
                                             :class="{
                                                 'form-check-input': true,
-                                                'is-invalid': errors.length > 0
+                                                'is-invalid': validator.errors.length > 0
                                             }"
                                             v-model="formData['4'].tncAgreement">
                                         <label for="tncAgreement" class="form-check-label pr-md-5">
-                                            By ticking this box, I hereby acknowledge that I have read the <a class="underline" href="#">Product Disclosure Sheet</a> and agree to the <a href="#" class="underline">Terms and Conditions</a>.
+                                            By ticking this box, I hereby acknowledge that I have read the <a class="underline" href="/msigonline/resource/MSIG%20Motorcycle%20Insurance%20PDS%20(Rebate).pdf">Product Disclosure Sheet</a> and agree to the <a href="#" class="underline">Terms and Conditions</a>.
                                         </label>
                                         <svg class="icon icon-m tick-mark">
                                             <use xlink:href="/spa-assets/icons/icons.svg#sprite-tick-mark"
                                                 href="/spa-assets/icons/icons.svg#sprite-tick-mark"></use>
                                         </svg>
-                                        <div class="invalid-feedback font-italic" v-if="errors.length > 0">
+                                        <div class="invalid-feedback font-italic" v-if="validator.errors.length > 0">
                                             * Oops, looks like you haven't ticked the box yet. Please do so to proceed
                                         </div>
                                     </div>
@@ -1582,7 +1379,7 @@
 
                                 <div class="pt-4 wizard-navigation d-none d-md-flex">
                                     <a @click.prevent="goToPrevStep()" href="#" role="button" class="btn btn-default btn-outline-primary mr-4">Back</a>
-                                    <a @click.prevent="handleSubmit(onSubmit).then(function() { scrollToError() })" href="#" role="button" class="btn btn-default btn-primary">Checkout</a>
+                                    <a @click.prevent="observer.handleSubmit(onSubmit).then(function() { scrollToError() })" href="#" role="button" class="btn btn-default btn-primary">Checkout</a>
                                 </div>
                             </div>
                             <div class="col-12 col-md-4">
@@ -1594,23 +1391,31 @@
                         </div>
                     </div>
                     <div class="container">
-                        <div class="form-check d-md-none mt-3">
-                            <input type="checkbox" 
-                                name="m_tncAgreement" 
-                                id="m_tncAgreement" 
-                                class="form-check-input"
-                                v-model="formData['4'].tncAgreement">
-                            <label for="m_tncAgreement" class="form-check-label pr-md-5">
-                                By ticking this box, I hereby acknowledge that I have read the <a class="underline" href="/msigonline/resource/MSIG%20Motorcycle%20Insurance%20PDS%20(Rebate).pdf">Product Disclosure Sheet</a> and agree to the <a href="#" class="underline">Terms and Conditions</a>.
-                            </label>
-                            <svg class="icon icon-m tick-mark">
-                                <use xlink:href="/spa-assets/icons/icons.svg#sprite-tick-mark"
-                                    href="/spa-assets/icons/icons.svg#sprite-tick-mark"></use>
-                            </svg>
-                        </div>
+                        <validation-provider v-slot="validator" rules="mustBeTrue">
+                            <div class="form-check d-md-none mt-3">
+                                <input type="checkbox" 
+                                    name="m_tncAgreement" 
+                                    id="m_tncAgreement" 
+                                    :class="{
+                                        'form-check-input': true,
+                                        'is-invalid': validator.errors.length > 0
+                                    }"
+                                    v-model="formData['4'].tncAgreement">
+                                <label for="m_tncAgreement" class="form-check-label pr-md-5">
+                                    By ticking this box, I hereby acknowledge that I have read the <a class="underline" href="/msigonline/resource/MSIG%20Motorcycle%20Insurance%20PDS%20(Rebate).pdf">Product Disclosure Sheet</a> and agree to the <a href="#" class="underline">Terms and Conditions</a>.
+                                </label>
+                                <svg class="icon icon-m tick-mark">
+                                    <use xlink:href="/spa-assets/icons/icons.svg#sprite-tick-mark"
+                                        href="/spa-assets/icons/icons.svg#sprite-tick-mark"></use>
+                                </svg>
+                                <div class="invalid-feedback font-italic" v-if="validator.errors.length > 0">
+                                    * Oops, looks like you haven't ticked the box yet. Please do so to proceed
+                                </div>
+                            </div>
+                        </validation-provider>
                     </div>
                     <div class="container pt-4 wizard-navigation d-md-none">
-                        <a @click.prevent="onSubmit()" href="#" role="button" class="btn btn-default btn-primary mb-3 mb-md-0">Checkout</a>
+                        <a @click.prevent="observer.handleSubmit(onSubmit).then(function() { scrollToError() })" href="#" role="button" class="btn btn-default btn-primary mb-3 mb-md-0">Checkout</a>
                         <a @click.prevent="goToPrevStep()" role="button" class="btn btn-default btn-outline-primary ">Back</a>
                     </div>
                 </fieldset>
@@ -1760,12 +1565,12 @@
                                     <div v-show="formData['5'].paymentMethod === 'fpxPaymentGateway'">
                                         <p class="bt1 mb-2">Bank:</p>
                                         <validation-provider :rules="formData['5'].paymentMethod === 'fpxPaymentGateway' ? 'required' : ''"
-                                            v-slot="{ errors, failedRules }">
+                                            v-slot="validator">
                                             <div class="form-group">
                                                 <select v-model="formData['5'].bankId"
                                                     :class="{
                                                         'form-control': true,
-                                                        'is-invalid': errors.length > 0
+                                                        'is-invalid': validator.errors.length > 0
                                                     }">
                                                     <option disabled hidden selected value="">Select a Bank</option>
                                                     <option v-for="(bank, index) in banks" v-bind:key="index"
@@ -1773,7 +1578,7 @@
                                                         {{ bank.bankName }}
                                                     </option>
                                                 </select>
-                                                <small class="error-message text-primary font-italic" v-if="failedRules.required">
+                                                <small class="error-message text-primary font-italic" v-if="validator.failedRules.required">
                                                     Please select a valid bank
                                                 </small>
                                             </div>
@@ -1788,18 +1593,18 @@
                                         <div class="row">
                                             <div class="col-12 col-md-6">
                                                 <validation-provider :rules="formData['5'].paymentMethod === 'fpxPaymentGateway' ? 'required|email' : ''"
-                                                    v-slot="{ errors, failedRules }">
+                                                    v-slot="validator">
                                                     <div class="form-group">
                                                         <input type="email" 
                                                             :class="{
                                                                 'form-control': true,
-                                                                'is-invalid': errors.length > 0
+                                                                'is-invalid': validator.errors.length > 0
                                                             }"
                                                             placeholder="e.g. hteoro@gmail.com"
                                                             v-model="formData['5'].fpxEmail">
-                                                        <small class="error-message text-primary font-italic" v-if="errors.length > 0">
-                                                            <span v-if="failedRules.required">* Complete the Email field.</span>
-                                                            <span v-else-if="failedRules.email">Please check email address</span>
+                                                        <small class="error-message text-primary font-italic" v-if="validator.errors.length > 0">
+                                                            <span v-if="validator.failedRules.required">* Complete the Email field.</span>
+                                                            <span v-else-if="validator.failedRules.email">Please check email address</span>
                                                         </small>
                                                     </div>
                                                 </validation-provider>
@@ -1830,8 +1635,8 @@
                                         <div class="row">
                                             <div class="col-12 col-md-7">
                                                 <validation-provider 
-                                                    :rules="formData['5'].paymentMethod === 'abmbGateway' ? 'required|isCreditCardValid' : ''" 
-                                                    v-slot="{ errors, failedRules }">
+                                                    :rules="formData['5'].paymentMethod === 'abmbGateway' ? 'required' : ''" 
+                                                    v-slot="validator">
                                                     <div class="form-group">
                                                         <label class="bt1">Card Number:</label>
                                                         <input type="text"
@@ -1841,18 +1646,18 @@
                                                             v-model="formData['5'].ccNo"
                                                             :class="{
                                                                 'form-control': true,
-                                                                'is-invalid': errors.length > 0
+                                                                'is-invalid': validator.errors.length > 0
                                                             }"
                                                             autocomplete="cc-number">
                                                         <div class="small error-message text-primary font-italic">
-                                                            <span v-if="failedRules.required">* Complete the Card Number field.</span>
-                                                            <span v-else-if="failedRules.isCreditCardValid">* Please enter a valid Visa / MasterCard No</span>
+                                                            <span v-if="validator.failedRules.required">* Complete the Card Number field.</span>
+                                                            <span v-else-if="validator.failedRules.isCreditCardValid">* Please enter a valid Visa / MasterCard No</span>
                                                         </div>
                                                     </div>
                                                 </validation-provider>
                                             </div>
                                             <div class="col-12 col-md-7">
-                                                <validation-provider :rules="formData['5'].paymentMethod === 'abmbGateway' ? 'required' : ''" v-slot="{ errors, failedRules }">
+                                                <validation-provider :rules="formData['5'].paymentMethod === 'abmbGateway' ? 'required' : ''" v-slot="validator">
                                                     <div class="form-group">
                                                         <label class="bt1">Name on Card:</label>
                                                         <input type="text"
@@ -1862,9 +1667,9 @@
                                                             autocomplete="cc-name"
                                                             :class="{
                                                                 'form-control': true,
-                                                                'is-invalid': errors.length > 0
+                                                                'is-invalid': validator.errors.length > 0
                                                             }">
-                                                        <small v-if="failedRules.required" class="error-message text-primary font-italic">
+                                                        <small v-if="validator.failedRules.required" class="error-message text-primary font-italic">
                                                             <span>* Please enter a valid Visa / MasterCard No.</span>
                                                         </small>
                                                     </div>
@@ -1873,9 +1678,7 @@
 
                                             <div class="col-12 col-md-10">
                                                 <div class="form-row">
-                                                    <validation-provider 
-                                                        :rules="formData['5'].paymentMethod === 'abmbGateway' ? 'required|isCreditCardExpiryValid' : ''"
-                                                        v-slot="{ errors, failedRules }" slim>
+                                                    <validation-provider :rules="formData['5'].paymentMethod === 'abmbGateway' ? 'required|isCreditCardExpiryValid' : ''" v-slot="validator" slim>
                                                         <div class="col-3 form-group">
                                                             <label class="bt1">Expiration Date:</label>
                                                             <input type="text" 
@@ -1887,17 +1690,17 @@
                                                                 v-model="formData['5'].expiry"
                                                                 :class="{
                                                                     'form-control': true,
-                                                                    'is-invalid': errors.length > 0
+                                                                    'is-invalid': validator.errors.length > 0
                                                                 }">
-                                                            <div class="small error-message text-primary font-italic" v-if="errors.length > 0">
-                                                                <span v-if="failedRules.required">* Complete the Expiry (MM/YY) field.</span>
-                                                                <span v-if="failedRules.isCreditCardExpiryValid">* Please enter a valid Expiry date (MM/YY).</span>
+                                                            <div class="small error-message text-primary font-italic" v-if="validator.errors.length > 0">
+                                                                <span v-if="validator.failedRules.required">* Complete the Expiry (MM/YY) field.</span>
+                                                                <span v-if="validator.failedRules.isCreditCardExpiryValid">* Please enter a valid Expiry date (MM/YY).</span>
                                                             </div>
                                                         </div>
                                                     </validation-provider>
                                                     <validation-provider
                                                         :rules="formData['5'].paymentMethod === 'abmbGateway' ? 'required|integer|length:3' : ''"
-                                                        v-slot="{ errors, failedRules }" slim>
+                                                        v-slot="validator" slim>
                                                         <div class="form-group col-1">
                                                             <label class="bt1">CVV
                                                                 <span class="d-inline-flex">
@@ -1917,11 +1720,11 @@
                                                                 v-model="formData['5'].cvv"
                                                                 :class="{
                                                                     'form-control': true,
-                                                                    'is-invalid': errors.length > 0
+                                                                    'is-invalid': validator.errors.length > 0
                                                                 }">
-                                                            <div class="small error-message text-primary font-italic" v-if="errors.length > 0">
-                                                                <span v-if="failedRules.required">* Complete the CVV field.</span>
-                                                                <span v-else-if="failedRules.length || failedRules.integer">* Please enter a valid CVV</span>
+                                                            <div class="small error-message text-primary font-italic" v-if="validator.errors.length > 0">
+                                                                <span v-if="validator.failedRules.required">* Complete the CVV field.</span>
+                                                                <span v-else-if="validator.failedRules.length || validator.failedRules.integer">* Please enter a valid CVV</span>
                                                             </div>
                                                         </div>
                                                     </validation-provider>
@@ -1975,7 +1778,7 @@
                                 
                                 <div class="wizard-navigation d-none d-md-flex pt-4">
                                     <a @click.prevent="goToPrevStep()" href="#" role="button" class="btn btn-default btn-outline-primary mr-4">Back</a>
-                                    <button @click.prevent="handleSubmit(onSubmit).then(function() { scrollToError() })" role="button" class="btn btn-default btn-primary">Pay Now</button>
+                                    <button @click.prevent="observer.handleSubmit(onSubmit).then(function() { scrollToError() })" role="button" class="btn btn-default btn-primary">Pay Now</button>
                                 </div>
                             </div>
 
@@ -1988,7 +1791,7 @@
 
                             <div class="container pt-4 wizard-navigation d-md-none">
                                 <a @click.prevent="goToPrevStep()" href="#" role="button" class="btn btn-default btn-outline-primary mb-3">Back</a>
-                                <button @click.prevent="handleSubmit(onSubmit).then(function() { scrollToError() })" role="button" class="btn btn-default btn-primary">Pay Now</button>
+                                <button @click.prevent="observer.handleSubmit(onSubmit).then(function() { scrollToError() })" role="button" class="btn btn-default btn-primary">Pay Now</button>
                             </div>
                         </div>
                     </div>
