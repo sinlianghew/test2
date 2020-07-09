@@ -20,6 +20,7 @@
     <input type="hidden" name="branchCode" value="">
     <input type="hidden" name="supportTel" value="1-800-88-6744">
     <input type="hidden" name="thankYouPageUrl" value="/payment-completed.html">
+    <input type="hidden" name="summaryUrl" value="/msigonline/products/motorcycle/summary.html">
     <input type="hidden" name="paymentUrl" value="/msigonline/products/motorcycle/payment.html">
 
     <div class="container py-5" v-if="canProceed">
@@ -748,16 +749,6 @@
                                                                     </li>
 
                                                                     <li class="mb-2 row-match-height pl-lg-0 text-lg-center" data-row-num="3">
-                                                                        <div class="list-icon">
-                                                                            <svg class="icon icon-s">
-                                                                                <use xlink:href="/spa-assets/icons/icons.svg#sprite-tick-mark"
-                                                                                    href="/spa-assets/icons/icons.svg#sprite-tick-mark">
-                                                                                </use>
-                                                                            </svg>
-                                                                        </div>
-                                                                        <div class="list-content d-flex justify-content-between d-lg-block w-100 text-left ml-md-4">
-                                                                            <span class='bold'>Personal accident cover for authorised riders if All Riders cover is purchased</span>
-                                                                        </div>
                                                                     </li>
                                                                 </ul>
 
@@ -866,6 +857,11 @@
                                                 <small class="color-red"><b>"You are choosing Single Rider coverage"</b></small>
                                                 <br>
                                                 <small class="color-red">Important Note: There will be no coverage in the event of your motorcycle ridden by any other person.</small>
+                                            </div>
+                                            <div class="ml-4 pl-2 font-italic" v-if="formData['3'].allRiderPlan">
+                                                <small><b>"You are choosing All Riders coverage"</b></small>
+                                                <br>
+                                                <small>Important Note: There will be personal accident cover for authorised riders.</small>
                                             </div>
                                         </div>
 
