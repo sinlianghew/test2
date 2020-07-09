@@ -13,7 +13,7 @@ Vue.component('motor-summary-pane', MotorcycleSummaryPane)
  * Staff Relation: ['Direct Relationship']
  */
 
-new Vue({
+const m3paform = new Vue({
     el: '#motorcycle-form',
     data: {
         stage: document.querySelector('#motorcycle-form input[name=stage]').value,
@@ -252,21 +252,6 @@ new Vue({
 
                 // By right not supposed to set like this..
                 this.handleMotorModelChanged()
-
-                const motorSumInsured = await this.findVehicleSumInsured()
-                this.formData['2'] = {
-                    ...this.formData['2'],
-                    ...motorSumInsured
-                }
-                this.formData['2'].sumInsuredType = this.formData['2'].sumInsuredType === 'MarketValue' ? 'marketValue' : 'recomendedValue';
-                
-                if (!motorSumInsured.canProceed) {
-                    
-                    // show the user the form
-                    // ' The car sum insured is not available in the system.  Please download the application form <a style="width: auto; height: auto; display: inline-block; line-height: initial; background: transparent;text-decoration:underline" href="../../resource/Motor_ProposalForm.pdf" target="_blank"><b><u> here </u></b></a> and email to us.'
-                } else {
-                    
-                }
             } else if (this.currStep.stepNum == '2') {
                 this.formData['3'].motorPlanType = "comprehensive"
                 await this.calculatePremiumAsync()
@@ -443,6 +428,20 @@ new Vue({
             this.formData['2'].motorModelCode = this.formData['2'].motorModel.modelCode;
             this.formData['2'].make = this.formData['2'].motorModel.make;
             this.formData['2'].family = this.formData['2'].motorModel.family;
+        },
+        async handleMotorcycleLocationChanged () {
+            const motorSumInsured = await this.findVehicleSumInsured()
+            this.formData['2'] = {
+                ...this.formData['2'],
+                ...motorSumInsured
+            }
+            this.formData['2'].sumInsuredType = this.formData['2'].sumInsuredType === 'MarketValue' ? 'marketValue' : 'recomendedValue';
+            
+            if (!motorSumInsured.canProceed) {
+                this.errorMessage = '<p>The car sum insured is not available in the system.  Please download the application form <a style="width: auto; height: auto; display: inline-block; line-height: initial; background: transparent;text-decoration:underline" href="../../resource/Motor_ProposalForm.pdf" target="_blank"><b><u> here </u></b></a> and email to us.</p>'
+                this.canProceed = false;
+                sessionStorage.removeItem('m3pa_data')
+            }
         },
         findVehicleSumInsured () {
             let apiUrl = this.baseUrl + '/dotCMS/purchase/buynow';

@@ -268,7 +268,7 @@
                                             <validation-provider rules="required" v-slot="validator">
                                                 <div class="form-group">
                                                     <select :class="{ 'form-control': true, 'is-invalid': validator.errors.length > 0 }" 
-                                                        @change="findVehicleSumInsured"
+                                                        @change="handleMotorcycleLocationChanged"
                                                         v-model="formData['2'].motorVehicleLocation">
                                                         <option disabled hidden selected value="">Select a state</option>
                                                         <option v-for="state in states" :key="state.code" :value="state">{{ state.name }}</option>
