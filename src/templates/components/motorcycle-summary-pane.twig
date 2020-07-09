@@ -10,8 +10,8 @@
 			<span class="title">Toggle Summary</span>
 		</div>
 	</div>
-	<div class="bg-w py-3 px-2">
-		<div class="px-3 pt-2" v-if="currStepNum !== '5'">
+	<div class="body bg-w py-3 px-2">
+		<div class="px-2 pt-2" v-if="currStepNum !== '5'">
 			<p class="bt1" v-if="formData['2'].nxtNCDDiscount > 0">
 				You’re qualified for {{ formData['2'].nxtNCDDiscount }}% NCD!
 			</p>
@@ -49,7 +49,7 @@
 		</div>
 
 		<template v-if="currStepNum > 2">
-			<div class="bg-p2c px-3 py-4 mb-4 rounded" v-if="currStepNum !== '5'">
+			<div class="bg-p2c px-2 py-2 mb-4 breakdown-pane" v-if="currStepNum !== '5'">
 				<div class="d-flex justify-content-between">
 					<p class="bt2 mb-0">Basic Premium</p>
 					<p class="bt2 mb-0">{{ formatAsCurrency(formData['3'].basePremium) }}</p>
@@ -66,13 +66,14 @@
 					<p class="bt2 mb-0">NCD ({{ formData['3'].ncdRate }}%)</p>
 					<p class="bt2 mb-0">({{ formatAsCurrency(formData['3'].ncdAmount) }})</p>
 				</div>
+				<div class="divider my-2"></div>
 				<div class="d-flex justify-content-between">
 					<p class="bt2 mb-0 font-weight-bold">Total Amount</p>
 					<p class="bt2 mb-0 font-weight-bold">{{ formatAsCurrency(netNCDAmount) }}</p>
 				</div>
 			</div>
 
-			<div class="px-3" v-if="(isAnySpecialAddOnSelected || formData['3'].motorPlusPlan === '') && currStepNum !== '5'">
+			<div class="px-2" v-if="(isAnySpecialAddOnSelected || formData['3'].motorPlusPlan === '') && currStepNum !== '5'">
 				<div class=" d-flex justify-content-between mb-2">
 					<p class="bt2 mb-0 font-weight-bold">Add-Ons</p>
 				</div>
@@ -94,23 +95,23 @@
 				</div>
 				<hr />
 				<div class="d-flex justify-content-between pb-4">
-					<p class="bt2 mb-0 pr-3"><strong>Total Add-Ons</strong></p>
+					<p class="bt2 mb-0 pr-3"><strong>Total Add-On</strong></p>
 					<p class="bt2 mb-0"><strong>{{ formatAsCurrency(formData['3'].totalAdditionalCoveragePremium) }}</strong></p>
 				</div>
 			</div>
 
-			<p class="text-right bt1 mb-1 px-3" v-if="currStepNum === '5'">RM</p>
-			<div class="bg-p2c px-3 py-4 rounded">
+			<p class="text-right bt1 mb-1 px-2" v-if="currStepNum === '5'">RM</p>
+			<div class="bg-p2c px-2 py-2 breakdown-pane">
 				<div class="d-flex justify-content-between">
 					<p class="bt2 mb-0">Gross Premium</p>
 					<p class="bt2 mb-0">{{ formatAsCurrency(grossPremium) }}</p>
 				</div>
 				<div class="d-flex justify-content-between ">
 					<p class="bt2 mb-0">Rebate ({{ formData['3'].discountRate }}%)</p>
-					<p class="bt2 mb-0">{{ formatAsCurrency(formData['3'].discountAmount) }}</p>
+					<p class="bt2 mb-0">({{ formatAsCurrency(formData['3'].discountAmount) }})</p>
 				</div>
 
-				<div class="divider my-4"></div>
+				<div class="divider my-2"></div>
 				<div class="d-flex justify-content-between">
 					<p class="bt2 mb-0">
 						<strong>Subtotal</strong>
@@ -131,7 +132,7 @@
 
 		</template>
 	</div>
-	<div class="section-header bg-p2 py-4 px-4 d-flex justify-content-between align-items-center" v-if="currStepNum > 2">
+	<div class="footer section-header bg-p2 py-md-4 px-4 d-flex justify-content-between align-items-center" v-if="currStepNum > 2">
 		<p class="bt1 w mb-0"><strong>Total Amount Payable</strong></p>
 		<p class="h2 w mb-0">{{ formatAsCurrency(formData['3'].totalPayable) }}</p>
 	</div>

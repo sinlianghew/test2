@@ -20,6 +20,21 @@ $header-xs-height: 60px;
         height: #{$header-xs-height};
     }
 
+    .footer {
+        height: #{$header-xs-height}
+    }
+
+    .body {
+        min-height: calc(100vh - #{$header-xs-height * 2});
+        max-height: calc(100vh - #{$header-xs-height * 2});
+        overflow-y: auto;
+        overscroll-behavior: contain;
+    }
+
+    .breakdown-pane {
+        border-radius: .825rem;
+    }
+
     .btn-toggle {
         border: none;
         background-color: transparent;
@@ -50,6 +65,13 @@ $header-xs-height: 60px;
         transform: translateY(0);
         top: 0;
         z-index: 1020;
+        max-height: fit-content;
+        height: auto;
+        min-height: auto;
+        
+        .header {
+            pointer-events: none;
+        }
 
         .btn-toggle {
             display: none;
@@ -57,6 +79,12 @@ $header-xs-height: 60px;
 
         .is-expanded {
             transform: translateY(0);            
+        }
+
+        .body {
+            min-height: auto;
+            max-height: none;
+            overscroll-behavior: auto;
         }
     }
 

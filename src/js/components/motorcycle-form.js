@@ -28,6 +28,7 @@ const m3paform = new Vue({
         thankYouPageUrl: document.querySelector('#motorcycle-form input[name="thankYouPageUrl"]').value,
         formula: document.querySelector('#motorcycle-form input[name=formula]').value,
         paymentUrl: document.querySelector('#motorcycle-form input[name="paymentUrl"]').value,
+        summaryUrl: document.querySelector('#motorcycle-form input[name="summaryUrl"]').value,
         wishToRestoreSession: false,
 
         steps: [
@@ -191,6 +192,7 @@ const m3paform = new Vue({
                         this.postcodeSuggestions = state.postcodeSuggestions;
                         this.currSelectedPostcode = state.currSelectedPostcode;
                         this.loanProviderSuggestions = state.loanProviderSuggestions;
+                        this.$nextTick(() => this.rowMatchHeight())
                         return;
                     }
                 }
