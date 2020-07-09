@@ -2,7 +2,9 @@ export default {
     template: '#summary-pane-template',
     props: ['formData', 'currStepNum', 'showSpecialAddOns'],
     data: function () {
-        return {}
+        return {
+            isExpanded: false
+        }
     },
     computed: {
         isAnySpecialAddOnSelected: function () {
@@ -31,6 +33,9 @@ export default {
                 number = 0;
             }
             return number.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+        },
+        toggleExpand: function () {
+            this.isExpanded = !this.isExpanded;
         }
     }
 }

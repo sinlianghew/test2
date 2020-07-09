@@ -154,7 +154,8 @@ body {
     @import "components/buttons.scss";
     @import "components/rounded-corners.scss";
     @import "components/credit-card-indicator.scss";
-
+    @import "components/summary-pane";
+    
     /** Page Specific styling **/
     @import "pages/payment-completed.scss";
 

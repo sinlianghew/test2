@@ -1,8 +1,14 @@
 {% verbatim %}
 
-<div class="summary-pane sticky-top">
-	<div class="section-header bg-p2 py-4 px-4">
+<div :class="{ 'summary-pane': true, 'is-expanded': isExpanded }">
+	<div class="header section-header bg-p2 py-md-4 px-4" @click.prevent="toggleExpand">
 		<h2 class="w mb-0">{{ currStepNum === '5' ? 'Order ' : '' }}Summary</h2>
+		<div class="btn-toggle">
+			<svg class="icon icon-l w">
+				<use href="/spa-assets/icons/icons.svg#sprite-chevron"></use>
+			</svg>
+			<span class="title">Toggle Summary</span>
+		</div>
 	</div>
 	<div class="bg-w py-3 px-2">
 		<div class="px-3 pt-2" v-if="currStepNum !== '5'">
