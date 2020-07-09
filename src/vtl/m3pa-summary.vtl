@@ -1,43 +1,3 @@
-#set ($partnerCode = $request.getParameter('partnerCode'))
-#set ($partnerURLTitle = $request.getParameter('partnerURLTitle'))
-#set ($productCode = $request.getParameter('productCode'))
-#set ($productName = $request.getParameter('productName'))
-#set ($productURLTitle = $request.getParameter('productURLTitle'))
-#set ($promotionCode = $request.getParameter('promotionCode'))
-#set ($CmsSettingUtil = $webutil.getBean("cmsSettingUtil"))
-#set ($partner = $CmsSettingUtil.findCMSSetting($partnerCode))
-#set ($allowPromoCode = $UtilMethods.isSet($productCode) && $CmsSettingUtil.hasPromoCodeStructure($productCode))
-#if ($allowPromoCode && $UtilMethods.isSet($promotionCode))
-    #set ($promoCodeStruc = $CmsSettingUtil.findPromoCodeStructure($productCode, $promotionCode))
-#end
-#set ($product = $CmsSettingUtil.findCMSProductSettingAdjustedByPromoCode($productCode, $partner.getPartnerIdentifier(), $promoCodeStruc))
-#set ($productExtended = $CmsSettingUtil.findExtendedProductStructure($productCode))
-#if($request.getParameter('branch').length() > 0)
-    #set ($branch = $request.getParameter('branch'))
-#end
-
-#foreach($con in $dotcontent.pull("+structureName:WlpProductStructure +(conhost:$host.identifier conhost:SYSTEM_HOST) +(Parent_WlpPartnerStructure-Child_WlpProductStructure:$partner.getPartnerIdentifier()) +WlpProductStructure.productCode:$productCode",1,"undefined"))
-    #set($tnc = $con.tnc)
-    #set($productDisclosurePDF =  $con.productDisclosureSheet.uri)
-    #set($productDisclosurePDFHtml =  $con.productDisclosureSheetHtml)
-#end
-
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        $tnc
-      </div>
-    </div>
-  </div>
-</div>
-
 <script>
     $(function() { 
         window.killUnloadM3PA = function () {
@@ -49,13 +9,16 @@
 #[[
 
 <main class="travel-insurance-new" id="main-content">
-    
+        
 
     <div id="motorcycle-form" class="form-wizard">
         <!-- The base URL for all the API calls -->
         <input type="hidden" name="tieBaseUrl" value="">
 
-        <!-- Values from Server Side -->
+        <!-- Depending on the stage of the subscription journey, the form will behave differently. -->
+        <input type="hidden" name="stage" value="summary">
+
+        <!-- Default Values -->
         <input type="hidden" name="formula" value="motor">
         <input type="hidden" name="partnerCode" value="msigonline">
         <input type="hidden" name="productCode" value="MCY">
@@ -224,7 +187,7 @@
                                                 }"
                                                 v-model="formData['1'].agreement">
                                             <label for="agreement" class="form-check-label">
-                                                I have read and understood MSIG's <a href="#" class="underline">Privacy Notice</a> and
+                                                I have read and understood MSIG's <a href="https://www.msig.com.my/privacy-notice/" class="underline">Privacy Notice</a> and
                                                 agree to MSIG
                                                 processing my personal data for the purposes and in the manners set out in the Privacy
                                                 Notice.

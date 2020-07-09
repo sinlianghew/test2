@@ -1,0 +1,158 @@
+
+<div class="motorNewPreScreenPage">
+##<input type="hidden" value="Y" id="motorPlusPlan" />
+
+  <div class="preScreen-container no-pageIntro">
+  <p class="ncdGetStarted">Get Started<!-- <span class="ncdGetStarted-toolTip"><span class="ncdGetStarted-toolTipText">You can purchase Motor Insurance online for vehicles 15 years old and below.</span></span>--></p>
+  <span>Please make sure you meet the following conditions.</span>
+  <ol>
+    <li>You are between 16 and 75 years old.</li>
+    #if($partnerCode == 'dmms' || $partnerCode == 'ford')
+    
+    #else
+    <li>Your motorcycle is 250 c.c and below.</li>
+    #end
+    
+    <li>Your motorcycle sum insured does not exceed RM30,000.</li>
+    
+    <li>Your motorcycle is not older than 15 years old.</li>
+    
+    <li>Your next policy renewal date is within 60 days.</li>
+    
+  </ol>
+  </div>
+    #if($partnerCode == 'msigstaff')
+        <a class="previous mmpPreScreen-backbtn">Back</a>
+    #end
+    <div class="mmpPrescreenBtn">
+        <a class="mmpPreScreen-yesbtn">Yes</a>
+        <a class="mmpPreScreen-nobtn">No</a>
+    </div>
+</div>
+<div class="motorNewNCDPage">
+
+  <ul class="formNCD hidden">
+  <p class="ncdGetStarted">Get Started <!-- <span class="ncdGetStarted-toolTip"><span class="ncdGetStarted-toolTipText">You can purchase Motor Insurance online for vehicles 15 years old and below.</span></span> --></p>
+  <div class="NcdFormMainContainer">
+  <div class="container-checkNcdForm1">
+  
+    <li class="checkNcd-form">
+      <input type="radio" name="carOwnerMalaysian" value="Y" id="carOwnerMalaysian" class="tabMalaysian inputNationality" #if(!$UtilMethods.isSet($request.getParameter('policyHolderMalaysian')) || $request.getParameter('policyHolderMalaysian') == "Y") checked="checked" #end>
+        <label for="carOwnerMalaysian">NRIC</label>
+        </li>
+    <li class="checkNcd-form">
+      <input type="radio" name="carOwnerMalaysian" value="N" id="carOwnerNonMalaysian" class="tabMalaysian inputNationality" #if($request.getParameter('policyHolderMalaysian') == "N") checked="checked" #end>
+        <label for="carOwnerNonMalaysian">Passport</label>
+    </li>
+
+    <span class="personalDetailsMalaysian">
+        <li class="fieldgroup clearfix">
+            <input class="required"  maxlength="14" name="motorNcdCheckNRIC" id="motorNcdCheckNRIC" data-name="Car Owner NRIC" type="text" placeholder="E.g.: 900808-10-8888" value="$!esc.html($!request.getParameter('policyHolderNRIC'))">             
+      <span class="mmpErrorMsg"></span>
+        </li>
+    </span>
+    <span class="personalDetailsNonMalaysian" style="display:none">
+      <li class="fieldgroup clearfix">
+        <select class="required dropdown-dim" id="motorNcdCheckNationality" name="motorNcdCheckNationality" required="required" data-name="Nationality">          
+            <option value="" disabled selected hidden>Select Country/Nationality</option>
+            #foreach($con in $dotcontent.pull("+structureName:TieRefCountry +(conhost:9e20171a-ec3c-49cc-8f4a-0fdea34d6b74 conhost:SYSTEM_HOST) +live:true",0,"TieRefCountry.name"))
+            <option value="$con.countryCode" #if($con.countryCode == $request.getParameter('policyHolderNationality') ) selected #end style="color: #666666" >$con.name</option>
+            #end
+        </select>
+      <span class="mmpErrorMsg"></span>
+      </li>
+    </span>
+    <span class="personalDetailsNonMalaysian" style="display:none">
+      <li class="fieldgroup clearfix">
+        <input class="required uppercase validPassport" maxlength="15" minlength="3" name="motorNcdCheckPassport" id="motorNcdCheckPassport" data-name="Car Owner Passport No" type="text" placeholder="E.g.: A98765432" value="$!esc.html($!request.getParameter('policyHolderNRIC'))">
+      <span class="mmpErrorMsg"></span>
+      </li>
+    </span>
+    </div>
+  <div class="container-checkNcdForm2">
+    <li class="fieldgroup clearfix">
+        <label for="motorRegistrationNo" class="clearMargin">Motorcycle Registration No.</label>
+        <input class="required uppercase" maxlength="15" name="motorRegistrationNo" id="motorRegistrationNo" data-name="Vehicle Registration No." type="text" placeholder="E.g.: WA888A" value="$!esc.html($!request.getParameter('motorRegistrationNo'))">             
+        <span class="mmpErrorMsg"></span>
+    </li>
+    <li class="fieldgroup clearfix">
+        <input class="required uppercase" maxlength="20" name="motorChassisNo" id="motorChassisNo" data-name="Car Chassis No." type="hidden" placeholder="" value="$!esc.html($!request.getParameter('motorChassisNo'))">          
+    </li>
+    </div>
+    <div class="blank"></div>
+	</div>
+        <div class=" privacy-notice-container no-pageIntro #if($partnerCode == 'msig')msigProduct #end" style="height: 120px">
+        <input type="checkbox" name="privacyNoticeCheckbox" id="banca-checkbox-privacy-notice" class="validPrivacyNotice" data-name="Privacy Notice Checkbox" >
+    <p>
+     I have read, understood MSIG’s <a class="ppda-cta" href="https://www.msig.com.my/privacy-notice/" target="_blank">Privacy Notice</a> and agree to MSIG processing my personal data for the purposes and in the manners set out in the Privacy Notice.
+    </p>
+          <span class="mmpErrorMsg"></span>
+    </div>
+    
+    <a class="ir alignRight next hidden mmpContinueBtn" onclick="ga('send', 'pageview', '/$partnerURLTitle/products/$productURLTitle/registration.html#checkncd');">Continue</a>
+    <a class="mmpPreScreen-BackBtn">Back</a>
+</ul>
+</div>
+
+<div class="mmpProgressChecking progress-checking hidden">
+      <div class="progress-loading-icon"></div>
+      <h1>Please Wait.....</h1>
+</div>
+
+
+<script type="text/javascript">
+    var mainJsReady = false; // to be updated in main.js when main.js is ready, this is so we don't have to change the sequence of JS files. This must be a global variable!
+    
+    var ncd = {
+    #set($counter = 0)
+    #foreach($con in $dotcontent.pull("+structureName:TieRefBancaMotorNcd +(conhost:ceaa0d75-448c-4885-a628-7f0c35d374bd conhost:SYSTEM_HOST +live:true)",0,"TieRefBancaMotorNcd.ncdLevel"))
+        #if ($counter > 0) , #end
+        #set($counter = $counter + 1)
+        "$con.ncdLevel" : $con.ncdDiscount
+    #end
+    }
+	
+	$("input#banca-checkbox-privacy-notice").change(function(){
+		if(this.checked){
+			$(this).val("Y");
+		} else {
+			$(this).val("N");
+		}
+	});
+	
+	$(".mmpPreScreen-yesbtn").css("cursor", "not-allowed");
+    
+    $(function() {
+        $(".mmpPreScreen-yesbtn").click(function () {
+            if (mainJsReady) {
+            	if (formula != "critical-illness") {     
+        			$('input[name=prescreenYesNo]').val("Y");
+                }
+        		$(".preScreen-container").addClass("hidden");
+        		$(".mmpPrescreenBtn").addClass("hidden");
+            	$(".mmpPreScreen-backbtn").addClass("hidden");
+        		$(".formNCD").removeClass("hidden");
+                $(".mmpContinueBtn").removeClass("hidden");
+            }
+    	});
+    })
+	
+    $(".mmpPreScreen-BackBtn").click(function(){
+        console.log("here");
+        $('input[name=prescreenYesNo]').val("N");
+		$(".preScreen-container").removeClass("hidden");
+		$(".mmpPrescreenBtn").removeClass("hidden");
+        $(".mmpPreScreen-backbtn").removeClass("hidden");
+		$(".formNCD").addClass("hidden");
+        $(".mmpContinueBtn").addClass("hidden");
+	});
+    
+	$(".mmpPreScreen-nobtn").click(function(){
+		var formula = $("#formula").val();
+		if (formula == "motor") {
+            window.location.href = "motor-prescreen-error.html";
+        }
+		$('input[name=prescreenYesNo]').val("N");
+	});
+
+</script>

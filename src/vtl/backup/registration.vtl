@@ -1,0 +1,1932 @@
+  $request.getSession().invalidate()
+  #set ($partnerCode = $request.getParameter('partnerCode'))
+  #set ($partnerURLTitle = $request.getParameter('partnerURLTitle'))
+  #set ($productCode = $request.getParameter('productCode'))
+  #set ($productURLTitle = $request.getParameter('productURLTitle'))
+  #set ($branch = $request.getParameter('branch'))
+  #set ($promotionCode = $request.getParameter('promotionCode'))
+  #set ($CmsSettingUtil = $webutil.getBean("cmsSettingUtil"))
+  #set ($partner = $CmsSettingUtil.findCMSSetting($partnerCode))
+  #if ($UtilMethods.isSet($promotionCode))
+    #set ($promoCodeStructure = $CmsSettingUtil.findPromoCodeStructure($productCode, $promotionCode))
+  #end
+  #if ($UtilMethods.isSet($promoCodeStructure))
+    #set ($product = $CmsSettingUtil.findCMSProductSettingAdjustedByPromoCode($productCode, $partner.getPartnerIdentifier(), $promoCodeStructure))
+  #else
+    #set ($product = $CmsSettingUtil.findCMSProductSetting($productCode, $partner.getPartnerIdentifier()))
+  #end
+  #set ($extendedProduct = $CmsSettingUtil.findExtendedProductStructure($productCode))
+  #set ($enableGst = $product.enableGst)
+  #set ($gstVal = $wlputil.getGst())
+  #set ($gstRate = $product.enableGstRate)
+  
+  #if($product.formula == 'daily-personal-accident')
+    #set ($coveragePlan = $productCode.toLowerCase() + '-single')
+    #set ($planTable = $CmsSettingUtil.findPlanTableStructure($coveragePlan))
+  #end
+  
+  #set ($enableSst = $product.enableSst)
+  #set ($sstVal = $wlputil.getSst())
+  #set ($sstRate = $product.enableSstRate)
+    #set($Integer = 0)
+
+###Clear session (Payment-Process-Thank You session)
+  #set ($attributeToRemove = 'purchaseTempId_' + $partnerCode)
+  $request.getSession().removeAttribute($attributeToRemove)
+  $request.getSession().setAttribute('previousPageIframe', 'Registration')
+  $request.getSession().setAttribute('isInIframeP', null)
+
+  #foreach($con in $dotcontent.pull("+structureName:WlpPartnerStructure +(conhost:$host.identifier conhost:SYSTEM_HOST) +WlpPartnerStructure.partnerCode:${partnerCode}",1,"undefined desc"))
+    #set($upgradeAnimationImage = $con.upgradeAnimationImage)
+  #end
+    
+      #foreach($content in $dotcontent.pull("+structureName:WlpProductStructure +(conhost:$host.identifier conhost:SYSTEM_HOST) +(Parent_WlpPartnerStructure-Child_WlpProductStructure:$partner.getPartnerIdentifier()) +WlpProductStructure.productCode:$productCode",1,"undefined"))
+        #set($productLogo = $content.productLogoS.uri)
+        #set ($product1 = $CmsSettingUtil.findCMSProductSetting($content.productCode,$partner.getPartnerIdentifier()))    
+        #set($upgradePlanHeaderDescription = $content.upgradePlanHeaderDescription)
+        #set($upgradePlanDescription = $content.upgradePlanDescription)
+        #set($policyStartDate = $date.format('MMMM d, yyyy',$product1.policyStartDate))
+        #set($policyEndDate = $date.format('MMMM d, yyyy',$product1.policyEndDate))
+        #if ($UtilMethods.isSet($!{request.getParameter('coverageStartDate')}))
+            #set($coverageStartDate = $!{request.getParameter('coverageStartDate')})
+            #set($coverageExpiryDate = $!{request.getParameter('coverageExpiryDate')})
+        #end
+    
+    #if ($product1.getIsSeasonal().equals("Y"))   
+           #foreach($content1 in $dotcontent.pullRelated("Parent_WlpProductStructure-Child_WlpSeasonalProductStructure","${content.identifier}",false,1,"WlpProductStructure.sequence asc"))  
+        #if ($UtilMethods.isSet($content1.upgradePlanHeaderDescription))
+          #set($upgradePlanHeaderDescription = $content1.upgradePlanHeaderDescription)
+        #end
+        #if ($UtilMethods.isSet($content1.upgradePlanDescription))
+          #set($upgradePlanDescription = $content1.upgradePlanDescription)
+        #end      
+           #end
+       
+    #end
+   #end
+   
+    #set($prefixMobile = "")
+  #foreach($prefixMobCon in $dotcontent.pull("+structureName:WlpRefMobilePrefixStructure +(conhost:${host.identifier} conhost:SYSTEM_HOST)",0,"WlpRefMobilePrefixStructure.sequence asc"))
+    #if ($UtilMethods.isSet($prefixMobile))
+      #set($prefixMobile = $prefixMobile + "|" + $prefixMobCon.prefix)
+    #else
+      #set($prefixMobile = $prefixMobile + $prefixMobCon.prefix)
+    #end
+  #end
+  
+  #set($actionAddOnURL = "")
+  
+  #if($branch.length() > 0 || $isInIframe=='true')
+    #set($actionAddOnURL = "?")
+    #if($branch.length() > 0)
+        #set($actionAddOnURL = $actionAddOnURL + "branch=" + $branch)
+    #end
+    #if($isInIframe=='true')
+        #if($branch.length() > 0)
+            #set($actionAddOnURL = $actionAddOnURL + "&isInIframe=true")
+        #else
+            #set($actionAddOnURL = $actionAddOnURL + "isInIframe=true")
+        #end
+    #end
+  #end
+<style>
+    ::-webkit-input-placeholder{
+    text-transform:initial;
+    }
+</style>
+<div class="main-container registration">
+
+  <div class="main clearfix">  
+     <form id="msform" class="#if($partnerCode == 'msigstaff' || $partnerCode == 'msig')msigProduct #end" 
+  action="/$partnerURLTitle/products/$productURLTitle/summary.html$actionAddOnURL" 
+  method="POST" name="signupform" novalidate enctype='application/x-www-form-urlencoded'>
+    <!--<form id="msform" class="#if($partnerCode == 'msigstaff' || $partnerCode == 'msig')msigProduct #end" action="/$partnerURLTitle/products/$productURLTitle/summary.html" method="POST" name="signupform" novalidate enctype='application/x-www-form-urlencoded'>-->
+      <input type="hidden" value="processPurchase" name="action" />
+      <input type="hidden" value="Step1" name="actionType" />
+      <input type="hidden" value="${partnerCode}" name="partnerCode" />
+      <input type="hidden" value="${productCode}" name="productCode" />
+       <input type="hidden" value="$!promotionCode" name="promotionCode" />
+      <input type="hidden" value="$!{branch}" name="branch" /> 
+      <input type="hidden" value="${product.getProductName()}" name="productName" />
+      <input type="hidden" value="${product.getProductGroup()}" name="productGroup" />
+      <input type="hidden" value="${prefixMobile}" name="prefixMobile" />
+      <input type="hidden" id="formula" value="${product.formula}" name="formula" />
+      <input type="hidden" id="allowMotorPlusPlan" value="${extendedProduct.getAllowMotorPlusPlan()}" name="allowMotorPlusPlan" />
+      <input id="staffId" type="hidden" name="staffId" value="$!esc.html($!request.getParameter('staffId'))">
+      <input id="staffRelationship" type="hidden" name="staffRelationship" value="$!esc.html($!request.getParameter('staffRelationship'))">
+      <input type="hidden" class=""  name="certificateNo" id="certificateNo" data-name="certificateNo"   disabled value="$!esc.html($!request.getParameter('certificateNo'))"> 
+      <input type="hidden" class=""  name="motorNvic" id="motorNvic" data-name="motorNvic"   disabled value="$!esc.html($!request.getParameter('motorNvic'))"> 
+      <input type="hidden" class=""  name="motorMakeCode" id="motorMakeCode" data-name="motorMakeCode"   disabled value="$!esc.html($!request.getParameter('motorMakeCode'))">
+      <input type="hidden" class=""  name="motorModelCode" id="motorModelCode" data-name="motorModelCode"   disabled value="$!esc.html($!request.getParameter('motorModelCode'))">
+      <input type="hidden" class="" name="enableCcDropDown" data-name="enableCcDropDown" value="$!esc.html($!request.getParameter('enableCcDropDown'))" >
+      <input type="hidden" class=""  name="motorCc" id="motorCc" data-name="motorCc"   disabled value="$!esc.html($!request.getParameter('motorCc'))">
+      <input type="hidden" class=""  name="motorYearOfMake" id="motorYearOfMake" data-name="motorYearOfMake"   disabled value="$!esc.html($!request.getParameter('motorYearOfMake'))">
+      <input type="hidden" class=""  name="policyHolderNRIC" id="policyHolderNRIC" data-name="policyHolderNRIC"   disabled value="$!esc.html($!request.getParameter('policyHolderNRIC'))">
+      <input type="hidden" class=""  name="policyHolderDrivingExp2" id="policyHolderDrivingExp2" data-name="policyHolderDrivingExp2"   disabled value="$!esc.html($!request.getParameter('policyHolderDrivingExp'))">
+      <input name="policyStartDate" id="policyStartDate" value="$!{policyStartDate}" type="hidden">
+      <input name="policyEndDate" id="policyEndDate" value="$!{policyEndDate}" type="hidden">  
+      <input name="policyStartDate" id="policyStartDate" value="$!{policyStartDate}" type="hidden">
+      <input name="policyEndDate" id="policyEndDate" value="$!{policyEndDate}" type="hidden">  
+      <input type="hidden" class=""  name="carLocation" id="carLocation" data-name="carLocation"   disabled value="$!esc.html($!request.getParameter('motorVehicleLocation'))">
+      <input type="hidden" class=""  name="carLocationStateCode" id="carLocationStateCode" data-name="carLocationStateCode"   disabled value="$!esc.html($!request.getParameter('motorVehicleLocationStateCode'))">
+      
+      <input name="coverageStartDate"  id="coverageStartDate" value="$!esc.html($!coverageStartDate)" type="hidden">
+      <input name="coverageExpiryDate"  id="coverageExpiryDate" value="$!esc.html($!coverageExpiryDate)" type="hidden">
+      
+
+      <input type="hidden" name="coveragePlan" #if($!{request.getParameter('coveragePlan')}) value="$!esc.html($!{request.getParameter('coveragePlan')})" #else value="Basic" #end/>
+      <input type="hidden" name="coveragePremiumRate" value="$product.getNormalRate()" />
+      <input type="hidden" name="coveragePremiumUpgradeRate" value="$product.getUpgradeRate()" />
+      #if ($product.getIsSeasonal().equals("Y"))
+         <input type="hidden" name="coveragePremiumType" value="promotion" />
+      #else
+         <input type="hidden" name="coveragePremiumType" value="default" />
+      #end
+      <input type="hidden" name="coveragePremiumDiscount" value="$product.getDiscount()" />
+      <input type="hidden" name="coverageStampDuty" value="$product.getStampDuty()" />
+      <input type="hidden" name="totalPremium" value="0" />             
+      <input type="hidden" id="minimumCoverage" name="minimumCoverage" value="$product.getMinimumPeriod()" />
+      <input type="hidden" id="totalDaysSelected" name="totalDaysSelected" value="" />
+      <input type="hidden" id="totalPersonToCalc" name="totalPersonToCalc" value="1" />  
+      <input type="hidden" id="noDaysCovered" name="noDaysCovered" value="" />    
+      <input type="hidden" id="productMinAge" name="productMinAge" value="$product.getMinAge()" />
+      <input type="hidden" id="productMinAgeUnit" name="productMinAgeUnit" value="year" />
+      <input type="hidden" id="productMaxAge" name="productMaxAge" value="$product.getMaxAge()" />
+      <input type="hidden" id="productMaxAgeUnit" name="productMaxAgeUnit" value="year" />
+      <input type="hidden" id="maxCoverDuration" name="maxCoverDuration" value="$product.getMaxCoverDuration()" />
+      <input type="hidden" id="maxCoverDurationUnit" name="maxCoverDurationUnit" value="$product.getMaxCoverDurationUnit()" />
+      
+      #if($extendedProduct.getAllowSingleDifferentAgeCoverage().equals("Y") && $Integer.parseInt($extendedProduct.getMinAge())>0 && $Integer.parseInt($extendedProduct.getMaxAge())>0)
+        <input type="hidden" id="refSingleMinAge" name="refSingleMinAge" value="$extendedProduct.getMinAge()" />
+        <input type="hidden" id="refSingleMaxAge" name="refSingleMaxAge" value="$extendedProduct.getMaxAge()" />
+        <input type="hidden" id="refAnnualMinAge" name="refAnnualMinAge" value="$product.getMinAge()" />
+        <input type="hidden" id="refAnnualMaxAge" name="refAnnualMaxAge" value="$product.getMaxAge()" />
+      #end
+      
+      #foreach($value in $extendedProduct.content.allowAnnualRenewalDiffAgeCov.selectedValues)
+        #set($isAllowAnnualRenewalDiffAgeCovEnabled = $value)
+      #end
+      
+      #if($isAllowAnnualRenewalDiffAgeCovEnabled.equals("Y") && $extendedProduct.content.annualRenewalMinAge>0 && $extendedProduct.content.annualRenewalMaxAge>0)
+        <input type="hidden" id="refAnnualRenewalMinAge" name="refAnnualRenewalMinAge" value="$extendedProduct.content.annualRenewalMinAge" />
+        <input type="hidden" id="refAnnualRenewalMaxAge" name="refAnnualRenewalMaxAge" value="$extendedProduct.content.annualRenewalMaxAge" />
+        <input type="hidden" id="refDefaultAnnualMinAge" name="refDefaultAnnualMinAge" value="$product.getMinAge()" />
+        <input type="hidden" id="refDefaultAnnualMaxAge" name="refDefaultAnnualMaxAge" value="$product.getMaxAge()" />
+      #end
+      
+      <input type="hidden" id="refAddress1" name="refAddress1" value="$!esc.html($!request.getParameter('refAddress1'))" />
+      <input type="hidden" id="refAddress2" name="refAddress2" value="$!esc.html($!request.getParameter('refAddress2'))" />
+      <input type="hidden" id="addressOverwriteIndicator" name="addressOverwriteIndicator" />
+      
+      <input type="hidden" name="isInIframe" value="${isInIframe}">
+      
+      <!-- progressbar -->
+      #dotParse("//msiginternal/vtl/widgets/product/productTop.vtl")
+              
+        #set ($firstFieldSet = true)        
+        <!--fieldsets-->                
+        <!-- New FieldSet For Privacy Notice -->
+        #if($extendedProduct.getAllowMotorPlusPlan() != "Y" && $product.productName != "Motorcycle")
+        <fieldset id="privacy-notice" class="banca-fieldset">
+          #set($privacyvtl = "//msiginternal/vtl/widgets/product/privacy-notice.vtl")
+          #dotParse($privacyvtl)
+          <div class="navBottom">
+            <ul class="clearfix">
+              <li class="prevArrow"><a href="#if($firstFieldSet)/$partnerURLTitle$actionAddOnURL#end" class="ir alignLeft#if(!$firstFieldSet) previous#end"><span class="button">#if($firstFieldSet)Cancel#{else}Back#end</span> Previous</a></li>
+              <li class="smallLogo"><a href="/$partnerURLTitle/$actionAddOnURL" class="ir">MSIG</a></li>                  
+            </ul>
+          </div>
+          #set ($firstFieldSet = false)
+        </fieldset>
+        #end
+        #if ($partnerCode == "hlbb")
+        <fieldset id="branch-code">
+           #set($branchCodeVtl = "//msiginternal/vtl/widgets/product/branch-code.vtl")
+           #dotParse($branchCodeVtl)
+		   <div class="navBottom">
+            <ul class="clearfix">
+              <li class="prevArrow"><a href="#if($firstFieldSet)/$partnerURLTitle$actionAddOnURL#end" class="ir alignLeft#if(!$firstFieldSet) previous#end"><span class="button">#if($firstFieldSet)Cancel#{else}Back#end</span> Previous</a></li>
+              <li class="smallLogo"><a href="/$partnerURLTitle/$actionAddOnURL" class="ir">MSIG</a></li>   
+              <li class="nextArrow"><a class="ir alignRight next"><span class="button">Continue</span> Next</a></li>   
+            </ul>
+          </div>
+          #set ($firstFieldSet = false)
+		</fieldset>
+        #end
+        #if ($partnerCode == "msigstaff")
+          <!-- New FieldSet For Staff Site -->
+          <fieldset id="staff-id" #if($extendedProduct.getAllowMotorPlusPlan() == "Y" || $product.productName == "Motorcycle") class="mmpStaffIdFieldset" #end>
+            #set($staffIDvtl = "//msiginternal/vtl/widgets/product/check-staff-id.vtl")
+            #dotParse($staffIDvtl)
+			#if($extendedProduct.getAllowMotorPlusPlan() == "Y" || $product.productName == "Motorcycle")
+            <div class="mmpStaffIdBtn">
+                <a class="ir next nextArrow mmpBtnNext" onclick="ga('send', 'pageview', '/$partnerURLTitle/products/$productURLTitle/registration.html#staff-id');">Continue</a>
+                <a href="" class="ir prevArrow mmpStaffId-nobtn mmpBtnBack">Back</a>
+            </div>
+            #else
+            <div class="navBottom">
+              <ul class="clearfix">
+				<li class="prevArrow"><a href="#if($firstFieldSet)/$partnerURLTitle$actionAddOnURL#end" class="ir alignLeft#if(!$firstFieldSet) previous#end"><span class="button">#if($firstFieldSet)Cancel#{else}Back#end</span> Previous</a></li>
+                <li class="smallLogo"><a href="/$partnerURLTitle/$actionAddOnURL" class="ir">MSIG</a></li>
+                <li class="nextArrow"><a class="ir alignRight next" onclick="ga('send', 'pageview', '/$partnerURLTitle/products/$productURLTitle/registration.html#staff-id');"><span class="button">Continue</span> Next</a></li>             
+              </ul>
+            </div>
+            #end
+            #set ($firstFieldSet = false)
+          </fieldset>
+          <!-- New FieldSet End -->
+        #end
+        
+        #if ($partnerCode == "msigstaff")
+          <!-- New FieldSet For Staff Site -->
+          <fieldset id="staff-relationship" #if($extendedProduct.getAllowMotorPlusPlan() == "Y" || $product.productName == "Motorcycle") class="mmpStaffRelationshipFieldset" #end>
+            #set($staffRelationshipvtl = "//msiginternal/vtl/widgets/product/check-staff-relationship.vtl")
+            #dotParse($staffRelationshipvtl)
+            #if($extendedProduct.getAllowMotorPlusPlan() == "Y" || $product.productName == "Motorcycle")
+            <div class="mmpStaffRelationshipBtn">
+                <a class="ir next nextArrow mmpBtnNext" onclick="ga('send', 'pageview', '/$partnerURLTitle/products/$productURLTitle/registration.html#staff-relationship');">Continue</a>
+                <a href="" class="ir prevArrow previous mmpBtnBack">Back</a>
+            </div>
+            #else
+            <div class="navBottom">
+              <ul class="clearfix">
+                <li class="prevArrow"><a href="#if($firstFieldSet)/$partnerURLTitle$actionAddOnURL#end" class="ir alignLeft#if(!$firstFieldSet) previous#end"><span class="button">#if($firstFieldSet)Cancel#{else}Back#end</span> Previous</a></li>
+                <li class="smallLogo"><a href="/$partnerURLTitle/$actionAddOnURL" class="ir">MSIG</a></li>
+                <li class="nextArrow"><a class="ir alignRight next" onclick="ga('send', 'pageview', '/$partnerURLTitle/products/$productURLTitle/registration.html#staff-relationship');"><span class="button">Continue</span> Next</a></li>              
+              </ul>
+            </div>
+            #end
+            #set ($firstFieldSet = false)
+          </fieldset>
+          <!-- New FieldSet End -->
+        #end
+        
+      <!--  #if ($product.formula == "motor" && $partnerCode == "gc")
+        <fieldset id="ehailing" class="banca-fieldset">
+          #set($ehailing = "//msiginternal/vtl/widgets/product/ehailing.vtl")   
+          #dotParse($ehailing)    
+          <div class="navBottom">   
+            <ul class="clearfix">   
+              <li class="prevArrow"><a href="#if($firstFieldSet)/$partnerURLTitle#end" class="ir alignLeft#if(!$firstFieldSet) previous#end"><span class="button">#if($firstFieldSet)Cancel#{else}Back#end</span> Previous</a></li>   
+              <li class="smallLogo"><a href="/$partnerURLTitle" class="ir">MSIG</a></li>
+              <li class="nextArrow"><a class="ir alignRight next" onclick="ga('send', 'pageview', '/$partnerURLTitle/products/$productURLTitle/registration.html#ehailing');"><span class="button">Continue</span> Next</a></li>            
+            </ul>   
+          </div>    
+          #set ($firstFieldSet = false)   
+        </fieldset>
+        #end  -->
+        
+        #if ($product.formula == "travelright-plus" || $product.formula == "motor" || $product.formula == "critical-illness" || $product.formula == "home-content"|| $product.formula == "pets")
+            <fieldset id="prescreen" #if($extendedProduct.getAllowMotorPlusPlan() == "Y" || $product.productName == "Motorcycle")class="mmpPrescreenFieldset" #end>
+              #if($product.formula == "critical-illness")
+                <input type="hidden" name="bmi" value="$!esc.html($!{request.getParameter('bmi')})" />
+              #else
+                <input type="hidden" name="prescreenYesNo" value="$!esc.html($!{request.getParameter('prescreenYesNo')})" />
+              #end
+                #if($extendedProduct.getAllowMotorPlusPlan() == "Y")
+					#set($prescreenvtl = "//msiginternal/vtl/widgets/product/registration-checkncd.vtl")
+                    #dotParse($prescreenvtl)
+                    #set ($firstFieldSet = false)
+				</fieldset>
+				#elseif($product.productName == "Motorcycle")
+                    #set($prescreenvtl = "//msiginternal/vtl/widgets/product/registration-motorcycle-checkncd.vtl")
+                    #dotParse($prescreenvtl)
+                    #set ($firstFieldSet = false)
+                </fieldset>
+				#else
+                    #set($prescreenvtl = "//msiginternal/vtl/widgets/product/registration-${product.formula}-prescreen.vtl")
+					#dotParse($prescreenvtl)
+              <div class="navBottom">
+                <ul class="clearfix">
+                  <li class="prevArrow"><a href="#if($firstFieldSet)/$partnerURLTitle$actionAddOnURL#end" class="ir alignLeft#if(!$firstFieldSet) previous#end"><span class="button">#if($firstFieldSet)Cancel#{else}Back#end</span> Previous</a></li>
+                  <li class="smallLogo"><a href="/$partnerURLTitle/$actionAddOnURL" class="ir">MSIG</a></li>
+                  #if($product.formula == "home-content" || $product.formula == "personal-accident" || $product.formula == "critical-illness" || $product.formula == "pets")
+                  <li class="nextArrow"><a class="ir alignRight next" onclick="ga('send', 'pageview', '/$partnerURLTitle/products/$productURLTitle/registration.html#prescreen');"><span class="button">Continue</span> Next</a></li>
+                  #end
+                </ul>
+              </div>
+                #set ($firstFieldSet = false)
+            </fieldset>
+			#end
+            #if($product.formula == "critical-illness")
+              <fieldset id="prescreen1">
+                  <input type="hidden" name="prescreenYesNo" value="$!esc.html($!{request.getParameter('prescreenYesNo')})" />
+                  #set($prescreenvtl = "//msiginternal/vtl/widgets/product/registration-${product.formula}-prescreen1.vtl")
+                  #dotParse($prescreenvtl)
+                <div class="navBottom">
+                  <ul class="clearfix">
+                    <li class="prevArrow"><a href="#if($firstFieldSet)/$partnerURLTitle$actionAddOnURL#end" class="ir alignLeft#if(!$firstFieldSet) previous#end"><span class="button">#if($firstFieldSet)Cancel#{else}Back#end</span> Previous</a></li>
+					<li class="smallLogo"><a href="/$partnerURLTitle/$actionAddOnURL" class="ir">MSIG</a></li>
+                  </ul>
+                </div>
+                  #set ($firstFieldSet = false)
+              </fieldset>
+              <fieldset id="prescreen2">
+                  <input type="hidden" name="prescreenYesNo2" value="$!esc.html($!{request.getParameter('prescreenYesNo2')})" />
+                  #set($prescreenvtl = "//msiginternal/vtl/widgets/product/registration-${product.formula}-prescreen2.vtl")
+                  #dotParse($prescreenvtl)
+                <div class="navBottom">
+                  <ul class="clearfix">
+                    <li class="prevArrow"><a href="#if($firstFieldSet)/$partnerURLTitle$actionAddOnURL#end" class="ir alignLeft#if(!$firstFieldSet) previous#end"><span class="button">#if($firstFieldSet)Cancel#{else}Back#end</span> Previous</a></li>
+                    <li class="smallLogo"><a href="/$partnerURLTitle/$actionAddOnURL" class="ir">MSIG</a></li>
+                  </ul>
+                </div>
+                  #set ($firstFieldSet = false)
+              </fieldset>
+              <fieldset id="prescreen3">
+                  <input type="hidden" name="prescreenYesNo3" value="$!esc.html($!{request.getParameter('prescreenYesNo3')})" />
+                  #set($prescreenvtl = "//msiginternal/vtl/widgets/product/registration-${product.formula}-prescreen3.vtl")
+                  #dotParse($prescreenvtl)
+                <div class="navBottom">
+                  <ul class="clearfix">
+                    <li class="prevArrow"><a href="#if($firstFieldSet)/$partnerURLTitle$actionAddOnURL#end" class="ir alignLeft#if(!$firstFieldSet) previous#end"><span class="button">#if($firstFieldSet)Cancel#{else}Back#end</span> Previous</a></li>
+                    <li class="smallLogo"><a href="/$partnerURLTitle/$actionAddOnURL" class="ir">MSIG</a></li>
+                  </ul>
+                </div>
+                  #set ($firstFieldSet = false)
+              </fieldset>
+              <fieldset id="prescreen4">
+                  <input type="hidden" name="prescreenYesNo4" value="$!esc.html($!{request.getParameter('prescreenYesNo4')})" />
+                  #set($prescreenvtl = "//msiginternal/vtl/widgets/product/registration-${product.formula}-prescreen4.vtl")
+                  #dotParse($prescreenvtl)
+                <div class="navBottom">
+                  <ul class="clearfix">
+                    <li class="prevArrow"><a href="#if($firstFieldSet)/$partnerURLTitle$actionAddOnURL#end" class="ir alignLeft#if(!$firstFieldSet) previous#end"><span class="button">#if($firstFieldSet)Cancel#{else}Back#end</span> Previous</a></li>
+                    <li class="smallLogo"><a href="/$partnerURLTitle/$actionAddOnURL" class="ir">MSIG</a></li>
+                  </ul>
+                </div>
+                  #set ($firstFieldSet = false)
+              </fieldset>
+            #end
+            #if ($product.formula == "motor")
+			#if($extendedProduct.getAllowMotorPlusPlan() != "Y" && $product.productName != "Motorcycle")
+           <fieldset id="checkncd">
+                #set($riskvtl = "//msiginternal/vtl/widgets/product/registration-motor-checkncd.vtl")
+                #dotParse($riskvtl)
+              <div class="navBottom">
+                <ul class="clearfix">
+                  <li class="prevArrow"><a href="#if($firstFieldSet)/$partnerURLTitle$actionAddOnURL#end" class="ir alignLeft#if(!$firstFieldSet) previous#end"><span class="button">#if($firstFieldSet)Cancel#{else}Back#end</span> Previous</a></li>
+                  <li class="smallLogo"><a href="/$partnerURLTitle/$actionAddOnURL" class="ir">MSIG</a></li>
+                  <li class="nextArrow"><a class="ir alignRight next" onclick="ga('send', 'pageview', '/$partnerURLTitle/products/$productURLTitle/registration.html#checkncd');"><span class="button">Continue</span> Next</a></li>
+                </ul>
+              </div>
+                #set ($firstFieldSet = false)
+            </fieldset>
+            #end
+			#end
+            
+            #if($product.formula != "home-content" && $product.formula != "personal-accident" && $product.formula != "pets")
+				#if($extendedProduct.getAllowMotorPlusPlan() == "Y")
+					<fieldset id="fillindetails">
+					#set($riskvtl = "//msiginternal/vtl/widgets/product/registration-${product.formula}-fillindetails.vtl")
+					#dotParse($riskvtl)
+						<div class="mmpNavigationBtn">
+                            <a class="ir next nextArrow mmpBtnNext" onclick="ga('send', 'pageview', '/$partnerURLTitle/products/$productURLTitle/registration.html#fillindetails');">Continue</a>
+                            <a href="" class="ir prevArrow previous mmpBtnBack">Back</a></li>
+						</div>
+						#set ($firstFieldSet = false)
+					</fieldset>
+				#elseif($product.productName == "Motorcycle")
+					<fieldset id="fillindetails">
+					#set($riskvtl = "//msiginternal/vtl/widgets/product/registration-motorcycle-fillindetails.vtl")
+					#dotParse($riskvtl)
+						<div class="mmpNavigationBtn">
+    						<a class="ir next nextArrow mmpBtnNext">Continue</a>
+                            <a href="" class="ir prevArrow previous mmpBtnBack">Back</a>
+						</div>
+						#set ($firstFieldSet = false)
+					</fieldset>
+				#else
+				   <fieldset id="risk">
+						#set($riskvtl = "//msiginternal/vtl/widgets/product/registration-${product.formula}-risk.vtl")
+						#dotParse($riskvtl)
+					  <div class="navBottom">
+						<ul class="clearfix">
+						  <li class="prevArrow"><a href="#if($firstFieldSet)/$partnerURLTitle$actionAddOnURL#end" class="ir alignLeft#if(!$firstFieldSet) previous#end"><span class="button">#if($firstFieldSet)Cancel#{else}Back#end</span> Previous</a></li>
+						  <li class="smallLogo"><a href="/$partnerURLTitle/$actionAddOnURL" class="ir">MSIG</a></li>
+						  <li class="nextArrow"><a class="ir alignRight next" onclick="ga('send', 'pageview', '/$partnerURLTitle/products/$productURLTitle/registration.html#risk');"><span class="button">Continue</span> Next</a></li>
+						</ul>
+					  </div>
+						#set ($firstFieldSet = false)
+					</fieldset>
+				#end
+            #end
+        #end
+        #if ($product.formula != "motor")
+        <fieldset id="calendar"><!--select a date-->
+          #if($product.formula == "travelright-plus")
+          <div class="helpContent whilePrompt clearfix hidden">
+            <span class="promptTail"></span>
+            <h1>Next, select your dates</h1>
+            <ul>
+              <li>First, click on the date that you want your coverage to start.</li>
+              <li>Then click on the end date, however not applicable for Single Trip One Way and Annual Cover.</li>
+              <li>Click again to reselect or restart.</li>
+              <li id="singleLI">Please note that the Single Travel Plan coverage period is only up to a maximum of $product.maxCoverDuration days.</li>
+              <li id="annualLI" class="hidden">Please note that An overseas trip shall involve return to Malaysia and in no event to exceed ninety(90) days for Annual Cover.</li>
+            </ul>
+            <a href="" class="button">Ok, got it.</a>
+          </div>
+          #else
+          <div class="helpContent whilePrompt clearfix hidden">
+            <span class="promptTail"></span>
+            <h1>Ok, first select your dates</h1>
+            <ul>
+              #if($product.formula == "mcp")
+                <!--<li>The coverage period begins from 1 Apr 2020 - 31 Mar 2021</li>-->
+              <li>The coverage period begins from 29 June 2020 - 28 June 2021</li>
+              #elseif($product.formula == "daily-personal-accident")
+                <li>Click on the date that you want your coverage to start then click on the end date.</li>
+                <li>Click again to reselect or restart.</li>
+                <li>Coverage period is up to a maximum of $product.maxCoverDuration days.</li>
+                <li style="padding-bottom:10px;">The earliest coverage start date that you can choose is tomorrow.</li>
+              #else
+              <li>First, click on the date that you want your coverage to start.</li>
+              <li>Then click on the end date, however not applicable for Annual Policy. </li>
+              <li>Click again to reselect or restart.</li>
+              #end
+            </ul>
+            <a href="" class="button">Ok, got it.</a>
+          </div>
+          #end
+          <div class="pageIntro">
+              <h1>
+                #if ($product.formula == "critical-illness" || $product.formula == "home-content" || $product.formula == "personal-accident"|| $product.formula == "pets")
+                 Select Your Start Date
+                #elseif($product.formula == "daily" || $product.formula == "daily-personal-accident")
+                    Please Select Period of Coverage
+                #end
+              </h1>
+          </div>
+          <div class="">
+            <div id="planRange" class="dates">
+            <div></div>
+            </div>
+          </div>    
+          <div class="navBottom">
+            <ul class="clearfix">
+              <li class="prevArrow"><a href="#if($firstFieldSet)/$partnerURLTitle$actionAddOnURL#end" class="ir alignLeft#if(!$firstFieldSet) previous#end"><span class="button">#if($firstFieldSet)Cancel#{else}Back#end</span> Previous</a></li>
+              <li class="smallLogo"><a href="/$partnerURLTitle/$actionAddOnURL" class="ir">MSIG</a></li>
+              <li class="nextArrow"><a class="ir alignRight next" onclick="ga('send', 'pageview', '/$partnerURLTitle/products/$productURLTitle/registration.html#calendar');"><span class="button">Continue</span> Next</a></li>
+            </ul>
+          </div>
+             #set ($firstFieldSet = false)
+        </fieldset>
+        #end
+
+        <!-- Home-Content Risk  -->
+        #if($product.formula == "home-content")
+        <fieldset id="risk">
+            #set($riskvtl = "//msiginternal/vtl/widgets/product/registration-${product.formula}-risk.vtl")
+            #dotParse($riskvtl)
+          <div class="navBottom">
+            <ul class="clearfix">
+              <li class="prevArrow"><a href="#if($firstFieldSet)/$partnerURLTitle$actionAddOnURL#end" class="ir alignLeft#if(!$firstFieldSet) previous#end"><span class="button">#if($firstFieldSet)Cancel#{else}Back#end</span> Previous</a></li>
+              <li class="smallLogo"><a href="/$partnerURLTitle/$actionAddOnURL" class="ir">MSIG</a></li>
+              <li class="nextArrow"><a class="ir alignRight next" onclick="ga('send', 'pageview', '/$partnerURLTitle/products/$productURLTitle/registration.html#risk');"><span class="button">Continue</span> Next</a></li>
+            </ul>
+          </div>
+            #set ($firstFieldSet = false)
+        </fieldset>
+        #end
+        <!-- Pets Content Risk -->
+        #if($product.formula == "pets")
+          <fieldset id="risk">
+            <div class="helpRisk helpContent whilePrompt clearfix hidden">
+            <span class="promptTail"></span>          
+            <h1>Next, fill in your pet's details where applicable.</h1>
+            <ul>
+              <li>Please fill the required details of your pet.</li>
+            </ul>
+            <a href="" class="button">Ok, got it.</a>
+          </div>
+              #set($riskvtl = "//msiginternal/vtl/widgets/product/registration-${product.formula}-risk.vtl")
+              #dotParse($riskvtl)
+            <div class="navBottom">
+              <ul class="clearfix">
+                <li class="prevArrow"><a href="#if($firstFieldSet)/$partnerURLTitle$actionAddOnURL#end" class="ir alignLeft#if(!$firstFieldSet) previous#end"><span class="button">#if($firstFieldSet)Cancel#{else}Back#end</span> Previous</a></li>
+                <li class="smallLogo"><a href="/$partnerURLTitle/$actionAddOnURL" class="ir">MSIG</a></li>
+                <li class="nextArrow"><a class="ir alignRight next" onclick="ga('send', 'pageview', '/$partnerURLTitle/products/$productURLTitle/registration.html#risk');"><span class="button">Continue</span> Next</a></li>
+              </ul>
+            </div>
+              #set ($firstFieldSet = false)
+          </fieldset>
+        #end
+        <!-- Wedding Content Risk -->
+        #if($product.formula == "wedding")
+          <fieldset id="risk">
+              #set($riskvtl = "//msiginternal/vtl/widgets/product/registration-${product.formula}-risk.vtl")
+              #dotParse($riskvtl)
+            <div class="navBottom">
+              <ul class="clearfix">
+                <li class="prevArrow"><a href="#if($firstFieldSet)/$partnerURLTitle$actionAddOnURL#end" class="ir alignLeft#if(!$firstFieldSet) previous#end"><span class="button">#if($firstFieldSet)Cancel#{else}Back#end</span> Previous</a></li>
+                <li class="smallLogo"><a href="/$partnerURLTitle/$actionAddOnURL" class="ir">MSIG</a></li>
+                <li class="nextArrow"><a class="ir alignRight next" onclick="ga('send', 'pageview', '/$partnerURLTitle/products/$productURLTitle/registration.html#risk');"><span class="button">Continue</span> Next</a></li>
+              </ul>
+            </div>
+              #set ($firstFieldSet = false)
+          </fieldset>
+        #end
+		
+		#if($extendedProduct.getAllowMotorPlusPlan() == "Y")
+            <fieldset id="planselection"><!-- motor plus plan selection -->
+            #set($planvtl = "//msiginternal/vtl/widgets/product/registration-motor-planselection.vtl")
+            #dotParse($planvtl)
+            #set ($firstFieldSet = false)
+            <div class="mmpNavigationBtn">
+                <a class="ir nextArrow next mmpBtnNext" onclick="ga('send', 'pageview', '/$partnerURLTitle/products/$productURLTitle/registration.html#planselection');">Continue</a>
+                <a href="" class="ir prevArrow previous mmpBtnBack">Back</a></li>
+            </div>
+            </fieldset>
+        #elseif($product.productName == "Motorcycle")
+            <fieldset id="planselection"><!-- motorcycle selection -->
+                #set($planvtl = "//msiginternal/vtl/widgets/product/registration-motorcycle-planselection.vtl")
+                #dotParse($planvtl)
+                #set ($firstFieldSet = false)
+                <div class="mmpNavigationBtn">
+        			<a class="ir next nextArrow mmpBtnNext">Continue</a>
+                    <a href="" class="ir prevArrow previous mmpBtnBack">Back</a>
+    			</div>
+            </fieldset>
+        #else
+        <fieldset id="personalDetails"><!--personal details-->         
+          <div class="helpContent whilePrompt clearfix hidden">
+            <span class="promptTail"></span>
+            #if($product.formula != "motor")
+              #if($product.formula == "travelright-plus")
+               <h1>Next, fill in your personal details and family if applicable.</h1>
+               <ul>
+                 <li>Please fill the required details for yourself and your family members.</li>
+                 <li>Please note that Annual Cover Plan is only applicable for the Insured only.</li>
+               </ul>            
+              #elseif($product.formula == "pets") 
+                <h1>Next, fill in your personal details.</h1>
+               <ul>
+                 <li>Please fill the required details about yourself.</li>
+               </ul>
+              #elseif($product.formula == "mcp") 
+                <h1>Next, fill in your personal details.</h1>
+               <ul>
+                 <li>For non-Malaysians, you need to be residing in Malaysia to be eligible for this coverage.</li>
+               </ul>
+                #elseif($product.formula == "daily-personal-accident") 
+                 <h1>Next, we need your details.</h1>
+                 <ul>
+                   <li>Please fill the required details for yourself and your family members.</li>
+                   <li>Please note that non-Malaysian family members must be residing in Malaysia to be eligible for the plan.</li>
+                 </ul>
+            
+              #else
+               <h1>Next, fill in your personal details and family if applicable.</h1>
+               <ul>
+                 <li>Please fill the required details for yourself and your family members.</li>
+                 <li>Please note that non-Malaysian family members must be residing in Malaysia to be eligible for the plan.</li>
+               </ul>
+              #end            
+            #else
+            <h1>Next, fill in the policy holder and drivers details.</h1>
+            <ul>
+              <li>Please note that you can add more than 2 drivers with additional charge of RM10 per additional driver</li>
+              <li>Should you require to add more than 10 drivers, please download the <a class="pdfLink" href="../../resource/Motor_ProposalForm.pdf" class="pdfDownload" target="_blank"> proposal form </a> and email to us</li>
+            </ul>
+            #end
+            <a href="" class="button">Ok, got it.</a>
+          </div>
+        
+           <div class="clearfix wrapper">
+    
+    #if($enableGst && $gstRate)
+            <div class="pageIntro destination-title">
+              <h1>Your Travel Destination?</h1>
+            </div>
+               
+            <ul class="formPersonal form-gst">   
+           
+              <li class="fieldgroup destination clearfix">
+                
+                <div class="field-content">
+                  #set($destSelect = $request.getParameter('destSelect'))
+                  <input type="radio" value="Y" #if(!$UtilMethods.isSet($destSelect) || $destSelect == "Y") checked="checked" #end class="tabDomestic inputDest #if(!$UtilMethods.isSet($destSelect) || $destSelect == "Y") checked #end" name="destSelect" id="typeDestination1"><label for="typeDestination1">Within Malaysia [GST @ 6% (Standard Rate)] </label>
+                  <input type="radio" value="N" #if($destSelect == "N") checked="checked" #end class="tabInternational inputDest #if($destSelect == "N") checked #end" name="destSelect" id="typeDestination2"><label for="typeDestination2">Out of Malaysia [GST @ 0% (Zero-Rate)]</label>
+                </div>
+                <p class="alert">* GST @ 6% (Standard Rate) will apply on the insurance premium.</p>
+              </li>
+              </ul>
+              #end
+              
+             
+            #if ($product.formula != "daily" && $product.formula != "monthly" && $product.formula != "flat")
+             <div class="pageIntro">
+               <h1>Fill in Your Details</h1>
+             </div>
+            #else
+             <div class="pageIntro">
+               <h1>About You</h1>
+             </div>
+            #end
+            <ul class="formPersonal">
+                
+                #if($product.formula == "motor")
+                 <li class="form-title clearfix noMarginNPadding">
+                    <p>Main Policy Holder</p>                
+                 </li>
+                #elseif($product.formula == "critical-illness" || $product.formula == "home-content")
+                 <li class="form-title clearfix noMarginNPadding">
+                    <p>Policy Holder</p>                
+                 </li>
+                #end
+
+                #if(($partnerCode == "msig" && $product.formula != "travelright-plus" && $product.formula != "pets") || $product.formula == "mcp" || $productCode == "ACK")
+                   #if($productCode == "ACK")
+                    <li class="fieldgroup clearfix #if($partnerCode == "msig" || $partnerCode == "msigstaff")width70 #end">
+                        <label for="policyHolderCitizenship" class="clearMargin"></label>
+                    </li>
+                    #end
+                   <input type="hidden" name="policyHolderMalaysian" value="Y" >
+                #else
+                    #if($product.formula == "daily-personal-accident")
+                        #if($product.productName == "Take It Easy Personal Accident")
+                        <li class="clearfix">
+                            <label for="policyHolderOccupation" style="margin-top: 20px !important;">Occupation</label>
+                            <select name="policyHolderOccupation" id="policyHolderOccupation" class="required" data-name="Occupation" required>
+                              <option value="" disabled selected >Select</option>
+                              #foreach($con in $dotcontent.pull("+structureName:TieOccupation +(conhost:ceaa0d75-448c-4885-a628-7f0c35d374bd conhost:SYSTEM_HOST) +live:true",0,"TieOccupation.description"))
+                                #if($con.include.selectedValues.contains('Y'))
+                            	    <option value="$con.description" #if($con.description == $request.getParameter('policyHolderOccupation')) selected #end >$con.description</option>
+                                #end
+                    		  #end
+                              <option value="Others" >Others</option>
+                            </select>    
+                            <div class="mmpErrorMsg hidden" style="padding-top:5px">We regret to inform you that your occupation is not eligible to purchase this product.</div>
+                        </li>
+                        #end
+                    #end
+                 <li class="clearfix #if($partnerCode == "msig")width25 #end">
+                   <label for="policyHolderCitizenship" class="clearMargin">Nationality</label>
+                   <input type="radio" name="policyHolderMalaysian" value="Y" id="Malaysian" class="tabMalaysian inputNationality" #if(!$UtilMethods.isSet($request.getParameter('policyHolderMalaysian')) || $request.getParameter('policyHolderMalaysian') == "Y") checked="checked" #end>
+                   <label for="Malaysian">Malaysian</label>
+                   <input type="radio" name="policyHolderMalaysian" value="N" id="Non-Malaysian" class="tabMalaysian inputNationality" #if($request.getParameter('policyHolderMalaysian') == "N") checked="checked"  #end >
+                   <label for="Non-Malaysian">Non-Malaysian</label>
+                 </li>         
+                  <span class="personalDetailsNonMalaysian" style="display:none">
+                  <li class="fieldgroup clearfix #if($partnerCode == "msig" || $partnerCode == "msigstaff")width70 #end">
+                    <label for="policyHolderNationality" class="clearMargin">Country</label>
+                    <select class="required" name="policyHolderNationality" id="policyHolderNationality" data-name="Nationality" placeholder="">
+                      <option value="" disabled selected>Select</option>
+                      #set($policyHolderNationality= $request.getParameter('policyHolderNationality'))
+                     #foreach($con in $dotcontent.pull("+structureName:TieRefCountry +(conhost:9e20171a-ec3c-49cc-8f4a-0fdea34d6b74 conhost:SYSTEM_HOST) +live:true",0,"TieRefCountry.name"))
+                     <option value="$con.countryCode" #if ($policyHolderNationality == $con.countryCode) selected #end>$con.name</option>
+                     #end
+                    </select>
+                  </li>
+                  </span>
+                #end
+              
+              <li class="fieldgroup clearfix">
+                <label for="policyHolderName" class="clearMargin">Name as per <span class="personalDetailsMalaysian">NRIC</span><span class="personalDetailsNonMalaysian" style="display:none">Passport</span></label>
+                <input class="required validName"  minlength="2" maxlength="40" name="policyHolderName" id="policyHolderName" data-name="Name as per NRIC" type="text" placeholder="E.g.: Lee Siew Suan" value="$!esc.html($!request.getParameter('policyHolderName'))">
+              </li>
+              <span class="personalDetailsMalaysian">
+              <li class="fieldgroup clearfix">
+                <label for="nric">NRIC</label>
+                <input name="policyHolderNRIC"  class="required" maxlength="14" id="nric" type="text" data-name="NRIC" placeholder="900808-10-8888" value="$!esc.html($!request.getParameter('policyHolderNRIC'))">
+              </li>
+              
+
+              </span>
+               
+              #if ($product.formula != "daily" && $product.formula != "monthly" && $product.formula != "flat")
+              
+              <span class="personalDetailsNonMalaysian"  #if($request.getParameter('policyHolderMalaysian') == "N") style="display:inline"  #else style="display:none" #end>
+              <li class="fieldgroup clearfix" >
+                <label for="policyHolderPassport" class="clearMargin">Passport No</label>
+                <input class="required uppercase validPassport" minlength="3" maxlength="15" name="policyHolderPassport" id="policyHolderPassport" data-name="Passport No" type="text" placeholder="E.g.: A98765432" value="$!esc.html($!request.getParameter('policyHolderNRIC'))">
+              </li>
+              <li class="fieldgroup clearfix aboutUGender">
+                <label for="policyHolderGender" class="clearMargin">Gender</label>
+                <select class="required" name="policyHolderGender" id="policyHolderGender" data-name="Gender">
+                 <option value="">Select</option>
+                 <option value="M" #if ($request.getParameter('policyHolderGender') == "M") selected="" #end>Male</option>
+                 <option value="F" #if ($request.getParameter('policyHolderGender') == "F") selected="" #end>Female</option>
+                </select>
+              </li>
+              <li class="fieldgroup clearfix dobInput">
+                <label for="policyHolderDateOfBirth">D.O.B</label>
+                <input name="policyHolderDateOfBirth" data-name="About you DOB" id="policyHolderDateOfBirth" type="text" placeholder="DD/MM/YYYY" class="placeholder inputDate required validDOB" maxlength="10" autocomplete="off" value="$!esc.html($!request.getParameter('policyHolderDateOfBirth'))">
+                <span class="errorMsg">Error goes here</span>
+              </li>
+              </span>
+                #end
+              
+            #*  <li class="fieldgroup clearfix">
+                <label for="userEmail">Email</label>
+                <input name="policyHolderEmail" class="required email" maxlength="150" id="userEmail" type="email" data-name="Email" placeholder="name@domain.com" value="$!esc.html($!request.getParameter('policyHolderEmail'))">
+              </li>*#
+              
+              
+              <li class="fieldgroup clearfix">
+                <label for="userEmail">Email<span class="emailTooltip toolTip"><span class="toolTipText">Note: Email address provided should be the insured's email address. Future email communications regarding this policy will be sent to the email submitted. For policy renewal, kindly use the email address that is tied to your existing policy.</span></span></label>
+                <input name="policyHolderEmail" class="required email" maxlength="50" id="userEmail" type="email" data-name="Email" placeholder="E.g.: you@gmail.com" value="$!esc.html($!request.getParameter('policyHolderEmail'))">
+              </li>
+  
+              
+              <li class="fieldgroup clearfix">
+                <label for="mobile">Mobile</label>
+                <input name="policyHolderMobileNo" class="required" maxlength="15" id="mobile" type="text" data-name="Mobile" placeholder="E.g.: 018-123 4567" value="$!esc.html($!request.getParameter('policyHolderMobileNo'))">    
+              </li>
+              
+              #if ($product.formula == "motor")
+                <li class="fieldgroup clearfix aboutUMaritalStatus">
+                <label for="policyHolderMaritalStatus" class="clearMargin">Marital Status</label>
+                <select class="required" name="policyHolderMaritalStatus" id="policyHolderMaritalStatus" data-name="Marital Status">
+                 <option value="">Select</option>
+                 <option value="S" #if ($request.getParameter('policyHolderMaritalStatus') == "S") selected="" #end>Single</option>
+                 <option value="M" #if ($request.getParameter('policyHolderMaritalStatus') == "M") selected="" #end>Married</option>
+                </select>
+              </li>
+              #end
+
+              #if($product.formula == "mcp")
+              <li class="fieldgroup clearfix">
+                <label for="studentId">Student ID</label>
+                <input name="studentId" class="required digits" minlength="10" maxlength="15" id="mobile" type="text" data-name="Student ID" placeholder="XXXXXXXXXX" value="$!esc.html($!request.getParameter('studentId'))">    
+              </li>
+              <li class="fieldgroup clearfix">
+                <label for="campus">Campus</label>
+                <select class="required" name="campus" id="campus" data-name="Campus" placeholder="">
+                  <option value="" disabled selected>Select</option>
+                  #set($campus= $request.getParameter('campus'))
+                  #foreach($con in $dotcontent.pull("+structureName:TieRefCampus +(conhost:9e20171a-ec3c-49cc-8f4a-0fdea34d6b74 conhost:SYSTEM_HOST) +TieRefCampus.partnerCode:$partnerCode +live:true",0,"TieRefCampus.campusName"))        
+                    <option value="$con.code" #if ($campus == $con.code) selected #end>$con.campusName</option>
+                  #end
+                </select>
+              </li>
+              #end
+
+               #if($product.bancaProduct || $product.formula == "travelright-plus" || $product.formula == "daily" || $product.formula == "pets" || $product.formula == "mcp" || $product.formula == "daily-personal-accident")
+              
+               <!--karmun here-->
+                <li>
+                  <label for="policyHolderLocation" class="clearMargin">Address</label>
+                  <input name="policyHolderAddressLine1" #if($product.formula == "pets") class="disabledInput" #else class="required validAddress" #end minlength="2" maxlength="55" id="policyHolderAddressLine1" type="text" data-name="Address" placeholder="First Line" value="$!esc.html($!request.getParameter('policyHolderAddressLine1'))">
+                </li>
+                <li>
+                  <label for="policyHolderLocation" class="clearMargin"></label> 
+                  <input name="policyHolderAddressLine2" #if($product.formula == "pets") class="disabledInput" #else class="validAddress" #end maxlength="55" id="policyHolderAddressLine2" type="text" data-name="policyHolderAddressLine2" placeholder="Second Line" value="$!esc.html($!request.getParameter('policyHolderAddressLine2'))"> 
+                </li>
+                <li>
+                  <label for="policyHolderLocation" class="clearMargin"></label>  
+                  <input name="addressPostcode" #if($product.formula == "pets") class="disabledInput" #else class="required" #end maxlength="5" id="addressPostcode" type="text" data-name="Postal Code" placeholder="Find Postcode" #if($request.getParameter('addressPostcode') != "$('option:selected', $('#addressCity'))") value="$!esc.html($!request.getParameter('addressPostcode'))" #else value="$('option:selected', $('#addressCity'))" #end>
+                </li>
+                <li class="fieldgroup clearfix #if($partnerCode != "msig" && $partnerCode != "msigstaff" && $partnerCode != "mmu") aboutULocation #else width70 #end">
+                  #if($partnerCode == "msig" || $partnerCode == "msigstaff" || $partnerCode == "mmu") 
+                    <label for="policyHolderLocation" class="clearMargin"></label> 
+                  #end
+                    <select class="disabledInput hidden" id="addressState" name="addressState" data-name="State">
+                      <option value="" disabled="" #if (!$UtilMethods.isSet($request.getParameter('addressState'))) selected="" #end>State</option>
+                      #foreach($con in $dotcontent.pull("+structureName:TieRefState +(conhost:9e20171a-ec3c-49cc-8f4a-0fdea34d6b74 conhost:SYSTEM_HOST +live:true)",0,"TieRefState.stateDescription"))
+                        <option value="${con.stateCode}" #if (${con.stateCode} == $request.getParameter('addressState')) selected="" #end>${con.stateDescription}</option>
+                      #end
+                  </select>
+                  <!--This is for TIE, to push down the select -->
+                  #if($partnerCode == "msig" || $partnerCode == "msigstaff"  || $partnerCode == "mmu") 
+                    <label for="policyHolderLocation" class="clearMargin"></label>
+                  #end
+                  <select class="disabledInput hidden" id="addressCity" name="addressCity" data-name="Town/City" style="margin-bottom: 0px !important">
+                    <option value="" disabled="" #if ($UtilMethods.isSet($request.getParameter('addressCity'))) selected="" #end>Town/City</option>
+                    #if ($UtilMethods.isSet($request.getParameter('addressState')))
+                      #set($querystate = $request.getParameter('addressState').replace('-','\-'))
+                      #foreach($con in $dotcontent.pull("+structureName:TieRefCity +(conhost:ceaa0d75-448c-4885-a628-7f0c35d374bd conhost:SYSTEM_HOST) +live:true +TieRefCity.stateCode:$querystate",0,"TieRefCity.cityDescription"))
+                        <option value="${con.cityCode}" data-postcode="${con.postcode}" #if (${con.cityCode} == $request.getParameter('addressCity')) selected="" #end>${con.cityDescription}</option>
+                      #end
+                    #end
+                  </select>
+                </li>
+               <!-- <li style="padding-bottom: 16px !important">
+                  <label for="policyHolderLocation" class="clearMargin"></label>  
+                  <input name="addressPostcode" class="required" maxlength="5" id="addressPostcode" type="text" data-name="Postal Code" placeholder="Postal Code" #if($request.getParameter('addressPostcode') != "$('option:selected', $('#addressCity'))") value="$!esc.html($!request.getParameter('addressPostcode'))" #else value="$('option:selected', $('#addressCity'))" #end> 
+                </li>-->
+                <!--karmun End-->
+              #end
+              
+              #if($product.formula == "motor")
+                <li class="clearfix">
+                   <div class="checkBoxDriver">
+                     <input type="checkbox" id="checkBoxDriver" name="checkBoxDriver" value="">
+                     <label for="checkBoxDriver"> I'm the driver of this car.</label>
+                   </div>
+                </li>
+              #elseif($product.formula == "critical-illness")
+                <li class="clearfix marginBottom">
+                  <label for="policyHolderOccupation">Occupation</label>
+                  <input name="policyHolderOccupation" data-name="Policy Holder Occupation" id="policyHolderOccupation" type="text" placeholder="E.g.: Architect" class="required inputOccupation" maxlength="30" value="$!esc.html($!{request.getParameter('policyHolderOccupation')})">
+                </li>
+                
+              #end
+            </ul>
+             
+            
+             
+              #if($enableGst && !$gstRate)
+                <input type="hidden" name="destSelect" value="Y" />
+              #end
+              
+              #if($enableSst && !$sstRate)
+                <input type="hidden" name="destSelect" value="Y" />
+              #end
+            
+            <div class="formFamilyContainer">        
+            </div>
+            #if($product.formula != "critical-illness" && $product.formula != "home-content")
+              <a href="" class="triggerAddFamily" id="">&#10010; Add #if (${product.formula} == "motor") driver #else family #end</a>
+            #end
+          
+          </div>
+          <div class="navBottom">
+            <ul class="clearfix">
+              <li class="prevArrow"><a href="#if($firstFieldSet)/$partnerURLTitle$actionAddOnURL#end" class="ir alignLeft#if(!$firstFieldSet) previous#end"><span class="button">#if($firstFieldSet)Cancel#{else}Back#end</span> Previous</a></li>
+              <li class="smallLogo"><a href="/$partnerURLTitle/$actionAddOnURL" class="ir">MSIG</a></li>
+              <li class="nextArrow"><a class="ir alignRight next" onclick="ga('send', 'pageview', '/$partnerURLTitle/products/$productURLTitle/registration.html#personalDetails');"><span class="button">Continue</span> Next</a></li>
+            </ul>
+          </div>                
+            #set ($firstFieldSet = false)
+               </fieldset>
+			#end
+
+    #if (!$product.getUpgradeRate().equals("0"))      
+        <fieldset id="upgrade"><!--upgrade-->
+            <div class="clearfix wrapper">
+            <div class="pageIntro">
+              <h1>$upgradePlanHeaderDescription</h1>
+              <p>$upgradePlanDescription</p>
+            </div>
+          
+            <div class="animUpgrade">
+            <img class="animFlexDummy hidden" alt="" src="">  
+      $upgradeAnimationImage
+            </div>
+          
+            <div class="tickArea">
+              <div class="pointingArrow"></div>
+              <input type="checkbox" name="toUpgradeChkbox" value="Y" id="upgradePlan"><label for="upgradePlan"><span>Tick the box to double up</span></label>
+            </div>          
+          </div>
+          <div class="navBottom">
+            <ul class="clearfix">
+              <li class="prevArrow"><a href="#if($firstFieldSet)/$partnerURLTitle$actionAddOnURL#end" class="ir alignLeft#if(!$firstFieldSet) previous#end"><span class="button">#if($firstFieldSet)Cancel#{else}Back#end</span> Previous</a></li>
+              <li class="smallLogo"><a href="/$partnerURLTitle/$actionAddOnURL" class="ir">MSIG</a></li>
+              <li class="nextArrow"><a class="ir alignRight" href="#" onClick="javascript:proceed();return false;ga('send', 'pageview', '/$partnerURLTitle/products/$productURLTitle/registration.html#upgrade');"><span class="button">Continue</span> Next</a></li>
+            </ul>
+          </div>
+      <input type="hidden" name="hasUpgrade" value="Y" />
+            #set ($firstFieldSet = false)
+        </fieldset>
+     #else
+       <input type="hidden" name="hasUpgrade" value="N" />
+         #end
+     
+                <!-- hidden fields -->
+        #if($product.formula != "pets")                
+          <input name="memberName" id="memberName" type="hidden" value="$!esc.html($!{request.getParameter('memberName')})" />
+          <input name="memberIdNo" id="memberIdNo" type="hidden" value="$!esc.html($!{request.getParameter('memberIdNo')})" />
+          <input type="hidden" name="memberRelationship" value="$!esc.html($!{request.getParameter('memberRelationship')})" />       
+          <input type="hidden" name="driverRelationship" value="$!esc.html($!{request.getParameter('driverRelationship')})" />
+          <input type="hidden" name="memberDOB" value="$!esc.html($!{request.getParameter('memberDOB')})" />
+          <input type="hidden" name="memberMotorDrivingExperience" value="$!esc.html($!{request.getParameter('memberMotorDrivingExperience')})" />
+        #end
+          <input type="hidden" name="memberIsMalaysian" value="$!esc.html($!{request.getParameter('memberIsMalaysian')})" />           
+          <input type="hidden" name="memberOccupation" value="$!esc.html($!{request.getParameter('memberOccupation')})" />
+        <input type="hidden" name="memberGender" value="$!esc.html($!{request.getParameter('memberGender')})" />
+        
+        <!-- Pop up modal -->
+        <div id="overwriteAddressModal" class="overwriteAddressModal">
+            
+            <!-- Modal content -->
+            <div class="overwriteAddressModal-Content overwriteAddress-Bg">
+                <!--span class="overwriteAddressModal-Close" onclick="closeModal()">&times;</span-->
+                <p>There's a difference in the address that you have given. Would you like to use this new address as the default mailing address?</p>
+                <br/>
+                <span name="overwriteAddressModal-Address"></span>
+                <br/>
+                <div class="btnContainer overwriteAddressModal-Button"><a class="button" onclick="confirmAddressChange('Y')" value="Y">Use New</a></div>
+                <div class="btnContainer overwriteAddressModal-Button"><a class="button" onclick="confirmAddressChange('N')" value="N">Keep Existing</a></div>
+            </div>
+            
+        </div>
+
+
+        </form>
+       </div> <!-- #main -->
+    </div> <!-- #main-container -->
+<script type="text/javascript">  
+
+  var addCoverCountList = new Array();
+  var addCoverList = new Array();
+  var maxPaxList = new Array();
+  var addCoverAgeLimitList = new Array();
+  
+  #if ($UtilMethods.isSet( $product.getAdditionalCoverageList()))
+  #set ($totalMaxPax = 0)
+    #foreach($addCover in $product.getAdditionalCoverageList().entrySet())
+
+    #if ($addCover.getValue().getToCalculatePremium().equals("true"))
+      addCoverList['$addCover.getKey()'] = "Y";    
+    #else
+      addCoverList['$addCover.getKey()'] = "N";     
+    #end
+    addCoverAgeLimitList['$addCover.getKey()'] = {
+                            min: "$addCover.getValue().getMinAge()",
+                            minUnit : "$addCover.getValue().getMinAgeUnit()",
+                            max: "$addCover.getValue().getMaxAge()",
+                            maxUnit: "$addCover.getValue().getMaxAgeUnit()"
+                            }
+    addCoverCountList['$addCover.getKey()'] = 0;
+    maxPaxList['$addCover.getKey()'] = "$addCover.getValue().getMaxPax()";
+    #set ($totalMaxPax = $math.add($totalMaxPax,$addCover.getValue().getMaxPax()))
+    
+    min = "$addCover.getValue().getMinAge()";
+    minUnit = "$addCover.getValue().getMinAgeUnit()";
+    max = "$addCover.getValue().getMaxAge()";
+    maxUnit = "$addCover.getValue().getMaxAgeUnit()";
+    jQuery("#min").val(min);
+    jQuery("#minUnit").val(minUnit);
+    jQuery("#max").val(max);
+    jQuery("#maxUnit").val(maxUnit);
+    #end
+  
+  #else
+      $(".triggerAddFamily").hide();
+  #end
+  
+  function removeExceedDriver(){
+    $("#exceedDriverErrorMsgContainer").hide();
+    
+    var allowMotorPlusPlan = $('#allowMotorPlusPlan').val();
+    var maxDriver = 0;
+    var drivers;
+    if(allowMotorPlusPlan === "Y"){
+        drivers = $(".motorplus-family");
+    } else {
+        maxDriver = 1;
+        drivers = $(".addFamilyTabs");
+    }
+    var driversCounts = drivers.length;    
+    
+    while(driversCounts > maxDriver){
+        
+        if(allowMotorPlusPlan === "Y"){
+            $(".motorplus-family").last().remove();
+        } else {
+            $(".addFamilyTabs").last().remove();
+        }
+        driversCounts--;
+    }
+ 
+    proceed();
+  }
+
+  function relationshipChanged(){
+      var totalPersonToCalc = $(".formFamilyContainer").find("input.inputRelation[data-tocal=Y]:checked").length + 1;
+    $('#totalPersonToCalc').val(totalPersonToCalc);
+      //var totalDaysPicked = $(".productDays").text();
+      //var minimumDays = $("#minimumCoverage").val();
+       //var normalRate = $("input[name=coveragePremiumRate]").val();
+    
+      //if (totalDaysPicked < minimumDays){
+        //$('.productPrice span').text(Number(minimumDays)*normalRate*totalPersonToCalc);
+      //}else{    
+        //$('.productPrice span').text(totalDaysPicked*normalRate*totalPersonToCalc);
+      //}
+    calculatePremium();
+  }
+
+#if ($product.ageFromYearOfBirth)
+var isAgeFromYearOfBirth = true;
+#else
+var isAgeFromYearOfBirth = false;
+#end
+
+  
+function extractDOB(nric){
+  var today = new Date();
+  
+  var currentYYYY = today.getFullYear();
+  var currentMM = today.getMonth();
+  var currentDD = today.getDate();
+ 
+  var yymmdd = nric.substring(0,6);
+  var year = yymmdd.substring(0,2);
+  var month = yymmdd.substring(2,4);
+  var date = yymmdd.substring(4,6);
+  var currentYY = currentYYYY.toString().substring(2,4);
+  
+  if ((currentYY - year) < 0) {
+      ageYearPrefix = 19;
+  }
+  else {
+  if ((currentYY - year) == 0){
+    if ((currentMM - (month-1)) < 0){
+      ageYearPrefix = 19;
+    }else{
+      if ((currentMM - (month-1)) == 0){
+        if ((currentDD - date) < 0){
+          ageYearPrefix = 19;
+        }else{
+          ageYearPrefix = 20;
+        }
+      }else{
+        ageYearPrefix = 20;
+      }    
+    }
+  }else{
+    ageYearPrefix = 20;
+  }
+  }  
+  
+  dob  = new Date(ageYearPrefix+year, month - 1, date);
+  return dob;
+  
+}
+
+function getDate(dateStr){
+  ddMMYYYY = dateStr.split("/");
+  var date = new Date(ddMMYYYY[2], ddMMYYYY[1] - 1, ddMMYYYY[0]);
+  return date;
+}
+
+function checkAgeLimit(dob, min, minUnit, max, maxUnit, isMainPerson, coverStart){
+
+  var minAgeDate = new Date(dob.getFullYear(), dob.getMonth(), dob.getDate());
+  var maxAgeDate = new Date(dob.getFullYear(), dob.getMonth(), dob.getDate());
+  
+  if (minUnit == "year"){
+    var config = {years: min};
+    var minAgeDate = minAgeDate.add(config);
+  }else if (minUnit == "month"){
+    var config = {months: min};
+    var minAgeDate = minAgeDate.add(config);
+  }else if (minUnit == "day"){
+    var config = {days: min};
+    var minAgeDate = minAgeDate.add(config);
+  }
+  
+  if (!Date.isLeapYear(minAgeDate.getFullYear)){
+    if (dob.getMonth() == 1 && dob.getDate() == 29){
+      var config = {days: 1};
+      minAgeDate = minAgeDate.add(config);
+    }
+  }
+    
+  if (maxUnit == "year"){
+  max = Number(max) + 1;
+    var config = {years: max};
+    var maxAgeDate = maxAgeDate.add(config);
+  }else if (maxUnit == "month"){
+    var config = {months: max};
+    var maxAgeDate = maxAgeDate.add(config);
+  }else if (maxUnit == "day"){
+    var config = {days: max};
+    var maxAgeDate = maxAgeDate.add(config);
+  }
+  
+  if (!Date.isLeapYear(maxAgeDate.getFullYear())){
+    if (dob.getMonth() == 1 && dob.getDate() == 29){
+      var config = {days: 1};
+      maxAgeDate = maxAgeDate.add(config);
+    }
+  }
+
+  //console.log("minAgeDate = " + minAgeDate);
+  //console.log("maxAgeDate = " + maxAgeDate);
+  
+  var result = 0;
+  
+  if (isMainPerson == "Y"){
+    console.log("Main"+minAgeDate);
+    
+    if(formula != "travelright-plus"){
+        result = Date.today().compareTo(minAgeDate);
+    } else {
+        result = coverStart.compareTo(minAgeDate);
+    }
+    console.log(result);
+    if (result < 0 ){
+      console.log("result: "+" ERR_POLICYHOLDER_MIN_AGE");
+      return "ERR_POLICYHOLDER_MIN_AGE";
+    }else{
+      result = coverStart.compareTo(maxAgeDate);
+      if (result == 0 || result > 0 ){
+        console.log("result : ERR_POLICYHOLDER_MAX_AGE");
+        return "ERR_POLICYHOLDER_MAX_AGE";
+      }          
+    }
+  }else{
+    result = coverStart.compareTo(minAgeDate);
+    if (result < 0){        
+      console.log("result : " + "ERR_POLICYHOLDER_MIN_AGE");
+      return "ERR_POLICYHOLDER_MIN_AGE";
+    }else{
+      result = coverStart.compareTo(maxAgeDate);
+      if (result == 0 || result > 0 ){
+        console.log("result : " + "ERR_POLICYHOLDER_MAX_AGE");
+        return "ERR_POLICYHOLDER_MAX_AGE";
+      }
+    }
+  }
+  return "NO_ERROR";
+  
+}
+
+
+
+function proceed(){
+  var toProceed = true;
+  var toProceedMax2Driver = true;
+  var coverStart = $("input[name=coverageStartDate]").val();
+  var coverEnd = $("input[name=coverageExpiryDate]").val();
+  var allowMotorPlusPlan = $('#allowMotorPlusPlan').val();
+  var isMotorcycle = "N";
+  if ($("input[name=productName]").val() == "Motorcycle") {
+  	isMotorcycle = "Y";
+  }
+  var formula = $('#formula').val();
+  
+  var form = jQuery('#msform');      
+  
+  if (formula == "motor" || (coverStart != undefined && coverStart != '' && coverEnd != undefined && coverEnd != '')) {
+      if (form.valid()) {
+        toProceed = true;  
+      }else{
+        toProceed = false;
+      }  
+  }else{
+    toProceed = false;
+  }
+  
+	if(allowMotorPlusPlan === "Y"){
+        var elem = $(".motorplus-family");
+    } else {
+        var elem = $(".addFamilyTabs");
+    }
+    if (formula == "motor"){
+        if ($('#motorAddWaiverCompulsoryExcess').is(":checked") === true) {
+            if(allowMotorPlusPlan === "Y" && elem.length > 0){
+                toProceedMax2Driver = false;            
+            } else if(elem.length > 1){
+                toProceedMax2Driver = false;
+            }
+        }
+    }
+    
+  if (toProceed && toProceedMax2Driver){
+
+    var memberNameArr = new Array();
+    var memberIdArr = new Array();
+    var memberDobArr = new Array();
+    var memberRelArr = new Array();
+    var memberIsMYArr = new Array();
+    var totalPremium = $('.productPrice span').text();
+    var memberDrivingExpArr = new Array();
+    var memberDrivingOccupationArr = new Array();  
+    var memberGenderArr = new Array();
+    var driverRelArr = new Array();
+	if(allowMotorPlusPlan === "Y" || isMotorcycle === "Y"){
+		var memberName = $( "input[name=policyHolderName]" ).val();
+		var memberId= $( "input[name=policyHolderNRIC]" ).val();
+		var memberDOB= $( "input[name=policyHolderDateOfBirth]" ).val();  
+		var memberRel = "";
+		var driverRel = "";
+		var memberIsMY = $('input[name="policyHolderMalaysian"]:checked').val();
+		var formula = $('#formula').val();
+        if(memberIsMY == 'N') {
+            var memberId= $( "input[name=policyHolderPassport]" ).val();
+        }
+        var memberDrivingExp = $('select[name="policyHolderDrivingExp"]').val();
+        var memberDrivingOccupation = $('input[name="policyHolderOccupation"]').val();
+        var memberGender = $('select[name="policyHolderGender"]').val();
+        memberRel = "Driver";
+        driverRel = "00";
+		
+		memberDrivingExpArr.push(memberDrivingExp);        
+        memberDrivingOccupationArr.push(memberDrivingOccupation);
+        memberGenderArr.push(memberGender);
+
+        addCoverCountList[memberRel] = addCoverCountList[memberRel] + 1;  
+		memberNameArr.push(memberName);        
+		memberIdArr.push(memberId);    
+		memberDobArr.push(memberDOB);    
+		memberRelArr.push(memberRel);   
+		driverRelArr.push(driverRel);
+		memberIsMYArr.push(memberIsMY);
+          
+        console.log("policy holder my: " + memberGender);
+          
+        for(var i = 0; i < elem.length; i++)
+        {
+			var memberName = $(elem[i]).find("ul.active > li").find(".inputName").val();
+			var memberId= $(elem[i]).find("ul.active > li").find(".inputID").val();
+			var memberDOB= $(elem[i]).find("ul.active > li").find(".inputDate").val();  
+			var memberRel = "";
+			var driverRel = "";
+			var memberIsMY = $(elem[i]).find("li").find(".inputNationality:checked").val();
+			var formula = $('#formula').val();
+            
+            console.log("member id : " + memberId);
+            console.log("member memberName : " + memberName);
+            console.log("member memberDOB : " + memberDOB);
+            
+            var memberDrivingExp = $(elem[i]).find("li.motorplus-exp").find(".inputExp").val();
+            var memberDrivingOccupation = $(elem[i]).find("li.motorplus-occupation").find(".inputOccupation").val();
+            var memberGender = $(elem[i]).find("ul.active > li").find(".inputGender").val();
+            memberRel = $(elem[i]).find(".inputRelation").val();
+            driverRel = $(elem[i]).find("li.motorplus-relation").find(".inputRelationship").val();
+
+            memberDrivingExpArr.push(memberDrivingExp);        
+            memberDrivingOccupationArr.push(memberDrivingOccupation);
+            memberGenderArr.push(memberGender);
+            
+            addCoverCountList[memberRel] = addCoverCountList[memberRel] + 1;  
+            
+            memberNameArr.push(memberName);        
+            memberIdArr.push(memberId);    
+            memberDobArr.push(memberDOB);    
+            memberRelArr.push(memberRel);   
+            driverRelArr.push(driverRel);
+            memberIsMYArr.push(memberIsMY);    
+            
+            console.log("member memberRel : " + memberRel);
+        }
+	} else {
+		for(var i = 0; i < elem.length; i++)
+		{
+		  var memberName = $(elem[i]).find("ul.active > li").find(".inputName").val();
+		  var memberId= $(elem[i]).find("ul.active > li").find(".inputID").val().toUpperCase();
+		  var memberDOB= $(elem[i]).find("ul.active > li").find(".inputDate").val();  
+		  var memberRel = "";
+		  var driverRel = "";
+		  var memberIsMY = $(elem[i]).find("ul.formFamilyRadioBtns > li:nth-child(2) ").find("input:checked").val();
+		  var formula = $('#formula').val();
+		 
+		  if(formula == "motor"){
+			var memberDrivingExp = $(elem[i]).find("ul.motorRegistrationForm > li").find(".inputExp").val();
+			var memberDrivingOccupation = $(elem[i]).find("ul.motorRegistrationForm > li").find(".inputOccupation").val();
+			var memberGender = $(elem[i]).find("ul.motorRegistrationForm > li").find(".inputGender").val();
+			memberRel = $(elem[i]).find(".inputRelation").val();
+			driverRel = $(elem[i]).find("ul.motorRegistrationForm > li").find(".inputRelationship").val();
+			
+			memberDrivingExpArr.push(memberDrivingExp);        
+			memberDrivingOccupationArr.push(memberDrivingOccupation);
+			memberGenderArr.push(memberGender);
+			
+			
+		  } else {
+			memberRel = $(elem[i]).find("ul.formFamilyRadioBtns > li:first-child ").find("input:checked").val();
+		  }
+		  addCoverCountList[memberRel] = addCoverCountList[memberRel] + 1;  
+		
+		  memberNameArr.push(memberName);        
+		  memberIdArr.push(memberId);    
+		  memberDobArr.push(memberDOB);    
+		  memberRelArr.push(memberRel);   
+		  driverRelArr.push(driverRel);
+		  memberIsMYArr.push(memberIsMY);    
+		
+		}
+	}
+    
+    if (memberNameArr.join() != ''){
+    document.forms["signupform"].memberName.value = memberNameArr.join();
+    document.forms["signupform"].memberIdNo.value = memberIdArr.join();
+    document.forms["signupform"].memberDOB.value = memberDobArr.join();
+    document.forms["signupform"].memberRelationship.value = memberRelArr.join();
+    document.forms["signupform"].driverRelationship.value = driverRelArr.join();
+    document.forms["signupform"].memberIsMalaysian.value = memberIsMYArr.join();   
+      var formula = $('#formula').val();
+      if(formula == "motor"){
+        document.forms["signupform"].memberMotorDrivingExperience.value = memberDrivingExpArr.join();
+        document.forms["signupform"].memberOccupation.value = memberDrivingOccupationArr.join();    
+        document.forms["signupform"].memberGender.value=memberGenderArr.join();
+
+
+      }
+    }else{
+      var formula = $('#formula').val();
+      if(formula != "pets"){
+        $( "input[name=memberName]" ).remove();
+        $( "input[name=memberIdNo]" ).remove();
+        $( "input[name=memberDOB]" ).remove();
+        $( "input[name=memberRelationship]" ).remove();
+        $( "input[name=memberIsMalaysian]" ).remove();
+      }
+      
+      if(formula == "motor"){
+       $( "input[name=memberMotorDrivingExperience]" ).remove();
+       $( "input[name=memberDrivingOccupation]" ).remove();  
+      }
+    }
+    
+    document.forms["signupform"].totalPremium.value =  $('.productPrice span').text();
+    document.forms["signupform"].noDaysCovered.value =  $('input[name=totalDaysSelected]').val();
+    
+    #if ($product.formula == "daily" || $product.formula == "monthly" || $product.formula == "flat")
+      if ($('input#upgradePlan').is (':checked')){
+        document.forms["signupform"].coveragePlan.value = "Upgrade";
+      }else{
+        document.forms["signupform"].coveragePlan.value = "Basic";
+      }
+    #end
+    $(window).unbind('beforeunload');
+    
+    document.forms["signupform"].submit();
+  }else{
+    if(!(toProceedMax2Driver) && toProceed){
+    	//ky 20180629 enter here if named driver more than 2. 
+        $("#exceedDriverErrorMsgContainer").show();
+        $(".promptOverlay").removeClass("hidden");
+        $(".promptMMPMsg").addClass("hidden");
+        var motorPlusPlan = $("#motorPlusPlan").prop("checked"); 
+        if(motorPlusPlan){
+            $("#exceedDriverErrorMsgHeader").html("MSIG Motor Plus Insurance");
+        } else {
+            $("#exceedDriverErrorMsgHeader").html("MSIG Motor Comprehensive Insurance");
+        }
+    }else{
+        var items = [];
+        items.push('<li> You may have refreshed your page. Please go back to previous screens to complete the purchase details before you proceed.</li>');
+        $(".errorMsgContainer").find("ul").html(items.join(""));            
+        $(".errorMsgContainer").removeClass("hidden");
+    }
+    
+  }
+}
+  
+function setCarLocation(){
+    //console.log("car location back from request: " + $("input[name=carLocation]").val());
+    //console.log("car location state code back from request: " + $("input[name=carLocationStateCode]").val());
+    
+    if($("input[name=carLocation]").val() != null && $("input[name=carLocation]").val() != "" && $("input[name=carLocationStateCode]").val() != null && $("input[name=carLocationStateCode]").val() != "" ){
+        /*$('select[name=motorVehicleLocationStateCode]').val($("input[name=carLocationStateCode]").val()).trigger("change");
+        //console.log("finish esum checking before bind");
+        
+        $('select[name=motorVehicleLocation]').bind("change", function(){
+            //console.log("finish esum checking");
+            
+            if ($('.registration #msform').valid()){
+                //console.log("valid form returned");
+                calculatePremium();
+            }
+        });*/
+        if ($('.registration #msform').valid()){
+            ///console.log("valid form returned");
+            calculatePremium();
+        }
+    }
+    
+}
+
+function setMember(){
+  var noOfPersons = 1;
+  var isMotorcycle = "N";
+  if ($("input[name=productName]").val() == "Motorcycle") {
+  	isMotorcycle = "Y";
+  }
+  var allowMotorPlusPlan = $('#allowMotorPlusPlan').val();
+  if ($("input[name=memberName]").length){
+  
+    var memberName = $("input[name=memberName]").val();
+    var memberNameList = memberName.split(",");
+    var memberIdNo = $("input[name=memberIdNo]").val();
+    var memberIdNoList = memberIdNo.split(",");
+    var memberDOB = $("input[name=memberDOB]").val();
+    var memberDOBList = memberDOB.split(",");
+    var memberRelationship= $("input[name=memberRelationship]").val();
+    var memberRelationshipList = memberRelationship.split(",");
+    var driverRelationship= $("input[name=driverRelationship]").val();
+    var driverRelationshipList = driverRelationship.split(",");
+    var memberIsMalaysian = $("input[name=memberIsMalaysian]").val();
+    var memberIsMalaysianList = memberIsMalaysian.split(",");
+    
+    var memberGender = $("input[name=memberGender]").val();
+    var memberGenderList = memberGender.split(",");
+    var memberDrivingExp = $("input[name=memberMotorDrivingExperience]").val();
+    var memberDrivingExpList = memberDrivingExp.split(",");
+    var memberOccupation = $("input[name=memberOccupation]").val();
+    var memberOccupationList = memberOccupation.split(",");
+	
+	var length = memberNameList.length;
+	
+	for(var i = 0; i < length; i++){
+		if(allowMotorPlusPlan === "Y" || isMotorcycle === "Y"){
+			if(i != 0){
+              if (memberNameList[i] != undefined && memberNameList[i] != ""){
+                $(".triggerAddFamily").click();
+                var memberElem = $(".formFamilyContainer .motorplus-family:nth-child("+(i)+")");
+                console.log("member Element: " + memberElem.val());
+                console.log("member Element: " + $(memberElem).find(".inputRelation").val());
+                console.log("member Element: " + $(memberElem).find(".inputNationality").val());
+                console.log("member Element: " + $(memberElem).find('.inputOccupation').val());
+                $(memberElem).find(".formFamilyRadioBtns .inputRelation").filter('[value='+memberRelationshipList[i]+']').prop('checked', true);
+                $(memberElem).find(".inputNationality").filter('[value='+memberIsMalaysianList[i]+']').prop('checked', true);
+                $(memberElem).find(".formFamilyRadioBtns .inputRelation").removeClass("checked");
+                $(memberElem).find(".formFamilyRadioBtns .inputRelation").filter('[value='+memberRelationshipList[i]+']').addClass("checked");
+                $(memberElem).find(".inputNationality").removeClass("checked");
+                $(memberElem).find(".inputNationality").filter('[value='+memberIsMalaysianList[i]+']').addClass("checked")
+                $(memberElem).find('.inputOccupation').val(memberOccupationList[i]);
+                var expNumber = memberDrivingExpList[i];
+                $(memberElem).find(".inputExp option[value='"+expNumber+"']").attr('selected','selected');
+                var genderNumber = memberGenderList[i];
+                $(memberElem).find(".inputGender option[value='"+genderNumber+"']").attr('selected','selected');
+                var relationNumber = driverRelationshipList[i];
+                $(memberElem).find(".inputRelationship option[value='"+relationNumber+"']").attr('selected','selected');
+               
+                if (memberIsMalaysianList[i] == 'Y'){          
+                  $(memberElem).find(".formMalaysian").addClass("active");
+                  $(memberElem).find(".formNonMalaysian").removeClass("active");
+                  $(memberElem).find(".formMalaysian .inputName").val(memberNameList[i]);
+                  $(memberElem).find(".formMalaysian .inputNric").val(memberIdNoList[i]);    
+                  
+                }else{          
+                  $(memberElem).find(".formNonMalaysian").addClass("active");
+                  $(memberElem).find(".formMalaysian").removeClass("active");
+                  $(memberElem).find(".formNonMalaysian .inputName").val(memberNameList[i]);
+                  $(memberElem).find(".formNonMalaysian .inputPassport").val(memberIdNoList[i]);    
+                  $(memberElem).find(".formNonMalaysian .inputDate").val(memberDOBList[i]);  
+                  
+                }
+            
+                noOfPersons++;
+              }
+              
+            }
+		} else {
+			if (memberNameList[i] != undefined && memberNameList[i] != ""){
+                $(".triggerAddFamily").click();
+                var memberElem = $(".formFamilyContainer .formFamily:nth-child("+(i+1)+")");
+                console.log(memberElem);
+                $(memberElem).find(".formFamilyRadioBtns .inputRelation").filter('[value='+memberRelationshipList[i]+']').prop('checked', true);
+                $(memberElem).find(".formFamilyRadioBtns .inputNationality").filter('[value='+memberIsMalaysianList[i]+']').prop('checked', true);
+                $(memberElem).find(".formFamilyRadioBtns .inputRelation").removeClass("checked");
+                $(memberElem).find(".formFamilyRadioBtns .inputRelation").filter('[value='+memberRelationshipList[i]+']').addClass("checked");
+                $(memberElem).find(".formFamilyRadioBtns .inputNationality").removeClass("checked");
+                $(memberElem).find(".formFamilyRadioBtns .inputNationality").filter('[value='+memberIsMalaysianList[i]+']').addClass("checked")
+                $(memberElem).find('.inputOccupation').val(memberOccupationList[i]);
+                var expNumber = memberDrivingExpList[i];
+                $(memberElem).find(".inputExp option[value='"+expNumber+"']").attr('selected','selected');
+                var genderNumber = memberGenderList[i];
+                $(memberElem).find(".inputGender option[value='"+genderNumber+"']").attr('selected','selected');
+                var relationNumber = driverRelationshipList[i];
+                $(memberElem).find(".inputRelationship option[value='"+relationNumber+"']").attr('selected','selected');
+               
+                if (memberIsMalaysianList[i] == 'Y'){          
+                  $(memberElem).find(".formMalaysian").addClass("active");
+                  $(memberElem).find(".formNonMalaysian").removeClass("active");
+                  $(memberElem).find(".formMalaysian .inputName").val(memberNameList[i]);
+                  $(memberElem).find(".formMalaysian .inputNric").val(memberIdNoList[i]);    
+                  
+                }else{          
+                  $(memberElem).find(".formNonMalaysian").addClass("active");
+                  $(memberElem).find(".formMalaysian").removeClass("active");
+                  $(memberElem).find(".formNonMalaysian .inputName").val(memberNameList[i]);
+                  $(memberElem).find(".formNonMalaysian .inputPassport").val(memberIdNoList[i]);    
+                  $(memberElem).find(".formNonMalaysian .inputDate").val(memberDOBList[i]);  
+                  
+                }
+            
+                noOfPersons++;
+             }
+		}
+	}
+  }    
+  
+  if ($("input[name=coveragePlan]").val() == "Upgrade"){
+  
+    $("input[name=toUpgradeChkbox]").filter('[value=Y]').prop('checked', true);
+  $(".productUpgrade span").html("&#10004;");
+    $(".productUpgrade span").addClass("allowUpgrade");   
+    $(".productUpgrade").removeClass("hidden");
+   
+  }
+  
+  var totalPersonToCalc = $('#totalPersonToCalc').val();
+  var upgradePrice = $("input[name=coveragePremiumUpgradeRate]").val();      
+  var totalDaysPicked = $("#totalDaysSelected").val();
+  var minimumDays = $("#minimumCoverage").val();
+
+  if (Number(totalDaysPicked) != 0){
+    if (Number(totalDaysPicked) < Number(minimumDays)){
+        $('#upgradePremiumSpan').text(Number(minimumDays)*Number(totalPersonToCalc)*Number(upgradePrice));
+        $("#err_duration_exceed").removeClass("hidden");
+    }else{
+        $('#upgradePremiumSpan').text(Number(totalDaysPicked)*Number(totalPersonToCalc)*Number(upgradePrice));
+    }
+  } else {
+    $('#upgradePremiumSpan').text(Number(totalDaysPicked)*Number(totalPersonToCalc)*Number(upgradePrice));
+  }
+  
+  $('.productPrice span').text($("input[name=totalPremium]").val());
+  $('.productPeople span').text(noOfPersons);
+  
+}
+
+var stateCityMap =
+    [
+#set($stateCounter = 0)
+#foreach($con in $dotcontent.pull("+structureName:TieRefState +(conhost:9e20171a-ec3c-49cc-8f4a-0fdea34d6b74 conhost:SYSTEM_HOST) +live:true",0,"TieRefState.stateDescription"))
+  #set($stateCounter = $stateCounter + 1)
+  #if ($stateCounter > 1) , #end
+        { "stateCode" : "$con.stateCode",
+        "stateDescription" : "$con.stateDescription",
+          "cityList" :
+            [
+  #set($searchParam = $con.stateCode.replace("-","\-"))
+  #set($cityCounter = 0)
+  #foreach($con in $dotcontent.pull("+structureName:TieRefCity +(conhost:9e20171a-ec3c-49cc-8f4a-0fdea34d6b74 conhost:SYSTEM_HOST) +live:true +TieRefCity.stateCode:$searchParam",0,"TieRefCity.cityDescription"))
+    #set($cityCounter = $cityCounter + 1)
+    #if ($cityCounter > 1) , #end
+            {"cityCode":"$con.cityCode", "cityDescription":"$con.cityDescription", "postcode":"$con.postcode"}
+  #end
+            ]
+        }
+#end        
+    ]
+/*
+$(window).load(function() {
+  $('#addressPostcode').val($('option:selected', $('#addressCity')).attr('data-postcode'));
+});
+*/
+ $(document).ready(function(){
+    $('#addressPostcode').change(function(event, data) {
+        var currentPostcode = $(this).val();
+        
+        if(data){
+            currentPostcode = data;
+            autocompleteSuggestionClicked = false;
+        }
+        
+        var hasResult = false;
+    
+        if(currentPostcode.length==5){
+            for (var stateCtr = 0; stateCtr<stateCityMap.length; stateCtr++) {
+            
+                for (var cityCtr = 0; cityCtr < stateCityMap[stateCtr].cityList.length; cityCtr++) {
+                
+                    if(stateCityMap[stateCtr].cityList[cityCtr].postcode == currentPostcode){
+                        hasResult = true;                        
+                        
+                        $('select[name=addressState]>option:gt(0)').remove();
+                        
+                        var ops = $('<option/>', {
+                            "value" : stateCityMap[stateCtr].stateCode
+                        });
+                        ops.html(stateCityMap[stateCtr].stateDescription);
+                        ops.appendTo($('select[name=addressState]'));                       
+                        
+                        $('select[name=addressCity]>option:gt(0)').remove();
+                        
+                        var opt = $('<option/>', {
+                                "value" : stateCityMap[stateCtr].cityList[cityCtr].cityCode,
+                                "data-postcode" : stateCityMap[stateCtr].cityList[cityCtr].postcode
+                            });
+                            
+                        opt.html(stateCityMap[stateCtr].cityList[cityCtr].cityDescription);
+                        opt.appendTo($('select[name=addressCity]'));  
+                        
+                        $('select[name=addressState]').val(stateCityMap[stateCtr].stateCode);
+                        $('select[name=addressCity]').val(stateCityMap[stateCtr].cityList[cityCtr].cityCode);
+                        
+                        //$('input[name=addressState]').val(stateCityMap[stateCtr].stateCode);
+                        //$('input[name=addressCity]').val(stateCityMap[stateCtr].cityList[cityCtr].cityCode);
+                                                
+                        break;
+                    }
+                    
+                }
+                
+            }
+        }
+            // No more results, clear all value 
+            if(hasResult==false){
+                
+                   
+                $('select[name=addressState]>option:gt(0)').remove();
+                $('select[name=addressCity]>option:gt(0)').remove();
+                            
+                    // Condition explain:
+                    // 1. if a div "autocomplete-no-suggestion" exists = No results => clear input field
+                    // 2. currentPostcode.length is the input field value's length
+                    // 3. the conflict without autocompleteSuggestionClicked is when the user CLICK the suggestion, it considers the user has left
+                    // the input field and triggers ONCHANGE method first, thus rendering addressPostCode field value as EMPTY. Empty value = no
+                    // suggestions, so autocomplete onSelect will not be invoked. Adding autocompleteSuggestionClicked = true
+                    // as a flag and it is set when the mouse is click. Everything happens within a frame, currently the only workaround.
+                    // ====>> Google search "autocomplete devbridge onselect and onchange conflict" for more info
+                if(($('div.autocomplete-no-suggestion').length || currentPostcode.length!=5) && autocompleteSuggestionClicked == false){
+                    $('#addressPostcode').val('');
+                }
+                
+                $('select[name=addressState]').val('');
+                $('select[name=addressCity]').val('');
+                
+                //$('input[name=addressState]').val('');
+                //$('input[name=addressCity]').val('');
+                    
+            }
+        
+    });
+    /*$('#addressState').change(function() {
+        $('#addressCity>option:gt(0)').remove();
+        var selectedStateCode = $(this).val();
+        for (var i=0; i<stateCityMap.length; i++) {
+            if (stateCityMap[i].stateCode == selectedStateCode) {
+                for (var j = 0; j < stateCityMap[i].cityList.length; j++) {
+                    var opt = $('<option/>', {
+                        "value" : stateCityMap[i].cityList[j].cityCode,
+                        "data-postcode" : stateCityMap[i].cityList[j].postcode,
+                    });
+                    opt.html(stateCityMap[i].cityList[j].cityDescription);
+                    opt.appendTo($('#addressCity'));           
+                }
+                $('#addressPostcode').val($('option:selected', $('#addressCity')).attr('data-postcode'));
+                break;
+            }
+        }
+    });
+    $('#addressCity').change(function(){
+        $('#addressPostcode').val($('option:selected', this).attr('data-postcode'));
+    });*/
+
+   // For Home Content
+   $('#propertyState').change(function() {
+        $('#propertyCity>option:gt(0)').remove();
+        var selectedStateCode = $(this).val();
+        for (var i=0; i<stateCityMap.length; i++) {
+            if (stateCityMap[i].stateCode == selectedStateCode) {
+                for (var j = 0; j < stateCityMap[i].cityList.length; j++) {
+                    var opt = $('<option/>', {
+                        "value" : stateCityMap[i].cityList[j].cityCode,
+                        "data-postcode" : stateCityMap[i].cityList[j].postcode,
+                    });
+                    opt.html(stateCityMap[i].cityList[j].cityDescription);
+                    opt.appendTo($('#propertyCity'));           
+                }
+                break;
+            }
+        }
+    });
+ });
+ 
+ $(document).one('ready', function () {
+ 
+    autocompleteSuggestionClicked = false;
+    $('#addressPostcode').trigger('change');
+});
+
+$(document).on("mousedown", ".autocomplete-suggestion", function () {
+    autocompleteSuggestionClicked = true;
+    
+});
+
+$(document).on("mouseup", function () {
+    autocompleteSuggestionClicked = false;
+    var postcodeLength = $('#addressPostcode').val().length;
+    if(postcodeLength>0){
+        $('#addressPostcode').trigger('change');
+    }
+    /* always becomes enabled when mouse up. Purposedly made for clicking "Continue" for checking */
+    $('select[name=addressState]').prop("disabled", false);
+    $('select[name=addressCity]').prop("disabled", false);
+});
+
+/* For UI purposes - prevent Tab-navigating into the menus */
+$('select[name=addressState]').on("focus", function () {
+    $('select[name=addressState]').prop("disabled", true);
+});
+$('select[name=addressCity]').on("focus", function () {
+    $('select[name=addressCity]').prop("disabled", true);
+});
+$('#addressPostcode').on("keydown", function () {
+    $('select[name=addressState]').prop("disabled", true);
+    $('select[name=addressCity]').prop("disabled", true);
+});
+
+/* For UI purposes - prevent in IE fast-clicking to trigger the drop down list being shown */
+$('select[name=addressState]').on("mousedown", function () {
+    $('select[name=addressState]').prop("disabled", true);
+});
+$('select[name=addressCity]').on("mousedown", function () {
+    $('select[name=addressCity]').prop("disabled", true);
+});
+
+//For overwrite address
+    console.log("in document checked");
+    console.log("address overwrite value: " + $('input[id=addressOverwriteIndicator]').val());
+    if($('input[id=addressOverwriteIndicator]').val() == 'Y'){
+     console.log("checkbox checked");
+        $('input[id=addressOverwrite]').prop('checked', true);
+    }
+
+  
+   $('#addressOverwrite').change(function() {
+   console.log("Enter value");
+        if($(this).is(":checked")) {
+            $('#addressOverwriteIndicator').val('Y');
+        }else{
+            $('#addressOverwriteIndicator').val('');
+        }
+  
+    });
+  
+  function staffIdOnchange(staffId){
+  
+    console.log("is in method");
+            
+        //$('input[id=staffName]').val("");
+       
+       if($('input[name=autocompleteStaffID]').val().length > 0){
+       autocompleteSuggestionClicked = false;
+           jQuery.ajax({
+            type: "POST",
+            url: '/dotCMS/purchase/buynow',
+            data: {"action": "retrieveStaffName",
+                   "branchAbbr": $('input[name=branchCode]').val(),
+                   "partnerCode": $('input[name=partnerCode]').val(),
+                   "staffId": $('input[name=autocompleteStaffID]').val()
+                  },
+                  dataType: "json",
+            success: function (data2) {
+                if (data2 !== null && data2.length > 0) {
+                    for (var i = 0; i < data2.length; i++) {
+                        var staffNameRetrieved = data2[i].staffName;
+                        var agentCodeRetrieved = data2[i].agentCode;
+                        var staffIdRetrieved = data2[i].staffId;
+                        
+                        //console.log("in onchange function");
+                        //console.log("data2.length when onchange : " + data2.length);
+                      // console.log(staffNameRetrieved);
+                       
+                       $('input[name=autocompleteStaffID]').val(staffIdRetrieved);
+                       $('input[name=staffName]').val(staffNameRetrieved);
+                       $('input[name=agentNumber]').val(agentCodeRetrieved);
+                       $('input[name=staffName_hidden]').val(staffNameRetrieved);
+                       $('input[name=staffId]').val(staffIdRetrieved);
+                       
+                       //console.log($('input[name=autocompleteStaffID]').val());
+                       //console.log($('input[name=staffName]').val());
+                       
+                    }
+                
+                }
+                else{
+                       // console.log("here");
+                    if($('div.autocomplete-no-suggestion').length || autocompleteSuggestionClicked == false){
+                        $('input[name=autocompleteStaffID]').val("");
+                    $('input[id=staffName]').val("");
+                    $('input[name=staffName_hidden]').val("");
+                        
+                    }
+                    
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                        console.log("Got Error When Retrieved Data");   
+                        var errorList = [];                        
+                        errorList.push({'message': 'Opps. Something went wrong, please check back again later.'});
+                        showErrorMessages(errorList);
+             }
+                });    
+               
+       
+       
+       }
+       
+  }
+</script>
+
+
+
+
+<div class="promptOverlay promptMinDays hidden"></div>
+<div class="promptMsg promptMinDaysMsg hidden">    
+  <p id="warning" class="hidden">    
+       Before we continue, note that:
+       <br /><br />
+       #if($product.formula == 'daily-personal-accident')
+            &raquo; The minimum premium for this plan is <strong>RM ${planTable.basePremium}</strong>.<br />
+       #else
+            &raquo; The minimum cover price for this plan is <strong>RM $math.mul($product.getMinimumPeriod(),$product.getNormalRate())</strong><br />
+       #end
+       &raquo; Coverage ends at <strong>11:59pm</strong> on the last date of your plan.<br />
+    
+  </p>
+  <!-- Single Day -->
+  <div id="reminderSingleDay" class="hidden">
+  <p>
+   Before we continue, please note that your coverage will terminate on the earliest happening of the following:<br><br>
+       <ol>
+        <li>24 hours upon your arrival in Malaysia </li>
+        <li>Upon reaching your home or workplace in Malaysia (whichever is the earlier)</li>
+        <li>Expiry of the Period of Insurance</li>
+       </ol>
+  </p>
+  </div>
+  <!-- End Here -->
+  <p id="reminder" class="hidden">   
+    Before we continue, note that your coverage will end at 11:59pm on the last date of your plan.
+  </p>
+  <div id="purchaseMinimumDay" class="hidden">
+  <p>The following benefits will not be applicable for travel insurance purchased less than 7 days from travel commencement date:
+      <ul type="none" style="padding-left:0px;">
+          <li>a) Section 7: Travel Cancellation</li>
+          <li>b) Section 14: Loss of Travel Deposit</li>
+      </ul>
+  </p>
+  </div>
+    #if ($product.formula == "travelright-plus")
+    <p id="err_coverage_warning" class="hidden">Coverage duration must not exceed 31 days, if you wish to extend coverage more than 31 days, please proceed to fill up the proposa form and email to us.</p>    
+    #else
+    <p id="err_coverage_warning" class="hidden">Please select coverage start date.</p>
+    <!-- <p id="err_coverage_warning" class="hidden">Coverage duration should start today or at a later date. Nothing before, please.</p> -->
+    #end
+    <p id="err_start_date_exceed" class="hidden">Coverage start date must be within a year from today.</p>
+  #if ($product.getMaxCoverDurationUnit().equals("day"))
+    #set ($maxCoverDurationCopy = $product.getMaxCoverDuration() + " days")
+  #else
+    #if ($product.getMaxCoverDurationUnit().equals("year"))
+      #if ($product.getMaxCoverDuration().equals("1"))
+        #set ($maxCoverDurationCopy =  "a year")
+      #else
+        #set ($maxCoverDurationCopy = $product.getMaxCoverDuration() + " years")
+      #end
+    #else
+      #if ($product.getMaxCoverDurationUnit().equals("month"))        
+        #if ($product.getMaxCoverDuration().equals("1"))
+          #set ($maxCoverDurationCopy =  "a month")
+        #else
+          #set ($maxCoverDurationCopy = $product.getMaxCoverDuration() + " months")
+        #end
+      #end      
+    #end
+  #end
+    <p id="err_duration_exceed" class="hidden">Coverage duration must not exceed ${maxCoverDurationCopy}.</p>
+    <p id="err_backdate" class="hidden">Coverage period should start today or at a later date. Nothing before, please.</p>
+    <p id="err_min_coverage" class="hidden">Minimum coverage duration is $product.getMinimumPeriod() days.</p>
+      <div><a href="" class="cancel-btn">Cancel&nbsp;&nbsp;</a><a href="" class="ok-btn">Ok&nbsp;&nbsp;</a><a href="" class="ok-noted-btn">Ok</a></div>
+    </div>
+    
+    <div class="promptOverlay hidden promptMaxFamily"></div>
+    <div class="promptMsg promptMaxFamilyMsg hidden">
+       #if($product.formula == 'daily-personal-accident')
+        #set ($totalMaxPax = $math.add($totalMaxPax, 1))
+            <p>You may only have a maximum of $totalMaxPax family members including yourself under the plan.</p>
+        #else
+            <p>You may only have a maximum of $totalMaxPax family members under your plan.</p>
+        #end
+      <a href="">Ok</a>
+    </div>
+
+ <div class="errorMsgContainer hidden"  #if($extendedProduct.getAllowMotorPlusPlan() == "Y") id="mmpErrorMsgContainer" #end><!--errors-->
+  <p><strong>Oops, please check your details</strong></p>
+  <ul>
+    <li>error 1</li>
+    <li>error 2</li>
+    <li>error 3</li>
+  </ul>
+  <a href="">Ok, got it</a>
+</div>
+
+ <div class="exceedDriverErrorMsgContainer" hidden id="exceedDriverErrorMsgContainer"><!--errors-->
+  <p><strong id="exceedDriverErrorMsgHeader"></strong></p>
+  <ul>
+    <li>
+        Motor Add-On "Waiver of Compulsory Excess" covers all unnamed authorized driver(s); the additional driver you have registered earlier will be removed.
+    </li>
+  </ul>
+##   <a href="">Ok, got it</a>
+  <button onclick="removeExceedDriver();">Ok, got it</button>
+</div>
+
+#set ($purchaseTempId = $request.getParameter('purchaseTempId'))
+<div class="promptOverlay promptMMP hidden"></div>
+<div class="promptMMPMsg hidden">
+    <a href="" class="closeMMPMsg">&#10005;</a>
+    <p>
+        <h3>Do you want to upgrade?</h3>
+        <ol>
+            <!--<li>$purchaseTempId</li>-->
+            <li>You can enjoy more coverage for less with our <strong>MSIG Motor Plus Insurance</strong>.</li>
+            <li>Get more value with our NEW Motor Insurance package now!</li>
+        </ol>
+    </p>
+    <div>
+        <a href="" class="ok-noted-btn">UPGRADE NOW</a>    
+        <a href="" class="cancel-btn">MAYBE NEXT TIME&nbsp;&nbsp;</a>
+    </div>
+    <div id="upgradePlan" class="hidden">
+            <p>The following add-on(s) from your current plan will be included in your new plan:</p>
+            <ol>
+            </ol>
+        <div>
+            <a href="" class="ok-noted-btn">UPGRADE NOW</a>    
+            <a href="" class="cancel-btn">MAYBE NEXT TIME&nbsp;&nbsp;</a>
+        </div>
+    </div>
+</div>

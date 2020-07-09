@@ -1,0 +1,73 @@
+#if($extendedProduct.getAllowMotorPlusPlan() == "Y" || $productExtended.getAllowMotorPlusPlan() == "Y" || $product.productName == "Motorcycle")
+    
+#else
+    <div class="clearfix productLabel">
+	<ul>
+	#if($partnerCode != "msig")  
+	  <li class="productPlan hidden"><span>$!{product.productName}</span></li>
+	#end
+	#if($product.formula == "travelright-plus")
+	#if($partnerCode != "mach" && $partnerCode != "sc")
+		
+			<li class="travelBenefitPlan hidden">
+				<span>
+					#if($partnerCode != "msig") - #end $!{product.travelBenefitPlan} #if($travelBenefitPlan != '2')Plan 1 #elseif($travelBenefitPlan == '2')Plan 2#end
+				</span>
+			</li>
+
+		#end
+
+	<li class="travelPlan hidden"><span>#if($partnerCode != "msig") - #end $!{product.travelPlan} #if($travelPlan == 'single')Single Trip #elseif($travelPlan == 'annual') Annual Cover #end</span></li>
+	#end  
+
+	#if($product.formula == "critical-illness" || $product.formula == "home-content" || $product.formula == "pets")
+		#foreach($con in $dotcontent.pull("+structureName:TieBancaPlanTableStructure +(conhost:9e20171a-ec3c-49cc-8f4a-0fdea34d6b74 conhost:SYSTEM_HOST) +TieBancaPlanTableStructure.planCode:${coveragePlan}",1,"TieBancaPlanTableStructure.planCode"))
+			#set($planName = $con)
+		#end
+		#if($product.formula == "critical-illness" || $product.formula == "pets")
+		<li class="productPlanName"><span>$!{planName.planName} </span></li>
+		#elseif($product.formula == "home-content")  
+		<li class="productPlanName"><span>Plan $!{planName.planName} </span></li>  
+		#end    
+	#end
+
+	<li class="productArea hidden"><span>
+	#if($UtilMethods.isSet($travelArea))
+		#if ($travelArea == "area1") Area 1
+		#elseif ($travelArea == "area2") Area 2
+		#elseif ($travelArea == "area3") Area 3
+		#elseif ($travelArea == "area4") Area 4 #end
+	#end
+	</span></li>
+	<li class="productDays"><span>
+	#if ($UtilMethods.isSet($coverageStartDate) && $UtilMethods.isSet($coverageExpiryDate))
+		#if ($travelPlan == "annual" || $product.formula == "personal-accident" || $product.formula == "critical-illness" || $product.formula == "home-content" || $product.formula == "pets" || $product.formula == "mcp")
+			$coverageStartDate - $coverageExpiryDate (1 Year)
+		#elseif($product.formula == "motor")
+			$coverageStartDate - $coverageExpiryDate (1 Year)  
+		#else
+			$coverageStartDate - $coverageExpiryDate ($noDaysCovered #if ($UtilMethods.parseDouble($noDaysCovered,0) > 1) Days #else Day #end)
+		#end
+		
+	#else
+	0
+	#end
+	</span><div class="iconLabel"></div></li>
+	#if($product.formula != "pets")
+	  <li class="productPeople hidden"><span>1</span></li>
+	#end
+	<li class="productUpgrade hidden"><span>&#10008;</span></li>
+	#if($product.formula != "mcp")
+	<li class="productPrice"><strong class="rmSign">RM</strong><span></span></li>
+	#end
+	</ul>
+
+	<span class="iconHelp"><a href="" class="ir">HELP</a></span>
+	</div>
+
+	#if($UtilMethods.isSet($productLogo))
+	<script type="text/javascript">
+	  $("#naviTrigger img").attr("src","/contentAsset/image/${webapi.getIdentifierByURI("$productLogo")}/fileAsset/filter/Resize/resize_h/63");
+	</script>
+	#end
+#end
