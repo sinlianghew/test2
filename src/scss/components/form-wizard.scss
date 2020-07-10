@@ -39,4 +39,12 @@
             }
         }
     }
+
+    .wizard-sections {
+        padding-bottom: 120px;
+
+        @include media-breakpoint-up(lg) {
+            padding-bottom: 3rem;
+        }
+    }
 } 

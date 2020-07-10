@@ -1,4 +1,5 @@
 $header-xs-height: 60px;
+$footer-offset: 30px;
 
 .summary-pane {
     position: fixed;
@@ -10,7 +11,7 @@ $header-xs-height: 60px;
     min-height: 100vh;
     max-height: 100vh;
     background-color: #fff;
-    transform: translateY(calc(100% - #{$header-xs-height} + 1px));
+    transform: translateY(calc(100% - #{$header-xs-height + $footer-offset} + 1px));
     transition: .4s ease;
 
     .header {
@@ -25,8 +26,8 @@ $header-xs-height: 60px;
     }
 
     .body {
-        min-height: calc(100vh - #{$header-xs-height * 2});
-        max-height: calc(100vh - #{$header-xs-height * 2});
+        min-height: calc(100vh - #{$header-xs-height * 2 + $footer-offset});
+        max-height: calc(100vh - #{$header-xs-height * 2 + $footer-offset});
         overflow-y: auto;
         overscroll-behavior: contain;
     }
@@ -59,7 +60,7 @@ $header-xs-height: 60px;
         }
     }
 
-    @include media-breakpoint-up(md) {
+    @include media-breakpoint-up(lg) {
         background-color: transparent;
         position: sticky;
         transform: translateY(0);

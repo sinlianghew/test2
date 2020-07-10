@@ -10,7 +10,7 @@
     color: $p2;
     width: 100%;
 
-    @include media-breakpoint-up(lg) {
+    @include media-breakpoint-up(md) {
         width: 50%;
     }
 
