@@ -23,5 +23,5 @@ import "./directives/uppercase";
 import "./components/validations"
 import "./components/motorcycle-form"
 
-import "./components/sticky-sidebar.min"
+// import "./components/sticky-sidebar.min"
  
