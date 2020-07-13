@@ -707,8 +707,25 @@
   #set ($memberCount = 0)
 #end
 
-#if ($product.productName === 'Motorcycle')
-    <h1>motorcycle summary </h1>
+#set($actionAddOnURL = "")
+#if($branch.length() > 0 || $isInIframe=='true')
+  #set($actionAddOnURL = "?")
+  #if($branch.length() > 0)
+        #set($actionAddOnURL = $actionAddOnURL + "branch=" + $branch)
+  #end
+  #if($isInIframe=='true')
+    #if($branch.length() > 0)
+      #set($actionAddOnURL = $actionAddOnURL + "&isInIframe=true")
+    #else
+      #set($actionAddOnURL = $actionAddOnURL + "isInIframe=true")
+    #end
+  #end
+#end
+
+#if ($product.getProductName() == 'Motorcycle')
+    #set($m3paStage = "summary")
+    #dotParse('//msiginternal/vtl/widgets/product/m3pa/m3pa-form.vtl')
+    #stop
 #end
 
 <form name="summaryForm" method="post" class="#if(($partnerCode == 'msig') && $product.formula == 'motor') tieMotor #end">
@@ -797,20 +814,7 @@
     <input type="hidden" name="additionalPlan21" value="$!esc.html($!{additionalPlan21})">
     
   #end
-  #set($actionAddOnURL = "")
-  #if($branch.length() > 0 || $isInIframe=='true')
-    #set($actionAddOnURL = "?")
-    #if($branch.length() > 0)
-        #set($actionAddOnURL = $actionAddOnURL + "branch=" + $branch)
-    #end
-    #if($isInIframe=='true')
-        #if($branch.length() > 0)
-            #set($actionAddOnURL = $actionAddOnURL + "&isInIframe=true")
-        #else
-            #set($actionAddOnURL = $actionAddOnURL + "isInIframe=true")
-        #end
-    #end
-  #end
+  
   
   <div class="main-container">
      #dotParse("//msiginternal/vtl/widgets/product/productTop.vtl")

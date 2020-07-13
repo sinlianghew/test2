@@ -1,0 +1,549 @@
+#set ($partnerCode = $request.getParameter('partnerCode'))
+#set ($partnerURLTitle = $request.getParameter('partnerURLTitle'))
+#set ($productCode = $request.getParameter('productCode'))
+#set ($productURLTitle = $request.getParameter('productURLTitle'))
+#set ($CmsSettingUtil = $webutil.getBean("cmsSettingUtil"))
+#set ($partner = $CmsSettingUtil.findCMSSetting($partnerCode))
+#set ($product = $CmsSettingUtil.findCMSProductSetting($productCode, $partner.getPartnerIdentifier()))
+#set ($branch = $request.getParameter('branch'))
+#set ($isBoostPaymentGateway = $partner.isBoostPaymentGateway())
+#set ($isFPXPaymentGateway = $partner.isFPXPaymentGateway())
+#set ($extendedProduct = $CmsSettingUtil.findExtendedProductStructure($productCode))
+#set ($fpxMin = $wlputil.getFpxMinLimit())
+#set ($fpxMax = $wlputil.getFpxMaxLimit())
+
+   ##foreach($content in $dotcontent.pull("+structureName:WlpProductStructure +(conhost:$host.identifier conhost:SYSTEM_HOST) +(Parent_WlpPartnerStructure-Child_WlpProductStructure:$partner.getPartnerIdentifier()) +WlpProductStructure.productCode:$productCode",1,"undefined"))
+#foreach($content in $dotcontent.pullRelated("WlpPartnerStructure.wlpproductstructures",$partner.getPartnerIdentifier(),"+Wlpproductstructure.productCode:$productCode",false, 1, ""))
+   #set($productLogo = $content.productLogoS.uri)
+#end
+  
+#if ($request.getMethod().equals('POST'))
+    #set ($tempId = $request.getParameter('tempId'))
+    #set ($purchaseTempIdCheck = $!request.getParameter('purchaseTempId'))
+    #if($UtilMethods.isSet($purchaseTempIdCheck))
+        #set ($Integer = 0)
+        #set ($sstVal = $Integer.parseInt($wlputil.getSst()))
+        #set ($attributeToRemove = 'purchaseTempId_' + $partnerCode)
+        #set ($pTempId = $request.getSession().getAttribute($attributeToRemove))
+        #set ($mainPolicyholder = $request.getParameter('mainPolicyholder'))
+        #set ($daysOfCoverage = $request.getParameter('daysOfCoverage'))
+        #set ($noDaysCovered = $daysOfCoverage)
+        #set ($purchaseService = $webutil.getBean("purchaseService"))  
+        #set ($purchaseTemp = $purchaseService.findPurchaseTempById($webapi.parseLong($CmsSettingUtil.decryptPBEWithMD5AndDES($pTempId))))
+        #if($UtilMethods.isSet($purchaseTemp) && $UtilMethods.isSet($purchaseTemp.getPromoCode()))
+            #set ($promoCodeStructure = $CmsSettingUtil.findPromoCodeStructure($productCode, $purchaseTemp.getPromoCode()))
+            #if($UtilMethods.isSet($promoCodeStructure))
+                #set ($product = $CmsSettingUtil.findCMSProductSettingAdjustedByPromoCode($productCode, $partner.getPartnerIdentifier(), $promoCodeStructure))
+            #end
+        #end
+        #set ($errorMessage = $purchaseService.getPaymentCheckingErrorMessage($webapi.parseLong($CmsSettingUtil.decryptPBEWithMD5AndDES($pTempId))))
+        #set ($coverageStartDate = $date.format('dd/MM/yyyy', $purchaseTemp.getCoverageStartDate()))
+        #set ($coverageExpiryDate = $date.format('dd/MM/yyyy', $purchaseTemp.getCoverageExpiryDate()))
+        #set ($travelPlan = $purchaseTemp.getTravelPlan())
+        #set ($travelArea = $purchaseTemp.getTravelArea())
+        #set ($travelBenefitPlan = $purchaseTemp.getTravelBenefitPlan())
+        #set ($noOfPersonsCovered = $request.getParameter('noOfPersonsCovered'))
+        #set ($coveragePlan = $request.getParameter('coveragePlan'))
+        #set ($totalPremium = $request.getParameter('totalPremium'))
+        #set ($total = $request.getParameter('total'))
+        #set($stampDuty=$purchaseTemp.getCoverageStampDuty())        
+        #set($rebate = $purchaseTemp.getCoveragePremiumDiscount())        
+        #set($staffrebate = $purchaseTemp.getCoveragePremiumDiscount2())		
+        #set($servicetax= $purchaseTemp.getCoverageSstValue()) 		
+        #set($grossPremium = $purchaseTemp.getTotalPremium()  - $purchaseTemp.getCoverageStampDuty() - $purchaseTemp.getCoverageSstValue())
+        #set($format = "#[[#,##0.00]]#")
+        #if($rebate > 0)		
+			#set($grossPremium=$grossPremium + $purchaseTemp.getCoveragePremiumDiscount())		
+        #end		
+        #if($staffrebate > 0)		
+			#set($grossPremium=$grossPremium + $purchaseTemp.getCoveragePremiumDiscount2())		
+		#end  		
+    #else
+        #if($UtilMethods.isSet($tempId))      
+            #set ($attributeToRemove = 'purchaseTempId_' + $partnerCode)
+            #set ($pTempId = $request.getSession().getAttribute($attributeToRemove))
+            #set ($purchaseService = $webutil.getBean("purchaseService"))  
+            #set ($errorMessage = $purchaseService.getPaymentCheckingErrorMessage($webapi.parseLong($CmsSettingUtil.decryptPBEWithMD5AndDES($pTempId))))
+            #set($purchaseTemp = $purchaseService.findPurchaseTempById($webapi.parseLong($CmsSettingUtil.decryptPBEWithMD5AndDES($pTempId))))
+            
+            #set ($mainPolicyholder = $purchaseTemp.getPolicyHolderName())
+            #set ($daysOfCoverage = $purchaseTemp.getDaysOfCoverage())
+            #set ($noDaysCovered = $daysOfCoverage)
+            #set ($noOfPersonsCovered = $purchaseTemp.getNoOfPersonsCovered())
+            #set ($coveragePlan = $purchaseTemp.getCoveragePlan())
+            #set ($coverageStartDate = $date.format('dd/MM/yyyy', $purchaseTemp.getCoverageStartDate()))
+            #set ($coverageExpiryDate = $date.format('dd/MM/yyyy', $purchaseTemp.getCoverageExpiryDate()))
+            #set ($travelPlan = $purchaseTemp.getTravelPlan())
+            #set ($travelArea = $purchaseTemp.getTravelArea())
+            #set ($totalPremium = $purchaseTemp.getTotalPremium())
+            #set ($formatter = $webutil.getFormatter())
+            #set ($total = $formatter.formatCurrency($UtilMethods.parseDirtyDouble("$totalPremium")))
+            #set($stampDuty=$purchaseTemp.getCoverageStampDuty())		
+            #set($rebate = $purchaseTemp.getCoveragePremiumDiscount())		
+            #set($staffrebate = $purchaseTemp.getCoveragePremiumDiscount2())		
+            #set($servicetax= $purchaseTemp.getCoverageSstValue())
+            #set($format = "#[[#,##0.00]]#")
+            #set($grossPremium = $purchaseTemp.getTotalPremium()  - $purchaseTemp.getCoverageStampDuty() - $purchaseTemp.getCoverageSstValue())       		
+        #if($rebate > 0)
+			#set($grossPremium=$grossPremium + $purchaseTemp.getCoveragePremiumDiscount())		
+        #end
+        #if($staffrebate > 0)
+			#set($grossPremium=$grossPremium + $purchaseTemp.getCoveragePremiumDiscount2())		
+        #end
+    #end
+#end
+    
+#set ($double = 0.00)
+#set ($doubleTotal = $double.parseDouble($total.replace(",","")))
+    
+
+
+#if($UtilMethods.isSet($pTempId))
+    <input type="hidden" value="$!errorMessage" name="errorMessage">
+    <div class="main-container">
+        #dotParse("//msiginternal/vtl/widgets/product/productTop.vtl")
+        <div class="main clearfix paymentPage">
+  
+        #if($extendedProduct.getAllowMotorPlusPlan() != 'Y' && $product.getProductName() != 'Motorcycle')
+		<div class="clearfix pageIntro wrapper">
+			<h1><img src="/img/icon-padlock.png" class="iconLock">Secure Payment</h1>
+			<p>When you click 'Pay Now', the amount of <strong>RM<span>$total</span></strong> will be charged. </p>
+			<!--   <p style="color:red;font-size:medium;padding-top:8px;margin-bottom:0px;"><b>Notice</b>: Alliance Bank cardholders may experience service interruption during payment verification from Alliance Bank. Please consider using other credit/debit cards providers until the service interruption has been resolved.</p> -->
+            <!--<p style="color:red;font-size:medium;padding-top:8px;margin-bottom:0px">* Note: We are currently experiencing delays. Should it persist, please try again later. Apologise for the inconvenience caused.</p>-->
+            
+		#if($date.date.after($date.toDate('yyyy-M-d H:m:s',"2020-07-11 03:00:00")) 
+		    && $date.date.before($date.toDate('yyyy-M-d H:m:s',"2020-07-11 08:00:00")))
+            <p style="color:red;font-size:medium;padding-top:8px;margin-bottom:0px">Please note that FPX will be temporarily unavailable from 11 July 2020 (Saturday) 3am to 8am. Apologise for any inconvenience caused.</p>
+            #set($isFPXPaymentGateway = false)
+        #end
+        #if($date.date.after($date.toDate('yyyy-M-d H:m:s',"2020-07-12 03:00:00")) 
+            && $date.date.before($date.toDate('yyyy-M-d H:m:s',"2020-07-12 07:00:00")))
+            <p style="color:red;font-size:medium;padding-top:8px;margin-bottom:0px">Please note that FPX will be temporarily unavailable from 12 July 2020 (Sunday) 3am to 7am. Apologise for any inconvenience caused.</p>
+            #set($isFPXPaymentGateway = false)
+        #end
+        #if($date.date.after($date.toDate('yyyy-M-d H:m:s',"2020-07-14 00:00:00")) 
+            && $date.date.before($date.toDate('yyyy-M-d H:m:s',"2020-07-14 00:30:00")))
+            <p style="color:red;font-size:medium;padding-top:8px;margin-bottom:0px">Please note that FPX will be temporarily unavailable from 14 July 2020 (Tuesday) 12am to 12:30am. Apologise for any inconvenience caused.</p>
+            #set($isFPXPaymentGateway = false)
+        #end
+        #if($date.date.after($date.toDate('yyyy-M-d H:m:s',"2020-07-25 03:00:00")) 
+            && $date.date.before($date.toDate('yyyy-M-d H:m:s',"2020-07-25 08:00:00")))
+            <p style="color:red;font-size:medium;padding-top:8px;margin-bottom:0px">Please note that FPX will be temporarily unavailable from 25 July 2020 (Saturday) 3am to 8am. Apologise for any inconvenience caused.</p>
+            #set($isFPXPaymentGateway = false)
+        #end
+		</div>
+		#end
+                                
+      <form id="msform" action="/dotCMS/purchase/paynow" name="paymentForm" method="post">
+        <input type="hidden" value="${partnerCode}" name="partnerCode" />
+        <input type="hidden" value="${productCode}" name="productCode" />
+        <input type="hidden" value="${product.getProductName()}" name="productName" />
+        <input type="hidden" value="$!pTempId" name="purchaseId" />
+        <input type="hidden" value="$!product.formula" name="formula" id="formula" />
+    
+		#if($isInIframe == "true")
+            $request.getSession().setAttribute("isInIframeP", "true")
+        #else
+            $request.getSession().setAttribute("isInIframeP", "false")
+        #end
+        $request.getSession().setAttribute('previousPageIframe', 'Payment')
+		
+        #if($date.date.after($date.toDate('yyyy-M-d H:m:s',"2020-03-07 04:00:00")) && $date.date.before($date.toDate('yyyy-M-d H:m:s',"2020-03-07 08:00:00")))  || 
+        ($date.date.after($date.toDate('yyyy-M-d H:m:s',"2020-03-18 01:00:00")) && $date.date.before($date.toDate('yyyy-M-d H:m:s',"2020-03-18 03:30:00"))) ||
+        ($date.date.after($date.toDate('yyyy-M-d H:m:s',"2020-03-19 01:00:00")) && $date.date.before($date.toDate('yyyy-M-d H:m:s',"2020-03-19 03:30:00"))) ||
+        ($date.date.after($date.toDate('yyyy-M-d H:m:s',"2020-03-21 04:00:00")) && $date.date.before($date.toDate('yyyy-M-d H:m:s',"2020-03-21 08:00:00"))))
+        
+            #set($isFPXPaymentGateway = false)
+        
+        #end
+		#if($extendedProduct.getAllowMotorPlusPlan() == 'Y' || $product.getProductName() == 'Motorcycle')
+			<fieldset class="motorPlusPaymentPage" id="paymentMethod" >
+				<div id="splitCol">
+					<div class="motor-plus-container">
+						<div class="form-title">
+							<p>Payment</p>
+						</div>
+						<ul class="clearfix">
+							<li class="clearfix" style="margin-bottom: 0;">
+								<label for="paymentMethod" class="clearMargin">Payment Method :</label>
+							</li>
+                        	#if($date.date.after($date.toDate('yyyy-M-d H:m:s',"2019-12-06 00:00:00")) && $date.date.before($date.toDate('yyyy-M-d H:m:s',"2019-12-07 05:05:00")))
+                            <p style="color:red;font-size: 12px;margin-bottom:0px;">Please note that FPX will be temporarily unavailable from 07 Dec 2019 (Saturday) 3am to 5am. Apologise for any inconvenience caused.</p>
+                            #elseif($date.date.after($date.toDate('yyyy-M-d H:m:s',"2019-12-13 00:00:00")) && $date.date.before($date.toDate('yyyy-M-d H:m:s',"2019-12-14 08:05:00")))
+                            <p style="color:red;font-size: 12px;margin-bottom:0px;">Please note that FPX will be temporarily unavailable from 14 Dec 2019 (Saturday) 4am to 8am. Apologise for any inconvenience caused.</p>
+                            #end
+							<li class="clearfix motor-plus-paymentMethod paymentMethod">
+                                #if($isFPXPaymentGateway)
+								<div class="motor-plus-online">
+									<input type="radio" name="paymentMethod" value="fpxPaymentGateway" id="FPXPaymentMethod"  #if($isFPXPaymentGateway) checked="checked" #end >
+									<label for="FPXPaymentMethod"><img src="/img/onlinebanking-logo.png"><br/>Online Banking</label>
+								</div>
+								#end
+        						<div class="motor-plus-credit">
+									<input type="radio" name="paymentMethod" value="abmbGateway" id="ABMBPaymentMethod" #if(!$isFPXPaymentGateway) checked="checked" #end >
+									<label for="ABMBPaymentMethod"><img src="/img/creditcard-logo.png"><br/>Credit / Debit Card</label>
+								</div>
+                                #if ($doubleTotal < 1500 && $isBoostPaymentGateway)
+            					<div class="motor-plus-ewallet">
+                                    <input type="radio" name="paymentMethod" value="ewalletPaymentMethod" id="ewalletMethod">
+                                    <label for="ewalletMethod"><img src="/img/ewallet-logo.png"><br/>eWallet</label>
+                                </div>
+                                #end
+							</li>
+						
+							<span id="creditcard-details ABMB" class="creditcard mmpCreditCard"  #if($isFPXPaymentGateway) style="display:none;" #end>
+								<li class="clearfix motorpluscard"><span class="ir cardType">Card Type</span></li>
+								<li class="clearfix"><label for="cardNo">Card Number:</label><input id="cardNo" name="ccNo" type="text" data-name="Card No" maxlength="20" placeholder="XXXX XXXX XXXX XXXX" autocomplete="off"></li>
+								<li class="clearfix"><label class="clearMargin">Name on Card:</label><input id="" name="cardHolderName" class="required" data-name="Name as per card" type="text" maxlength="150" autocomplete="off"></li>
+								<li class="clearfix">
+								<div class="plus-plan-row">
+								<div class="plus-plan-exp"><label for="cardExpire">Expiration Date</label><input id="cardExpire" name="expiry"  data-name="Expiry (MM/YY)" class="required CCExpiry validCCExpiry" type="text" placeholder="mm/yy" maxlength="6" autocomplete="off"></div>
+								<div class="plus-plan-cvc">
+									<label for="cardCVC">CVC<span class="toolTip"><span class="toolTipText"><p>The CVC or CVV number is the 3-digits number that appears on the back of your credit card or debit card.</p></span></span>
+									</label>
+									<input id="cardCVC" name="cvv" data-name="CVC" type="password" class="required" maxlength="3" autocomplete="off">
+								</div>
+								</div>
+								</li>
+							</span>
+							
+                            <span id="ewallet-details" class="ewallet mmpEWallet" style="display:none;">
+                                <li class="clearfix">
+                                        <input type="radio" name="wallet" id="boostPaymentGateway" value="boostPaymentGateway" hidden checked="checked">
+        								<label for="boostPaymentGateway"><img src="/img/boost.png" style="width: 40px;height: 40px;">Boost</label>
+                                </li>
+                            </span>
+                            
+                            <span id="onlinebanking-details FPX"  class="onlineBanking mmpFpx" #if(!$isFPXPaymentGateway) style="display:none;" #end>
+    						<li class="fieldgroup clearfix">
+							  <label for="bank" class="clearMargin">Bank</label>
+							  <select id="bankId" name="bankId"><option disabled='true'>Select A Bank</option></select>
+                              <span class="fpxNotice">Note: You need to have an active internet banking account with any of the FPX participating banks to use FPX.</span>
+							</li>
+							<li class="fieldgroup clearfix">
+							  <label for="userEmail" class="email-100">Email <span class="email-note">(For transaction status)</span></label>
+							  <input name="fpxEmail" class="email" maxlength="150" id="fpxEmail" type="email" data-name="Email" placeholder="E.g.: you@gmail.com" value="">
+							</li>
+							<li class="payment-tnc">By clicking on the <strong>"Pay Now"</strong> button, you agree to FPX's <a href="https://www.mepsfpx.com.my/FPXMain/termsAndConditions.jsp" target="_blank"> Terms & Conditions</a>.</li>
+							</span>
+						</ul>
+					</div>
+					<div class="motorNewSummaryPage motor-plus-summary">
+						<ul>
+							<li class="summaryTitleTop"><p>Order Summary</p></li>
+							<li class="summaryDiscount"><p>Gross Premium</p><span>RM $number.format($format, $grossPremium)</span> </li>
+							#if ($UtilMethods.isSet($rebate))
+								#if ($rebate > 0)
+								<li class="summaryDiscount summaryRed"><p>#if($UtilMethods.isSet($extendedProduct.getDiscountRebateLabel())) $extendedProduct.getDiscountRebateLabel() #else Discount #end @ $product.getDiscount()%</p><span>RM $number.format($format, $rebate)</span> </li>
+								#end
+							#end
+							#if ($UtilMethods.isSet($sstVal))
+								#if ($sstVal > 0)
+								<li class="summaryDiscount"><p>Service Tax @ ($sstVal%)</p><span>RM $number.format($format, $servicetax)</span> </li>
+								#else
+								<li class="summaryDiscount"><p>GST @ 0% (Zero-rate)</p><span>RM 0.00</span> </li>
+								#end
+							#end
+							#if ($UtilMethods.isSet($stampDuty) && $stampDuty > 0)
+								<li class="summaryStamp"><p>Stamp Duty </p><span>RM $number.format($format,$stampDuty)</span></li>  
+							#end
+							<li class="summaryTotal border"><p>Total Amount to Pay </p><span>RM $number.format($format, $totalPremium)</span></li>
+						</ul>
+					</div>
+                    <div class="mmpPaymentNavigationBtn">
+                        <a class="ir alignRight mmpBtnNext" id="submitClaim" href="#" onClick="javascript:proceed();">Pay Now</a>
+                        <a href="#" class="ir alignLeft mmpBtnBack" href="#" onClick="javascript: $(window).unbind('beforeunload'); $('#backform').submit(); return false;">Back</a>
+                    </div>
+				</div>
+		#else
+		
+                <fieldset id="paymentMethod">
+                <div class="clearfix">
+					<ul class="clearfix">
+                        <li class="clearfix " style="border-bottom: 2px solid #f4f4f4; padding: 0 0 0 4%;">
+                            <label for="paymentMethod" class="clearMargin">Payment Method</label>
+                            <div>
+                                #if($isFPXPaymentGateway)
+    							<div>
+									<input type="radio" name="paymentMethod" value="fpxPaymentGateway" id="FPXPaymentMethod" checked="checked" hidden>
+									<label for="FPXPaymentMethod" class="radio-label">Online Banking <img src="/img/fpx-logo.jpg"></label>
+								</div>
+								#end
+                                <div>
+                                    <input type="radio" name="paymentMethod" value="abmbGateway" id="ABMBPaymentMethod" #if(!$isFPXPaymentGateway) checked="checked" #end hidden>
+                                    <label for="ABMBPaymentMethod" class="radio-label">Credit Card / Debit Card</label>
+                                </div>
+                                #if ($doubleTotal < 1500 && $isBoostPaymentGateway)
+                                <div>
+                                    <input type="radio" name="paymentMethod" value="ewalletPaymentMethod" id="ewalletMethod" hidden>
+                                    <label for="ewalletMethod" class="radio-label">eWallet</label>
+                                </div>
+                                #end
+                            </div>
+                        </li>
+						
+						<!-- for online banking-->
+							<span id="onlinebanking-details FPX"  class="onlineBanking" #if(!$isFPXPaymentGateway) style="display:none;" #end>
+							<li class="fieldgroup clearfix">
+							  <label for="bank" class="clearMargin">Bank</label>
+                              <select id="bankId" name="bankId"  #if($partnerURLTitle == "mcp") style="width: 68% !important;" #end><option disabled='true'>Select A Bank</option></select>
+                              <span class="fpxNotice" #if($partnerURLTitle == "mcp") style="padding-left: 31%!important;font-size: 12px;display: block;" #end>Note: You need to have an active internet banking account with any of the FPX participating banks to use FPX.</span>
+							</li>
+							<li class="fieldgroup clearfix">
+							  <label for="userEmail" class="email-100">Email <span class="email-note">(For transaction status)</span></label>
+							  <input name="fpxEmail" #if($partnerURLTitle == "mcp") style="width: 68% !important;" #end class="email" maxlength="150" id="fpxEmail" type="email" data-name="Email" placeholder="E.g.:you@gmail.com" value=""> 
+							</li>
+							<li class="payment-tnc">By clicking on the <strong>"Pay Now"</strong> button, you agree to FPX's <a href="https://www.mepsfpx.com.my/FPXMain/termsAndConditions.jsp" target="_blank"> Terms & Conditions</a>.</li>
+							</span>
+						<!-- end online banking -->  
+					
+                        <span id="creditcard-details ABMB" class="creditcard" #if($isFPXPaymentGateway) style="display:none;" #end>
+                            ## <li class="clearfix">
+                            ##     <span class="ir cardType">Card Type</span>
+                            ## </li>
+                            <li class="clearfix">
+                                <label class="clearMargin">Name as per Card</label><input id="" name="cardHolderName" class="required" data-name="Name as per card" type="text" maxlength="150" autocomplete="off">    
+                            </li>
+                            <li class="clearfix">
+                                <label for="cardNo">Card No.</label><input id="cardNo" name="ccNo" type="text" data-name="Card No" maxlength="20" placeholder="XXXX XXXX XXXX XXXX" autocomplete="off">
+                                <span class="ir cardType">Card Type</span>
+                            </li>
+                            <li class="clearfix">
+                                <label for="cardExpire">Expiry</label>
+                                <input id="cardExpire" name="expiry"  data-name="Expiry (MM/YY)" class="required CCExpiry validCCExpiry" type="text" placeholder="mm/yy" maxlength="6" autocomplete="off"> 
+                            </li>
+                            <li class="clearfix">
+                                <label for="cardCVC">CVC</label>
+                                <input id="cardCVC" name="cvv" data-name="CVC" type="password" class="required" maxlength="3" autocomplete="off">
+                                <span class="assistTip">
+                                <a href="" id="whatIsThis" class="button">What is this?</a>
+                                    <div class="assistPopUp cvc whilePrompt">
+                                        <h1>CVC or CVV number</h1>
+                                        <p>The CVC or CVV number is the 3-digits number that appears on the back of your credit card or debit card.</p>
+                                        <div class="icon-cvc"></div>
+                                        <a href="" id="closeButton" class="button">Ok, got it.</a>
+                                        <span class="promptTail"></span>
+                                    </div>
+                                </span>
+                            </li>
+                        </span>
+                        
+                        <div id="ewallet-details" class="ewallet" style="display:none;">
+                            <div class="boostPayment">
+                                    <input type="radio" name="wallet" id="boostPaymentGateway" value="boostPaymentGateway" checked="checked">
+    								<label for="boostPaymentGateway"><img src="/img/boost.png" style="width: 40px;height: 40px;"><p>Boost</p></label>
+                            </div>
+                            
+                        </div>
+                    </ul>
+                </div>      
+		#end
+		#set($actionAddOnURL = "")
+        #if($branch || $isInIframe=='true')
+            #set($actionAddOnURL = "?")
+            #if($branch)
+                #set($actionAddOnURL = $actionAddOnURL + "branch=" + $branch)
+            #end
+            #if($isInIframe=='true')
+                #if($branch)
+                    #set($actionAddOnURL = $actionAddOnURL + "&isInIframe=true")
+                #else
+                    #set($actionAddOnURL = $actionAddOnURL + "isInIframe=true")
+                #end
+            #end
+        #end
+        
+		#if($extendedProduct.getAllowMotorPlusPlan() != 'Y' && $product.getProductName() != 'Motorcycle')
+        <div class="navBottom">
+                  <ul class="clearfix">
+                        <li class="prevArrow"><a href="#" class="ir alignLeft" onClick="javascript: $(window).unbind('beforeunload'); $('#backform').submit(); return false;"><span class="button">Back</span> Previous</a></li>
+						<li class="smallLogo"><a href="/$partnerURLTitle$actionAddOnURL" class="ir">MSIG</a></li>
+                        <li class="nextArrow"><a href="#" class="ir alignRight" id="submitClaim" onclick="javascript:proceed();"><span class="button">Pay Now</span> Next</a></li>
+                    </ul>
+           
+                </div>
+        #end
+        </fieldset>
+
+</form>
+<form id="backform" action="#if($branch)summary.html?branch=$branch #else summary.html #end" method="post">
+  <input type="hidden" value="$!pTempId" name="purchaseTempId" />
+  
+  <input type="hidden" name="isInIframe" value="${isInIframe}">
+</form>
+              
+              
+              #if($partnerURLTitle != "msig" || $partnerURLTitle != "mcp")    
+              <div class="helpPayment helpContent whilePrompt clearfix hidden">
+                <span class="promptTail"></span>
+                <h1>One final step to secure your purchase!</h1>
+                <ul>
+                  <li>Please fill in your Credit Card or Debit Card details to proceed with the payment for your chosen plan. </li>
+                  <li>Your purchase for the plan will be secured upon payment.</li>
+                  <li> Thank you!</li>
+                </ul>
+                <a href="" class="button">Ok, got it.</a>
+              </div>
+              #end           
+           
+              
+            </div> <!-- #main -->
+           
+        </div> <!-- #main-container -->
+    
+ #if ($errorMessage != "")
+        <div class="errorMsgContainer">
+            <ul>
+                <li> $!errorMessage</li>
+            </ul>
+            <a href="">Ok, got it</a>
+        </div>
+#else    
+    <div class="errorMsgContainer hidden"><!--errors-->
+      <p><strong>Oops, please check your details</strong></p>
+      <ul>
+        <li>error 1</li>
+        <li>error 2</li>
+        <li>error 3</li>
+      </ul>
+      <a href="">Ok, got it</a>
+    </div>
+#end
+ <script type="text/javascript">
+ var coveragePlan = '$coveragePlan';
+ if (coveragePlan == "Upgrade"){
+
+  $(".productUpgrade span").html("✔");
+    $(".productUpgrade span").addClass("allowUpgrade");   
+    $(".productUpgrade").removeClass("hidden");
+  }
+  
+ ## $(".productDays span").text($daysOfCoverage);  
+ 
+  $(".productPeople span").text($noOfPersonsCovered);  
+  var totalPeople = $noOfPersonsCovered;
+  #if ($product.formula != "motor")
+  if(totalPeople >= 2){
+    $(".productPeople").removeClass("hidden");
+  }
+  #end
+  $(".productPrice span").html("$total");
+  
+  $('#cardNo').keyup(function(){
+    var value = $(this).val();
+    if (value != ""){
+      var firstDigit = value.substring(0,1);
+      $("span.cardType").removeClass("visaCard");
+      $("span.cardType").removeClass("masterCard");
+      $(this).siblings(".errorMsg").text("").show();
+      if (firstDigit == 4){
+        $("span.cardType").addClass("visaCard");
+      }else if (firstDigit == 5 || firstDigit == 2){
+        $("span.cardType").addClass("masterCard");
+      }else{
+        $(this).siblings(".errorMsg").text("Visa and Master Card only").show();
+      }
+    }
+  });
+  
+    $(".motorPlusProgress").addClass("motorPlusStep5");
+    $(".motorPlusProgress").removeClass("motorPlusStep1");
+	$(".motorPlusProgress").removeClass("motorPlusStep3");
+    $(".motorPlusProgress").removeClass("motorPlusStep4");
+    $(".motorPlusProgress").removeClass("motorPlusStep2");
+  
+ function proceed(){
+        
+  var form = jQuery('form[name=paymentForm]');
+  var invalidLimit = "false";
+  $(form).find('[placeholder]').each(function() {
+          var input = $(this);
+          if (input.val() == input.attr('placeholder')) {
+            input.val('');
+          }
+        })
+		
+	if($('input[name="paymentMethod"]').val() == "fpxPaymentGateway"){
+	console.log("Total Premium: " +$totalPremium);
+	console.log("fpxMax: " +$fpxMax);
+	console.log("fpxMin: " +$fpxMin);
+	if($totalPremium > $fpxMax){
+			console.log("Maximum Transaction Limit Exceeded RM30000");
+			var items = [];
+			items.push('Maximum Transaction Limit Exceeded RM30000');
+			$(".errorMsgContainer").find("ul").html(items.join(""));            
+			$(".errorMsgContainer").removeClass("hidden");  
+			invalidLimit = "true"
+		}else if($totalPremium < $fpxMin ){
+		console.log("Transaction Amount is Lower than the Minimum Limit RM 1.00");
+			var items = [];
+			items.push('Transaction Amount is Lower than the Minimum Limit RM 1.00');
+			$(".errorMsgContainer").find("ul").html(items.join(""));            
+			$(".errorMsgContainer").removeClass("hidden");  
+			invalidLimit = "true"
+		}
+    }
+  if($("input[name=errorMessage]").val() != ""){
+        $(".errorMsgContainer").removeClass("hidden");
+        $(".errorMsgContainer a").click(function(e) {
+            e.preventDefault();
+            $(this).parent().addClass("hidden");
+        });
+    } else {
+        if (form.valid() && invalidLimit == "false"){
+            var cardNoTrimmed = $("#cardNo").val().split(" ").join("");
+            $("#cardNo").val(cardNoTrimmed);
+            $(window).unbind('beforeunload');
+            document.forms["paymentForm"].submit();
+        }
+    }
+        
+  /*if (form.valid()){
+    var cardNoTrimmed = $("#cardNo").val().split(" ").join("");
+    $("#cardNo").val(cardNoTrimmed);
+    $(window).unbind('beforeunload');
+    document.forms["paymentForm"].submit();
+  }*/
+ }
+ 
+	function SortByName(x,y){
+		return((x.bankName == y.bankName) ? 0 : ((x.bankName > y.bankName) ? 1 : -1));
+	}
+	
+	$(document).ready(function() { 
+        $.ajax({
+            url: "/dotCMS/purchase/paynow/banklist",
+            success: function(data){
+                var JSONObject = $.parseJSON(data);
+                for(var n=0; n< JSONObject.length; n++){
+                    console.log(JSONObject[n].bankName);
+                }
+                var htmlString = "<option value=''>Select A Bank</option>";
+                $.each(JSONObject, function(){
+                console.log("This Bank Name : " + this.bankName);
+                                        
+                    if(this.bankName != null ){
+                        if(this.bankOnlineStatus == true){
+                            htmlString = htmlString + "<option value='"+this.bankId+"'>"+this.bankName+"</option>";
+                        }else{
+                            htmlString = htmlString + "<option value='"+this.bankId+"' disabled>"+this.bankName+" (Offline)</option>";
+                        }
+                    } 
+                });
+                $('#bankId').html(htmlString);
+            }
+        })
+	});
+ </script>
+ 
+#else
+    <!--If $purchaseTempId is empty, means it didnt come from summary.html -->
+    $response.sendRedirect("/$partnerURLTitle/products");
+#end
+
+  
+  
+#else  
+<!--If request.getMethod() is not POST -->
+$response.sendRedirect("/$partnerURLTitle/products");
+#end

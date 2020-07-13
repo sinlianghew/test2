@@ -43,7 +43,9 @@ $request.getSession().setAttribute('isInIframeP', null)
     #set($upgradeAnimationImage = $con.upgradeAnimationImage)
 #end
     
-#foreach($content in $dotcontent.pull("+structureName:WlpProductStructure +(conhost:$host.identifier conhost:SYSTEM_HOST) +(Parent_WlpPartnerStructure-Child_WlpProductStructure:$partner.getPartnerIdentifier()) +WlpProductStructure.productCode:$productCode",1,"undefined"))
+##foreach($content in $dotcontent.pull("+structureName:WlpProductStructure +(conhost:$host.identifier conhost:SYSTEM_HOST) +(Parent_WlpPartnerStructure-Child_WlpProductStructure:$partner.getPartnerIdentifier()) +WlpProductStructure.productCode:$productCode",1,"undefined"))
+#foreach($content in $dotcontent.pullRelated("WlpPartnerStructure.wlpproductstructures",$partner.getPartnerIdentifier(),"+Wlpproductstructure.productCode:$productCode",false, 1, ""))
+
     #set ($productLogo = $content.productLogoS.uri)
     #set ($product1 = $CmsSettingUtil.findCMSProductSetting($content.productCode,$partner.getPartnerIdentifier()))    
     #set ($upgradePlanHeaderDescription = $content.upgradePlanHeaderDescription)
@@ -56,7 +58,8 @@ $request.getSession().setAttribute('isInIframeP', null)
     #end
     
     #if ($product1.getIsSeasonal().equals("Y"))   
-        #foreach($content1 in $dotcontent.pullRelated("Parent_WlpProductStructure-Child_WlpSeasonalProductStructure","${content.identifier}",false,1,"WlpProductStructure.sequence asc"))  
+        ##foreach($content1 in $dotcontent.pullRelated("Parent_WlpProductStructure-Child_WlpSeasonalProductStructure","${content.identifier}",false,1,"WlpProductStructure.sequence asc"))
+        #foreach($content1 in $dotcontent.pullRelated("WlpProductStructure.wlpseasonalproductstructures","${content.identifier}",false,1,"WlpProductStructure.sequence asc"))
             #if ($UtilMethods.isSet($content1.upgradePlanHeaderDescription))
                 #set($upgradePlanHeaderDescription = $content1.upgradePlanHeaderDescription)
             #end
@@ -94,7 +97,7 @@ $request.getSession().setAttribute('isInIframeP', null)
 
 
 #if ($product.getProductName() == 'Motorcycle')
-    #dotParse('//msiginternal/vtl/widgets/product/m3pa-form.vtl')
+    #dotParse('//msiginternal/vtl/widgets/product/m3pa/m3pa-registration.vtl')
     #stop
 #end
 
@@ -552,7 +555,7 @@ $request.getSession().setAttribute('isInIframeP', null)
                     #set ($firstFieldSet = false)
                 </fieldset>
             #end
-		
+    	
             #if($extendedProduct.getAllowMotorPlusPlan() == "Y")
                 <fieldset id="planselection"><!-- motor plus plan selection -->
                     #set($planvtl = "//msiginternal/vtl/widgets/product/registration-motor-planselection.vtl")
@@ -855,7 +858,7 @@ $request.getSession().setAttribute('isInIframeP', null)
                     <div class="formFamilyContainer"></div>
 
                     #if($product.formula != "critical-illness" && $product.formula != "home-content")
-                        <a href="" class="triggerAddFamily" id="">&#10010; Add #if (${product.formula} == "motor") driver #else family #end</a>
+                        <a href="" class="triggerAddFamily" id="">✚ Add #if (${product.formula} == "motor") driver #else family #end</a>
                     #end
                 </div>
 
@@ -923,7 +926,7 @@ $request.getSession().setAttribute('isInIframeP', null)
                 
                 <!-- Modal content -->
                 <div class="overwriteAddressModal-Content overwriteAddress-Bg">
-                    <!--span class="overwriteAddressModal-Close" onclick="closeModal()">&times;</span-->
+                    <!--span class="overwriteAddressModal-Close" onclick="closeModal()">×</span-->
                     <p>There's a difference in the address that you have given. Would you like to use this new address as the default mailing address?</p>
                     <br/>
                     <span name="overwriteAddressModal-Address"></span>
@@ -1524,7 +1527,7 @@ function setMember(){
   if ($("input[name=coveragePlan]").val() == "Upgrade"){
   
     $("input[name=toUpgradeChkbox]").filter('[value=Y]').prop('checked', true);
-  $(".productUpgrade span").html("&#10004;");
+  $(".productUpgrade span").html("✔");
     $(".productUpgrade span").addClass("allowUpgrade");   
     $(".productUpgrade").removeClass("hidden");
    
@@ -1833,11 +1836,11 @@ $('select[name=addressCity]').on("mousedown", function () {
        Before we continue, note that:
        <br /><br />
        #if($product.formula == 'daily-personal-accident')
-            &raquo; The minimum premium for this plan is <strong>RM ${planTable.basePremium}</strong>.<br />
+            » The minimum premium for this plan is <strong>RM ${planTable.basePremium}</strong>.<br />
        #else
-            &raquo; The minimum cover price for this plan is <strong>RM $math.mul($product.getMinimumPeriod(),$product.getNormalRate())</strong><br />
+            » The minimum cover price for this plan is <strong>RM $math.mul($product.getMinimumPeriod(),$product.getNormalRate())</strong><br />
        #end
-       &raquo; Coverage ends at <strong>11:59pm</strong> on the last date of your plan.<br />
+       » Coverage ends at <strong>11:59pm</strong> on the last date of your plan.<br />
     
   </p>
   <!-- Single Day -->
@@ -1892,7 +1895,7 @@ $('select[name=addressCity]').on("mousedown", function () {
     <p id="err_duration_exceed" class="hidden">Coverage duration must not exceed ${maxCoverDurationCopy}.</p>
     <p id="err_backdate" class="hidden">Coverage period should start today or at a later date. Nothing before, please.</p>
     <p id="err_min_coverage" class="hidden">Minimum coverage duration is $product.getMinimumPeriod() days.</p>
-      <div><a href="" class="cancel-btn">Cancel&nbsp;&nbsp;</a><a href="" class="ok-btn">Ok&nbsp;&nbsp;</a><a href="" class="ok-noted-btn">Ok</a></div>
+      <div><a href="" class="cancel-btn">Cancel  </a><a href="" class="ok-btn">Ok  </a><a href="" class="ok-noted-btn">Ok</a></div>
     </div>
     
     <div class="promptOverlay hidden promptMaxFamily"></div>
@@ -1930,7 +1933,7 @@ $('select[name=addressCity]').on("mousedown", function () {
 #set ($purchaseTempId = $request.getParameter('purchaseTempId'))
 <div class="promptOverlay promptMMP hidden"></div>
 <div class="promptMMPMsg hidden">
-    <a href="" class="closeMMPMsg">&#10005;</a>
+    <a href="" class="closeMMPMsg">✕</a>
     <p>
         <h3>Do you want to upgrade?</h3>
         <ol>
@@ -1941,7 +1944,7 @@ $('select[name=addressCity]').on("mousedown", function () {
     </p>
     <div>
         <a href="" class="ok-noted-btn">UPGRADE NOW</a>    
-        <a href="" class="cancel-btn">MAYBE NEXT TIME&nbsp;&nbsp;</a>
+        <a href="" class="cancel-btn">MAYBE NEXT TIME  </a>
     </div>
     <div id="upgradePlan" class="hidden">
             <p>The following add-on(s) from your current plan will be included in your new plan:</p>
@@ -1949,7 +1952,7 @@ $('select[name=addressCity]').on("mousedown", function () {
             </ol>
         <div>
             <a href="" class="ok-noted-btn">UPGRADE NOW</a>    
-            <a href="" class="cancel-btn">MAYBE NEXT TIME&nbsp;&nbsp;</a>
+            <a href="" class="cancel-btn">MAYBE NEXT TIME  </a>
         </div>
     </div>
 </div>
