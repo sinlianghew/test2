@@ -6,10 +6,10 @@ const { CleanWebpackPlugin } =      require("clean-webpack-plugin") // only need
 const SVGSpritemapPlugin =          require("svg-spritemap-webpack-plugin");
 
 module.exports = merge(common, {
-    mode: "development",
-    optimization: {
-		minimize: false
-	},
+    mode: "production",
+    // optimization: {
+	// 	minimize: false
+	// },
     entry: "./src/js/index.js",
     output: {
         path: path.resolve(__dirname, "dist"),
@@ -56,16 +56,7 @@ module.exports = merge(common, {
                 test: [/.js$/],
                 exclude: /(node_modules)/,
                 use: {
-                    loader: 'babel-loader',
-                    options: {
-                        presets: [
-                            [
-                                '@babel/preset-env', { 
-                                    "targets": ['> 1%', 'last 2 versions']
-                                }
-                            ]
-                        ]
-                    }
+                    loader: 'babel-loader'
                 }
             },
             {
@@ -93,7 +84,6 @@ module.exports = merge(common, {
                         loader: "sass-loader",
                         options: {
                             implementation: require("sass"),
-                            outputStyle: 'expanded'
                         }
                     } 
                 ]

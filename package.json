@@ -20,6 +20,8 @@
   "homepage": "https://gitlab.com/apd-my/msig-takeiteasy-webpack#readme",
   "devDependencies": {
     "@babel/core": "^7.5.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.10.4",
+    "@babel/plugin-transform-template-literals": "^7.10.4",
     "@babel/preset-env": "^7.5.0",
     "autoprefixer": "^9.6.1",
     "babel-loader": "^8.0.6",
