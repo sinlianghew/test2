@@ -22,22 +22,20 @@
     <input type="hidden" name="registrationUrl" value="/msigonline/products/motorcycle/registration.html">
     <input type="hidden" name="summaryUrl" value="/msigonline/products/motorcycle/summary.html">
     <input type="hidden" name="paymentUrl" value="/msigonline/products/motorcycle/payment.html">
-    {# <input type="hidden" name="summaryUrl" value="/msigonline/products/motorcycle/summary.html">
-    <input type="hidden" name="paymentUrl" value="/msigonline/products/motorcycle/payment.html"> #}
     <input type="hidden" name="productMinAge" value="$product.getMinAge()" />
     <input type="hidden" name="productMinAgeUnit" value="year" />
     <input type="hidden" name="productMaxAge" value="$product.getMaxAge()" />
     <input type="hidden" name="productMaxAgeUnit" value="year" />
     <input type="hidden" name="maxCoverDuration" value="$product.getMaxCoverDuration()" />
     <input type="hidden" name="maxCoverDurationUnit" value="$product.getMaxCoverDurationUnit()" />
-    <input type="hidden" name="coveragePlan" #if($!{request.getParameter('coveragePlan')}) value="$!esc.html($!{request.getParameter('coveragePlan')})" #else value="Basic" #end/>
+    {# <input type="hidden" name="coveragePlan" #if($!{request.getParameter('coveragePlan')}) value="$!esc.html($!{request.getParameter('coveragePlan')})" #else value="Basic" #end/> #}
     <input type="hidden" name="coveragePremiumRate" value="$product.getNormalRate()" />
     <input type="hidden" name="coveragePremiumUpgradeRate" value="$product.getUpgradeRate()" />
-    #if ($product.getIsSeasonal().equals("Y"))
+    {# #if ($product.getIsSeasonal().equals("Y"))
         <input type="hidden" name="coveragePremiumType" value="promotion" />
     #else
         <input type="hidden" name="coveragePremiumType" value="default" />
-    #end
+    #end #}
     
 
     {% verbatim %}
@@ -122,10 +120,8 @@
                                                             {{ country.name }}
                                                         </option>
                                                     </select>
-                                                    <div class="invalid-feedback">
-                                                        <small class="error-message text-primary font-italic">
-                                                            * Complete the country field.
-                                                        </small>
+                                                    <div class="invalid-feedback font-italic">
+                                                        <span>* Complete the country field.</span>
                                                     </div>
                                                 </div>
                                             </validation-provider>
@@ -340,12 +336,12 @@
                                                         :max-matches="5"
                                                         @hit="formData['2'].motorLoanProvider = $event.financeName"
                                                     >
-                                                        <template slot="append">
+                                                        <div v-slot:append>
                                                             <svg class="icon icon-s mr-2">
                                                                 <use xlink:href="/spa-assets/icons/icons.svg#sprite-search"
                                                                     href="/spa-assets/icons/icons.svg#sprite-search"></use>
                                                             </svg>
-                                                        </template>
+                                                        </div>
                                                     </vue-bootstrap-typeahead>
                                                 </div>
                                             </div>
@@ -427,7 +423,7 @@
                                             </div>
 
                                             <div class="col-12 col-md-6">
-                                                <validation-provider rules="required|integer|max:11" v-slot="validator">
+                                                <validation-provider rules="required|mobileNumber" v-slot="validator">
                                                     <div class="form-group">
                                                         <label class="bt1">Mobile No.:</label>
                                                         <input type="tel"
@@ -435,11 +431,12 @@
                                                                 'form-control': true,
                                                                 'is-invalid': validator.errors.length > 0
                                                             }"
+                                                            v-mask="'###-### #####'"
                                                             v-model="formData['2'].policyHolderMobileNo"
                                                             placeholder="E.g. 018-123 4567">
                                                         <small class="error-message text-primary font-italic" v-if="validator.errors.length > 0">
                                                             <span v-if="validator.failedRules.required">* Complete the Mobile field.</span>
-                                                            <span v-else-if="validator.failedRules.integer || validator.failedRules.max">Please check mobile number.</span>
+                                                            <span v-else-if="validator.failedRules.mobileNumber">Please check mobile number.</span>
                                                         </small>
                                                     </div>
                                                 </validation-provider>
@@ -483,12 +480,12 @@
                                                             maxlength="5"
                                                             v-mask="'#####'"
                                                         >
-                                                            <template slot="append">
+                                                            <div v-slot:append>
                                                                 <svg class="icon icon-s mr-2">
                                                                     <use xlink:href="/spa-assets/icons/icons.svg#sprite-search"
                                                                         href="/spa-assets/icons/icons.svg#sprite-search"></use>
                                                                 </svg>
-                                                            </template>
+                                                            </div>
                                                         </vue-bootstrap-typeahead>
                                                         <div class="small error-message text-primary font-italic" v-if="validator.errors.length > 0">
                                                             <span v-if="validator.failedRules.required">
@@ -608,7 +605,7 @@
                                     <motor-summary-pane 
                                         :curr-step-num="currStep.stepNum"
                                         :form-data="formData"
-                                    />
+                                    ></motor-summary-pane>
                                 </div>
                             </div>
                         </div>
@@ -638,7 +635,7 @@
                                                                 </svg>
                                                                 <span>Recommended</span>
                                                             </strong>
-                                                            <input @change="initializeTooltips"
+                                                            <input @change="handlePlanTypeChange"
                                                                 type="radio" 
                                                                 v-model="formData['3'].motorPlanType" 
                                                                 value="comprehensive" />
@@ -656,9 +653,9 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="box--body px-3 pt-0 pb-3">
-                                                                    <ul class="list variant-icon mb-0 ">
+                                                                    <ul class="list variant-icon mb-0 row-match-height" data-row-num="1">
 
-                                                                        <li class="mb-2 row-match-height pl-lg-0 text-lg-center" data-row-num="1">
+                                                                        <li class="mb-2 row-match-height pl-lg-0 text-lg-center">
                                                                             <div class="list-icon">
                                                                                 <svg class="icon icon-s">
                                                                                     <use xlink:href="/spa-assets/icons/icons.svg#sprite-tick-mark"
@@ -671,7 +668,7 @@
                                                                             </div>
                                                                         </li>
 
-                                                                        <li class="mb-2 row-match-height pl-lg-0 text-lg-center" data-row-num="2">
+                                                                        <li class="mb-2 row-match-height pl-lg-0 text-lg-center">
                                                                             <div class="list-icon">
                                                                                 <svg class="icon icon-s">
                                                                                     <use xlink:href="/spa-assets/icons/icons.svg#sprite-tick-mark"
@@ -684,7 +681,7 @@
                                                                             </div>
                                                                         </li>
 
-                                                                        <li class="mb-2 row-match-height pl-lg-0 text-lg-center" data-row-num="3">
+                                                                        <li class="mb-2 row-match-height pl-lg-0 text-lg-center">
                                                                             <div class="list-icon">
                                                                                 <svg class="icon icon-s">
                                                                                     <use xlink:href="/spa-assets/icons/icons.svg#sprite-tick-mark"
@@ -721,7 +718,7 @@
                                                                 </svg>
                                                                 <span></span>
                                                             </strong>
-                                                            <input @change="initializeTooltips" type="radio" v-model="formData['3'].motorPlanType" value="m3pa" />
+                                                            <input @change="handlePlanTypeChange" type="radio" v-model="formData['3'].motorPlanType" value="m3pa" />
                                                             <div class="box overflow-hidden">
                                                                 <div class="header-match-height">
                                                                     <div class="box--header bg-p2 text-white p-3">
@@ -738,8 +735,8 @@
                                                                 <div class="box--body px-3 pt-0 pb-3">
 
 
-                                                                    <ul class="list variant-icon mb-0 ">
-                                                                        <li class="mb-2 row-match-height pl-lg-0 text-lg-center" data-row-num="1">
+                                                                    <ul class="list variant-icon mb-0 row-match-height" data-row-num="1">
+                                                                        <li class="mb-2 row-match-height pl-lg-0 text-lg-center">
 
                                                                             <div class="list-icon">
                                                                                 <svg class="icon icon-s">
@@ -754,7 +751,7 @@
 
                                                                         </li>
 
-                                                                        <li class="mb-2 row-match-height pl-lg-0 text-lg-center" data-row-num="2">
+                                                                        <li class="mb-2 row-match-height pl-lg-0 text-lg-center">
                                                                             <div class="list-icon">
                                                                                 <svg class="icon icon-s">
                                                                                     <use xlink:href="/spa-assets/icons/icons.svg#sprite-tick-mark"
@@ -767,7 +764,7 @@
                                                                             </div>
                                                                         </li>
 
-                                                                        <li class="mb-2 row-match-height pl-lg-0 text-lg-center" data-row-num="3">
+                                                                        <li class="mb-2 row-match-height pl-lg-0 text-lg-center">
                                                                         </li>
                                                                     </ul>
 
@@ -986,7 +983,7 @@
                                     <motor-summary-pane 
                                         :form-data="formData"
                                         :curr-step-num="currStep.stepNum"
-                                    />
+                                    ></motor-summary-pane>
                                 </div>
                             </div>
                         </div>
@@ -1044,15 +1041,15 @@
                                                 <p class="bt1 mb-0">Motorcycle Location:</p>
                                                 <p class="bt2" v-if="!formData['4'].isMotorDetailsEditMode">{{ formData['2'].motorVehicleLocation.name }}</p>
                                                 <template v-if="formData['4'].isMotorDetailsEditMode">
-                                                    <validation-provider rules="required" v-slot="{ errors, failedRules }">
+                                                    <validation-provider rules="required" v-slot="validator">
                                                         <div class="form-group">
-                                                            <select :class="{ 'form-control': true, 'is-invalid': errors.length > 0 }" 
+                                                            <select :class="{ 'form-control': true, 'is-invalid': validator.errors.length > 0 }" 
                                                                 @change="calculatePremiumAsync"
                                                                 v-model="formData['4'].motorVehicleLocation">
                                                                 <option disabled hidden selected value="">Select a state</option>
                                                                 <option v-for="state in states" :key="state.code" :value="state">{{ state.name }}</option>
                                                             </select>
-                                                            <small class="error-message text-primary font-italic" v-if="failedRules.required">
+                                                            <small class="error-message text-primary font-italic" v-if="validator.failedRules.required">
                                                                 * Complete the Motorcycle Location field.
                                                             </small>
                                                         </div>
@@ -1401,7 +1398,7 @@
                                     <motor-summary-pane 
                                         :form-data="formData"
                                         :curr-step-num="currStep.stepNum"
-                                    />
+                                    ></motor-summary-pane>
                                 </div>
                             </div>
                         </div>
@@ -1438,7 +1435,7 @@
                     <fieldset class="wizard-section-5" v-if="currStep && currStep.stepNum === '5'">
                         <div class="container">
                             <div class="row">
-                                <div class="col-12 col-md-8">
+                                <div class="col-12 col-lg-8">
                                     <div class="bg-w py-5 px-4 mb-3">
                                         <h2 class="p2 mb-4">Payment</h2>
 
@@ -1797,11 +1794,11 @@
                                     </div>
                                 </div>
 
-                                <div class="col-12 col-md-4">
+                                <div class="col-12 col-lg-4">
                                     <motor-summary-pane 
                                         :form-data="formData"
                                         :curr-step-num="currStep.stepNum"
-                                    />
+                                    ></motor-summary-pane>
                                 </div>
 
                                 <div class="container pt-4 wizard-navigation d-md-none">
@@ -1840,7 +1837,7 @@
 
 
         <!-- Form to Submit Data to Summary Page -->
-        <form id="summary-form-placeholder" class="d-none"></form>
+        <form id="summary-form-placeholder" class="d-none" enctype="application/x-www-form-urlencoded"></form>
 
         <!-- The error form returned from processPurchase will be placed here -->
         <div id="error-form-placeholder" class="d-none"></div>
@@ -1868,7 +1865,7 @@
                         <h6 class="w text-center modal-title">Information</h6>
                         <button class="modal-header-btn button-icon btn-close" data-dismiss="modal" @click="wishToRestoreSession = false">
                             <svg class="icon icon-s">
-                                <use xlink:href="spa-assets/icons/icons.svg#sprite-close-popup" href="spa-assets/icons/icons.svg#sprite-close-popup"></use>
+                                <use xlink:href="/spa-assets/icons/icons.svg#sprite-close-popup" href="/spa-assets/icons/icons.svg#sprite-close-popup"></use>
                             </svg>
                         </button>
                     </div>

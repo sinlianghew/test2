@@ -1,5 +1,5 @@
 import $ from 'jquery'
-const baseUrl = $('input[name=tieBaseUrl]').val() || 'https://takeiteasy.msig.com.my';
+const baseUrl = $('input[name=tieBaseUrl]').val();
 
 /**
  * Given an NRIC, return a Date object representing
@@ -139,4 +139,10 @@ export function scrollTo(offset) {
             behavior: 'smooth'
         })
     })
+}
+
+export function getInputValueOrEmpty (inputName) {
+    const input = document.querySelector(`#motorcycle-form input[name=${inputName}]`)
+    if (input) return input.value;
+    return ''
 }

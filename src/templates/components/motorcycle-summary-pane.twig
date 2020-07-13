@@ -1,13 +1,22 @@
 {% verbatim %}
 
-<div :class="{ 'summary-pane': true, 'is-expanded': isExpanded }">
-	<div class="header section-header bg-p2 py-md-4 px-4" @click.prevent="toggleExpand">
-		<h2 class="w mb-0">{{ currStepNum === '5' ? 'Order ' : '' }}Summary</h2>
-		<div class="btn-toggle">
-			<svg class="icon icon-l w">
-				<use href="/spa-assets/icons/icons.svg#sprite-chevron"></use>
-			</svg>
-			<span class="title">Toggle Summary</span>
+<div :class="{ 'summary-pane': true, 'is-expanded': isExpanded, 'has-total': currStepNum > 2 }">
+	<div class="header section-header bg-p2 py-lg-4" @click.prevent="toggleExpand">
+		<div class="inner-container">
+			<div class="section-title">
+				<h2 class="w mb-0">{{ currStepNum === '5' ? 'Order ' : '' }}Summary</h2>
+				<div class="btn-toggle">
+					<svg class="icon icon-m w">
+						<use href="/spa-assets/icons/icons.svg#sprite-chevron"></use>
+					</svg>
+					<span class="title">Toggle Summary</span>
+				</div>
+			</div>
+
+			<div class="sub-header" v-if="currStepNum > 2">
+				<p class="bt1 w mb-0"><strong>Total Amount Payable</strong></p>
+				<p class="price w mb-0">RM {{ formatAsCurrency(formData['3'].totalPayable) }}</p>
+			</div>
 		</div>
 	</div>
 	<div class="body bg-w py-3 px-2">

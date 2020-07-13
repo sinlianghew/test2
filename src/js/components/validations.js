@@ -93,3 +93,11 @@ extend('isCreditCardExpiryValid', {
         return true;
     }
 })
+
+extend('mobileNumber', {
+    validate: function (value) {
+        if (!value.length) return true;
+        const number = value.replace(/[\s-]*/g, '');
+        return /^\d*$/.test(number) && number.length <= 11
+    }
+})

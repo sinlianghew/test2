@@ -1,12 +1,14 @@
 .footer-wrapper {
-
-    height: 25px;
-    background: #E9E9E9;
+    height: 30px;
+    background: #222222;
     width: 100%;
-    position: relative;
+    position: fixed;
     bottom: 0;
-    z-index: 10;
+    z-index: $zindex-fixed;
 
+    p {
+        color: #fff;
+    }
 }
 
 

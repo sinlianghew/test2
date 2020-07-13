@@ -5,7 +5,7 @@ import { mask, masked } from 'vue-the-mask';
 import moment from 'moment';
 import VueBootstrapTypeahead from 'vue-typeahead-bootstrap/dist/VueBootstrapTypeahead.umd';
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
-import { extractDOB, createDotCMSQueryURL, getCardType, scrollTo } from '../helpers/utilities';
+import { extractDOB, createDotCMSQueryURL, getCardType, scrollTo, getInputValueOrEmpty } from '../helpers/utilities';
 import MotorcycleSummaryPane from '../components/motorcycle-summary-pane';
 Vue.component('motor-summary-pane', MotorcycleSummaryPane)
 
@@ -16,34 +16,34 @@ Vue.component('motor-summary-pane', MotorcycleSummaryPane)
 const m3paform = new Vue({
     el: '#motorcycle-form',
     data: {
-        stage: document.querySelector('#motorcycle-form input[name=stage]').value,
-        isInIframe: document.querySelector('#motorcycle-form input[name=isInIframe]').value,
-        baseUrl: document.querySelector('#motorcycle-form input[name=tieBaseUrl]').value,
-        productCode: document.querySelector('#motorcycle-form input[name="productCode"]').value,
-        partnerCode: document.querySelector('#motorcycle-form input[name="partnerCode"]').value,
-        prefixMobile: document.querySelector('#motorcycle-form input[name="prefixMobile"]').value,
-        productName: document.querySelector('#motorcycle-form input[name="productName"]').value,
-        productGroup: document.querySelector('#motorcycle-form input[name="productName"]').value,
-        branchCode: document.querySelector('#motorcycle-form input[name="productGroup"]').value,
-        staffId: document.querySelector('#motorcycle-form input[name="staffId"]').value,
-        staffRelationship: document.querySelector('#motorcycle-form input[name="staffRelationship"]').value,
-        supportTel: document.querySelector('#motorcycle-form input[name="supportTel"]').value,
-        thankYouPageUrl: document.querySelector('#motorcycle-form input[name="thankYouPageUrl"]').value,
-        formula: document.querySelector('#motorcycle-form input[name=formula]').value,
-        registrationUrl: document.querySelector('#motorcycle-form input[name=registrationUrl]').value,
-        paymentUrl: document.querySelector('#motorcycle-form input[name="paymentUrl"]').value,
-        summaryUrl: document.querySelector('#motorcycle-form input[name="summaryUrl"]').value,
-        certificateNo: document.querySelector('#motorcycle-form input[name="certificateNo"]').value,
-        productMinAge: document.querySelector('#motorcycle-form input[name="productMinAge"]').value,
-        productMinAgeUnit: document.querySelector('#motorcycle-form input[name="productMinAgeUnit"]').value,
-        productMaxAge: document.querySelector('#motorcycle-form input[name="productMaxAge"]').value,
-        productMaxAgeUnit: document.querySelector('#motorcycle-form input[name="productMaxAgeUnit"]').value,
-        maxCoverDuration: document.querySelector('#motorcycle-form input[name="maxCoverDuration"]').value,
-        maxCoverDurationUnit: document.querySelector('#motorcycle-form input[name="maxCoverDurationUnit"]').value,
-        coveragePlan: document.querySelector('#motorcycle-form input[name="coveragePlan"]').value,
-        coveragePremiumRate: document.querySelector('#motorcycle-form input[name="coveragePremiumRate"]').value,
-        coveragePremiumUpgradeRate: document.querySelector('#motorcycle-form input[name="coveragePremiumUpgradeRate"]').value,
-        coveragePremiumType: document.querySelector('#motorcycle-form input[name="coveragePremiumType"]').value,
+        stage: getInputValueOrEmpty("stage"),
+        isInIframe: getInputValueOrEmpty("isInIframe"),
+        baseUrl: getInputValueOrEmpty("tieBaseUrl"),
+        productCode: getInputValueOrEmpty("productCode"),
+        partnerCode: getInputValueOrEmpty("partnerCode"),
+        prefixMobile: getInputValueOrEmpty("prefixMobile"),
+        productName: getInputValueOrEmpty("productName"),
+        productGroup: getInputValueOrEmpty("productGroup"),
+        branchCode: getInputValueOrEmpty("branchCode"),
+        staffId: getInputValueOrEmpty("staffId"),
+        staffRelationship: getInputValueOrEmpty("staffRelationship"),
+        supportTel: getInputValueOrEmpty("supportTel"),
+        thankYouPageUrl: getInputValueOrEmpty("thankYouPageUrl"),
+        formula: getInputValueOrEmpty("formula"),
+        registrationUrl: getInputValueOrEmpty("registrationUrl"),
+        paymentUrl: getInputValueOrEmpty("paymentUrl"),
+        summaryUrl: getInputValueOrEmpty("summaryUrl"),
+        certificateNo: getInputValueOrEmpty("certificateNo"),
+        productMinAge: getInputValueOrEmpty("productMinAge"),
+        productMinAgeUnit: getInputValueOrEmpty("productMinAgeUnit"),
+        productMaxAge: getInputValueOrEmpty("productMaxAge"),
+        productMaxAgeUnit: getInputValueOrEmpty("productMaxAgeUnit"),
+        maxCoverDuration: getInputValueOrEmpty("maxCoverDuration"),
+        maxCoverDurationUnit: getInputValueOrEmpty("maxCoverDurationUnit"),
+        coveragePlan: getInputValueOrEmpty("coveragePlan"),
+        coveragePremiumRate: getInputValueOrEmpty("coveragePremiumRate"),
+        coveragePremiumUpgradeRate: getInputValueOrEmpty("coveragePremiumUpgradeRate"),
+        coveragePremiumType: getInputValueOrEmpty("coveragePremiumType"),
         wishToRestoreSession: false,
 
         steps: [
@@ -80,8 +80,8 @@ const m3paform = new Vue({
             1: {
                 policyHolderIdType: 'nric',
                 country: '',
-                policyHolderNric: '750820-14-5815',
-                motorRegistrationNo: 'WQN5666',
+                policyHolderNric: '',
+                motorRegistrationNo: '',
                 agreement: true
             },
             2: {
@@ -328,7 +328,6 @@ const m3paform = new Vue({
                 
                 window.killUnloadM3PA && window.killUnloadM3PA()
                 this.currStep.completed = true;
-                this.currStep = this.steps[this.steps.indexOf(this.currStep) + 1];
                 this.saveSession();
                 this.processPurchaseStep1()
                 await this.scrollTop();
@@ -338,15 +337,14 @@ const m3paform = new Vue({
                 const response = await this.initiatePayment()
                 const $errorFormWrapper = $(`<div id="error-form-wrapper">${response}</div>`)
                 $errorFormWrapper.find('form').attr('action', this.paymentUrl)
-                $(this.$el).find('#error-form-placeholder').html($errorFormWrapper.html())
-
+                $(this.$el).find('#error-form-placeholder').html($errorFormWrapper.html());
                 this.formData['4'].purchaseTempId = $errorFormWrapper.find('input[name="purchaseTempId"]').val()
+
                 window.killUnloadM3PA && window.killUnloadM3PA()
                 this.currStep.completed = true;
-                this.currStep = this.steps[this.steps.indexOf(this.currStep) + 1];
                 this.saveSession();
                 await this.scrollTop();
-                window.location.href = this.paymentUrl;
+                $(this.$el).find('#error-form-placeholder form').trigger('submit')
                 return;
             } else if (this.currStep.stepNum == '5') {
                 window.killUnloadM3PA && window.killUnloadM3PA()
@@ -371,21 +369,23 @@ const m3paform = new Vue({
                 return;
             }
 
+            this.loading = true;
+
             if (this.currStep.stepNum == '4' && !['registration', 'payment'].includes(this.stage)) {
-                this.saveSession();
+                await this.scrollTop();
                 window.killUnloadM3PA && window.killUnloadM3PA()
-                this.currStep.completed = true;
-                this.currStep = this.steps[this.steps.indexOf(this.currStep) - 1];
+                this.saveSession();
                 window.location.href = this.registrationUrl + '#planselection';
+                // this.currStep = this.steps[this.steps.indexOf(this.currStep) - 1];
                 return;
             }
 
             if (this.currStep.stepNum == '5' &&  !['registration', 'summary'].includes(this.stage)) {
-                this.saveSession();
+                await this.scrollTop();
                 window.killUnloadM3PA && window.killUnloadM3PA()
-                this.currStep.completed = true;
-                this.currStep = this.steps[this.steps.indexOf(this.currStep) - 1];
+                this.saveSession();
                 window.location.href = this.summaryUrl;
+                // this.currStep = this.steps[this.steps.indexOf(this.currStep) - 1];
                 return;
             }
 
@@ -394,6 +394,7 @@ const m3paform = new Vue({
             this.currStep = this.steps[this.steps.indexOf(this.currStep) - 1];
             window.location.hash = this.currStep.hash;
             this.initializeTooltips()
+            this.loading = false;
             this.$nextTick(() => this.rowMatchHeight())
         },
         checkNCD: async function () {
@@ -761,7 +762,7 @@ const m3paform = new Vue({
             this.calculatePremiumAsync()
         },
         processPurchaseStep1: function () {
-            const $form = $(this.el).find('form#summary-form-placeholder');
+            const $form = $(this.$el).find('form#summary-form-placeholder');
             $form.attr('action', this.summaryUrl)
             const data = {
                 action: "processPurchase",
@@ -851,7 +852,7 @@ const m3paform = new Vue({
                 policyHolderGender: this.policyHolderGender,
                 policyHolderDateOfBirth: moment(this.policyHolderDob).format('DD/MM/YYYY'),
                 policyHolderEmail: this.formData['2'].policyHolderEmail,
-                policyHolderMobileNo: this.formData['2'].policyHolderMobileNo,
+                policyHolderMobileNo: this.mobileNumber,
                 policyHolderAddressLine1: this.formData['2'].policyHolderAddressLine1,
                 policyHolderAddressLine2: this.formData['2'].policyHolderAddressLine2,
                 addressPostcode: this.formData['2'].addressPostcode,
@@ -900,7 +901,7 @@ const m3paform = new Vue({
                     .keys(data)
                     .map(key => $(`<input type="hidden" name="${key}" value="${data[key]}">`))
             )
-            $form.trigger('submit')
+            $form.trigger('submit', data)
         },
         // Step 5
         initiatePayment: function () {
@@ -973,7 +974,7 @@ const m3paform = new Vue({
                         motorAddLimitedSpecialPerils: '',
                         motorAddNcdRelief: '',
                         motorPlusPlan: this.formData['3'].motorPlanType === 'comprehensive' ? '' : 'Y',
-                        motorPlusPlanPremium: this.formData['3'].motorPlanType === 'comprehensive' ? '' : '0',
+                        motorPlusPlanPremium: '',
                         allRiderPlan: this.formData['3'].allRiderPlan ? 'Y' : '',
                         flexiPlan: '',
                         additionalPlanA: '',
@@ -995,7 +996,7 @@ const m3paform = new Vue({
                         policyHolderDateOfBirth: moment(this.policyHolderDob).format('DD/MM/YYYY'),
                         policyHolderNationality: this.formData['1'].country,
                         policyHolderEmail: this.formData['2'].policyHolderEmail,
-                        policyHolderMobileNo: this.formData['2'].policyHolderMobileNo,
+                        policyHolderMobileNo: this.mobileNumber,
                         policyHolderMaritalStatus: this.formData['2'].policyHolderMaritalStatus === 'Married' ? 'M' : 'S',
                         policyHolderOccupation: this.formData['2'].policyHolderOccupation,
                         photo: '',
@@ -1153,7 +1154,9 @@ const m3paform = new Vue({
             let $rows = $group.find('.row-match-height');
 
             let rowsByRowNum = {}
-            $rows.each(function () {
+            $rows
+            .filter(function () { return $(this).data('row-num') })
+            .each(function () {
                 const rowNum = $(this).data('row-num')
                 if (!rowsByRowNum[rowNum]) {
                     rowsByRowNum[rowNum] = [this]
@@ -1174,6 +1177,16 @@ const m3paform = new Vue({
             if (currHash === '') {
 
             }
+        },
+        handlePlanTypeChange () {
+            if (this.formData['3'].motorPlanType === 'm3pa') {
+                this.formData['3'].motorAddRiderPA = true;
+                this.formData['3'].motorAddSRCC = false
+                this.formData['3'].motorAddSpecialPerils = false
+            } else {
+                this.formData['3'].motorAddRiderPA = false;
+            }
+            this.calculatePremiumAsync()
         }
     },
     computed: {
@@ -1210,6 +1223,9 @@ const m3paform = new Vue({
         },
         grossPremium: function () {
             return this.netNCDAmount + this.formData['3'].totalAdditionalCoveragePremium;
+        },
+        mobileNumber: function () {
+            return this.formData['2'].policyHolderMobileNo.replace(/\s/g, '')
         }
     },
     watch: {
@@ -1242,16 +1258,6 @@ const m3paform = new Vue({
         "formData.2.motorLoanProvider": _.debounce(function (name) {
             this.getLoanProvidersAsync(name)
         }, 500),
-        "formData.3.motorPlanType": function (value) {
-            if (value === 'm3pa') {
-                this.formData['3'].motorAddRiderPA = true;
-                this.formData['3'].motorAddSRCC = false
-                this.formData['3'].motorAddSpecialPerils = false
-            } else {
-                this.formData['3'].motorAddRiderPA = false;
-            }
-            this.calculatePremiumAsync()
-        },
         loading: function (value) {
             if (value) {
                 return $('.page-loader').fadeIn()

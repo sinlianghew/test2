@@ -1,4 +1,6 @@
 $header-xs-height: 60px;
+$subtotal-font-size: 22px;
+$footer-xs-height: 60px;
 $footer-offset: 30px;
 
 .summary-pane {
@@ -12,17 +14,56 @@ $footer-offset: 30px;
     max-height: 100vh;
     background-color: #fff;
     transform: translateY(calc(100% - #{$header-xs-height + $footer-offset} + 1px));
-    transition: .4s ease;
+    transition: .6s ease;
 
     .header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
         height: #{$header-xs-height};
+        justify-content: center;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+
+        .section-title {
+            @extend .px-4;
+            display: flex;
+            justify-content: space-between;
+            transition: .3s ease;
+        }
+
+        .sub-header {
+            @extend .px-4;
+            position: absolute;
+            top: calc(22px + 18px);
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            visibility: visible;
+            opacity: 1;
+            transition: .3s ease;
+
+            .price {
+                font-size: $subtotal-font-size;
+                font-weight: 600;
+                position: static;
+            }
+        }
+    }
+
+    &.has-total {
+        transform: translateY(calc(100% - #{$header-xs-height + $footer-offset + $subtotal-font-size} + 1px));
+
+        .header {
+            height: #{$header-xs-height + $subtotal-font-size};
+
+            .section-title {
+                margin-bottom: $subtotal-font-size;
+            }
+        }
     }
 
     .footer {
-        height: #{$header-xs-height}
+        height: #{$footer-xs-height};
     }
 
     .body {
@@ -48,12 +89,25 @@ $footer-offset: 30px;
 
         .icon {
             transform: rotateX(180deg);
-            transition: .4s ease;
+            transition: .9s ease;
         }
     }
 
     &.is-expanded {
         transform: translateY(0);
+
+        .header {
+            height: #{$header-xs-height};
+            
+            .section-title {
+                margin-bottom: 0;
+            }
+
+            .sub-header {
+                visibility: hidden;
+                opacity: 0;    
+            }
+        }
 
         .btn-toggle .icon {
             transform: rotateX(0);
@@ -62,8 +116,9 @@ $footer-offset: 30px;
 
     @include media-breakpoint-up(lg) {
         background-color: transparent;
+        position: static;
         position: sticky;
-        transform: translateY(0);
+        transform: translateY(0) !important;
         top: 0;
         z-index: 1020;
         max-height: fit-content;
@@ -72,6 +127,16 @@ $footer-offset: 30px;
         
         .header {
             pointer-events: none;
+            height: #{$header-xs-height} !important;
+
+            .section-title {
+                margin-bottom: 0 !important;
+            }
+
+            .sub-header {
+                visibility: hidden;
+                opacity: 0;    
+            }
         }
 
         .btn-toggle {
@@ -79,7 +144,7 @@ $footer-offset: 30px;
         }
 
         .is-expanded {
-            transform: translateY(0);            
+            transform: translateY(0) !important;            
         }
 
         .body {
