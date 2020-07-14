@@ -37,6 +37,26 @@
         <input type="hidden" name="coveragePremiumType" value="default" />
     #end #}
     
+    <div id="tnc-modal" class="modal fade variant-tnc">
+        <div class="modal-dialog partial-screen-modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-w">
+                    <button class="modal-header-btn button-icon btn-close" data-dismiss="modal">
+                        <svg class="icon icon-s">
+                            <use xlink:href="/spa-assets/icons/icons.svg#sprite-close-popup"
+                                href="/spa-assets/icons/icons.svg#sprite-close-popup"></use>
+                        </svg>
+                    </button>
+                </div>
+                <div class="py-5 px-4 content-container">
+                    <p><strong>Terms and Conditions</strong></p>
+                    <p><br>You hereby acknowledge that you have read the Terms of Use, Product Disclosure Sheet and understood the policy terms and conditions stated in the master policy and wish to proceed with the purchase of this policy.</p>
+                    <p>You must take reasonable care not to misrepresent when answering questions herein or in any request made by MSIG and check the information you have provided is complete and accurate. You should also disclose all relevant information which may influence MSIG in the acceptance of this insurance, decide the terms and the premium you will pay. If you do not take reasonable care and the information provided by you is incomplete or inaccurate, this may affect your claim. Your responsibility to provide complete and accurate information when requested by MSIG shall continue until the time of you entering into, making changes to or renewing your insurance. Unless renewed, the coverage will cease on expiry date and we shall strictly not be liable for any expenses that take place after the expiry date.</p>
+                    <p>With respect to personal information submitted herein, you hereby consent to MSIG to process your personal information for the purpose of processing your application herein. Where applicable, you also confirm that you have obtained the consent from the person(s) named herein and that you are duly authorized to disclose their personal information herein. For more information our Privacy Policy, please read our Terms of Use.&nbsp;Kindly read our Privacy Notice at<a href="https://www.msig.com.my/privacy-notice/" target="_blank" class="donFunction">www.msig.com.my </a>for details.<br><br><strong>Tax Clause&nbsp;</strong><br><br>You are obligated to pay any applicable taxes (which include but not limited to service tax and stamp duty) imposed by the Malaysian tax authorities in relation to this Policy, with effective from 1<sup>st</sup> September 2018.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     {% verbatim %}
         <div class="container py-5" v-if="canProceed">
@@ -113,7 +133,7 @@
                                                         'form-control': true,
                                                         'is-invalid': validator.errors.length > 0
                                                     }" v-model="formData['1'].country">
-                                                        <option disabled hidden selected value="">Select a country</option>
+                                                        <option disabled hidden selected value="">Select Country</option>
                                                         <option v-for="country in countries"
                                                             v-bind:key="countries.indexOf(country)"
                                                             :value="country.code">
@@ -141,7 +161,7 @@
                                                             'is-invalid': validator.errors.length > 0
                                                         }"
                                                         :name="isIdNric ? 'NRIC' : 'Passport'"
-                                                        :placeholder="isIdNric ? 'E.g. 900808-10-8888' : 'E.g. A98765432'"
+                                                        :placeholder="isIdNric ? 'E.g.: 900808-10-8888' : 'E.g.: A98765432'"
                                                         v-mask="isIdNric ? '######-##-####' : 'XXXXXXXXXXXXXX'"
                                                         v-model="formData['1'].policyHolderNric"
                                                         autocomplete="off">
@@ -168,9 +188,10 @@
                                                                 'form-control': true,
                                                                 'is-invalid': validator.errors.length > 0
                                                             }"
-                                                            placeholder="E.g. WA888A"
+                                                            placeholder="E.g.: WA888A"
                                                             name='Vehicle Registration No.'
                                                             v-uppercase
+                                                            v-mask="'XXXXXXXXXX'"
                                                             v-model="formData['1'].motorRegistrationNo">
                                                         <div class="invalid-feedback">
                                                             {{ validator.errors[0] }}
@@ -194,7 +215,7 @@
                                                 }"
                                                 v-model="formData['1'].agreement">
                                             <label for="agreement" class="form-check-label">
-                                                I have read and understood MSIG's <a href="#" class="underline">Privacy Notice</a>, and
+                                                I have read and understood MSIG's <a target="_blank" href="https://www.msig.com.my/privacy-notice/" class="underline">Privacy Notice</a>, and
                                                 agree to MSIG
                                                 processing my personal data for the purposes and in the manners set out in the Privacy
                                                 Notice.
@@ -268,7 +289,7 @@
                                                         <label class="bt1">Variant:</label>
                                                         <select :class="{ 'form-control': true, 'is-invalid': validator.errors.length > 0 }" v-model="formData['2'].motorModel" @change="handleMotorModelChanged">
                                                             <option v-for="model in allModelVariants" :value="model">
-                                                                {{ model.variant }} {{ model.style }} {{ model.engine }} {{ model.seat }} SEAT {{ model.transmission }}
+                                                                {{ model.variant }} {{ model.style }} {{ model.seat }} SEAT {{ model.transmission }}
                                                             </option>
                                                         </select>
                                                         <small class="error-message text-primary font-italic" v-if="validator.failedRules.required">
@@ -285,7 +306,7 @@
                                                         <select :class="{ 'form-control': true, 'is-invalid': validator.errors.length > 0 }" 
                                                             @change="handleMotorcycleLocationChanged"
                                                             v-model="formData['2'].motorVehicleLocation">
-                                                            <option disabled hidden selected value="">Select a state</option>
+                                                            <option disabled hidden selected value="">Select State</option>
                                                             <option v-for="state in states" :key="state.code" :value="state">{{ state.name }}</option>
                                                         </select>
                                                         <small class="error-message text-primary font-italic" v-if="validator.failedRules.required">
@@ -298,9 +319,10 @@
                                             <div class="col-12 col-md-6">
                                                 <div class="form-group">
                                                     <label class="bt1">Sum Insured Value:</label>
-                                                    <select class="form-control" 
+                                                    <select :class="{ 'form-control': true, 'no-value': !formData['2'].sumInsuredType }" 
                                                         v-model="formData['2'].sumInsuredType"
                                                         :disabled="partnerCode === 'msigonline'">
+                                                        <option value="" disabled selected hidden>Estimated Value</option>
                                                         <option value="marketValue">Market Value</option>
                                                         <option value="recomendedValue">Recommended Value</option> 
                                                     </select>
@@ -336,12 +358,12 @@
                                                         :max-matches="5"
                                                         @hit="formData['2'].motorLoanProvider = $event.financeName"
                                                     >
-                                                        <div v-slot:append>
+                                                        <template v-slot:append>
                                                             <svg class="icon icon-s mr-2">
                                                                 <use xlink:href="/spa-assets/icons/icons.svg#sprite-search"
                                                                     href="/spa-assets/icons/icons.svg#sprite-search"></use>
                                                             </svg>
-                                                        </div>
+                                                        </template>
                                                     </vue-bootstrap-typeahead>
                                                 </div>
                                             </div>
@@ -364,7 +386,7 @@
                                                                 'is-invalid': validator.errors.length > 0
                                                             }"
                                                             v-model="formData['2'].policyHolderName"
-                                                            placeholder="E.g. Lee Siew Suan">
+                                                            placeholder="E.g.: Lee Siew Suan">
                                                         <small class="error-message text-primary font-italic" v-if="validator.errors.length > 0">
                                                             <span v-if="validator.failedRules.required">* Complete the Name as per NRIC field.</span>
                                                             <span v-else-if="validator.failedRules.validName">Please enter only alphabet, "-", "@", "/" and " ' " for Name</span>
@@ -383,7 +405,7 @@
                                                                 'is-invalid': validator.errors.length > 0
                                                             }"
                                                             v-model="formData['1'].policyHolderNric"
-                                                            placeholder="E.g. 900808-10-8888"
+                                                            placeholder="E.g.: 900808-10-8888"
                                                             disabled
                                                             v-mask="'######-##-####'">
                                                         <small class="error-message text-primary font-italic" v-if="validator.failedRules.required">
@@ -413,7 +435,7 @@
                                                                 'is-invalid': validator.errors.length > 0
                                                             }"
                                                             v-model="formData['2'].policyHolderEmail"
-                                                            placeholder="E.g. you@gmail.com">
+                                                            placeholder="E.g.: you@gmail.com">
                                                         <small class="error-message text-primary font-italic" v-if="validator.errors.length > 0">
                                                             <span v-if="validator.failedRules.required">* Complete the Email field.</span>
                                                             <span v-else-if="validator.failedRules.email">Please check email address</span>
@@ -433,7 +455,7 @@
                                                             }"
                                                             v-mask="'###-### #####'"
                                                             v-model="formData['2'].policyHolderMobileNo"
-                                                            placeholder="E.g. 018-123 4567">
+                                                            placeholder="E.g.: 018-123 4567">
                                                         <small class="error-message text-primary font-italic" v-if="validator.errors.length > 0">
                                                             <span v-if="validator.failedRules.required">* Complete the Mobile field.</span>
                                                             <span v-else-if="validator.failedRules.mobileNumber">Please check mobile number.</span>
@@ -480,12 +502,12 @@
                                                             maxlength="5"
                                                             v-mask="'#####'"
                                                         >
-                                                            <div v-slot:append>
+                                                            <template v-slot:append>
                                                                 <svg class="icon icon-s mr-2">
                                                                     <use xlink:href="/spa-assets/icons/icons.svg#sprite-search"
                                                                         href="/spa-assets/icons/icons.svg#sprite-search"></use>
                                                                 </svg>
-                                                            </div>
+                                                            </template>
                                                         </vue-bootstrap-typeahead>
                                                         <div class="small error-message text-primary font-italic" v-if="validator.errors.length > 0">
                                                             <span v-if="validator.failedRules.required">
@@ -578,7 +600,7 @@
                                                         <label for="occupation" class="bt1">Occupation:</label>
                                                         <input id="occupation"
                                                             type="text"
-                                                            placeholder="E.g. Architect"
+                                                            placeholder="E.g.: Architect"
                                                             :class="{
                                                                 'form-control': true,
                                                                 'is-invalid': validator.errors.length > 0
@@ -642,7 +664,7 @@
                                                             <div class="box overflow-hidden">
                                                                 <div class="header-match-height">
                                                                     <div class="box--header bg-p2 text-white p-3">
-                                                                        <h3 class="m-0">Comprehensive Motorcycle Insurance</h3>
+                                                                        <h3 class="m-0">Comprehensive <br class="d-none d-lg-block" /> Motorcycle Insurance</h3>
                                                                     </div>
                                                                     <div class="mt-4 mb-3">
                                                                         <svg class="icon icon-7xl ">
@@ -695,7 +717,7 @@
                                                                         </li>
                                                                     </ul>
 
-                                                                    <div class="text-center py-2">
+                                                                    <div class="d-flex justify-content-center py-2">
                                                                         <div class="custom-rounded-checked">
                                                                             <svg class="icon icon-m tick-mark my-2">
                                                                                 <use xlink:href="/spa-assets/icons/icons.svg#sprite-tick-mark"
@@ -722,7 +744,7 @@
                                                             <div class="box overflow-hidden">
                                                                 <div class="header-match-height">
                                                                     <div class="box--header bg-p2 text-white p-3">
-                                                                        <h3 class="m-0 py-2 mt-1">Motorcycle 3PA Insurance</h3>
+                                                                        <h3 class="m-0">Motorcycle 3PA <br class="d-none d-lg-block" /> Insurance</h3>
                                                                     </div>
                                                                     <div class="mt-4 mb-3">
                                                                         <svg class="icon icon-7xl ">
@@ -768,7 +790,7 @@
                                                                         </li>
                                                                     </ul>
 
-                                                                    <div class="text-center py-2">
+                                                                    <div class="d-flex justify-content-center py-2">
                                                                         <div class="custom-rounded-checked">
                                                                             <svg class="icon icon-m tick-mark my-2">
                                                                                 <use xlink:href="/spa-assets/icons/icons.svg#sprite-tick-mark"
@@ -790,7 +812,7 @@
                                         <!-- Checkboxes for add-ons -->
                                         <div class="check-list-container" v-if="formData['3'].motorPlanType === 'm3pa'">
                                             <div class="d-flex mt-5">
-                                                <h2 class="p2 mb-0">Pre-Bundled Add-On</h2>
+                                                <h2 class="p2 mb-0">Packaged Add-On</h2>
                                             </div>
                                             <div class="checkbox-list mb-5 mt-4">
                                                 <div class="d-flex align-items-center">
@@ -801,14 +823,6 @@
                                                         </svg>
                                                     </span>
                                                     <p class="bt2 ml-3 mb-0 bold">Rider’s Personal Accident (Non-Tariff)</p>
-                                                    <span>
-                                                        <div class="ml-2 btn-tooltip"
-                                                            data-toggle="tooltip"
-                                                            data-placement="right"
-                                                            title="Get covered against death or permanent disablement resulting from a road accident whilst using the insured motorcycle. In the event of death of the policyholder or authorised rider from an accident, we will pay a bereavement allowance.">
-                                                            ?
-                                                        </div>
-                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -883,8 +897,7 @@
 
                                             <div class="checkbox-list my-4">
                                                 <div :class="{
-                                                    'd-flex align-items-md-center': true,
-                                                    'disabled-check': formData['3'].motorPlanType === 'm3pa'
+                                                    'd-flex align-items-md-center': true
                                                 }">
                                                     <div class="form-check">
                                                         <input type="checkbox"
@@ -914,8 +927,7 @@
 
                                             <div class="checkbox-list my-4">
                                                 <div :class="{
-                                                    'd-flex align-items-md-center': true,
-                                                    'disabled-check': formData['3'].motorPlanType === 'm3pa'
+                                                    'd-flex align-items-md-center': true
                                                 }">
                                                     <div class="form-check">
                                                         <input type="checkbox"
@@ -1032,9 +1044,9 @@
                                             </div>
                                             <div class="col-12 col-md-6">
                                                 <p class="bt1 mb-0">Variant:</p>
-                                                <p class="bt2" v-if="!formData['4'].isMotorDetailsEditMode">{{ formData['2'].variant }}</p>
+                                                <p class="bt2" v-if="!formData['4'].isMotorDetailsEditMode">{{ formData['2'].motorModel.variant }} {{ formData['2'].motorModel.style }} {{ formData['2'].motorModel.engine }} {{ formData['2'].motorModel.seat }} SEAT {{ formData['2'].motorModel.transmission }}</p>
                                                 <div class="form-group" v-if="formData['4'].isMotorDetailsEditMode">
-                                                    <input type="text" class="form-control" v-model="formData['2'].variant" disabled>
+                                                    <input type="text" class="form-control" :value="formData['2'].motorModel.variant + ' ' + formData['2'].motorModel.style + ' ' + formData['2'].motorModel.engine + ' ' + formData['2'].motorModel.seat + ' SEAT ' + formData['2'].motorModel.transmission" disabled>
                                                 </div>
                                             </div>
                                             <div class="col-12 col-md-6">
@@ -1058,10 +1070,15 @@
                                             </div>
                                             <div class="col-12 col-md-6">
                                                 <p class="bt1 mb-0">Sum Insured Value:</p>
-                                                <p class="bt2" v-if="!formData['4'].isMotorDetailsEditMode">{{ formData['2'].sumInsuredType === 'marketValue' ? 'Market Value' : 'Recommended Value' }}</p>
-                                                <div class="form-group" v-if="formData['4'].isMotorDetailsEditMode">
-                                                    <input type="text" class="form-control" :value="formData['2'].sumInsuredType === 'marketValue' ? 'Market Value' : 'Recommended Value'" disabled>
-                                                </div>
+                                                <template v-if="formData['3'].motorPlanType === 'comprehensive'">
+                                                    <p class="bt2" v-if="!formData['4'].isMotorDetailsEditMode">
+                                                        {{ formData['2'].sumInsuredType === 'marketValue' ? 'Market Value' : 'Recommended Value' }}
+                                                    </p>
+                                                    <div class="form-group" v-if="formData['4'].isMotorDetailsEditMode">
+                                                        <input type="text" class="form-control" :value="formData['2'].sumInsuredType === 'marketValue' ? 'Market Value' : 'Recommended Value'" disabled>
+                                                    </div>
+                                                </template>
+                                                <p class="bt2" v-else>Not Applicable</p>
                                             </div>
                                             <div class="col-12 col-md-6">
                                                 <p class="bt1 mb-0">Cubic Capacity:</p>
@@ -1377,7 +1394,7 @@
                                                 }"
                                                 v-model="formData['4'].tncAgreement">
                                             <label for="tncAgreement" class="form-check-label pr-md-5">
-                                                By ticking this box, I hereby acknowledge that I have read the <a class="underline" href="/msigonline/resource/MSIG%20Motorcycle%20Insurance%20PDS%20(Rebate).pdf">Product Disclosure Sheet</a> and agree to the <a href="#" class="underline">Terms and Conditions</a>.
+                                                By ticking this box, I hereby acknowledge that I have read the <a class="underline" target="_blank" href="/msigonline/resource/MSIG%20Motorcycle%20Insurance%20PDS%20(Rebate).pdf">Product Disclosure Sheet</a> and agree to the <a href="#" class="underline" @click.prevent="showTncModal">Terms and Conditions</a>.
                                             </label>
                                             <svg class="icon icon-m tick-mark">
                                                 <use xlink:href="/spa-assets/icons/icons.svg#sprite-tick-mark"
@@ -1414,7 +1431,7 @@
                                         }"
                                         v-model="formData['4'].tncAgreement">
                                     <label for="m_tncAgreement" class="form-check-label pr-md-5">
-                                        By ticking this box, I hereby acknowledge that I have read the <a class="underline" href="/msigonline/resource/MSIG%20Motorcycle%20Insurance%20PDS%20(Rebate).pdf">Product Disclosure Sheet</a> and agree to the <a href="#" class="underline">Terms and Conditions</a>.
+                                        By ticking this box, I hereby acknowledge that I have read the <a class="underline" href="/msigonline/resource/MSIG%20Motorcycle%20Insurance%20PDS%20(Rebate).pdf">Product Disclosure Sheet</a> and agree to the <a href="#" class="underline" @click.prevent="showTncModal">Terms and Conditions</a>.
                                     </label>
                                     <svg class="icon icon-m tick-mark">
                                         <use xlink:href="/spa-assets/icons/icons.svg#sprite-tick-mark"
@@ -1471,7 +1488,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="box--body px-3 pt-0 pb-3">
-                                                                <div class="text-center py-2">
+                                                                <div class="d-flex justify-content-center py-2">
                                                                     <div class="custom-rounded-checked">
                                                                         <svg class="icon icon-m tick-mark my-2">
                                                                             <use xlink:href="/spa-assets/icons/icons.svg#sprite-tick-mark"
@@ -1515,7 +1532,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="box--body px-3 pt-0 pb-3">
-                                                                <div class="text-center py-2">
+                                                                <div class="d-flex justify-content-center py-2">
                                                                     <div class="custom-rounded-checked">
                                                                         <svg class="icon icon-m tick-mark my-2">
                                                                             <use xlink:href="/spa-assets/icons/icons.svg#sprite-tick-mark"
@@ -1557,7 +1574,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="box--body px-3 pt-0 pb-3">
-                                                                <div class="text-center py-2">
+                                                                <div class="d-flex justify-content-center py-2">
                                                                     <div class="custom-rounded-checked">
                                                                         <svg class="icon icon-m tick-mark my-2">
                                                                             <use xlink:href="/spa-assets/icons/icons.svg#sprite-tick-mark"
@@ -1612,7 +1629,7 @@
                                                                     'form-control': true,
                                                                     'is-invalid': validator.errors.length > 0
                                                                 }"
-                                                                placeholder="e.g. hteoro@gmail.com"
+                                                                placeholder="E.g.: you@gmail.com"
                                                                 v-model="formData['5'].fpxEmail">
                                                             <small class="error-message text-primary font-italic" v-if="validator.errors.length > 0">
                                                                 <span v-if="validator.failedRules.required">* Complete the Email field.</span>
@@ -1784,7 +1801,7 @@
 
                                     <div class="d-none d-md-block" v-if="formData['5'].paymentMethod === 'fpxPaymentGateway'">
                                         <p class="bt2">By clicking <strong>"Pay Now"</strong> button, you agree to FPX's
-                                            <a href="#" target="_blank" class="underline">Terms & Conditions</a>.
+                                            <a href="https://www.mepsfpx.com.my/FPXMain/termsAndConditions.jsp" target="_blank" class="underline">Terms & Conditions</a>.
                                         </p>
                                     </div>
                                     
