@@ -34,12 +34,16 @@
 
     select.form-control[disabled] {
         background-image: none;
-
     }
 
+    select.form-control.no-value {
+        color: #525252;
+        font-style: italic;
+    }
 
-
-
+    input.italic-placeholder::placeholder {
+        font-style: italic;
+    }
 }
 
 .form-row {
