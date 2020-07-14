@@ -1,4 +1,5 @@
 .form-check {
+
     .form-check-input[type=checkbox] {
         visibility: hidden;
         position: absolute;
@@ -20,6 +21,14 @@
                 position: absolute;
                 left: 0;
                 transition: 0.2s ease border-color;
+            }
+        }
+
+        &:disabled + .form-check-label {
+            opacity: .6;
+
+            &::before {
+                opacity: .4;
             }
         }
     }
