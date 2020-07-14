@@ -1,4 +1,4 @@
-.modal.variant-msig {
+.modal {
     &.fade .modal-dialog {
         transform: translateY(0)
     }
@@ -8,24 +8,56 @@
         border: 0;
     }
 
-    .modal-header {
-        background-color: $p2;
-        border-top-left-radius: 0;
-        border-top-right-radius: 0;
-        border-bottom: 0;
+    &.variant-msig {
+        .modal-header {
+            background-color: $p2;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+            border-bottom: 0;
+    
+            .modal-title {
+                margin-bottom: 0;
+            }
+    
+            .btn-close {
+                appearance: none;
+                border: 0;
+                background-color: transparent;
+                
+                svg {
+                    stroke: #fff;
+                }
+            }
+        }
+    }
 
-        .modal-title {
-            margin-bottom: 0;
+    &.variant-tnc {
+        .modal-header {
+            background-color: #fff;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+            border-bottom: 0;
+            padding: 0;
+
+            .btn-close {
+                appearance: none;
+                border: 0;
+                border-radius: 50%;
+                height: 40px;
+                width: 40px;
+                background-color: $p2;
+                position: absolute;
+                right: 1rem;
+                top: 1rem;
+                
+                svg {
+                    stroke: #fff;
+                }
+            }
         }
 
-        .btn-close {
-            appearance: none;
-            border: 0;
-            background-color: transparent;
-            
-            svg {
-                stroke: #fff;
-            }
+        strong {
+            font-size: 1.5rem;
         }
     }
 }
