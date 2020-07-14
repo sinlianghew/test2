@@ -99,7 +99,8 @@ const m3paform = new Vue({
                 addressStateCode: '',
                 addressCity: '',
                 policyHolderMaritalStatus: '',
-                policyHolderOccupation: ''
+                policyHolderOccupation: '',
+                sumInsuredType: ''
             },
             3: {
                 motorPlanType: '',
@@ -109,16 +110,7 @@ const m3paform = new Vue({
                 motorAddLegalLiabilityOfPassengers: '',
                 motorAddSpecialPerils: '',
                 motorAddSRCC: '',
-                allRiderPlan: false,
-                
-                isRenewRoadtax: null,
-                roadtaxCollectionMethod: 'homeOfficeDelivery',
-                roadtaxDelAddrSameAsMotor: false,
-                roadtaxDelRegion: '',
-                roadtaxAddressLine1: '',
-                roadtaxAddressLine2: '',
-                roadtaxPostcode: '',
-                roadtaxCity: ''
+                allRiderPlan: true,
             },
             4: {
                 tncAgreement: false,
@@ -496,28 +488,24 @@ const m3paform = new Vue({
         /**
          * Used in template to handle a change in the variant of the motorcycle
          */
-        handleMotorModelChanged() {
+        async handleMotorModelChanged() {
             this.formData['2'].motorModelCode = this.formData['2'].motorModel.modelCode;
             this.formData['2'].make = this.formData['2'].motorModel.make;
             this.formData['2'].family = this.formData['2'].motorModel.family;
+            this.loading = true;
+            await this.findVehicleSumInsured()
+            this.loading = false;
         },
         async handleMotorcycleLocationChanged () {
-            const motorSumInsured = await this.findVehicleSumInsured()
-            this.formData['2'] = {
-                ...this.formData['2'],
-                ...motorSumInsured
-            }
-            this.formData['2'].sumInsuredType = this.formData['2'].sumInsuredType === 'MarketValue' ? 'marketValue' : 'recomendedValue';
-            
-            if (!motorSumInsured.canProceed) {
-                this.errorMessage = '<p>The car sum insured is not available in the system.  Please download the application form <a style="width: auto; height: auto; display: inline-block; line-height: initial; background: transparent;text-decoration:underline" href="../../resource/Motor_ProposalForm.pdf" target="_blank"><b><u> here </u></b></a> and email to us.</p>'
-                this.canProceed = false;
-                sessionStorage.removeItem('m3pa_data')
-            }
+            this.loading = true;
+            await this.findVehicleSumInsured()
+            this.loading = false;
         },
-        findVehicleSumInsured () {
+        async findVehicleSumInsured () {
+            if (!this.formData['2'].motorVehicleLocation) return;
+
             let apiUrl = this.baseUrl + '/dotCMS/purchase/buynow';
-            return $.ajax({
+            const motorSumInsured = await $.ajax({
                 type: "POST",
                 url: apiUrl,
                 dataType: 'json',
@@ -545,6 +533,19 @@ const m3paform = new Vue({
                     staffRelationship: this.staffRelationship
                 }
             }).promise()
+
+            this.formData['2'] = {
+                ...this.formData['2'],
+                ...motorSumInsured
+            }
+
+            this.formData['2'].sumInsuredType = this.formData['2'].sumInsuredType === 'MarketValue' ? 'marketValue' : 'recomendedValue';
+            
+            if (!motorSumInsured.canProceed) {
+                this.errorMessage = '<p>The car sum insured is not available in the system.  Please download the application form <a style="width: auto; height: auto; display: inline-block; line-height: initial; background: transparent;text-decoration:underline" href="../../resource/Motor_ProposalForm.pdf" target="_blank"><b><u> here </u></b></a> and email to us.</p>'
+                this.canProceed = false;
+                sessionStorage.removeItem('m3pa_data')
+            }
         },
         async findErrorByErrorCodeAsync (errorCode) {
             const queryObj = {
@@ -730,6 +731,7 @@ const m3paform = new Vue({
         cancelEditMotorDetails: function () {
             this.formData['4'].motorVehicleLocation = this.formData['2'].motorVehicleLocation;
             this.formData['4'].isMotorDetailsEditMode = false;
+            this.handleMotorcycleLocationChanged()
         },
         saveEditMotorDetails: function () {
             this.formData['2'].motorVehicleLocation = this.formData['4'].motorVehicleLocation;
@@ -1187,6 +1189,10 @@ const m3paform = new Vue({
                 this.formData['3'].motorAddRiderPA = false;
             }
             this.calculatePremiumAsync()
+            this.initializeTooltips()
+        },
+        showTncModal () {
+            $(this.$el).find('#tnc-modal').modal('show')
         }
     },
     computed: {
