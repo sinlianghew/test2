@@ -7,6 +7,7 @@ import VueBootstrapTypeahead from 'vue-typeahead-bootstrap/dist/VueBootstrapType
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import { extractDOB, createDotCMSQueryURL, getCardType, scrollTo, getInputValueOrEmpty } from '../helpers/utilities';
 import MotorcycleSummaryPane from '../components/motorcycle-summary-pane';
+import Datepicker from 'vuejs-datepicker';
 Vue.component('motor-summary-pane', MotorcycleSummaryPane)
 
 /**
@@ -49,7 +50,7 @@ const m3paform = new Vue({
         steps: [
             { stepNum: '1', title: 'Get Started', completed: false, showPrescreen: true, hash: 'prescreen' },
             { stepNum: '2', title: 'Fill In Details', completed: false, hash: 'fillindetails' },
-            { stepNum: '3', title: 'Choose Add-Ons', completed: false, hash: 'planselection' },
+            { stepNum: '3', title: 'Plan Selection', completed: false, hash: 'planselection' },
             { stepNum: '4', title: 'REVIEW', completed: false, hash: '' },
             { stepNum: '5', title: 'PAY', completed: false, hash: '' }
         ],
@@ -94,6 +95,7 @@ const m3paform = new Vue({
                 policyHolderAddressLine1: '',
                 policyHolderAddressLine2: '',
                 policyHolderGender: '', // remember to use computed property instead
+                policyHolderDateOfBirth: '',
                 addressPostcode: '',
                 addressState: '',
                 addressStateCode: '',
@@ -153,12 +155,19 @@ const m3paform = new Vue({
                 pattern: /[0-9A-Za-z]/,
                 transform: v => v.toLocaleUpperCase()
             }
+        },
+
+        openDate: moment().subtract(18, "years").toDate(),
+        disabledDates: {
+            from: moment().subtract(18, "years").toDate(),
+            to: moment().subtract(75, "years").toDate()
         }
     },
     components: {
         ValidationProvider,
         ValidationObserver,
-        VueBootstrapTypeahead
+        VueBootstrapTypeahead,
+        Datepicker
     },
     directives: {
         mask,
@@ -166,6 +175,10 @@ const m3paform = new Vue({
     },
     methods: {
         createDotCMSQueryURL,
+        findCountryByCode (code) {
+            if (!this.countries) return ''
+            return this.countries.find(c => c.code === code)
+        },
         saveSession () {
             const state = {
                 allModelsByMake: this.allModelsByMake,
@@ -1200,19 +1213,31 @@ const m3paform = new Vue({
             return this.formData['1'].policyHolderIdType === 'nric';
         },
         policyHolderGender: {
-            get: function () {
-                const last4Digits = this.formData['1'].policyHolderNric.split('-')[2]
-                return last4Digits % 2 === 1 ? 'M' : 'F'
-            },
-            set: function (value) {
-                if (this.isIdNric) {
-                    this.formData['2'].policyHolderGender = value
+            cache: false,
+            get () {                
+                if (!this.isIdNric) {
+                    return this.formData['2'].policyHolderGender || ''
                 }
+                if (this.isIdNric) {
+                    const last4Digits = this.formData['1'].policyHolderNric.split('-')[2]
+                    return last4Digits % 2 === 1 ? 'M' : 'F'
+                }
+            },
+            set (value) {
+                this.formData['2'].policyHolderGender = value
             }
         },
-        policyHolderDob: function () {
-            const nric = this.formData['1'].policyHolderNric;
-            return extractDOB(nric);
+        policyHolderDob: {
+            get () {
+                if (this.isIdNric) {
+                    const nric = this.formData['1'].policyHolderNric;
+                    return extractDOB(nric);
+                }
+                return this.formData['2'].policyHolderDateOfBirth;          
+            },
+            set (value) {
+                this.formData['2'].policyHolderDateOfBirth = value;
+            }
         },
         fullAddress: function () {
             return `${this.formData['2'].policyHolderAddressLine1}, ${this.formData['2'].policyHolderAddressLine2}, ${this.formData['2'].addressPostcode} ${this.formData['2'].addressCity}, ${this.formData['2'].addressState}`
