@@ -1,6 +1,6 @@
 {% verbatim %}
 
-<div :class="{ 'summary-pane': true, 'is-expanded': isExpanded, 'has-total': currStepNum > 2 }">
+<div :class="{ 'summary-pane': true, 'is-expanded': isExpanded, 'has-total': currStepNum > 2 && currStepNum < 4, 'non-stick-mobile': currStepNum > 3 }">
 	<div class="header section-header bg-p2 py-lg-4" @click.prevent="toggleExpand">
 		<div class="inner-container">
 			<div class="section-title">
@@ -13,7 +13,7 @@
 				</div>
 			</div>
 
-			<div class="sub-header" v-if="currStepNum > 2">
+			<div class="sub-header" v-if="currStepNum > 2 && currStepNum < 4">
 				<p class="bt1 w mb-0"><strong>Total Amount Payable</strong></p>
 				<p class="price w mb-0">RM {{ formatAsCurrency(formData['3'].totalPayable) }}</p>
 			</div>

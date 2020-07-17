@@ -20,7 +20,7 @@
     <input type="hidden" name="supportTel" value="1-800-88-6744">
     <input type="hidden" name="thankYouPageUrl" value="/payment-completed.html">
     <input type="hidden" name="registrationUrl" value="/msigonline/products/motorcycle/registration.html">
-    <input type="hidden" name="summaryUrl" value="/msigonline/products/motorcycle/summary.html">
+    <input type="hidden" name="summaryUrl" value="/motorcycle-summary.html">
     <input type="hidden" name="paymentUrl" value="/msigonline/products/motorcycle/payment.html">
     <input type="hidden" name="productMinAge" value="$product.getMinAge()" />
     <input type="hidden" name="productMinAgeUnit" value="year" />
@@ -1467,7 +1467,7 @@
                                     <!-- #endregion Rider Details -->
 
                                     <validation-provider v-slot="validator" rules="mustBeTrue">
-                                        <div class="form-check d-none d-md-block">
+                                        <div class="form-check d-none d-lg-block">
                                             <input type="checkbox"
                                                 name="tncAgreement"
                                                 id="tncAgreement"
@@ -1490,7 +1490,7 @@
                                         </div>
                                     </validation-provider>
 
-                                    <div class="pt-4 wizard-navigation d-none d-md-flex">
+                                    <div class="pt-4 wizard-navigation d-none d-lg-flex">
                                         <a @click.prevent="goToPrevStep()" href="#" role="button" class="btn btn-default btn-outline-primary mr-4">Back</a>
                                         <a @click.prevent="observer.handleSubmit(onSubmit).then(function() { scrollToError() })" href="#" role="button" class="btn btn-default btn-primary">Checkout</a>
                                     </div>
@@ -1505,7 +1505,7 @@
                         </div>
                         <div class="container">
                             <validation-provider v-slot="validator" rules="mustBeTrue">
-                                <div class="form-check d-md-none mt-3">
+                                <div class="form-check d-lg-none mt-3">
                                     <input type="checkbox" 
                                         name="m_tncAgreement" 
                                         id="m_tncAgreement" 
@@ -1527,7 +1527,7 @@
                                 </div>
                             </validation-provider>
                         </div>
-                        <div class="container pt-4 wizard-navigation d-md-none">
+                        <div class="container pt-4 wizard-navigation d-lg-none">
                             <a @click.prevent="observer.handleSubmit(onSubmit).then(function() { scrollToError() })" href="#" role="button" class="btn btn-default btn-primary mb-3 mb-md-0">Checkout</a>
                             <a @click.prevent="goToPrevStep()" role="button" class="btn btn-default btn-outline-primary ">Back</a>
                         </div>

@@ -62,6 +62,24 @@ $footer-offset: 30px;
         }
     }
 
+    @include media-breakpoint-down (md) {
+        &.non-stick-mobile {
+            position: static;
+            transform: none;
+            min-height: auto;
+            overflow: hidden;
+    
+            .btn-toggle {
+                visibility: hidden;
+            }
+    
+            .body {
+                overscroll-behavior: auto;
+                min-height: auto;
+            }
+        }
+    }
+
     .footer {
         height: #{$footer-xs-height};
     }
