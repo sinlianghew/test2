@@ -8,3 +8,8 @@ form#msform {
     display: flex;
     color: #fff;
 }
+
+main#main-content {
+    min-height: calc(100vh - 66px);
+    background-color: $p2d;
+}

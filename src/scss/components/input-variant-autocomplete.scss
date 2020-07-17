@@ -1,6 +1,10 @@
 .form-group.variant-autocomplete {
     input[type=search].form-control {
         box-sizing: border-box;
+
+        &.is-invalid + .input-group-append {
+            display: none;
+        }
     }
 
     .vbt-autcomplete-list {

@@ -1,4 +1,6 @@
 .form-wizard {
+    height: 100%;
+
     .wizard-navigation {
         display: flex;
         flex-direction: column;
@@ -46,5 +48,9 @@
         @include media-breakpoint-up(lg) {
             padding-bottom: 3rem;
         }
+    }
+
+    .error-container {
+        height: 100%;
     }
 } 

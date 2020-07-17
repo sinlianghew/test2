@@ -1,13 +1,13 @@
 .footer-wrapper {
     height: 30px;
-    background: #222222;
+    background: #e2e2e2;
     width: 100%;
     position: fixed;
     bottom: 0;
     z-index: $zindex-fixed;
 
     p {
-        color: #fff;
+        color: $p2;
     }
 }
 

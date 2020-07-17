@@ -59,27 +59,29 @@
     </div>
 
     {% verbatim %}
-        <div class="container py-5" v-if="canProceed">
-            <h1>Motorcycle Insurance</h1>
-            <!-- Steppers -->
-            <div class="nav variant-steppers">
-                <div :class="{
-                    'nav-item step': true,
-                    'current': currStep == step,
-                    'completed': step.completed
-                }" v-for="step in steps" v-bind:key="steps.indexOf(step)">
-                    <div class="step-indicator">
-                        <span>
-                            {{ step.stepNum }}
-                        </span>
-                        <svg class="icon icon-s tick-mark">
-                            <use xlink:href="/spa-assets/icons/icons.svg#sprite-tick-mark" href="/spa-assets/icons/icons.svg#sprite-tick-mark"></use>
-                        </svg>
+        <div class="bg-w" v-if="canProceed">
+            <div class="container py-4 py-md-5">
+                <h1>Motorcycle Insurance</h1>
+                <!-- Steppers -->
+                <div class="nav variant-steppers">
+                    <div :class="{
+                        'nav-item step': true,
+                        'current': currStep == step,
+                        'completed': step.completed
+                    }" v-for="step in steps" v-bind:key="steps.indexOf(step)">
+                        <div class="step-indicator">
+                            <span>
+                                {{ step.stepNum }}
+                            </span>
+                            <svg class="icon icon-s tick-mark">
+                                <use xlink:href="/spa-assets/icons/icons.svg#sprite-tick-mark" href="/spa-assets/icons/icons.svg#sprite-tick-mark"></use>
+                            </svg>
+                        </div>
+                        <div class="step-title">{{ step.title }}</div>
                     </div>
-                    <div class="step-title">{{ step.title }}</div>
                 </div>
+                <!-- Steppers -->
             </div>
-            <!-- Steppers -->
         </div>
 
         <div class="bg-p2d pt-5 wizard-sections position-relative" v-if="canProceed">
@@ -87,12 +89,30 @@
                 <form @submit.prevent="observer.handleSubmit(onSubmit)">
                     <fieldset class="wizard-section-1" v-if="currStep && currStep.stepNum === '1'">
                         <div class="container">
-                            <div class="bg-w py-5 px-md-5 px-3 mx-md-2">
+                            <div class="bg-w py-5 px-md-5 px-3 mx-md-2" v-if="steps[0].showStaffVerification">
+                                <p>Please fill in your Staff ID before proceed</p>
+                                <div class="row">
+                                    <div class="col-12 col-md-6">
+                                        <validation-provider slim rules="required" v-slot="validator">
+                                            <div class="form-group">
+                                                <input type="text" 
+                                                    :class="{ 'form-control': true, 'is-invalid': validator.errors.length > 0 }"
+                                                    placeholder="XXXXXX"
+                                                    v-uppercase
+                                                    v-model="staffId">
+                                                <div class="invalid-feedback font-italic">Complete the Staff ID Field</div>
+                                            </div>    
+                                        </validation-provider>
+                                        <div :class="{ 'invalid-feedback font-italic': true, 'd-block': staffIDInvalid }">Oops! We couldn't find the Staff ID you entered. Please enter a correct one to proceed.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-w py-5 px-md-5 px-3 mx-md-2" v-if="!steps[0].showStaffVerification">
                                 <h2 class="p2">Get Started</h2>
 
                                 <div class="bt2 mt-4" v-if="steps[0].showPrescreen">
                                     <p>
-                                        Please make sure you meet the following conditions.
+                                        Please make sure you meet the following conditions:
                                     </p>
                                     <ol class="pl-3">
                                         <li>You are between 16 and 75 years old.</li>
@@ -233,23 +253,34 @@
                             </div>
                         </div>
                         <div class="container pt-4 wizard-navigation d-flex flex-column flex-md-row">
-                            <a class="btn btn-default btn-outline-primary order-1 order-md-0"
-                                v-if="steps[0].showPrescreen">No</a>
-                            <a href="#" 
-                                role="button"
-                                class="btn btn-default btn-primary mb-3 mb-md-0"
-                                v-if="steps[0].showPrescreen"
-                                @click.prevent="setPrescreen(false)">
-                                Yes</a>
-                            <a class="btn btn-default btn-outline-primary order-1 order-md-0" 
-                                @click.prevent="setPrescreen(true)"
-                                v-if="!steps[0].showPrescreen">Back</a>
-                            <a href="#"
-                                @click.prevent="observer.handleSubmit(onSubmit).then(function() { scrollToError() })"
-                                class="btn btn-default btn-primary mb-3 mb-md-0" 
-                                v-if="!steps[0].showPrescreen">
-                                Continue
-                            </a>
+                            <template v-if="steps[0].showStaffVerification">
+                                <a :href="'/' + partnerCode + '/products'" class="btn btn-default btn-outline-primary order-1 order-md-0">Back</a>
+                                <a href="#" role="button"
+                                    class="btn btn-default btn-primary mb-3 mb-md-0"
+                                    @click.prevent="verifyStaffID">
+                                    Continue
+                                </a>
+                            </template>
+                            <template v-else>
+                                <a @click="canProceed = false"
+                                    class="btn btn-default btn-outline-primary order-1 order-md-0"
+                                    v-if="steps[0].showPrescreen">No</a>
+                                <a href="#" 
+                                    role="button"
+                                    class="btn btn-default btn-primary mb-3 mb-md-0"
+                                    v-if="steps[0].showPrescreen"
+                                    @click.prevent="setPrescreen(false)">
+                                    Yes</a>
+                                <a class="btn btn-default btn-outline-primary order-1 order-md-0" 
+                                    @click.prevent="setPrescreen(true)"
+                                    v-if="!steps[0].showPrescreen">Back</a>
+                                <a href="#"
+                                    @click.prevent="observer.handleSubmit(onSubmit).then(function() { scrollToError() })"
+                                    class="btn btn-default btn-primary mb-3 mb-md-0" 
+                                    v-if="!steps[0].showPrescreen">
+                                    Continue
+                                </a>
+                            </template>
                         </div>
                     </fieldset>
                     
@@ -446,7 +477,7 @@
                                                             placeholder="E.g.: you@gmail.com">
                                                         <small class="error-message text-primary font-italic" v-if="validator.errors.length > 0">
                                                             <span v-if="validator.failedRules.required">* Complete the Email field.</span>
-                                                            <span v-else-if="validator.failedRules.email">Please check email address</span>
+                                                            <span v-else-if="validator.failedRules.email">Please enter a valid email address</span>
                                                         </small>
                                                     </div>
                                                 </validation-provider>
@@ -568,10 +599,10 @@
                                                         </vue-bootstrap-typeahead>
                                                         <div class="small error-message text-primary font-italic" v-if="validator.errors.length > 0">
                                                             <span v-if="validator.failedRules.required">
-                                                                * Complete the Postal Code field.
+                                                                * Complete the Postcode field.
                                                             </span>
                                                             <span v-else-if="validator.failedRules.min || validator.failedRules.max || validator.failedRules.integer">
-                                                                Please enter a valid Postal Code.
+                                                                Please enter a valid Postcode.
                                                             </span>
                                                         </div>
                                                     </div>
@@ -777,9 +808,9 @@
                                                         </label>
                                                     </div>
 
-                                                    <div class="selection-infobox px-md-2">
+                                                    <div class="selection-infobox px-md-2 pt-3 pt-md-0">
                                                         <label class="d-block">
-                                                            <strong class="flag-recommended text-primary text-center d-block py-2 invisible">
+                                                            <strong class="flag-recommended text-primary text-center d-none d-md-block py-2 invisible">
                                                                 <svg class="icon">
                                                                     <use xlink:href="/spa-assets/icons/icons.svg#sprite-star"
                                                                         href="/spa-assets/icons/icons.svg#sprite-star"></use>
@@ -869,13 +900,20 @@
                                                         </svg>
                                                     </span>
                                                     <p class="bt2 ml-3 mb-0 font-weight-bold">Rider’s Personal Accident (Non-Tariff)</p>
+                                                    <span>
+                                                        <div class="ml-2 btn-tooltip" data-toggle="tooltip"
+                                                            data-placement="right"
+                                                            title="Get covered against death or permanent disablement resulting from a road accident whilst using the insured motorcycle. In the event of death of the policyholder or authorised rider from an accident, we will pay a bereavement allowance.">
+                                                            ?
+                                                        </div>
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="check-list-container">
                                             <div class="d-flex mt-5 mb-4">
-                                                <h2 class="p2">Choose More Optional Add-On</h2>
+                                                <h2 class="p2">Choose Your Optional Add-On</h2>
                                             </div> 
 
                                             <div class="checkbox-list" v-if="formData['3'].motorPlanType === 'comprehensive'">
@@ -1215,7 +1253,7 @@
                                                                 placeholder="E.g. 900808-10-8888">
                                                             <small class="error-message text-primary font-italic" v-if="validator.errors.length > 0">
                                                                 <span v-if="validator.failedRules.required">* Complete the Email field.</span>
-                                                                <span v-else-if="validator.failedRules.email">Please check email address</span>
+                                                                <span v-else-if="validator.failedRules.email">Please enter a valid email address</span>
                                                             </small>
                                                         </div>
                                                     </validation-provider>
@@ -1293,10 +1331,10 @@
                                                             </vue-bootstrap-typeahead>
                                                             <div class="small error-message text-primary font-italic" v-if="validator.errors.length > 0">
                                                                 <span v-if="validator.failedRules.required">
-                                                                    * Complete the Postal Code field.
+                                                                    * Complete the Postcode field.
                                                                 </span>
                                                                 <span v-else-if="validator.failedRules.min || validator.failedRules.max || validator.failedRules.integer">
-                                                                    Please enter a valid Postal Code.
+                                                                    Please enter a valid Postcode.
                                                                 </span>
                                                             </div>
                                                         </div>
@@ -1499,23 +1537,15 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col-12 col-lg-8">
-                                    <div class="bg-w py-5 px-4 mb-3">
+                                    <div class="bg-w pt-5 pb-4 pb-md-5 px-4 mb-3">
                                         <h2 class="p2 mb-4">Payment</h2>
 
-                                        <p class="bt1 color-black font-weight-bold mb-0">Payment Method:</p>
-                                        <div class="vertical-scroller mb-3">
+                                        <p class="bt1 color-black font-weight-bold">Payment Method:</p>
+                                        <div class="vertical-scroller mb-md-3">
                                             <div class="d-flex">
                                                 <!-- card one -->
                                                 <div class="selection-infobox mb-3 mb-lg-0 mr-3">
                                                     <label class="d-block">
-                                                        <strong
-                                                            class="flag-recommended text-primary text-center d-block mb-2 invisible">
-                                                            <svg class="icon">
-                                                                <use xlink:href="/spa-assets/icons/icons.svg#sprite-star"
-                                                                    href="/spa-assets/icons/icons.svg#sprite-star"></use>
-                                                            </svg>
-                                                            <span></span>
-                                                        </strong>
                                                         <input type="radio" 
                                                             name="choosePayment" 
                                                             value="fpxPaymentGateway"
@@ -1551,14 +1581,6 @@
                                                 <!-- card two -->
                                                 <div class="selection-infobox mb-3 mb-lg-0 mr-3">
                                                     <label class="d-block">
-                                                        <strong
-                                                            class="flag-recommended text-primary text-center d-block mb-2 invisible">
-                                                            <svg class="icon">
-                                                                <use xlink:href="/spa-assets/icons/icons.svg#sprite-star"
-                                                                    href="/spa-assets/icons/icons.svg#sprite-star"></use>
-                                                            </svg>
-                                                            <span></span>
-                                                        </strong>
                                                         <input type="radio"
                                                             name="choosePayment"
                                                             value="abmbGateway"
@@ -1595,13 +1617,6 @@
                                                 <!-- card 3 -->
                                                 <div class="selection-infobox mb-3 mb-lg-0 mr-3">
                                                     <label class="d-block">
-                                                        <strong class="flag-recommended text-primary text-center d-block mb-2 invisible">
-                                                            <svg class="icon">
-                                                                <use xlink:href="/spa-assets/icons/icons.svg#sprite-star"
-                                                                    href="/spa-assets/icons/icons.svg#sprite-star"></use>
-                                                            </svg>
-                                                            <span></span>
-                                                        </strong>
                                                         <input type="radio"
                                                             name="choosePayment"
                                                             value="ewalletPaymentMethod"
@@ -1679,7 +1694,7 @@
                                                                 v-model="formData['5'].fpxEmail">
                                                             <small class="error-message text-primary font-italic" v-if="validator.errors.length > 0">
                                                                 <span v-if="validator.failedRules.required">* Complete the Email field.</span>
-                                                                <span v-else-if="validator.failedRules.email">Please check email address</span>
+                                                                <span v-else-if="validator.failedRules.email">Please enter a valid email address</span>
                                                             </small>
                                                         </div>
                                                     </validation-provider>
@@ -1745,7 +1760,7 @@
                                                                     'is-invalid': validator.errors.length > 0
                                                                 }">
                                                             <small v-if="validator.failedRules.required" class="error-message text-primary font-italic">
-                                                                <span>* Please enter a valid Visa / MasterCard No.</span>
+                                                                <span>* Complete the Name field.</span>
                                                             </small>
                                                         </div>
                                                     </validation-provider>

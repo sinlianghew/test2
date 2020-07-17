@@ -161,7 +161,6 @@ body {
 
     /** Customizations **/
     @import "custom/utilities";
-    @import "custom/overrides";
     @import "custom/form";
 
     /** Bootstrap **/
@@ -249,5 +248,4 @@ body {
 }
 // copy client css end
 
-/** Bootstrap **/
-// @import "node_modules/bootstrap/scss/bootstrap.scss";
+@import "custom/overrides";
