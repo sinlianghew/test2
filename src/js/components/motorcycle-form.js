@@ -45,10 +45,19 @@ const m3paform = new Vue({
         coveragePremiumRate: getInputValueOrEmpty("coveragePremiumRate"),
         coveragePremiumUpgradeRate: getInputValueOrEmpty("coveragePremiumUpgradeRate"),
         coveragePremiumType: getInputValueOrEmpty("coveragePremiumType"),
+        
         wishToRestoreSession: false,
+        staffIDInvalid: false,
 
         steps: [
-            { stepNum: '1', title: 'Get Started', completed: false, showPrescreen: true, hash: 'prescreen' },
+            { 
+                stepNum: '1', 
+                title: 'Get Started', 
+                completed: false, 
+                showStaffVerification: getInputValueOrEmpty("partnerCode") === 'msigstaff' ? true : false,
+                showPrescreen: true,
+                hash: 'prescreen'
+            },
             { stepNum: '2', title: 'Fill In Details', completed: false, hash: 'fillindetails' },
             { stepNum: '3', title: 'Plan Selection', completed: false, hash: 'planselection' },
             { stepNum: '4', title: 'REVIEW', completed: false, hash: '' },
@@ -178,6 +187,28 @@ const m3paform = new Vue({
         findCountryByCode (code) {
             if (!this.countries) return ''
             return this.countries.find(c => c.code === code)
+        },
+        async verifyStaffID() {
+            this.staffIDInvalid = false;
+
+            const isValid = await this.$refs.form.validate()
+            if (!isValid) return;
+
+            let apiUrl = this.baseUrl + '/dotCMS/purchase/buynow';
+            const results = await $.ajax({
+                method: 'POST',
+                url: apiUrl,
+                data: {
+                    action: 'staffIdCheck',
+                    partnerCode: this.partnerCode,
+                    staffId: this.staffId
+                }
+            })
+            if (!results.canProceed) {
+                this.staffIDInvalid = true;
+                return
+            }
+            this.steps[0].showStaffVerification = false;
         },
         saveSession () {
             const state = {
