@@ -124,7 +124,7 @@
                                 </div>
 
                                 <div class="row mt-4 pt-2" v-if="!steps[0].showPrescreen">
-                                    <div class="col-md-4 col-12">
+                                    <div class="col-md-6 col-lg-4 col-12">
                                         <div class="d-flex mb-3">
                                             <div class="form-check">
                                                 <input class="form-check-input" 
@@ -200,7 +200,7 @@
                                         <!-- Don't change this value as this is for their CMS -->
                                         <p class="bt1 mt-1" style="margin-bottom: .825rem">Motorcycle Registration No.:</p>
                                         <div class="row">
-                                            <div class="col-12 col-md-6">
+                                            <div class="col-12 col-lg-6">
                                                 <validation-provider v-slot="validator" rules="required">
                                                     <div class="form-group">
                                                         <input type="text"
@@ -821,7 +821,7 @@
                                                             <div class="box overflow-hidden">
                                                                 <div class="header-match-height">
                                                                     <div class="box--header bg-p2 text-white p-3">
-                                                                        <h3 class="m-0">Motorcycle 3PA <br class="d-none d-lg-block" /> Insurance</h3>
+                                                                        <h3 class="m-0">Motorcycle 3PA <br class="d-none d-md-block" /> Insurance</h3>
                                                                     </div>
                                                                     <div class="mt-4 mb-3">
                                                                         <svg class="icon icon-7xl ">
@@ -1527,9 +1527,9 @@
                                 </div>
                             </validation-provider>
                         </div>
-                        <div class="container pt-4 wizard-navigation d-lg-none">
-                            <a @click.prevent="observer.handleSubmit(onSubmit).then(function() { scrollToError() })" href="#" role="button" class="btn btn-default btn-primary mb-3 mb-md-0">Checkout</a>
-                            <a @click.prevent="goToPrevStep()" role="button" class="btn btn-default btn-outline-primary ">Back</a>
+                        <div class="container pt-4 wizard-navigation d-lg-none flex-md-row-reverse justify-content-md-start">
+                            <a @click.prevent="observer.handleSubmit(onSubmit).then(function() { scrollToError() })" href="#" role="button" class="btn btn-default btn-primary mb-3 mb-md-0 mr-md-0">Checkout</a>
+                            <a @click.prevent="goToPrevStep()" role="button" class="btn btn-default btn-outline-primary mr-md-3">Back</a>
                         </div>
                     </fieldset>
 
