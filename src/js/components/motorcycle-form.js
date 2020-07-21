@@ -750,6 +750,14 @@ const m3paform = new Vue({
                 this.formData['3'].sumInsured = minSumInsured;
             }
 
+            if (this.formData['3'].loading === null) {
+                this.formData['3'].loading = 0;
+            }
+
+            if (this.formData['3'].loadingPct === null) {
+                this.formData['3'].loadingPct = 100;
+            }
+
             this.loading = false;
         },
         formatAsCurrency: function(number) {
@@ -1280,7 +1288,7 @@ const m3paform = new Vue({
             if (this.formData['3'].allRiderPlanPremium) {
                 additionalAddOns += this.formData['3'].allRiderPlanPremium;
             }
-            return this.formData['3'].basePremium + additionalAddOns - this.formData['3'].ncdAmount
+            return this.formData['3'].basePremium + additionalAddOns + this.formData['3'].loading - this.formData['3'].ncdAmount
         },
         grossPremium: function() {
             return this.netNCDAmount + this.formData['3'].totalAdditionalCoveragePremium;

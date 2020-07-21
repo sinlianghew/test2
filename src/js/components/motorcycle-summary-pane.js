@@ -21,7 +21,7 @@ export default {
             if (this.formData['3'].allRiderPlanPremium) {
                 additionalAddOns += this.formData['3'].allRiderPlanPremium;
             }
-            return this.formData['3'].basePremium + additionalAddOns - this.formData['3'].ncdAmount
+            return this.formData['3'].basePremium + additionalAddOns + this.formData['3'].loading - this.formData['3'].ncdAmount
         },
         grossPremium: function () {
             return this.netNCDAmount + this.formData['3'].totalAdditionalCoveragePremium;
