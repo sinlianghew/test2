@@ -2,7 +2,6 @@ $header-xs-height: 60px;
 $subtotal-font-size: 22px;
 $footer-xs-height: 60px;
 $footer-offset: 30px;
-
 .summary-pane {
     position: fixed;
     top: 0;
@@ -15,21 +14,18 @@ $footer-offset: 30px;
     background-color: #fff;
     transform: translateY(calc(100% - #{$header-xs-height + $footer-offset} + 1px));
     transition: .6s ease;
-
     .header {
         height: #{$header-xs-height};
         justify-content: center;
         display: flex;
         flex-direction: column;
         position: relative;
-
         .section-title {
             @extend .px-4;
             display: flex;
             justify-content: space-between;
             transition: .3s ease;
         }
-
         .sub-header {
             @extend .px-4;
             position: absolute;
@@ -41,7 +37,6 @@ $footer-offset: 30px;
             visibility: visible;
             opacity: 1;
             transition: .3s ease;
-
             .price {
                 font-size: $subtotal-font-size;
                 font-weight: 600;
@@ -49,89 +44,73 @@ $footer-offset: 30px;
             }
         }
     }
-
     &.has-total {
         transform: translateY(calc(100% - #{$header-xs-height + $footer-offset + $subtotal-font-size} + 1px));
-
         .header {
             height: #{$header-xs-height + $subtotal-font-size};
-
             .section-title {
                 margin-bottom: $subtotal-font-size;
             }
         }
     }
-
     @include media-breakpoint-down (md) {
         &.non-stick-mobile {
             position: static;
             transform: none;
             min-height: auto;
             overflow: hidden;
-    
+            max-height: none;
             .btn-toggle {
                 visibility: hidden;
             }
-    
             .body {
                 overscroll-behavior: auto;
                 min-height: auto;
+                max-height: none;
             }
         }
     }
-
     .footer {
         height: #{$footer-xs-height};
     }
-
     .body {
         min-height: calc(100vh - #{$header-xs-height * 2 + $footer-offset});
         max-height: calc(100vh - #{$header-xs-height * 2 + $footer-offset});
         overflow-y: auto;
         overscroll-behavior: contain;
     }
-
     .breakdown-pane {
         border-radius: .825rem;
     }
-
     .btn-toggle {
         border: none;
         background-color: transparent;
-
         .title {
             visibility: hidden;
             text-indent: 9999px;
             position: absolute;
         }
-
         .icon {
             transform: rotateX(180deg);
             transition: .9s ease;
         }
     }
-
     &.is-expanded {
         transform: translateY(0);
-
         .header {
             height: #{$header-xs-height};
-            
             .section-title {
                 margin-bottom: 0;
             }
-
             .sub-header {
                 visibility: hidden;
-                opacity: 0;    
+                opacity: 0;
             }
         }
-
         .btn-toggle .icon {
             transform: rotateX(0);
         }
     }
-
     @include media-breakpoint-up(lg) {
         background-color: transparent;
         position: static;
@@ -142,41 +121,33 @@ $footer-offset: 30px;
         max-height: fit-content;
         height: auto;
         min-height: auto;
-        
         .header {
             pointer-events: none;
             height: #{$header-xs-height} !important;
-
             .section-title {
                 margin-bottom: 0 !important;
             }
-
             .sub-header {
                 visibility: hidden;
-                opacity: 0;    
+                opacity: 0;
             }
         }
-
         .btn-toggle {
             display: none;
         }
-
         .is-expanded {
-            transform: translateY(0) !important;            
+            transform: translateY(0) !important;
         }
-
         .body {
             min-height: auto;
             max-height: none;
             overscroll-behavior: auto;
         }
     }
-
     .summary-pane {
         .rounded {
             border-radius: 10px !important;
         }
-
         hr {
             background: $color-primary-blue;
         }
