@@ -9,37 +9,37 @@
 .selection-infobox {
     color: $p2;
     width: 100%;
-
     @include media-breakpoint-up(md) {
         width: 50%;
     }
-
     input[type="radio"],
     input[type="checkbox"] {
         display: none;
-
         &:checked {
             +.box {
                 background-color: $p2;
                 color: white;
                 fill: white;
-
                 .custom-rounded-checked {
                     background-color: $s1;
                     border-color: $s1;
                 }
-
                 .custom-rounded-checked .icon {
                     opacity: 1;
                 }
             }
+            .wallet-rounded-checked {
+                background-color: $s1;
+                border-color: $s1;
+            }
+            .wallet-rounded-checked .icon {
+                opacity: 1;
+            }
         }
     }
-
     &.disabled {
         opacity: .5;
     }
-
     .box {
         width: 100%;
         height: auto;
@@ -51,32 +51,26 @@
         display: inline-block;
         text-align: center;
         cursor: pointer;
-        position: relative;   
+        position: relative;
     }
-
-    label{ 
+    label {
         transition: 250ms ease;
         will-change: transform;
-        
         &:active {
             transform: translateY(10px);
         }
     }
-
     p {
         color: $white;
         font-weight: $font-weight-normal;
-
         a {
             text-decoration: underline;
             font-weight: bold;
         }
     }
-
     strong {
         font-weight: $font-weight-bold;
     }
-
     .custom-rounded-checked {
         display: flex;
         justify-content: center;
@@ -87,36 +81,38 @@
         text-align: center;
         border-radius: 50px;
         border: 2px solid $p2;
-
         .icon {
             opacity: 0;
         }
     }
-
-
+    .wallet-rounded-checked {
+        background-color: white;
+        width: 20px;
+        height: 20px;
+        border-radius: 50px;
+        border: 2px solid $p2;
+        .icon {
+            opacity: 0;
+        }
+    }
 }
 
 .motorcycle-selection {
-
     .flag-recommended {
         color: #fff;
         background-color: $p1;
         border-top-left-radius: .625rem;
         border-top-right-radius: .625rem;
     }
-
     .has-recommended {
         .box {
             border-top-left-radius: 0;
             border-top-right-radius: 0;
         }
     }
-
-
     input[type="radio"],
     input[type="checkbox"] {
         display: none;
-
         &:checked {
             +.box {
                 .box--body {
@@ -126,16 +122,12 @@
             }
         }
     }
-
-
     .box--body {
         padding-left: 42px !important;
         padding-right: 42px !important;
         color: black;
         fill: black;
-
     }
-
     .custom-rounded-checked {
         display: flex;
         justify-content: center;
@@ -146,34 +138,36 @@
         text-align: center;
         border-radius: 50px;
         border: 2px solid $p2;
-
         .icon {
             opacity: 0;
         }
     }
-
+    .wallet-rounded-checked {
+        background-color: white;
+        width: 20px;
+        height: 20px;
+        border-radius: 50px;
+        border: 2px solid $p2;
+        .icon {
+            opacity: 0;
+        }
+    }
 }
 
-
 .check-list-container {
-
     .disabled-check {
         opacity: 0.6;
     }
-
     .maRow input[type=checkbox]+span {
         font-weight: normal;
         color: gray;
     }
-
     .maRow input[type=checkbox]:checked+span {
         font-weight: bold;
         color: black;
     }
-
     .form-check input[type=checkbox]:checked+label {
         font-weight: bold;
         color: black;
     }
-
 }
