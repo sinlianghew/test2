@@ -105,6 +105,24 @@ module.exports = merge(common, {
     ],
     devtool: "source-map",
     devServer: {
-        disableHostCheck: true
+        disableHostCheck: true,
+        proxy: {
+            '/dotCMS': {
+                target: `https://takeiteasy.msig.com.my/dotCMS`,
+                secure: false,
+                changeOrigin: true,
+                pathRewrite: {
+                    '^/dotCMS': ''
+                }
+            },
+            '/api': {
+                target: `https://takeiteasy.msig.com.my/api`,
+                secure: false,
+                changeOrigin: true,
+                pathRewrite: {
+                    '^/api': ''
+                }
+            }
+        }
     }
 })

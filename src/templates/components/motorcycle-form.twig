@@ -1,6 +1,6 @@
 <div id="motorcycle-form" class="form-wizard">
     <!-- The base URL for all the API calls -->
-    <input type="hidden" name="tieBaseUrl" value="https://takeiteasy.msig.com.my">
+    <input type="hidden" name="tieBaseUrl" value="">
 
     <!-- Depending on the stage of the subscription journey, the form will behave differently. -->
     <input type="hidden" name="stage" value="{{ stage }}">
@@ -387,7 +387,7 @@
                                                         :serializer="function(s) { return s.financeName }"
                                                         placeholder="Find Loan Provider"
                                                         :max-matches="5"
-                                                        @hit="formData['2'].motorLoanProvider = $event.financeName"
+                                                        @hit="handleLoanProviderHit($event)"
                                                     >
                                                         <template v-slot:append>
                                                             <svg class="icon icon-s mr-2">

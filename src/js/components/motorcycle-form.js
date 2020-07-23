@@ -3,7 +3,7 @@ import $ from 'jquery';
 import _ from 'lodash';
 import { mask, masked } from 'vue-the-mask';
 import moment from 'moment';
-import VueBootstrapTypeahead from 'vue-typeahead-bootstrap/dist/VueBootstrapTypeahead.umd';
+import VueBootstrapTypeahead from 'vue-typeahead-bootstrap/dist/VueBootstrapTypeahead.common';
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import { extractDOB, createDotCMSQueryURL, getCardType, scrollTo, getInputValueOrEmpty } from '../helpers/utilities';
 import MotorcycleSummaryPane from '../components/motorcycle-summary-pane';
@@ -1201,6 +1201,9 @@ const m3paform = new Vue({
                 })
                 $modal.modal('show')
             })
+        },
+        handleLoanProviderHit (value) {
+            console.log(value)
         },
         rowMatchHeight() {
             let $group = $(this.$el).find('.selection-infobox-group');
