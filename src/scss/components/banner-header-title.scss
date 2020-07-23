@@ -1,11 +1,19 @@
 .banner-header-title {
     min-height: 207px;
-    p{
-        width:100%;
+    p {
+        width: 100%;
         line-height: 20px;
         @include media-breakpoint-up(md) {
-           width: 70vw;
-           line-height: 26px;
-        }  
+            width: 70vw;
+            line-height: 26px;
+        }
     }
+}
+
+.banner-overlay-dark::after {
+    content: ""; // ::before and ::after both require content
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(#000, #000);
+    opacity: .25;
 }
