@@ -11,13 +11,13 @@
 }
 
 .tooltip.bs-tooltip-left .arrow:before {
-    border-right-color: $color-primary-blue !important;
+    border-left-color: $color-primary-blue !important;
 }
 
 .tooltip.bs-tooltip-bottom .arrow:before {
-    border-right-color: $color-primary-blue !important;
+    border-bottom-color: $color-primary-blue !important;
 }
 
 .tooltip.bs-tooltip-top .arrow:before {
-    border-right-color: $color-primary-blue !important;
+    border-top-color: $color-primary-blue !important;
 }
