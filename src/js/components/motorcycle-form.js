@@ -374,7 +374,7 @@ const m3paform = new Vue({
         },
         onSubmit: async function() {
             this.loading = true;
-            
+
             if (this.currStep.stepNum == '1') {
 
                 const isBlacklisted = (await this.checkBlacklist()).isBlacklisted;
@@ -385,9 +385,9 @@ const m3paform = new Vue({
                 }
 
                 if (this.copyOfVehicleRegNum !== this.formData['1'].motorRegistrationNo &&
-                    this.copyOfNricOrPassport !== this.formData['1'].policyHolderNric &&
-                    this.steps.find(step => step.stepNum === '2').completed) {
-                        console.log('user change their detail')
+                    this.copyOfNricOrPassport !== this.formData['1'].policyHolderNric) {
+                        console.log('user change their detail');
+                        this.resetForm();
                 }
 
                 // Check the vehicle's NCD
@@ -421,7 +421,7 @@ const m3paform = new Vue({
 
                 // By right not supposed to set like this..
                 this.handleMotorModelChanged()
-            } else if (this.currStep.stepNum == '2') {               
+            } else if (this.currStep.stepNum == '2') {
                 await this.calculatePremiumAsync()
             } else if (this.currStep.stepNum == '3') {
                 if (this.formData['3'].motorPlusPlan === null) {
