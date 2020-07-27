@@ -2,39 +2,71 @@
     margin: 0 -.5rem;
     display: flex;
     flex-wrap: wrap;
-
     .list-item {
         overflow: hidden;
         position: relative;
         margin: 0 .5rem;
         width: calc(100% / 2 - 1rem);
-
+        .wallet-rounded-checked {
+            background-color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50px;
+            border: 2px solid $p2;
+            margin-right: 3px;
+            margin-left: 12px;
+            .icon {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
         input[type=radio] {
             position: absolute;
             visibility: hidden;
-            
-            &:checked + label {
+            &:checked+label {
                 box-shadow: inset 0 0 0 3px $p2;
+                .wallet-rounded-checked {
+                    background-color: $s1;
+                    border-color: $s1;
+                }
+                .wallet-rounded-checked .icon {
+                    opacity: 1;
+                    visibility: visible;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 13px;
+                    color: white;
+                    margin-left: 2px;
+                    margin-top: 1px;
+                }
             }
         }
-
         label {
+            &:hover {
+                cursor: pointer;
+            }
             height: 46px;
             display: flex;
             // border: 1px solid $p2;
             box-shadow: inset 0 0 0 .5px $p2;
-            padding: 5px;
             align-items: center;
             transition: 0.2s ease;
+            padding: 0 !important;
+            .wallet-rounded-checked {
+                height: 20px;
+                width: 20px;
+                border-radius: 50%;
+                background-color: white;
+                border: 1px solid $p2;
+            }
         }
-
         .bank-logo {
             flex: 0 0 30px;
             padding-bottom: 65%;
             margin-right: 5px;
             overflow: hidden;
             position: relative;
-
             img {
                 position: absolute;
                 top: 50%;
@@ -42,26 +74,21 @@
                 transform: translate(-50%, -50%) scale(0.8);
             }
         }
-
         .bank-name {
             font-size: 12px;
             line-height: 100%;
             flex-grow: 1;
         }
     }
-
     @include media-breakpoint-up(md) {
         margin: 0 -.75rem;
-
         .list-item {
             width: calc(100% / 3 - (.75rem * 2));
             margin: 0 .75rem;
-
             .bank-logo {
                 flex: 0 0 40px;
                 padding-bottom: 20%;
             }
-
             .bank-name {
                 font-size: 1rem;
             }
