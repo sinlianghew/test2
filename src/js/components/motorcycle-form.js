@@ -49,7 +49,8 @@ const m3paform = new Vue({
         wishToRestoreSession: false,
         staffIDInvalid: false,
 
-        steps: [{
+        steps: [
+            {
                 stepNum: '1',
                 title: 'Get Started',
                 completed: false,
@@ -156,6 +157,9 @@ const m3paform = new Vue({
                 ewalletVendor: null
             }
         },
+
+        copyOfNricOrPassport: null,
+        copyOfVehicleRegNum: null,
 
         underwrittenRules: {},
         hexTokens: {
@@ -289,8 +293,88 @@ const m3paform = new Vue({
                 scrollTo(offset).then(() => resolve())
             })
         },
+        resetForm: function () {
+            this.steps
+                .filter(step => !['1', '2'].includes(step.stepNum))
+                .forEach(step => step.completed = false)
+
+            this.postcodeSearch = '';
+            this.postcodeSuggestions = [];
+            this.currSelectedPostcode = '';
+            this.loanProviderSuggestions = [];
+            this.isNotKnownPostcode = false;
+
+            this.formData['2'] = {
+                motorVehicleLocation: '', // a.k.a. vpmsStateCode, it's inside an object
+                curMktValue: 0,
+                motorLoanProvider: '',
+                policyHolderName: '',
+                policyHolderEmail: '',
+                policyHolderMobileNo: '',
+                policyHolderAddressLine1: '',
+                policyHolderAddressLine2: '',
+                policyHolderGender: '', // remember to use computed property instead
+                policyHolderDateOfBirth: '',
+                addressPostcode: '',
+                addressState: '',
+                addressStateCode: '',
+                addressCity: '',
+                policyHolderMaritalStatus: '',
+                policyHolderOccupation: '',
+                sumInsuredType: ''
+            }
+
+            this.formData['3'] = {
+                motorPlanType: 'comprehensive',
+                motorPlusPlan: 'Y', // consider removing
+                motorAddRiderPA: '',
+                motorAddLegalLiabilityToPassengers: '',
+                motorAddLegalLiabilityOfPassengers: '',
+                motorAddSpecialPerils: '',
+                motorAddSRCC: '',
+                allRiderPlan: true,
+            }
+
+            this.formData['4'] = {
+                tncAgreement: false,
+                isMotorDetailsEditMode: false,
+                isRiderDetailsEditMode: false,
+                purchaseTempId: '',
+
+                // Motorcycle Details Edit
+                motorVehicleLocation: '',
+
+                // Rider Details Edit
+                policyHolderName: '',
+                policyHolderEmail: '',
+                policyHolderMobileNo: '',
+                policyHolderAddressLine1: '',
+                policyHolderAddressLine2: '',
+                addressPostcode: '',
+                addressState: '',
+                addressStateCode: '',
+                addressCity: '',
+                policyHolderMaritalStatus: '',
+                policyHolderOccupation: '',
+
+            }
+
+            this.formData['5'] = {
+                paymentMethod: 'fpxPaymentGateway',
+                bankId: '',
+                fpxEmail: '',
+                cardHolderName: '',
+                ccNo: '',
+                expiry: '',
+                cvv: '',
+                ewalletVendor: null
+            }
+
+            this.saveSession()
+        },
         onSubmit: async function() {
             this.loading = true;
+            
             if (this.currStep.stepNum == '1') {
 
                 const isBlacklisted = (await this.checkBlacklist()).isBlacklisted;
@@ -300,6 +384,12 @@ const m3paform = new Vue({
                     return;
                 }
 
+                if (this.copyOfVehicleRegNum !== this.formData['1'].motorRegistrationNo &&
+                    this.copyOfNricOrPassport !== this.formData['1'].policyHolderNric &&
+                    this.steps.find(step => step.stepNum === '2').completed) {
+                        console.log('user change their detail')
+                }
+
                 // Check the vehicle's NCD
                 const motorDetails = await this.checkNCD()
                 this.formData['2'] = {
@@ -307,6 +397,7 @@ const m3paform = new Vue({
                     ...motorDetails
                 }
 
+                /** Comment the section below out when doing development in production */
                 if (!motorDetails.canProceed) {
                     if (motorDetails.errorCode) {
                         let errorMessage = await this.findErrorByErrorCodeAsync(motorDetails.errorCode)
@@ -330,8 +421,7 @@ const m3paform = new Vue({
 
                 // By right not supposed to set like this..
                 this.handleMotorModelChanged()
-            } else if (this.currStep.stepNum == '2') {
-                this.formData['3']
+            } else if (this.currStep.stepNum == '2') {               
                 await this.calculatePremiumAsync()
             } else if (this.currStep.stepNum == '3') {
                 if (this.formData['3'].motorPlusPlan === null) {
@@ -405,6 +495,13 @@ const m3paform = new Vue({
             }
 
             this.loading = true;
+
+            if (this.currStep.stepNum == '2') {
+                // User is trying to go back to step 1, so let's make a copy of the car number and IC
+                // This is used to check if the user has changed their nric or reg no
+                this.copyOfNricOrPassport = this.formData['1'].policyHolderNric;
+                this.copyOfVehicleRegNum = this.formData['1'].motorRegistrationNo;
+            }
 
             if (this.currStep.stepNum == '4' && !['registration', 'payment'].includes(this.stage)) {
                 await this.scrollTop();
