@@ -28,13 +28,6 @@
                     opacity: 1;
                 }
             }
-            .wallet-rounded-checked {
-                background-color: $s1;
-                border-color: $s1;
-            }
-            .wallet-rounded-checked .icon {
-                opacity: 1;
-            }
         }
     }
     &.disabled {
@@ -85,16 +78,6 @@
             opacity: 0;
         }
     }
-    .wallet-rounded-checked {
-        background-color: white;
-        width: 20px;
-        height: 20px;
-        border-radius: 50px;
-        border: 2px solid $p2;
-        .icon {
-            opacity: 0;
-        }
-    }
 }
 
 .motorcycle-selection {
@@ -136,16 +119,6 @@
         width: 50px;
         height: 50px;
         text-align: center;
-        border-radius: 50px;
-        border: 2px solid $p2;
-        .icon {
-            opacity: 0;
-        }
-    }
-    .wallet-rounded-checked {
-        background-color: white;
-        width: 20px;
-        height: 20px;
         border-radius: 50px;
         border: 2px solid $p2;
         .icon {

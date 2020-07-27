@@ -1842,10 +1842,16 @@
                                                                 value="boostPaymentGateway"
                                                                 v-model="formData['5'].ewalletVendor"
                                                                 :class="validator.errors.length > 0 ? 'is-invalid' : ''">
-                                                            <label for="radEWallet1">
+                                                            <label for="radEWallet1" style="border-radius:10px">
+                                                            <div class="wallet-rounded-checked">
+                                                                    <svg class="icon icon-s tick-mark">
+                                                                        <use xlink:href="/spa-assets/icons/icons.svg#sprite-tick-mark" href="/spa-assets/icons/icons.svg#sprite-tick-mark"></use>
+                                                                    </svg>
+                                                                </div>
                                                                 <div class="bank-logo">
                                                                     <img src="spa-assets/img/boost.png" alt="Boost logo">
                                                                 </div>
+                                                                
                                                                 <div class="bank-name">
                                                                     Boost
                                                                 </div>

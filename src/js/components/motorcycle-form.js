@@ -113,7 +113,7 @@ const m3paform = new Vue({
                 sumInsuredType: ''
             },
             3: {
-                motorPlanType: '',
+                motorPlanType: 'comprehensive',
                 motorPlusPlan: 'Y', // consider removing
                 motorAddRiderPA: '',
                 motorAddLegalLiabilityToPassengers: '',
@@ -331,7 +331,7 @@ const m3paform = new Vue({
                 // By right not supposed to set like this..
                 this.handleMotorModelChanged()
             } else if (this.currStep.stepNum == '2') {
-                this.formData['3'].motorPlanType = "comprehensive"
+                this.formData['3']
                 await this.calculatePremiumAsync()
             } else if (this.currStep.stepNum == '3') {
                 if (this.formData['3'].motorPlusPlan === null) {
@@ -1202,7 +1202,7 @@ const m3paform = new Vue({
                 $modal.modal('show')
             })
         },
-        handleLoanProviderHit (value) {
+        handleLoanProviderHit(value) {
             console.log(value)
         },
         rowMatchHeight() {
