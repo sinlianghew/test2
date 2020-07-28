@@ -295,7 +295,7 @@ const m3paform = new Vue({
         },
         resetForm: function() {
             this.steps
-                .filter(step => !['1', '2'].includes(step.stepNum))
+                .filter(step => !['1'].includes(step.stepNum))
                 .forEach(step => step.completed = false)
 
             this.postcodeSearch = '';
