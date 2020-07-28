@@ -1039,7 +1039,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="checkbox-list my-4">
+                                            {# <div class="checkbox-list my-4">
                                                 <div class="d-flex align-items-md-center">
                                                     <div class="form-check">
                                                         <input type="checkbox"
@@ -1049,6 +1049,32 @@
                                                             class="form-check-input"
                                                             @change="calculatePremiumAsync">
                                                         <label for="motorAddLegalLiabilityOfPassengers" class="form-check-label bt2 pr-0">
+                                                            Legal Liability to Pillion
+                                                        </label>
+                                                        <svg class="icon icon-m tick-mark">
+                                                            <use xlink:href="/spa-assets/icons/icons.svg#sprite-tick-mark"
+                                                                href="/spa-assets/icons/icons.svg#sprite-tick-mark"></use>
+                                                        </svg>
+                                                    </div>
+                                                    <span>
+                                                        <div class="ml-2 btn-tooltip" data-toggle="tooltip"
+                                                            data-placement="auto"
+                                                            title="Get covered against legal liability that your pillion might seek against you if you get into an accident.">
+                                                            ?
+                                                        </div>
+                                                    </span>
+                                                </div>
+                                            </div> #}
+                                            <div class="checkbox-list my-4">
+                                                <div class="d-flex align-items-md-center">
+                                                    <div class="form-check">
+                                                        <input type="checkbox"
+                                                            name="motorAddLegalLiabilityToPillion"
+                                                            id="motorAddLegalLiabilityToPillion"
+                                                            v-model="formData['3'].motorAddLegalLiabilityToPillion"
+                                                            class="form-check-input"
+                                                            @change="calculatePremiumAsync">
+                                                        <label for="motorAddLegalLiabilityToPillion" class="form-check-label bt2 pr-0">
                                                             Legal Liability to Pillion
                                                         </label>
                                                         <svg class="icon icon-m tick-mark">

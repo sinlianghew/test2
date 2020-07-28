@@ -49,8 +49,7 @@ const m3paform = new Vue({
         wishToRestoreSession: false,
         staffIDInvalid: false,
 
-        steps: [
-            {
+        steps: [{
                 stepNum: '1',
                 title: 'Get Started',
                 completed: false,
@@ -119,6 +118,7 @@ const m3paform = new Vue({
                 motorAddRiderPA: '',
                 motorAddLegalLiabilityToPassengers: '',
                 motorAddLegalLiabilityOfPassengers: '',
+                motorAddLegalLiabilityToPillion: '',
                 motorAddSpecialPerils: '',
                 motorAddSRCC: '',
                 allRiderPlan: true,
@@ -293,7 +293,7 @@ const m3paform = new Vue({
                 scrollTo(offset).then(() => resolve())
             })
         },
-        resetForm: function () {
+        resetForm: function() {
             this.steps
                 .filter(step => !['1', '2'].includes(step.stepNum))
                 .forEach(step => step.completed = false)
@@ -386,8 +386,8 @@ const m3paform = new Vue({
 
                 if (this.copyOfVehicleRegNum !== this.formData['1'].motorRegistrationNo &&
                     this.copyOfNricOrPassport !== this.formData['1'].policyHolderNric) {
-                        console.log('user change their detail');
-                        this.resetForm();
+                    console.log('user change their detail');
+                    this.resetForm();
                 }
 
                 // Check the vehicle's NCD
@@ -799,6 +799,7 @@ const m3paform = new Vue({
                     motorNxtNcdLevel: this.formData['2'].nxtNCDLevel,
                     motorAddLegalLiabilityToPassengers: '', // TODO: CHECK THIS!
                     motorAddLegalLiabilityOfPassengers: this.formData['3'].motorAddLegalLiabilityOfPassengers ? 'Y' : '',
+                    motorAddLegalLiabilityToPillion: this.formData['3'].motorAddLegalLiabilityToPillion ? 'Y' : '',
                     motorAddSpecialPerils: this.formData['3'].motorAddSpecialPerils ? 'Y' : '',
                     motorAddSRCC: this.formData['3'].motorAddSRCC ? 'Y' : '',
                     motorAddRiderPA: this.formData['3'].motorAddRiderPA ? 'Y' : '',
@@ -1104,6 +1105,7 @@ const m3paform = new Vue({
                         motorLoanProviderDescription: this.formData['2'].motorLoanProvider,
                         motorAddLegalLiabilityToPassengers: this.formData['3'].motorAddLegalLiabilityToPassengers ? 'Y' : '',
                         motorAddLegalLiabilityOfPassengers: this.formData['3'].motorAddLegalLiabilityOfPassengers ? 'Y' : '',
+                        motorAddLegalLiabilityToPillion: this.formData['3'].motorAddLegalLiabilityToPillion ? 'Y' : '',
                         motorAddSpecialPerils: this.formData['3'].motorAddSpecialPerils ? 'Y' : '',
                         motorAddWindscreen: '',
                         motorAddWindscreenSumInsured: 0,
