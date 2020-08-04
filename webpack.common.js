@@ -47,12 +47,6 @@ module.exports = {
             Tooltip: "exports-loader?Tooltip!bootstrap/js/dist/tooltip",
             Util: "exports-loader?Util!bootstrap/js/dist/util",
         }),
-
-        new CopyPlugin([{
-            from: 'src/vendor', // this is the path relative to the webpack config files
-            to: 'vendor' // this will send it to the output folder which is /dist
-        }]),
-
         new MomentLocalesPlugin() // remove the non related locales
     ]
 }
