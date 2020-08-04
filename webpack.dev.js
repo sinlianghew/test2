@@ -105,6 +105,7 @@ module.exports = merge(common, {
     ],
     devtool: "source-map",
     devServer: {
+        index: 'motorcycle-registration.html',
         disableHostCheck: true,
         proxy: {
             '/dotCMS': {
