@@ -169,9 +169,9 @@ const m3paform = new Vue({
             }
         },
 
-        openDate: moment().subtract(18, "years").toDate(),
+        openDate: moment().subtract(16, "years").toDate(),
         disabledDates: {
-            from: moment().subtract(18, "years").toDate(),
+            from: moment().subtract(16, "years").toDate(),
             to: moment().subtract(75, "years").toDate()
         }
     },
@@ -901,12 +901,22 @@ const m3paform = new Vue({
             this.formData['4'].policyHolderOccupation = this.formData['2'].policyHolderOccupation;
             this.formData['4'].isRiderDetailsEditMode = false;
         },
-        saveEditRiderDetails: function() {
+        saveEditRiderDetails: async function() {
+            const isValid = await this.$refs.editRiderObserver.validate();
+            if (!isValid) {
+                this.scrollToError()
+                return
+            };
+
             this.formData['2'].policyHolderName = this.formData['4'].policyHolderName;
             this.formData['2'].policyHolderEmail = this.formData['4'].policyHolderEmail;
             this.formData['2'].policyHolderMobileNo = this.formData['4'].policyHolderMobileNo;
             this.formData['2'].policyHolderAddressLine1 = this.formData['4'].policyHolderAddressLine1;
             this.formData['2'].policyHolderAddressLine2 = this.formData['4'].policyHolderAddressLine2;
+            this.formData['2'].addressPostcode = this.formData['4'].addressPostcode;
+            this.formData['2'].addressState = this.formData['4'].addressState;
+            this.formData['2'].addressStateCode = this.formData['4'].addressStateCode;
+            this.formData['2'].addressCity = this.formData['4'].addressCity;
             this.formData['2'].policyHolderMaritalStatus = this.formData['4'].policyHolderMaritalStatus;
             this.formData['2'].policyHolderOccupation = this.formData['4'].policyHolderOccupation;
             this.formData['4'].isRiderDetailsEditMode = false;
@@ -1417,6 +1427,27 @@ const m3paform = new Vue({
 
                 this.formData['2'].addressCity = suggestion.cityDescription;
                 this.formData['2'].addressState = this.states.find(s => s.code === suggestion.stateCode).name;
+                this.isNotKnownPostcode = false;
+                return;
+            }
+        }, 500),
+        "formData.4.addressPostcode": _.debounce(async function(postcode) {
+            await this.getPostcodesAsync(postcode)
+
+            if (postcode.length === 5 && this.currSelectedPostcode && this.currSelectedPostcode.postcode != postcode) {
+                this.currSelectedPostcode = null;
+            }
+
+            if (postcode.length === 5 && !this.currSelectedPostcode) {
+                let suggestion = this.postcodeSuggestions.find(s => s.postcode == postcode);
+                if (!suggestion) {
+                    console.log('postcode not found in suggestions')
+                    this.isNotKnownPostcode = true;
+                    return;
+                }
+
+                this.formData['4'].addressCity = suggestion.cityDescription;
+                this.formData['4'].addressState = this.states.find(s => s.code === suggestion.stateCode).name;
                 this.isNotKnownPostcode = false;
                 return;
             }

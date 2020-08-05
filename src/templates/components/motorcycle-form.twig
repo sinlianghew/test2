@@ -188,7 +188,7 @@
                                                     <div class="invalid-feedback font-italic">
                                                         <span v-if="validator.failedRules.required">* Complete the {{ isIdNric ? 'NRIC' : 'Passport' }} field.</span>
                                                         <span v-else-if="validator.failedRules.nricValidDob || validator.failedRules.min">Please check NRIC number</span>
-                                                        <span v-else-if="validator.failedRules.nricAge18AndAbove">Min age for main policyholder is 18.</span>
+                                                        <span v-else-if="validator.failedRules.nricAge18AndAbove">Min age for main policyholder is 16.</span>
                                                     </div>
                                                 </div>
                                             </validation-provider>
@@ -576,12 +576,12 @@
                                                 </div>
                                             </div>
                                             <div class="col-12 col-md-6">
-                                                <validation-provider rules="required|min:5|max:5|integer" v-slot="validator">
-                                                    <div class="form-group variant-icon variant-autocomplete">
+                                                <validation-provider rules="required|min:5|max:5|integer" v-slot="validator" ref="postcode1">
+                                                    <div class="form-group variant-icon variant-autocomplete" @click.once="$refs.postcode1.validate()">
                                                         <label class="bt1">Postcode:</label>
                                                         <vue-bootstrap-typeahead
-                                                            :data="postcodeSuggestions"
                                                             v-model="formData['2'].addressPostcode"
+                                                            :data="postcodeSuggestions"
                                                             :serializer="function (s) { return s.postcode }"
                                                             placeholder="Find postcode"
                                                             :max-matches="5"
@@ -1207,263 +1207,265 @@
                                     </div>
 
                                     <!-- #region Rider Details -->
-                                    <div class="bg-w py-5 pb-3 px-4 mb-4">
-                                        <h2 class="p2 mb-4">Rider Details</h2>
-                                        <div class="row">
-                                            <div class="col-12 col-md-6">
-                                                <p class="bt1 mb-0">Name (as per NRIC):</p>
-                                                <p class="bt2" v-if="!formData['4'].isRiderDetailsEditMode">{{ formData['2'].policyHolderName }}</p>
-                                                <template v-if="formData['4'].isRiderDetailsEditMode">
-                                                    <validation-provider rules="required|validName" v-slot="validator">
+                                    <validation-observer ref="editRiderObserver">
+                                        <div class="bg-w py-5 pb-3 px-4 mb-4">
+                                            <h2 class="p2 mb-4">Rider Details</h2>
+                                            <div class="row">
+                                                <div class="col-12 col-md-6">
+                                                    <p class="bt1 mb-0">Name (as per NRIC):</p>
+                                                    <p class="bt2" v-if="!formData['4'].isRiderDetailsEditMode">{{ formData['2'].policyHolderName }}</p>
+                                                    <template v-if="formData['4'].isRiderDetailsEditMode">
+                                                        <validation-provider rules="required|validName" v-slot="validator">
+                                                            <div class="form-group">
+                                                                <input type="text"
+                                                                    :class="{
+                                                                        'form-control': true,
+                                                                        'is-invalid': validator.errors.length > 0
+                                                                    }"
+                                                                    v-model="formData['4'].policyHolderName"
+                                                                    placeholder="E.g. Lee Siew Suan">
+                                                                <small class="error-message text-primary font-italic" v-if="validator.errors.length > 0">
+                                                                    <span v-if="validator.failedRules.required">* Complete the Name as per NRIC field.</span>
+                                                                    <span v-else-if="validator.failedRules.validName">Please enter only alphabet, "-", "@", "/" and " ' " for Name</span>
+                                                                </small>
+                                                            </div>
+                                                        </validation-provider>
+                                                    </template>
+                                                </div>
+                                                <div class="col-12 col-md-6">
+                                                    <p class="bt1 mb-0">NRIC No.:</p>
+                                                    <p class="bt2" v-if="!formData['4'].isRiderDetailsEditMode">{{ formData['1'].policyHolderNric }}</p>
+                                                    <div class="form-group" v-if="formData['4'].isRiderDetailsEditMode">
+                                                        <input type="text" class="form-control" v-model="formData['1'].policyHolderNric" disabled>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-md-6">
+                                                    <p class="bt1 mb-0">Email:</p>
+                                                    <p class="bt2" v-if="!formData['4'].isRiderDetailsEditMode">{{ formData['2'].policyHolderEmail }}</p>
+                                                    <template v-if="formData['4'].isRiderDetailsEditMode">
+                                                        <validation-provider rules="required|email" v-slot="validator">
+                                                            <div class="form-group">
+                                                                <input type="text" 
+                                                                    :class="{
+                                                                        'form-control': true,
+                                                                        'is-invalid': validator.errors.length > 0
+                                                                    }"
+                                                                    v-model="formData['4'].policyHolderEmail"
+                                                                    placeholder="E.g. 900808-10-8888">
+                                                                <small class="error-message text-primary font-italic" v-if="validator.errors.length > 0">
+                                                                    <span v-if="validator.failedRules.required">* Complete the Email field.</span>
+                                                                    <span v-else-if="validator.failedRules.email">Please enter a valid email address</span>
+                                                                </small>
+                                                            </div>
+                                                        </validation-provider>
+                                                    </template>
+                                                </div>
+                                                <div class="col-12 col-md-6">
+                                                    <p class="bt1 mb-0">Mobile No.:</p>
+                                                    <p class="bt2" v-if="!formData['4'].isRiderDetailsEditMode">{{ formData['4'].policyHolderMobileNo }}</p>
+                                                    <template v-if="formData['4'].isRiderDetailsEditMode">
+                                                        <validation-provider rules="required|mobileNumber" v-slot="validator">
+                                                            <div class="form-group">
+                                                                <input type="tel"
+                                                                    :class="{
+                                                                        'form-control': true,
+                                                                        'is-invalid': validator.errors.length > 0
+                                                                    }"
+                                                                    v-model="formData['4'].policyHolderMobileNo"
+                                                                    placeholder="E.g. 018-123 4567">
+                                                                <small class="error-message text-primary font-italic" v-if="validator.errors.length > 0">
+                                                                    <span v-if="validator.failedRules.required">* Complete the Mobile field.</span>
+                                                                    <span v-else-if="validator.failedRules.integer || validator.failedRules.max">Please check mobile number.</span>
+                                                                </small>
+                                                            </div>
+                                                        </validation-provider>
+                                                    </template>
+                                                </div>
+                                                <div class="col-12 col-md-6">
+                                                    <p class="bt1 mb-0">Address:</p>
+                                                    <p class="bt2" v-if="!formData['4'].isRiderDetailsEditMode">{{ fullAddress }}</p>
+                                                    <template v-if="formData['4'].isRiderDetailsEditMode">
+                                                        <!-- Address Line 1 -->
+                                                        <validation-provider rules="required" v-slot="validator">
+                                                            <div class="form-group">
+                                                                <input type="text"
+                                                                    placeholder="First Line"
+                                                                    v-model="formData['4'].policyHolderAddressLine1"
+                                                                    :class="{
+                                                                        'form-control': true,
+                                                                        'is-invalid': validator.errors.length > 0
+                                                                    }">
+                                                                <small class="error-message text-primary font-italic" v-if="validator.failedRules.required">
+                                                                    * Complete the Address field.
+                                                                </small>
+                                                            </div>
+                                                        </validation-provider>
+                                                        
+                                                        <!-- Address Line 2 -->
                                                         <div class="form-group">
                                                             <input type="text"
-                                                                :class="{
-                                                                    'form-control': true,
-                                                                    'is-invalid': validator.errors.length > 0
-                                                                }"
-                                                                v-model="formData['4'].policyHolderName"
-                                                                placeholder="E.g. Lee Siew Suan">
-                                                            <small class="error-message text-primary font-italic" v-if="validator.errors.length > 0">
-                                                                <span v-if="validator.failedRules.required">* Complete the Name as per NRIC field.</span>
-                                                                <span v-else-if="validator.failedRules.validName">Please enter only alphabet, "-", "@", "/" and " ' " for Name</span>
-                                                            </small>
+                                                                placeholder="Second Line"
+                                                                class="form-control"
+                                                                v-model="formData['4'].policyHolderAddressLine2">
                                                         </div>
-                                                    </validation-provider>
-                                                </template>
-                                            </div>
-                                            <div class="col-12 col-md-6">
-                                                <p class="bt1 mb-0">NRIC No.:</p>
-                                                <p class="bt2" v-if="!formData['4'].isRiderDetailsEditMode">{{ formData['1'].policyHolderNric }}</p>
-                                                <div class="form-group" v-if="formData['4'].isRiderDetailsEditMode">
-                                                    <input type="text" class="form-control" v-model="formData['1'].policyHolderNric" disabled>
-                                                </div>
-                                            </div>
-                                            <div class="col-12 col-md-6">
-                                                <p class="bt1 mb-0">Email:</p>
-                                                <p class="bt2" v-if="!formData['4'].isRiderDetailsEditMode">{{ formData['2'].policyHolderEmail }}</p>
-                                                <template v-if="formData['4'].isRiderDetailsEditMode">
-                                                    <validation-provider rules="required|email" v-slot="validator">
+
+                                                        <!-- Postcode -->
+                                                        <validation-provider rules="required|min:5|max:5|integer" v-slot="validator">
+                                                            <div class="form-group variant-icon variant-autocomplete">
+                                                                <label class="bt1">Postcode:</label>
+                                                                <vue-bootstrap-typeahead
+                                                                    :data="postcodeSuggestions"
+                                                                    v-model="formData['4'].addressPostcode"
+                                                                    :serializer="function(s) { return s.postcode }"
+                                                                    placeholder="Find postcode"
+                                                                    :max-matches="5"
+                                                                    :input-class="validator.errors.length > 0 ? 'is-invalid' : ''"
+                                                                    @hit="handlePostcodeHit($event)"
+                                                                    maxlength="5"
+                                                                >
+                                                                    <template slot="append">
+                                                                        <svg class="icon icon-s mr-2">
+                                                                            <use xlink:href="/spa-assets/icons/icons.svg#sprite-search"
+                                                                                href="/spa-assets/icons/icons.svg#sprite-search"></use>
+                                                                        </svg>
+                                                                    </template>
+                                                                </vue-bootstrap-typeahead>
+                                                                <div class="small error-message text-primary font-italic" v-if="validator.errors.length > 0">
+                                                                    <span v-if="validator.failedRules.required">
+                                                                        * Complete the Postcode field.
+                                                                    </span>
+                                                                    <span v-else-if="validator.failedRules.min || validator.failedRules.max || validator.failedRules.integer">
+                                                                        Please enter a valid Postcode.
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </validation-provider>
                                                         <div class="form-group">
+                                                            <label class="bt1">City:</label>
                                                             <input type="text" 
-                                                                :class="{
-                                                                    'form-control': true,
-                                                                    'is-invalid': validator.errors.length > 0
-                                                                }"
-                                                                v-model="formData['4'].policyHolderEmail"
-                                                                placeholder="E.g. 900808-10-8888">
-                                                            <small class="error-message text-primary font-italic" v-if="validator.errors.length > 0">
-                                                                <span v-if="validator.failedRules.required">* Complete the Email field.</span>
-                                                                <span v-else-if="validator.failedRules.email">Please enter a valid email address</span>
-                                                            </small>
+                                                                disabled="disabled"
+                                                                placeholder="city"
+                                                                v-model="formData['2'].addressCity"
+                                                                class="form-control">
                                                         </div>
-                                                    </validation-provider>
-                                                </template>
-                                            </div>
-                                            <div class="col-12 col-md-6">
-                                                <p class="bt1 mb-0">Mobile No.:</p>
-                                                <p class="bt2" v-if="!formData['4'].isRiderDetailsEditMode">{{ formData['4'].policyHolderMobileNo }}</p>
-                                                <template v-if="formData['4'].isRiderDetailsEditMode">
-                                                    <validation-provider rules="required|integer|max:11" v-slot="validator">
                                                         <div class="form-group">
-                                                            <input type="tel"
-                                                                :class="{
-                                                                    'form-control': true,
-                                                                    'is-invalid': validator.errors.length > 0
-                                                                }"
-                                                                v-model="formData['4'].policyHolderMobileNo"
-                                                                placeholder="E.g. 018-123 4567">
-                                                            <small class="error-message text-primary font-italic" v-if="validator.errors.length > 0">
-                                                                <span v-if="validator.failedRules.required">* Complete the Mobile field.</span>
-                                                                <span v-else-if="validator.failedRules.integer || validator.failedRules.max">Please check mobile number.</span>
-                                                            </small>
-                                                        </div>
-                                                    </validation-provider>
-                                                </template>
-                                            </div>
-                                            <div class="col-12 col-md-6">
-                                                <p class="bt1 mb-0">Address:</p>
-                                                <p class="bt2" v-if="!formData['4'].isRiderDetailsEditMode">{{ fullAddress }}</p>
-                                                <template v-if="formData['4'].isRiderDetailsEditMode">
-                                                    <!-- Address Line 1 -->
-                                                    <validation-provider rules="required" v-slot="validator">
-                                                        <div class="form-group">
+                                                            <label class="bt1">State:</label>
                                                             <input type="text"
-                                                                placeholder="First Line"
-                                                                v-model="formData['4'].policyHolderAddressLine1"
-                                                                :class="{
-                                                                    'form-control': true,
-                                                                    'is-invalid': validator.errors.length > 0
-                                                                }">
-                                                            <small class="error-message text-primary font-italic" v-if="validator.failedRules.required">
-                                                                * Complete the Address field.
-                                                            </small>
+                                                                disabled="disabled"
+                                                                placeholder="state"
+                                                                v-model="formData['2'].addressState"
+                                                                class="form-control">
                                                         </div>
-                                                    </validation-provider>
-                                                    
-                                                    <!-- Address Line 2 -->
-                                                    <div class="form-group">
-                                                        <input type="text"
-                                                            placeholder="Second Line"
-                                                            class="form-control"
-                                                            v-model="formData['4'].policyHolderAddressLine2">
-                                                    </div>
-
-                                                    <!-- Postcode -->
-                                                    <validation-provider rules="required|min:5|max:5|integer" v-slot="validator">
-                                                        <div class="form-group variant-icon variant-autocomplete">
-                                                            <label class="bt1">Postcode:</label>
-                                                            <vue-bootstrap-typeahead
-                                                                :data="postcodeSuggestions"
-                                                                v-model="formData['2'].addressPostcode"
-                                                                :serializer="function(s) { return s.postcode }"
-                                                                placeholder="Find postcode"
-                                                                :max-matches="5"
-                                                                :input-class="validator.errors.length > 0 ? 'is-invalid' : ''"
-                                                                @hit="handlePostcodeHit($event)"
-                                                                maxlength="5"
-                                                            >
-                                                                <template slot="append">
-                                                                    <svg class="icon icon-s mr-2">
-                                                                        <use xlink:href="/spa-assets/icons/icons.svg#sprite-search"
-                                                                            href="/spa-assets/icons/icons.svg#sprite-search"></use>
-                                                                    </svg>
-                                                                </template>
-                                                            </vue-bootstrap-typeahead>
-                                                            <div class="small error-message text-primary font-italic" v-if="validator.errors.length > 0">
-                                                                <span v-if="validator.failedRules.required">
-                                                                    * Complete the Postcode field.
-                                                                </span>
-                                                                <span v-else-if="validator.failedRules.min || validator.failedRules.max || validator.failedRules.integer">
-                                                                    Please enter a valid Postcode.
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </validation-provider>
-                                                    <div class="form-group">
-                                                        <label class="bt1">City:</label>
-                                                        <input type="text" 
-                                                            disabled="disabled"
-                                                            placeholder="city"
-                                                            v-model="formData['2'].addressCity"
-                                                            class="form-control">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="bt1">State:</label>
-                                                        <input type="text"
-                                                            disabled="disabled"
-                                                            placeholder="state"
-                                                            v-model="formData['2'].addressState"
-                                                            class="form-control">
-                                                    </div>
-                                                </template>
-                                            </div>
-                                            <div class="col-12 col-md-6">
-                                                <p class="bt1 mb-0">Gender:</p>
-                                                <p class="bt2" v-if="!formData['4'].isRiderDetailsEditMode">{{ policyHolderGender === 'M' ? 'Male' : 'Female' }}</p>
-                                                <template v-if="formData['4'].isRiderDetailsEditMode">
-                                                    <validation-provider rules="required" v-slot="validator">
-                                                        <div class="form-group">
-                                                            <select v-model="policyHolderGender" 
-                                                                :disabled="isIdNric"
-                                                                :class="{
-                                                                    'form-control': true,
-                                                                    'is-invalid': validator.errors.length > 0
-                                                                }">
-                                                                <option value="" disabled selected hidden>Select Option</option>
-                                                                <option value="M">Male</option>
-                                                                <option value="F">Female</option>
-                                                            </select>
-                                                            <div class="small error-message text-primary font-itatic" v-if="validator.errors.length > 0">
-                                                                <span v-if="validator.failedRules.required">
-                                                                    * Complete the Gender field.
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </validation-provider>
-                                                    
-                                                </template>
-                                            </div>
-                                            <div class="col-12 col-md-6">
-                                                <p class="bt1 mb-0">Marital Status:</p>
-                                                <p class="bt2" v-if="!formData['4'].isRiderDetailsEditMode">{{ formData['4'].policyHolderMaritalStatus }}</p>
-                                                <template v-if="formData['4'].isRiderDetailsEditMode">
-                                                    <validation-provider rules="required" v-slot="validator">
-                                                        <div class="form-group">
-                                                            <select v-model="formData['4'].policyHolderMaritalStatus"
-                                                                :class="{
-                                                                    'form-control': true,
-                                                                    'is-invalid': validator.errors.length > 0
-                                                                }">
-                                                                <option disabled="disabled" hidden="hidden" selected="selected" value="">
-                                                                    Select Option
-                                                                </option>
-                                                                <option value="Single">Single</option>
-                                                                <option value="Married">Married</option>
-                                                            </select>
-                                                            <div class="small error-message text-primary font-itatic" v-if="validator.errors.length > 0">
-                                                                <span v-if="validator.failedRules.required">
-                                                                    * Complete the Marital Status field.
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </validation-provider>
-                                                </template>
-                                            </div>
-                                            <div class="col-12 col-md-6">
-                                                <p class="bt1 mb-0">Occupation:</p>
-                                                <p class="bt2" v-if="!formData['4'].isRiderDetailsEditMode">{{ formData['4'].policyHolderOccupation }}</p>
-                                                <template v-if="formData['4'].isRiderDetailsEditMode">
-                                                    <validation-provider rules="required" v-slot="validator">
-                                                        <div class="form-group">
-                                                            <input id="occupation"
-                                                                type="text"
-                                                                placeholder="E.g. Architect"
-                                                                :class="{
-                                                                    'form-control': true,
-                                                                    'is-invalid': validator.errors.length > 0
-                                                                }"
-                                                                v-model="formData['4'].policyHolderOccupation">
-                                                            <div class="small error-message text-primary font-italic" v-if="validator.errors.length > 0">
-                                                                <span v-if="validator.failedRules.required">
-                                                                    * Complete the Occupation field.
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </validation-provider>
-                                                </template>
-                                            </div>
-                                        </div>
-
-                                        <div class="d-flex justify-content-end" v-if="!formData['4'].isRiderDetailsEditMode">
-                                            <a href="#" @click.prevent="formData['4'].isRiderDetailsEditMode = true" class="btn btn-secondary btn-icon">
-                                                <div class="button-icon">
-                                                    <svg class="icon icon-s">
-                                                        <use xlink:href="/spa-assets/icons/icons.svg#sprite-pencil-1"
-                                                            href="/spa-assets/icons/icons.svg#sprite-pencil-1"></use>
-                                                    </svg>
+                                                    </template>
                                                 </div>
-                                                <span class="button-text">Edit</span>
-                                            </a>
-                                        </div>
-                                        <div class="d-flex justify-content-end" v-if="formData['4'].isRiderDetailsEditMode">
-                                            <a href="#"
-                                                class="btn btn-primary btn-icon mr-3"
-                                                @click.prevent="cancelEditRiderDetails">
-                                                <div class="button-icon">
-                                                    <svg class="icon icon-s">
-                                                        <use xlink:href="/spa-assets/icons/icons.svg#sprite-close"
-                                                            href="/spa-assets/icons/icons.svg#sprite-close"></use>
-                                                    </svg>
+                                                <div class="col-12 col-md-6">
+                                                    <p class="bt1 mb-0">Gender:</p>
+                                                    <p class="bt2" v-if="!formData['4'].isRiderDetailsEditMode">{{ policyHolderGender === 'M' ? 'Male' : 'Female' }}</p>
+                                                    <template v-if="formData['4'].isRiderDetailsEditMode">
+                                                        <validation-provider rules="required" v-slot="validator">
+                                                            <div class="form-group">
+                                                                <select v-model="policyHolderGender" 
+                                                                    :disabled="isIdNric"
+                                                                    :class="{
+                                                                        'form-control': true,
+                                                                        'is-invalid': validator.errors.length > 0
+                                                                    }">
+                                                                    <option value="" disabled selected hidden>Select Option</option>
+                                                                    <option value="M">Male</option>
+                                                                    <option value="F">Female</option>
+                                                                </select>
+                                                                <div class="small error-message text-primary font-itatic" v-if="validator.errors.length > 0">
+                                                                    <span v-if="validator.failedRules.required">
+                                                                        * Complete the Gender field.
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </validation-provider>
+                                                        
+                                                    </template>
                                                 </div>
-                                                <span class="button-text">Cancel</span>
-                                            </a>
-                                            <a href="#"
-                                                class="btn btn-secondary"
-                                                @click.prevent="saveEditRiderDetails">
-                                                <span class="button-text">Save</span>
-                                            </a>
+                                                <div class="col-12 col-md-6">
+                                                    <p class="bt1 mb-0">Marital Status:</p>
+                                                    <p class="bt2" v-if="!formData['4'].isRiderDetailsEditMode">{{ formData['4'].policyHolderMaritalStatus }}</p>
+                                                    <template v-if="formData['4'].isRiderDetailsEditMode">
+                                                        <validation-provider rules="required" v-slot="validator">
+                                                            <div class="form-group">
+                                                                <select v-model="formData['4'].policyHolderMaritalStatus"
+                                                                    :class="{
+                                                                        'form-control': true,
+                                                                        'is-invalid': validator.errors.length > 0
+                                                                    }">
+                                                                    <option disabled="disabled" hidden="hidden" selected="selected" value="">
+                                                                        Select Option
+                                                                    </option>
+                                                                    <option value="Single">Single</option>
+                                                                    <option value="Married">Married</option>
+                                                                </select>
+                                                                <div class="small error-message text-primary font-itatic" v-if="validator.errors.length > 0">
+                                                                    <span v-if="validator.failedRules.required">
+                                                                        * Complete the Marital Status field.
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </validation-provider>
+                                                    </template>
+                                                </div>
+                                                <div class="col-12 col-md-6">
+                                                    <p class="bt1 mb-0">Occupation:</p>
+                                                    <p class="bt2" v-if="!formData['4'].isRiderDetailsEditMode">{{ formData['4'].policyHolderOccupation }}</p>
+                                                    <template v-if="formData['4'].isRiderDetailsEditMode">
+                                                        <validation-provider rules="required" v-slot="validator">
+                                                            <div class="form-group">
+                                                                <input id="occupation"
+                                                                    type="text"
+                                                                    placeholder="E.g. Architect"
+                                                                    :class="{
+                                                                        'form-control': true,
+                                                                        'is-invalid': validator.errors.length > 0
+                                                                    }"
+                                                                    v-model="formData['4'].policyHolderOccupation">
+                                                                <div class="small error-message text-primary font-italic" v-if="validator.errors.length > 0">
+                                                                    <span v-if="validator.failedRules.required">
+                                                                        * Complete the Occupation field.
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </validation-provider>
+                                                    </template>
+                                                </div>
+                                            </div>
+
+                                            <div class="d-flex justify-content-end" v-if="!formData['4'].isRiderDetailsEditMode">
+                                                <a href="#" @click.prevent="formData['4'].isRiderDetailsEditMode = true" class="btn btn-secondary btn-icon">
+                                                    <div class="button-icon">
+                                                        <svg class="icon icon-s">
+                                                            <use xlink:href="/spa-assets/icons/icons.svg#sprite-pencil-1"
+                                                                href="/spa-assets/icons/icons.svg#sprite-pencil-1"></use>
+                                                        </svg>
+                                                    </div>
+                                                    <span class="button-text">Edit</span>
+                                                </a>
+                                            </div>
+                                            <div class="d-flex justify-content-end" v-if="formData['4'].isRiderDetailsEditMode">
+                                                <a href="#"
+                                                    class="btn btn-primary btn-icon mr-3"
+                                                    @click.prevent="cancelEditRiderDetails">
+                                                    <div class="button-icon">
+                                                        <svg class="icon icon-s">
+                                                            <use xlink:href="/spa-assets/icons/icons.svg#sprite-close"
+                                                                href="/spa-assets/icons/icons.svg#sprite-close"></use>
+                                                        </svg>
+                                                    </div>
+                                                    <span class="button-text">Cancel</span>
+                                                </a>
+                                                <a href="#"
+                                                    class="btn btn-secondary"
+                                                    @click.prevent="saveEditRiderDetails">
+                                                    <span class="button-text">Save</span>
+                                                </a>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </validation-observer>
                                     <!-- #endregion Rider Details -->
 
                                     <validation-provider v-slot="validator" rules="mustBeTrue">
