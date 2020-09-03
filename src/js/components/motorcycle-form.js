@@ -185,7 +185,38 @@ const m3paform = new Vue({
         mask,
         masked
     },
+    // weijun - motorcycle model 99
+    // Life cycle hooks
+    updated() {
+        var motorModelInput = $("#motorModelInput");
+        // Check if model input exist
+        if (motorModelInput.length > 0) {
+            var motorModelCode = this.formData['2'].motorModel.modelCode;
+            // Check if motor model matches condition
+            // Change if neccessary
+            if (motorModelCode == "33") {
+                motorModelInput.css("display", "none");
+                $("#motorModelSelect").removeAttr("disabled");
+                $("#motorModelSelect").addClass("is-invalid");
+                $("#motorModelSelect").attr("required");
+                $("#motorModelSelect").css("display", "block");
+                $("#motorModelError").css("display", "block");
+            } else {
+                $("#motorModelError").css("display", "none"); 
+            }
+        }
+    },
+    // weijun - motorcycle model 99 END
     methods: {
+        // weijun - motorcycle model 99
+        motorSelection: function (event) {
+            if (event.target.value != null) {
+                $("#motorModelInput").val(event.target.value);
+                $("#motorModelSelect").removeClass("is-invalid");
+                $("#motorModelError").css("display", "none");
+            } 
+        },
+        // weijun - motorcycle model 99 END
         createDotCMSQueryURL,
         findCountryByCode(code) {
             if (!this.countries) return ''
