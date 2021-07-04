@@ -21,7 +21,11 @@ import "./directives/uppercase";
 
 // Import the JS components
 import "./components/validations"
-import "./components/motorcycle-form"
+//import "./components/miniPA-form"
+//import "./components/ezCancerCare-form"
+//import "./components/personalAccident-form"
+import "./components/travelrightPlus-form"
+
 
 // import "./components/sticky-sidebar.min"
  

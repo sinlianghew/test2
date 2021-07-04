@@ -1,0 +1,165 @@
+{% verbatim %}
+<div id="summaryPanelBigContainer" class="summaryPanelBigContainer">
+         <div id="summaryHeaderFake" class="header section-header bg-p2 py-lg-4 summaryHeaderFake d-lg-none" 
+                @click.prevent="toggleExpand" v-if="isExpanded != true && (currStepNum > 1 && currStepNum < 4)" 
+                v-bind:class="{'has-totalFake': currStepNum > 2 && currStepNum < 4,'non-stick-mobile': currStepNum > 3}">
+            <div class="inner-container">
+                <div class="section-title px-4">
+                    <h2 class="w mb-0 fakeSummaryWord">{{ currStepNum === '5' ? 'Order ' : '' }}Summary</h2>
+                    <div class="btn-toggle">
+                        <svg class="icon icon-m w">
+                            <use href="/spa-assets/icons/icons.svg?v=1#sprite-chevron"></use>
+                        </svg>
+                         <span class="title">Toggle Summary</span>
+                    </div>
+                </div>
+
+                <div class="sub-header px-4">
+                    <p class="bt1 w mb-0"><strong>Total Amount Payable</strong></p>
+                    <p class="price w mb-0" v-if="formData['2'].totalPayable!= null && formData['2'].totalPayable !=''">RM {{ formData['2'].totalPayable }}</p>
+                    <p class="price w mb-0" v-else>RM 0.00</p>
+                </div>
+
+            </div>
+        </div>
+        <div :class="{ 'summary-pane': true, 'is-expanded': isExpanded, 'has-total': currStepNum > 2 && currStepNum < 4, 'non-stick-mobile': currStepNum > 3 }">
+    	<div class="header section-header bg-p2 py-lg-4" @click.prevent="toggleExpand">
+    		<div class="inner-container">
+    			<div class="section-title">
+    				<h2 class="w mb-0">{{ currStepNum === '5' ? 'Order ' : '' }}Summary</h2>
+    				<div class="btn-toggle">
+    					<svg class="icon icon-m w">
+    						<use href="/spa-assets/icons/icons.svg#sprite-chevron"></use>
+    					</svg>
+    					<span class="title">Toggle Summary</span>
+    				</div>
+    			</div>
+                <!--
+    			<div class="sub-header" v-if="currStepNum >= 2 && currStepNum < 4">
+    				<p class="bt1 w mb-0"><strong>Total Amount Payable</strong></p>
+    				<p class="price w mb-0"  v-if="formData['2'].totalPayable!= null && formData['2'].totalPayable !=''">RM {{formData['2'].totalPayable}}</p>
+    				<p class="price w mb-0"  v-else>RM 0.00</p>
+    			</div>
+    			-->
+    		</div>
+    	</div>
+    	<div class="body bg-w py-3 px-2" >
+    		<div class="px-2 pt-2">
+    			<p class="bt2 mb-1 font-weight-bold" v-if="currStepNum !== '5'">Coverage</p>
+    			<table v-if="currStepNum !== '5'">
+					<tr>
+						<td>Type <span class="float-right pr-1"> : </span></td>
+						<td v-if="typeof(formData['2'].coverageType) != 'undefined' && formData['2'].coverageType !='' ">{{formData['2'].coverageType == 'single' ? 'Single Trip' : 'Annual Cover'}}</td>
+						<td v-else> - </td>
+					</tr>
+					<tr>
+						<td>Area <span class="float-right pr-1"> : </span></td>
+						<td v-if="typeof(formData['2'].coverageArea) != 'undefined' && formData['2'].coverageArea !='' ">Area {{formData['2'].coverageArea}}</td>
+						<td v-else> - </td>
+					</tr>
+    				<tr>
+    					<td width="65px">Period <span class="float-right pr-1"> :
+    						</span></td>
+    					<td v-if="formData['2'].coverageType == 'annual' && formData['2'].coverageStartDate != null && formData['2'].coverageStartDate != ''"> {{policyStartDate}} - {{policyEndDate}}</td>
+						<td v-if="formData['2'].coverageType == 'single' && formData['2'].coverageStartDate != null && formData['2'].coverageStartDate != '' && 
+								  formData['2'].coverageEndDate != null && formData['2'].coverageEndDate != ''"> {{policyStartDate}} - {{policyEndDate}}</td>
+    					<td v-else> - </td>
+    				</tr>
+    				<tr>
+						<td>
+							<td v-if="formData['2'].coverageType == 'single' && formData['2'].dateSelected">({{differentDaysInSummary}} {{differentDaysInSummary == 1 ? "Day" : "Days"}})</td>
+							<!--<td v-else-if="formData['2'].coverageType == 'single' && formData['2'].dateSelected && differentDaysInSummary == 1">({{differentDaysInSummary}} Day)</td>-->
+							<td v-if="formData['2'].coverageType == 'annual' && formData['2'].dateSelected && formData['2'].coverageStartDate">(1 Year)</td>
+						</td>
+					</tr>
+    					
+					<tr>
+						<td>Plan <span class="float-right pr-1"> : </span></td>
+						<td v-if="typeof(formData['2'].planName) != 'undefined' && formData['2'].planName !='' ">Plan {{formData['2'].planName | uppercase}}</td>
+						<td v-else> - </td>
+					</tr>			
+    				
+    			</table>
+    			<template v-if="currStepNum >= 2">
+    				<div class="divider my-3 darkBluebg" v-if="currStepNum !== '5'"></div>
+					
+					<div class="justify-content-between" v-if="currStepNum >= 3">
+						<p class="bt2 mb-0"><strong>No. of Insured</strong></p>
+						<p class="bt2 mb-0">{{formData['3'].personInsuredNum}} Person</p>
+						<div class="divider my-3 darkBluebg" v-if="currStepNum !== '5'"></div>
+    				</div>
+					
+
+    				<p class="text-right bt1 mb-3">RM</p>
+    			</template>
+    		</div>
+			<div class="bg-p2c px-2 py-2 mb-3 breakdown-pane">
+    			<div class="d-flex justify-content-between">
+    				<p class="bt2 mb-0">Basic Premium</p>
+    				<p class="bt2 mb-0" v-if="formData['2'].basePremium != null && formData['2'].basePremium!=''">{{formData['2'].basePremium}}</p>
+    				<p class="bt2 mb-0" v-else>0.00</p>
+    			</div>
+			</div>
+
+			<div class="px-2" v-if="formData['2'].optAddOnName != null && formData['2'].optAddOnName!=''">
+				<p class="bt2 mb-0"><strong>Add-On</strong></p>
+				<div class="d-flex justify-content-between">
+					<p class="bt2 mb-0">COVID-19 Add-On Plan {{formData['2'].optAddOnName}}</p>
+    				<p class="bt2 mb-0" v-if="formData['2'].optPlanDisplayPremium != null && formData['2'].optPlanDisplayPremium!=''">{{formData['2'].optPlanDisplayPremium}}</p>
+    				<p class="bt2 mb-0" v-else>0.00</p>
+    			</div>
+				<div class="divider my-2 darkBluebg"></div>
+				<div class="d-flex justify-content-between mb-3">
+					<p class="bt2 mb-0"><strong>Total Add-On</strong></p>
+    				<p class="bt2 mb-0" v-if="formData['2'].totalAddOn != null && formData['2'].totalAddOn!=''"><strong>{{formData['2'].totalAddOn}}</strong></p>
+    				<p class="bt2 mb-0" v-else><strong>0.00</strong></p>
+    			</div>
+			</div>
+			
+			<div class="bg-p2c px-2 py-2 breakdown-pane">	
+				<div class="d-flex justify-content-between">
+    				<p class="bt2 mb-0">Gross Premium</p>
+    				<p class="bt2 mb-0" v-if="formData['2'].basePremium != null && formData['2'].basePremium!=''">{{formData['2'].basePremium}}</p>
+    				<p class="bt2 mb-0" v-else>0.00</p>
+    			</div>
+				<div class="d-flex justify-content-between ">
+    				<p class="bt2 mb-0">Rebate ({{formData['2'].discountRate}}%)</p>
+    				<p class="bt2 mb-0" v-if="formData['2'].discountAmount != null && formData['2'].discountAmount!='' && formData['2'].discountAmount!='0'">({{formData['2'].discountAmount}})</p>
+    				<p class="bt2 mb-0" v-else>(0.00)</p>
+    			</div>
+    			<div class="divider my-2 darkBluebg"></div>
+    			<div class="d-flex justify-content-between">
+    				<p class="bt2 mb-0"><strong>Subtotal</strong></p>
+    				<p class="bt2 mb-0" v-if="formData['2'].subTotal != null && formData['2'].subTotal!=''"><strong>{{formData['2'].subTotal}}</strong></p>
+    				<p class="bt2 mb-0" v-else><strong>0.00</strong></p>
+    			</div>
+				<div class="d-flex justify-content-between" v-if="formData['2'].coverageType == 'annual'">
+    				<p class="bt2 mb-0">Service Tax ({{formData['2'].serviceTaxRate}}%)</p>
+    				<p class="bt2 mb-0" v-if="formData['2'].serviceTax != null && formData['2'].serviceTax!=''">{{formData['2'].serviceTax}}</p>
+    				<p class="bt2 mb-0" v-else>0.00</p>
+    			</div>
+    			<div class="d-flex justify-content-between">
+    				<p class="bt2 mb-0">Stamp Duty</p>
+    				<p class="bt2 mb-0" v-if="formData['2'].stampDuty != null && formData['2'].stampDuty!=''">{{formData['2'].stampDuty}}</p>
+    				<p class="bt2 mb-0" v-else>0.00</p>
+    			</div>
+    		</div>
+    
+    	</div>
+    		<div class="footer section-header bg-p2 py-md-4 px-4 d-flex justify-content-between align-items-center" v-if="currStepNum >= 1">
+    			<p class="bt1 w mb-0"><strong>Total Amount Payable</strong></p>
+    			<p class="h2 w mb-0" v-if="formData['2'].totalPayable != null && formData['2'].totalPayable!=''" >RM {{formData['2'].totalPayable}}</p>
+    			<p class="h2 w mb-0" v-else>RM 0.00</p>
+    		</div>
+			<div class="section-header bg-p2 p-0 px-4 d-flex justify-content-between align-items-center" v-if="currStepNum >= 4 && commissionRate > 0">
+				<div class="divider my-0 white-bg"></div>
+			</div>
+			<div class="footer section-header bg-p2 py-md-4 px-4 d-flex justify-content-between align-items-center" v-if="currStepNum >= 4 && commissionRate > 0">
+				<p class="bt1 w mb-0 no-bold">Commission ({{displayCommissionRateSummaryPanel}}%)</p>
+				<p class="h2 w mb-0 no-bold" v-if="displayCommissionSummaryPanel > 0">{{displayCommissionSummaryPanel}}</p>
+				<p class="h2 w mb-0 no-bold" v-else>0.00</p>
+    		</div>
+    	
+    </div>
+</div>
+{% endverbatim %}

@@ -321,7 +321,7 @@
                                                 <div class="form-group variant-icon variant-autocomplete">
                                                     <label class="bt1">Loan Provider (Optional):</label>
                                                 
-                                                    <vue-bootstrap-typeahead
+                                                    <vue-typeahead-bootstrap
                                                         :data="loanProviderSuggestions"
                                                         v-model="formData['2'].motorLoanProvider"
                                                         :serializer="function(s) { return s.financeName }"
@@ -335,7 +335,7 @@
                                                                     href="/spa-assets/icons/icons.svg#sprite-search"></use>
                                                             </svg>
                                                         </template>
-                                                    </vue-bootstrap-typeahead>
+                                                    </vue-typeahead-bootstrap>
                                                 </div>
                                             </div>
                                         </div>
@@ -461,7 +461,7 @@
                                                 <validation-provider rules="required|min:5|max:5|integer" v-slot="validator">
                                                     <div class="form-group variant-icon variant-autocomplete">
                                                         <label class="bt1">Postcode:</label>
-                                                        <vue-bootstrap-typeahead
+                                                        <vue-typeahead-bootstrap
                                                             :data="postcodeSuggestions"
                                                             v-model="formData['2'].addressPostcode"
                                                             :serializer="function (s) { return s.postcode }"
@@ -477,7 +477,7 @@
                                                                         href="/spa-assets/icons/icons.svg#sprite-search"></use>
                                                                 </svg>
                                                             </template>
-                                                        </vue-bootstrap-typeahead>
+                                                        </vue-typeahead-bootstrap>
                                                         <div class="small error-message text-primary font-italic" v-if="validator.errors.length > 0">
                                                             <span v-if="validator.failedRules.required">
                                                                 * Complete the Postal Code field.
@@ -1207,7 +1207,7 @@
                                                     <validation-provider rules="required|min:5|max:5|integer" v-slot="validator">
                                                         <div class="form-group variant-icon variant-autocomplete">
                                                             <label class="bt1">Postcode:</label>
-                                                            <vue-bootstrap-typeahead
+                                                            <vue-typeahead-bootstrap
                                                                 :data="postcodeSuggestions"
                                                                 v-model="formData['2'].addressPostcode"
                                                                 :serializer="function(s) { return s.postcode }"
@@ -1223,7 +1223,7 @@
                                                                             href="/spa-assets/icons/icons.svg#sprite-search"></use>
                                                                     </svg>
                                                                 </template>
-                                                            </vue-bootstrap-typeahead>
+                                                            </vue-typeahead-bootstrap>
                                                             <div class="small error-message text-primary font-italic" v-if="validator.errors.length > 0">
                                                                 <span v-if="validator.failedRules.required">
                                                                     * Complete the Postal Code field.

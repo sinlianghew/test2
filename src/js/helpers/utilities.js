@@ -142,7 +142,19 @@ export function scrollTo(offset) {
 }
 
 export function getInputValueOrEmpty (inputName) {
-    const input = document.querySelector(`#motorcycle-form input[name=${inputName}]`)
+    const input = document.querySelector(`#travelrightPlus-form input[name=${inputName}]`)
     if (input) return input.value;
     return ''
+}
+
+export function getDateUnitWithS(input){
+    let result = input;
+    if(input == "year" || input == "years"){
+        result = "years"
+    }else if(input == "month" || input == "months"){
+        result = "months"
+    }else if(input == "day" || input == "days"){
+        result = "days"
+    }
+    return result;
 }

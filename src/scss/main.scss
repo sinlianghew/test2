@@ -7,7 +7,6 @@
 @import "custom/variables";
 @import "custom/fonts";
 @import "node_modules/bootstrap/scss/root";
-
 @import "node_modules/bootstrap/scss/type";
 @import "node_modules/bootstrap/scss/tooltip"; 
  
@@ -120,6 +119,12 @@ body {
 
     }
 
+    /*mot here*/
+    .form-check .form-check-input[type=radio]:disabled + .form-check-label::before{
+        border-color: #D3D3D3;
+        border-width: 7px;
+    }
+     /*mot end*/
 
     /** End of Client base css **/
 
@@ -135,7 +140,7 @@ body {
     @import "components/input-variant-datepicker.scss";
     @import "components/input-variant-autocomplete.scss";
     @import "components/divider.scss";
-    @import "components/selection-infobox.scss";
+   // @import "components/selection-infobox.scss";
     @import "components/list-variant-icon.scss";
     @import "components/travel-details.scss";
     @import "components/list-variant-bank.scss";
@@ -154,6 +159,7 @@ body {
     @import "components/buttons.scss";
     @import "components/rounded-corners.scss";
     @import "components/credit-card-indicator.scss";
+    //@import "components/multiselect.scss";
     @import "components/summary-pane";
     
     /** Page Specific styling **/
@@ -193,10 +199,240 @@ body {
     @import "node_modules/bootstrap/scss/spinners";
     @import "node_modules/bootstrap/scss/utilities";
     @import "node_modules/bootstrap/scss/print";
+
+
 }
 
 @import "components/tooltip.scss"; 
 @import "node_modules/bootstrap/scss/modal";
+
+
+// multiple select
+#title-padding {
+    padding-top: 40px !important;
+  }
+  
+  @media only screen and (min-width: 768px) {
+    #title-padding {
+      padding-top: 48px !important;
+    }
+  }
+  
+  #section-country-container.form-group {
+    margin-bottom: 1rem;
+    width: 100%;
+  }
+  
+  #section-country-container .bt1 {
+    margin-bottom: 0.4rem;
+    font-size: 13px;
+  }
+  
+  #country-wrapper,
+  #occupation-wrapper {
+    position: relative;
+    /* width: 290px; */
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    cursor: default;
+    padding: 9px 1px 9px 8px;
+    min-height: 48px;
+    border: 1px solid #1b1464;
+  }
+  
+  #country-wrapper #country-token-label,
+  #occupation-wrapper #occupation-token-label {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: -6px;
+    width: 100%;
+  }
+  
+  #country-wrapper .selected-token,
+  #occupation-wrapper .selected-token {
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    margin-right: 6px;
+    min-height: 30px;
+    margin-top: 6px;
+    background-color: #ddf7e8;
+    border-radius: 4px;
+  }
+  #country-wrapper .selected-token .selected-close,
+  #occupation-wrapper .selected-token .selected-close {
+    margin-left: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #5a5a5b;
+    color: white;
+    border-radius: 50%;
+    width: 16px;
+    min-width: 16px;
+    height: 16px;
+    /* padding-bottom: 1px; */
+    margin-top: 2px;
+    cursor: pointer;
+  }
+  
+  #country-wrapper #input-wrapper,
+  #occupation-wrapper #occupation-input-wrapper {
+    display: flex;
+    flex: 1;
+    margin-top: 4px;
+  }
+  
+  #country-wrapper #input-wrapper input,
+  #occupation-wrapper #occupation-input-wrapper input {
+    width: 100%;
+    border: 0px;
+    padding: 0 8px;
+  }
+  
+  #country-wrapper #input-wrapper input.hidePlaceHolder::placeholder,
+  #occupation-wrapper #occupation-input-wrapper input.hidePlaceHolder::placeholder {
+    opacity: 0; /* Firefox */
+  }
+  #country-wrapper #input-wrapper input::-webkit-input-placeholder,
+  #occupation-wrapper #occupation-input-wrapper input::-webkit-input-placeholder {
+    font-style: italic;
+    font-weight: 400;
+    /* font-family: "pt_sans_italic" !important; */
+  }
+  #country-wrapper #input-wrapper input:-moz-placeholder,
+  #occupation-wrapper #occupation-input-wrapper input:-moz-placeholder {
+    font-style: italic;
+    font-weight: 400;
+    /* font-family: "pt_sans_italic" !important; */
+  }
+  #country-wrapper #input-wrapper input::-moz-placeholder,
+  #occupation-wrapper #occupation-input-wrapper input::-moz-placeholder {
+    font-style: italic;
+    font-weight: 400;
+    /* font-family: "pt_sans_italic" !important; */
+  }
+  #country-wrapper #input-wrapper input:-ms-input-placeholder,
+  #occupation-wrapper #occupation-input-wrapper input:-ms-input-placeholder {
+    font-style: italic;
+    font-weight: 400;
+    /* font-family: "pt_sans_italic" !important; */
+  }
+  #country-wrapper #input-wrapper input:focus,
+  #occupation-wrapper #occupation-input-wrapper input:focus {
+    outline: none;
+  }
+  
+  #country-wrapper #country-dropdown,
+  #occupation-wrapper #occupation-dropdown {
+    position: absolute;
+    width: 100%;
+    top: calc(100% + 3px);
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    height: 0;
+    pointer-events: none;
+    opacity: 0;
+  }
+  
+  #country-wrapper #country-dropdown.active,
+  #occupation-wrapper #occupation-dropdown.active {
+    height: auto;
+    pointer-events: auto;
+    opacity: 1;
+    z-index: 1;
+  }
+  
+  #country-wrapper #country-dropdown ul,
+  #occupation-wrapper #occupation-dropdown ul {
+    list-style-type: none;
+    padding-left: 0px;
+    overflow: auto;
+    height: 0;
+    transition: height 350ms ease-in;
+    transform-origin: top;
+  }
+  #country-wrapper #country-dropdown ul::-webkit-scrollbar,
+  #occupation-wrapper #occupation-dropdown ul::-webkit-scrollbar {
+    width: 4px;
+  }
+  
+  /* #country-wrapper #country-dropdown ul::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  } */
+  
+  #country-wrapper #country-dropdown ul::-webkit-scrollbar-thumb,
+  #occupation-wrapper #occupation-dropdown ul::-webkit-scrollbar-thumb {
+    background-color: rgba(218, 218, 218, 0.5);
+    border-radius: 20px;
+  }
+  
+  #country-wrapper #country-dropdown.active ul,
+  #occupation-wrapper #occupation-dropdown.active ul {
+    max-height: calc(46px * 7); /* 46px is a height of li tag */
+    height: auto;
+  }
+  
+  #country-wrapper #country-dropdown ul li,
+  #occupation-wrapper #occupation-dropdown ul li {
+    color: #000;
+    padding: 12px 0 12px 20px;
+    cursor: pointer;
+    font-family: 'pt_sansregular' !important;
+  }
+  
+  #country-wrapper #country-dropdown ul li.selected,
+  #occupation-wrapper #occupation-dropdown ul li.selected {
+    display: none;
+  }
+  #country-wrapper #country-dropdown ul li.filtered,
+  #occupation-wrapper #occupation-dropdown ul li.filtered {
+    display: none;
+  }
+  
+  #country-wrapper #country-dropdown ul li:hover,
+  #occupation-wrapper #occupation-dropdown ul li:hover {
+    background-color: #1b1464;
+    color: white;
+  }
+  
+  .hide-component {
+    /* use for mock puporse only */
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  .greyShadow{
+    /*box-shadow:0px 8px 16px 0px rgba(0,0,0,0.2);*/
+    box-shadow:0 4px 7px -2px rgba(0,0,0,0.2);
+    }
+    @media (max-width: 600px) {
+        #country-wrapper #country-dropdown.active ul {
+            max-height: 100%; /* 46px is a height of li tag */
+            height: auto;
+        }
+    }
+    #country-wrapper.is-invalid {
+        border-color: #dc3545;
+    }
+    .travel-insurance-new #country-wrapper:focus-within {
+        color: #495057;
+        background-color: #fff;
+        border-color: #80bdff;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgb(0 123 255 / 25%);
+    }
+    .travel-insurance-new #country-wrapper.form-control.is-invalid:focus-within {
+        border-color: #dc3545;
+        box-shadow: 0 0 0 0.2rem rgb(220 53 69 / 25%);
+    }
+//multiple select end
+
+
+
 
 // copy from client css
 .travelTNC {
@@ -248,4 +484,1015 @@ body {
 }
 // copy client css end
 
+.travel-insurance-new .vertical-scroller > div {
+    min-height:300px;
+}
+
+// main-ttk.css
+.travel-insurance-new svg.icon {
+    display: inline-block;
+    height: 1rem;
+    width: 1rem;
+    fill: currentColor;
+    /* Smaller than 1rem icons */
+    /* Larger than 1rem icons */
+  }
+  .travel-insurance-new svg.icon.icon-s {
+    height: -0.5rem;
+    width: -0.5rem;
+  }
+  .travel-insurance-new svg.icon.icon-xs {
+    height: 0rem;
+    width: 0rem;
+  }
+  .travel-insurance-new svg.icon.icon-xxs {
+    height: 0.5rem;
+    width: 0.5rem;
+  }
+  .travel-insurance-new svg.icon.icon-m {
+    height: 1.5rem;
+    width: 1.5rem;
+  }
+  .travel-insurance-new svg.icon.icon-l {
+    height: 2rem;
+    width: 2rem;
+  }
+  .travel-insurance-new svg.icon.icon-xl {
+    height: 2.5rem;
+    width: 2.5rem;
+  }
+  .travel-insurance-new svg.icon.icon-xxl {
+    height: 3rem;
+    width: 3rem;
+  }
+  .travel-insurance-new svg.icon.icon-3xl {
+    height: 3.5rem;
+    width: 3.5rem;
+  }
+  .travel-insurance-new svg.icon.icon-4xl {
+    height: 4rem;
+    width: 4rem;
+  }
+  .travel-insurance-new svg.icon.icon-5xl {
+    height: 4.5rem;
+    width: 4.5rem;
+  }
+  .travel-insurance-new svg.icon.icon-6xl {
+    height: 5rem;
+    width: 5rem;
+  }
+  .travel-insurance-new svg.icon.icon-7xl {
+    height: 5.5rem;
+    width: 5.5rem;
+  }
+  .travel-insurance-new svg.icon.icon-8xl {
+    height: 6rem;
+    width: 6rem;
+  }
+  .travel-insurance-new svg.icon.icon-9xl {
+    height: 6.5rem;
+    width: 6.5rem;
+  }
+  .travel-insurance-new svg.icon.icon-10xl {
+    height: 7rem;
+    width: 7rem;
+  }
+  .travel-insurance-new svg.icon.icon-11xl {
+    height: 7.5rem;
+    width: 7.5rem;
+  }
+
+  .travel-insurance-new .overflow-hidden {
+    overflow: hidden !important;
+}
+.travel-insurance-new .selection-infobox {
+    color: #000;
+    width: 100%;
+}
+@media (min-width: 992px) {
+    .travel-insurance-new .selection-infobox {
+    width: 50%;
+}
+}
+.travel-insurance-new .selection-infobox input[type=radio],
+.travel-insurance-new .selection-infobox input[type=checkbox] {
+display: none;
+}
+.travel-insurance-new .selection-infobox input[type=radio]:checked + label .box,
+.travel-insurance-new .selection-infobox input[type=checkbox]:checked + label .box,
+.travel-insurance-new .selection-infobox input[type=radio]:checked + .box,
+.travel-insurance-new .selection-infobox input[type=checkbox]:checked + .box {
+    background-color: #1B1464;
+    color:#fff;
+    fill:#fff;
+}
+.travel-insurance-new .selection-infobox input[type=radio]:checked + label .box .custom-rounded-checked,
+.travel-insurance-new .selection-infobox input[type=checkbox]:checked + label .box .custom-rounded-checked,
+.travel-insurance-new .selection-infobox input[type=radio]:checked +  .box .custom-rounded-checked,
+.travel-insurance-new .selection-infobox input[type=checkbox]:checked +  .box .custom-rounded-checked {
+background-color: #27AE60;
+border-color: #27AE60;
+}
+.travel-insurance-new .selection-infobox input[type=radio]:checked + label .box .custom-rounded-checked .icon,
+.travel-insurance-new .selection-infobox input[type=checkbox]:checked + label .box .custom-rounded-checked .icon,
+.travel-insurance-new .selection-infobox input[type=radio]:checked +  .box .custom-rounded-checked .icon,
+.travel-insurance-new .selection-infobox input[type=checkbox]:checked +  .box .custom-rounded-checked .icon {
+    opacity: 1;
+    fill: #fff;
+}
+.travel-insurance-new .selection-infobox input[type=radio]:checked +  .box svg,
+.travel-insurance-new .selection-infobox input[type=checkbox]:checked +  .box svg,
+.travel-insurance-new .selection-infobox input[type=radio]:checked +  .box .tick-mark,
+.travel-insurance-new .selection-infobox input[type=checkbox]:checked +  .box .tick-mark,
+.travel-insurance-new .selection-infobox input[type=radio]:checked+label  .box .tick-mark {
+    color:#fff;
+}
+
+.travel-insurance-new .selection-infobox.disabled {
+opacity: 0.5;
+}
+.travel-insurance-new .selection-infobox .box {
+width: 100% !important;
+height: auto;
+border-radius: 0.625rem;
+border: 2px solid #1B1464;
+background-color: #fff;
+-webkit-transition: all 250ms ease;
+transition: all 250ms ease;
+will-change: transition;
+display: inline-block;
+text-align: center;
+cursor: pointer;
+position: relative;
+}
+.travel-insurance-new .selection-infobox .box:active {
+-webkit-transform: translateY(10px);
+        transform: translateY(10px);
+}
+.travel-insurance-new .selection-infobox p {
+color: #fff;
+font-weight: 400;
+}
+.travel-insurance-new .selection-infobox p a {
+text-decoration: underline;
+font-weight: bold;
+}
+.travel-insurance-new .selection-infobox strong {
+font-weight: 700;
+}
+.travel-insurance-new .selection-infobox .no-bold {
+font-weight: 400;
+}
+.travel-insurance-new .footer .no-bold {
+font-weight: 400;
+}
+.travel-insurance-new .selection-infobox .custom-rounded-checked {
+display: inline-block;
+background-color: white;
+width: 50px;
+height: 50px;
+text-align: center;
+border-radius: 50px;
+border: 2px solid #1B1464;
+}
+.travel-insurance-new .selection-infobox .custom-rounded-checked .icon {
+    opacity: 0;
+}
+
+
+// ttk-new.css
+
+.travel-insurance-new .variant-date-picker .form-control ::placeholder {
+    font-style: italic !important;
+}
+.travel-insurance-new #nricNo::placeholder {
+    color: black !important;
+    font-style: italic !important;
+}
+
+.travel-insurance-new .vdp-datepicker .text-black ::placeholder {
+    color: black !important;
+}
+.travel-insurance-new .selection-infobox p {
+    color: black;
+}
+
+.travel-insurance-new .selection-infobox input[type=radio]:checked p {
+    color: white;
+}
+
+.travel-insurance-new .bold {
+    font-weight: bold;
+}
+
+.travel-insurance-new .variant-date-picker .form-control :disabled {
+    background-color: #d1d0e0;
+    color:#000;
+}
+
+.travel-insurance-new .icon-opacity {
+    opacity: 1 !important;
+    fill: white !important;
+}
+
+
+.travel-insurance-new .swiper-button-next-form, .travel-insurance-new .swiper-button-prev-form{
+    font-size: 30px !important;
+    color: white !important;
+    background-color: #1B1464 !important;
+    height: 45px;
+    min-width: 35px;
+    width: 45px;
+    border-radius: 50%;
+    margin-left: 0px !important;
+    padding-left: 0px !important;
+    padding-top: 0px !important;
+}
+
+.travel-insurance-new .swiper-button-next-form::after {
+    content:none;
+    /*font-size: 30px !important;*/
+}
+
+.travel-insurance-new .swiper-button-prev-form::after {  
+    content:none;
+    /*font-size: 30px !important;*/
+}
+
+
+.travel-insurance-new .swiper-button-prev-overwrite{
+    top: 50% !important;
+}
+
+.travel-insurance-new .swiper-button-next-overwrite{
+    top: 50% !important;
+}
+.travel-insurance-new .swiper-pagination-bullet {
+    width: 15px !important;
+    height: 15px !important;
+    margin: 0 12px !important;
+}
+
+.travel-insurance-new .swiper-pagination-bullet-active {
+    background-color: #1B1464 !important;
+  }
+/* sl comment
+  .travel-insurance-new .swiper-slide-opacity4:nth-child(n+4){
+    opacity: 0.5 !important;
+}
+
+.travel-insurance-new .swiper-slide-opacity1:nth-child(1){
+    opacity: 0.5 !important;
+}
+*/
+
+/* mot*/
+/* 20210602 hlbbcb plan swiper */
+.travel-insurance-new .swiper-container .swiper-slide.selection-planbox,
+.travel-insurance-new .swiper-container .swiper-slide.selection-planbox .box {
+    width: 210px !important;
+}
+
+.travel-insurance-new .swiper-container .swiper-slide.selection-infobox label {
+    padding-left: 0;
+}
+
+.travel-insurance-new .swiper-container .swiper-slide.selection-infobox{
+    opacity: 0.5; 
+}
+.travel-insurance-new .swiper-container .swiper-slide.swiper-slide-active,
+.travel-insurance-new .swiper-container .swiper-slide.swiper-slide-next,
+.travel-insurance-new .swiper-container .swiper-slide.swiper-slide-third  {
+    opacity: 1; 
+}
+
+.travel-insurance-new .swiper-container {
+    z-index: 0;
+}
+@media (max-width: 1186px) {
+    .travel-insurance-new .swiper-container .swiper-slide.selection-planbox,
+    .travel-insurance-new .swiper-container .swiper-slide.selection-planbox .box {
+        width: 270px !important;
+    }
+    
+    .travel-insurance-new .swiper-container .swiper-slide.swiper-slide-active,
+    .travel-insurance-new .swiper-container .swiper-slide.swiper-slide-next  {
+        opacity: 1; 
+    }
+}
+@media (max-width: 974px) {
+    .travel-insurance-new .swiper-container .swiper-slide.selection-planbox,
+    .travel-insurance-new .swiper-container .swiper-slide.selection-planbox .box {
+        width: 306px !important;
+    }
+}
+@media only screen and (max-width: 780px) {
+    //input[type="radio"]+label
+    .travel-insurance-new .swiper-container .swiper-slide.selection-infobox label {
+        padding-left: 0 !important;
+    }
+
+    .travel-insurance-new .swiper-container .swiper-slide.selection-planbox,
+    .travel-insurance-new .swiper-container .swiper-slide.selection-planbox .box {
+        width: 306px !important;
+    }
+}
+@media (max-width: 745px) {
+    .travel-insurance-new .swiper-container .swiper-wrapper {
+        margin-bottom: $spacer * 1.5;
+    }
+
+    .travel-insurance-new .swiper-container .swiper-slide.selection-infobox {
+        opacity: 0.5; 
+    }
+
+    .travel-insurance-new .swiper-container .swiper-slide.swiper-slide-active {
+        opacity: 1;
+    }
+    
+    .travel-insurance-new .swiper-container .swiper-slide.selection-planbox,
+    .travel-insurance-new .swiper-container .swiper-slide.selection-planbox .box {
+        width: 316px !important;
+    }
+}
+@media (max-width: 680px) {
+    .travel-insurance-new .swiper-container .swiper-slide.selection-planbox,
+    .travel-insurance-new .swiper-container .swiper-slide.selection-planbox .box {
+        width: 443px !important;
+    }
+}
+@media (max-width: 480px) {
+    .travel-insurance-new .swiper-container .swiper-slide.selection-planbox,
+    .travel-insurance-new .swiper-container .swiper-slide.selection-planbox .box {
+        width: 348px !important;
+    }
+}
+@media (max-width: 450px) {
+    .travel-insurance-new .swiper-container .swiper-slide.selection-planbox,
+    .travel-insurance-new .swiper-container .swiper-slide.selection-planbox .box {
+        width: 316px !important;
+    }
+}
+@media (max-width: 400px) {
+    .travel-insurance-new .swiper-container .swiper-slide.selection-planbox,
+    .travel-insurance-new .swiper-container .swiper-slide.selection-planbox .box {
+        width: 278px !important;
+    }
+
+    .travel-insurance-new .swiper-pagination-bullet {
+        width: 13px !important;
+        height: 13px !important;
+        margin: 0 8px !important;
+    }
+}
+@media (max-width: 360px) {
+    .travel-insurance-new .swiper-container .swiper-slide.selection-planbox,
+    .travel-insurance-new .swiper-container .swiper-slide.selection-planbox .box {
+        width: 260px !important;
+    }
+}
+@media (max-width: 340px) {
+    .travel-insurance-new .swiper-container .swiper-slide.selection-planbox,
+    .travel-insurance-new .swiper-container .swiper-slide.selection-planbox .box {
+        width: 231px !important;
+    }
+}
+
+.swiper-container .swiper-button-disabled{
+    display: none;
+}
+/*20210602 hlbbcb plan swiper end*/
+/* mot */
+#full-benefits .benefit-line{
+    border-top: 1px dotted #D3D3D3;
+    width: 80%;
+}
+#full-benefits .benefit-darkblue, .addFamilyFont{
+    color: #1b1464;
+}
+
+.addFamilyIcon{
+    color: #fff;
+    background: #1b1464;
+    padding: 2.5px 5px;
+    border-radius: 50%;
+}
+.addFamilyButton{
+    justify-content: flex-end;
+}
+.removeFamilyFont{
+    color: #dc3545;
+}
+.removeFamilyIcon{
+    color: #fff;
+    background: #dc3545;
+    padding: 2px 5.5px;
+    border-radius: 50%;
+}
+
+textarea.claimText{
+    height: 100px !important;
+    resize: none;
+}
+@media (max-width:600px){
+    textarea.claimText{
+        height: 220px !important;
+    }
+}
+
+
+
+.travel-insurance-new .destination-required .form-group #country-wrapper {
+    border: 1px solid #dc3545;
+}
+.travel-insurance-new .destination-required .form-group #country-wrapper:focus-within{
+    box-shadow: 0 0 0 0.2rem rgba(225, 31, 39, 0.25);
+}
+
+.travel-insurance-new .nav-wrapper .navbar img {
+    width: 250px;
+    height:80px;
+}
+.travel-insurance-new .nav-wrapper .navbar a {
+    cursor: pointer;
+}
+@media (min-width: 768px) {
+    .travel-insurance-new .nav-wrapper .navbar {
+        height: 110px;
+        padding: 14px 0;
+    }
+    .travel-insurance-new .nav-wrapper .navbar img {
+        width: 250px;
+        height:80px;
+    }
+}
+/* mot */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@media (min-width:720px) {
+    .travel-insurance-new .btn-ttk {
+        height: 48px !important;
+        width: 164px !important;
+        padding: 0.7rem 1rem !important;
+    }
+
+    .travel-insurance-new td {
+        font-size: 18px !important;
+    }
+
+    .travel-insurance-new label.form-check-label {
+        font-size: 18px !important;
+    }
+
+    .travel-insurance-new .blue-overlay {
+        position: absolute;
+        background-color: #1b1464 !important;
+        opacity: 0.3;
+        width: 100%;
+        height: 100%;
+    }
+
+    .travel-insurance-new .topright {
+        position: absolute;
+        top: 2px;
+        right: 0px;
+        width: 320px;
+        height: 125px;
+      }
+
+      .travel-insurance-new .header-overlay {
+        z-index: 10;
+    }
+
+    .travel-insurance-new .bt4 {
+        font-size: 21px !important;
+    }
+    .travel-insurance-new .b-bottom {
+        border-bottom: 1px solid #b0acc4 !important;
+    }
+    /*
+    .travel-insurance-new .selection-planbox{
+        height: 399px !important;
+        width: 201px !important;
+    }
+    .travel-insurance-new .selection-planbox .box {
+        height: 399px !important;
+        width: 201px !important;
+    }*/
+
+    .travel-insurance-new .swiper-slide:last-child {
+        margin-right: 0px !important;
+    }
+
+    .travel-insurance-new svg.icon-xs {
+        fill: black !important;
+        height: 18px !important;
+        width: 16px !important;
+    }
+    
+    .travel-insurance-new svg.icon-xxs {
+        fill: white !important;
+        height: 18px !important;
+        width: 16px !important;
+    }
+
+    .travel-insurance-new .icon-minipa {
+        width: 96px; 	
+        height:96px;	
+    }
+}
+
+@media (max-width: 720px) {
+    .travel-insurance-new .mb-30 {
+        margin-bottom: 30px;
+    }
+
+    .travel-insurance-new .background-header {
+        padding:97px 47px !important;
+    }
+
+    .travel-insurance-new .section-title-padding {
+        padding-bottom:118px !important;
+    }
+
+    .travel-insurance-new .blue-overlay {
+        position: absolute;
+        background-color: #1b1464 !important;
+        opacity: 0.5;
+        width: 100%;
+        height: 100%;
+    }
+
+    .travel-insurance-new .header-overlay {
+        z-index: 10;
+    }
+
+    /*.travel-insurance-new .selection-planbox {
+        width: 290px !important;
+        height: 290px !important;
+    }
+    .travel-insurance-new .selection-planbox .box {
+        width: 290px !important;
+        height: 510px !important;
+    }*/
+
+    .travel-insurance-new svg.icon-xs {
+        fill: black !important;
+        height: 12px !important;
+        width: 12px !important;
+    }
+    
+    .travel-insurance-new  svg.icon-xxs {
+        fill: white !important;
+        height: 12px !important;
+        width: 12px !important;
+    }
+    .travel-insurance-new .icon-minipa {
+        width: 76px; 
+        height:76px;
+    }
+
+    .travel-insurance-new .swiper-button-next-pdp {
+        right: -13px !important;
+    }
+
+    .travel-insurance-new  .swiper-button-prev-pdp {
+        left: -13px !important;
+    }
+    
+    .travel-insurance-new .swiper-button-next-pdp:after{
+    font-size: 17px !important;
+    color: white !important;
+    background-color: #1B1464 !important;
+    height: 27px;
+    width: 27px;
+    border-radius: 50%;
+    padding-left: 10px !important;
+    padding-top: 4px !important;
+    }
+
+    .travel-insurance-new .swiper-button-prev-pdp:focus{
+        border: none !important;
+        outline: none !important;
+    }
+
+    .travel-insurance-new .swiper-button-prev-pdp:after{
+        font-size: 17px !important;
+        color: white !important;
+        background-color: #1B1464 !important;
+        height: 27px;
+        width: 27px;
+        border-radius: 50%;
+        padding-left: 7px !important;
+        padding-top: 4px !important;
+    }
+    .travel-insurance-new .swiper-button-next-pdp:focus{
+        border: none !important;
+        outline: none !important;
+    }
+}
+
+// .mcmpgs-list started
+
+.travel-insurance-new  .mcmpgs-list.variant-bank {
+    margin: 0 -0.5rem;
+    display: flex;
+    flex-wrap: wrap
+}
+
+.travel-insurance-new  .mcmpgs-list.variant-bank .list-item {
+    overflow: hidden;
+    position: relative;
+    margin: 0 .5rem;
+    width: calc(100% / 1 - 1rem)
+}
+
+.travel-insurance-new  .mcmpgs-list.variant-bank .list-item .wallet-rounded-checked {
+    background-color: #fff;
+    width: 20px;
+    height: 20px;
+    border-radius: 50px;
+    border: 2px solid #1b1464;
+    margin-right: 5px;
+    margin-left: 12px
+}
+
+.travel-insurance-new  .mcmpgs-list.variant-bank .list-item .wallet-rounded-checked .icon {
+    opacity: 0;
+    visibility: hidden
+}
+
+.travel-insurance-new  .mcmpgs-list.variant-bank .list-item input[type=radio] {
+    position: absolute;
+    visibility: hidden
+}
+
+.travel-insurance-new  .mcmpgs-list.variant-bank .list-item input[type=radio]:checked+label {
+    box-shadow: inset 0 0 0 3px #1b1464
+}
+
+.travel-insurance-new  .mcmpgs-list.variant-bank .list-item input[type=radio]:checked+label .wallet-rounded-checked {
+    background-color: #27ae60;
+    border-color: #27ae60
+}
+
+.travel-insurance-new  .mcmpgs-list.variant-bank .list-item input[type=radio]:checked+label .wallet-rounded-checked .icon {
+    opacity: 1;
+    visibility: visible;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 13px;
+    color: #fff;
+    margin-left: 2px;
+    margin-top: 1px
+}
+
+.travel-insurance-new  .mcmpgs-list.variant-bank .list-item label {
+    height: 46px;
+    display: flex;
+    box-shadow: inset 0 0 0 .5px #1b1464;
+    align-items: center;
+    transition: .2s ease;
+    padding: 0 !important
+}
+
+.travel-insurance-new  .mcmpgs-list.variant-bank .list-item label:hover {
+    cursor: pointer
+}
+
+.travel-insurance-new  .mcmpgs-list.variant-bank .list-item label .wallet-rounded-checked {
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background-color: #fff;
+    border: 1px solid #1b1464
+}
+
+.travel-insurance-new  .mcmpgs-list.variant-bank .list-item .bank-logo {
+    flex: 0 0 100px;
+    padding-bottom: 65%;
+    margin-right: 5px;
+    overflow: hidden;
+    position: relative
+}
+
+.travel-insurance-new  .mcmpgs-list.variant-bank .list-item .bank-logo img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8)
+}
+
+.travel-insurance-new  .mcmpgs-list.variant-bank .list-item .bank-name {
+    font-size: 12px;
+    line-height: 100%;
+    flex-grow: 1
+}
+
+@media(min-width: 768px) {
+    .travel-insurance-new  .mcmpgs-list.variant-bank {
+        margin:0 6.25rem 0 -0.75rem
+    }
+
+    .travel-insurance-new  .mcmpgs-list.variant-bank .list-item {
+        width: calc(100% / 1.7 - (.75rem * 2));
+        margin: 0 .75rem
+    }
+
+    .travel-insurance-new  .mcmpgs-list.variant-bank .list-item .bank-logo {
+        flex: 0 0 100px;
+        padding-bottom: 20%
+    }
+
+    .travel-insurance-new  .mcmpgs-list.variant-bank .list-item .bank-name {
+        font-size: 1rem
+    }
+    .travel-insurance-new  .paymentTotalsubContainer{
+        height:60px;
+    }
+}
+
+// .mcmpgs-list ended
+
+// errorMsgContainer started
+//main
+.errorMsgContainer{z-index: 2002;position:fixed;bottom:3em;right:1em;width:90%;color:#ffffff;-webkit-box-shadow:0px 0px 3px rgba(50, 50, 50, 0.75);-moz-box-shadow:0px 0px 3px rgba(50, 50, 50, 0.75);box-shadow:0px 0px 3px rgba(50, 50, 50, 0.75);-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-border-radius:3px;-moz-border-radius:3px;-ms-border-radius:3px;-o-border-radius:3px;border-radius:3px;padding:1em;background:#870204;background:url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzg3MDIwNCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjUwJSIgc3RvcC1jb2xvcj0iI2E1MDMwNiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNjNDAwMDMiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);background:-moz-linear-gradient(top, #870204 0%, #a50306 50%, #c40003 100%);background:-webkit-gradient(linear, left top, left bottom, color-stop(0%, #870204), color-stop(50%, #a50306), color-stop(100%, #c40003));background:-webkit-linear-gradient(top, #870204 0%, #a50306 50%, #c40003 100%);background:-o-linear-gradient(top, #870204 0%, #a50306 50%, #c40003 100%);background:-ms-linear-gradient(top, #870204 0%, #a50306 50%, #c40003 100%);background:linear-gradient(to bottom, #870204 0%, #a50306 50%, #c40003 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#870204', endColorstr='#c40003', GradientType=0);}
+.errorMsgContainer ul{padding:0;margin:0;list-style:none;}
+.errorMsgContainer ul li:before{content:"\00bb";}
+.errorMsgContainer a{display:block;text-align:right;color:#ffffff;font-family:'pt_sansbold',Tahoma,Geneva,sans-serif;}
+.errorMsgContainer:after{border-color:#c40003 rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);border-style:solid;border-width:8px;bottom:-0.9em;content:"";position:absolute;right:1em;}
+.errorMsgContainer{width:400px;}
+// banca
+.errorMsgContainer{
+    background:#e22026;
+    filter:none;
+    bottom:6em;
+    right:5em;  
+  }
+  .errorMsgContainer a{
+    width:120px;
+    height:40px;
+    border-radius:5px;
+    -webkit-border-radius:5px;
+    -moz-border-radius:5px;
+    line-height:40px;
+    text-align:center;
+    background-color:darkblue;
+  }
+  .errorMsgContainer a:hover{
+      color:#ffffff;
+  }
+  .errorMsgContainer:after{
+    border-color:#e22026 rgba(0, 0, 0, 0) rgba(0, 0, 0, 0)
+  }
+
+  @media(max-width: 768px){
+    .errorMsgContainer{ right:2em }
+  }
+
+  @media(max-width: 568px){
+    .errorMsgContainer{ right:1em }
+  }
+
+  // errorMsgContainer ended
+
+  // asked to add by sin liang
+  .material-icons {
+      font-family: 'Material Icons';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 24px;
+      line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-feature-settings: 'liga';
+      font-feature-settings: 'liga';
+      -webkit-font-smoothing: antialiased;
+  }
+
+  .travel-insurance-new #travelrightPlus-form .tick-mark.blacktick{
+      color:#000;
+  }
+
+  .travel-insurance-new #travelrightPlus-form .custom-rounded-checked .tick-mark.my-2{
+      color:#fff;
+      font-size: 25pt;
+      vertical-align: middle;
+  }
+
+  .travel-insurance-new #travelrightPlus-form input[type="text"]::placeholder,
+  .travel-insurance-new #travelrightPlus-form input[type="text"]::-webkit-input-placeholder,
+  .travel-insurance-new #travelrightPlus-form input[type="text"]:-ms-input-placeholder{
+      font-style: italic !important;
+  }
+
+  .travel-insurance-new #travelrightPlus-form .form-check-input.is-invalid~.form-check-label{
+      color:#000;
+  }
+  
+  .travel-insurance-new #travelrightPlus-form .swiperIcon{
+    position:absolute;
+    top: calc(50% - 12px);
+    vertical-align: middle;	
+  }	
+  .travel-insurance-new .swiper-container .swiper-button-next-form .swiperIcon{
+    transform: rotate(270deg);
+    position: absolute;	
+    top: calc(50% - 12px);
+    right: calc(50% - 12px);
+  }	
+  .travel-insurance-new .swiper-container .swiper-button-prev-form .swiperIcon{	
+    transform: rotate(90deg);
+    position: absolute;	
+    top: calc(50% - 12px);
+    left: calc(50% - 14px);
+  }	
+  .travel-insurance-new #travelrightPlus-form .tncErrorMsg{
+    padding-left:12px;	
+  }
+
+  .travel-insurance-new #travelrightPlus-form .vertical-scroller .planBereavementAllowance{
+      position:absolute;
+      right:calc(0% + .5rem);
+  }
+  .navBottom-client a {
+      text-decoration: none;
+  }
+  .travel-insurance-new.travelrightPlus-form span.TNCclick{
+      cursor:pointer;
+  }
+  .travel-insurance-new #travelrightPlus-form span.text-danger:hover,
+  .travel-insurance-new #travelrightPlus-form span.text-danger:focus{
+    color:#a71d2a !important;
+    text-decoration: none;
+ }
+ .travel-insurance-new label{
+     cursor:pointer;
+ }
+
+ .travel-insurance-new .prescreenQuestionNumberContainer{
+    position: relative;
+    top: 0;
+}
+.travel-insurance-new .prescreenQuestionNumber{
+    position: relative;
+    top: 0;
+    left: 0;
+    width: fit-content;
+    margin: 0;
+    float:right;
+}
+
+ @media only screen and (max-width: 600px){
+    .tooltip-inner {
+        width: 20vh;
+    }
+    .travel-insurance-new #tnc-modal{
+        height:calc(100% - 30px);
+    }
+    .travel-insurance-new .prescreenQuestionNumber{
+        position: relative;
+        top: 0;
+        left: calc(100% - 106px);
+        width: fit-content;
+        float:none;
+        margin-bottom: 1.5rem;
+    }
+    .hiddenPreferPlan{
+        display: none !important;
+    }
+    .w-100-mobile{
+        width: 100%;
+    }
+}
+
+.travel-insurance-new #travelrightPlus-form .wizard-section-1 .wizard-navigation{
+    margin-bottom: 120px;
+}
+
+.travel-insurance-new .bold{
+    font-weight:bold;
+}
+
+.travel-insurance-new .divider{
+    height: 1px;
+    background-color: #D2D0E0;
+    width: 100%;
+    display: block;
+}
+.travel-insurance-new .white-border-top{
+    border-top: 1px solid #fff;
+}
+
+.lightblueWord
+{
+    color: #18C4DB;
+}
+.greeenWord{
+    color: #27AE60;
+}
+.yellowWord{
+    color: #F4D219;
+}
+.redWord{
+    color: #E01F27;
+}
+.darkBluebg{
+    background-color: #1b1464 !important;
+}
+.noBorder{
+    border: none !important;
+}
+.hidden{
+    display: none !important;
+}
+.pl-2rem{
+    padding-left: 2rem;
+}
+.broderTopWhite{border-top:1px solid #fff}
+.wizard-section-2 div#summaryPanelBigContainer,
+.wizard-section-5 div#summaryPanelBigContainer{
+    position: sticky;
+    top: 0;
+}
+.wizard-section-2 div#summaryPanelBigContainer{
+        z-index: 1020;
+}
+.travel-insurance-new .emailTooltip {
+    margin-top: 3px;
+}
+.bmiImg{
+    max-width: 100%;
+}
+.travel-insurance-new .wizard-section-5 .selection-infobox {
+    color:#1B1464;
+}
+
+ul.needToKnow li{
+    margin-bottom: 3px;
+}
+.wizard-section-2 .selection-infobox{
+    font-size: 18px;
+    font-weight: 400;
+    font-family: "pt_sansregular",Tahoma,Geneva,sans-serif;
+}
+
+.wizard-section-2 .selection-infobox .divider{
+    background-color: #5A5A5A;
+    margin: 1rem 0.5rem
+}
+
+.dropdown-scroll.occupation-invalid .form-control {
+    border: 1px solid #c40003;
+}
+.dropdown-scroll.occupation-invalid .form-control:focus {
+    box-shadow: 0 0 0 0.2rem rgba(225, 31, 39, 0.25);
+}
+
+.dropdown-scroll .vbt-autcomplete-list{
+    max-height:322px;
+    overflow: overlay;
+}
+.dropdown-scroll .vbt-autcomplete-list .list-group-item-action{
+    border: unset;
+}
+
+.dropdown-scroll .vbt-autcomplete-list::-webkit-scrollbar {
+    width: 17px;
+}
+  
+.dropdown-scroll .vbt-autcomplete-list::-webkit-scrollbar-thumb {
+    background-color: #e4e4ea;
+    border: 7px solid transparent;
+    border-top: 10px solid transparent;
+    border-radius: 50px;
+    background-clip: content-box;
+}
+
+@media only screen and (max-width: 600px){
+    .wizard-section-2 .selection-infobox {
+        font-size: 16px;
+    }
+}
+
 @import "custom/overrides";
+
+@import "node_modules/swiper/swiper";
+@import "node_modules/swiper/css/swiper";

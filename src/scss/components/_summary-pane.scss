@@ -2,6 +2,76 @@ $header-xs-height: 60px;
 $subtotal-font-size: 22px;
 $footer-xs-height: 60px;
 $footer-offset: 30px;
+$footer-offset-commission: 90px;
+.summaryPanelBigContainer{
+    .summaryHeaderFake {
+        height: 82px;
+        justify-content: center;
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        bottom:30px;
+        left:0;
+        width:100%;
+        z-index:100;
+        .inner-container{
+            height:100%;
+            .section-title {
+                @extend .px-4;
+                display: flex;
+                justify-content: space-between;
+                height: 100%;
+                /*transition: .3s ease;
+                margin-bottom:22px;*/
+                .fakeSummaryWord{
+                    position: relative;
+                    top: 18%;
+                }
+                .btn-toggle
+                    .icon{
+                        position: relative;
+                        top: 16%;
+                    }
+            }
+            .sub-header {
+                @extend .px-4;
+                position: absolute;
+                top: calc(25px + 18px);
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                visibility: visible;
+                opacity: 1;
+                left:0;
+                .price {
+                    font-size: $subtotal-font-size;
+                    font-weight: 600;
+                    position: static;
+                }
+            }
+        }
+    }
+    .has-totalFake {
+            height: #{$header-xs-height + $subtotal-font-size};
+            .section-title {
+                margin-bottom: $subtotal-font-size;
+            }
+    }
+    .btn-toggle {
+        border: none;
+        background-color: transparent;
+        .title {
+            visibility: hidden;
+            text-indent: 9999px;
+            position: absolute;
+        }
+        .icon {
+            transform: rotateX(180deg);
+            transition: .9s ease;
+        }
+    }
+}
 .summary-pane {
     position: fixed;
     top: 0;
@@ -12,7 +82,8 @@ $footer-offset: 30px;
     min-height: 100vh;
     max-height: 100vh;
     background-color: #fff;
-    transform: translateY(calc(100% - #{$header-xs-height + $footer-offset} + 1px));
+    /*transform: translateY(calc(100% - #{$header-xs-height + $footer-offset} + 1px)); sin liang comment*/
+    transform: translateY(100%);
     transition: .6s ease;
     .header {
         height: #{$header-xs-height};
@@ -45,7 +116,8 @@ $footer-offset: 30px;
         }
     }
     &.has-total {
-        transform: translateY(calc(100% - #{$header-xs-height + $footer-offset + $subtotal-font-size} + 1px));
+        /*transform: translateY(calc(100% - #{$header-xs-height + $footer-offset + $subtotal-font-size} + 1px)); sin liang comment*/
+        transform: translateY(100%);
         .header {
             height: #{$header-xs-height + $subtotal-font-size};
             .section-title {
@@ -151,5 +223,10 @@ $footer-offset: 30px;
         hr {
             background: $color-primary-blue;
         }
+    }
+
+    .dividerCommission{
+        margin: 0;
+        background-color:white;
     }
 }

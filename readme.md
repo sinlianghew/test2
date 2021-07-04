@@ -38,4 +38,4 @@ Note: Firebase needs `firebase tools` to be installed. Please install and login 
 - It bundles all the JS and CSS into their one file, respectively.
 - It minifies the CSS and JS. This can be turned off if needed by configuring `webpack.prod.js`.
 - It builds the twig templates into HTML
-- It also builds the SVG icon sprite map for all the icons placed in the icons folder
+- It also builds the SVG icon sprite map for all the icons placed in the icons folder# msig_newFrontEnd_Vue
